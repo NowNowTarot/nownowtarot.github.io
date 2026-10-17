@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NowNow Tarot | Thấu Cảm Lý Trí</title>
+  <!-- Phông chữ Montserrat chuyên nghiệp đồng bộ toàn trang -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg-cosmos: #05040a;
+      --card-glass: rgba(16, 13, 27, 0.78);
+      --ivory: #f8f5f0;
+      --champagne: #ebd5ab;
+      --gold-bright: #f7e38d;
+      --muted-lilac: #aba3c2;
+      --wine-red: #8c1d2c;
+      --wine-bright: #c92a42;
+      --logo-red: #6d131f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-cosmos);
+      color: var(--ivory);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    /* Canvas Vũ Trụ & Chòm Sao Hoàng Đạo */
+    #cosmicCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    /* Tinh vân Vũ Trụ lung linh đa tầng */
+    .nebula-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(168, 32, 54, 0.24) 0%, transparent 45%),
+        radial-gradient(circle at 85% 22%, rgba(98, 62, 168, 0.22) 0%, transparent 48%),
+        radial-gradient(circle at 50% 55%, rgba(235, 213, 171, 0.07) 0%, transparent 55%),
+        radial-gradient(circle at 25% 85%, rgba(72, 45, 140, 0.2) 0%, transparent 50%);
+    }
+
+    /* Vòng Tròn Hoàng Đạo Xoay Chậm Huyền Bí */
+    @keyframes zodiacSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .zodiac-wheel-bg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: min(880px, 135vw);
+      height: min(880px, 135vw);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.14;
+      animation: zodiacSpin 140s linear infinite;
+    }
+
+    /* Khung Kính Mờ Tách Biệt Thượng Hạng */
+    .cosmic-shell {
+      background: linear-gradient(165deg, rgba(22, 18, 38, 0.82) 0%, rgba(12, 10, 22, 0.88) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(235, 213, 171, 0.22);
+      box-shadow: 0 28px 75px rgba(0, 0, 0, 0.75), 0 0 40px rgba(140, 29, 44, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Khối Header Riêng Biệt Phía Trên */
+    .hero-top-card {
+      background: radial-gradient(circle at 50% 0%, rgba(140, 29, 44, 0.28) 0%, rgba(20, 16, 34, 0.65) 75%);
+      border: 1px solid rgba(235, 213, 171, 0.24);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Dải phân cách thiên văn tách biệt phần trên và phần dưới */
+    .celestial-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 26px 0;
+    }
+    .celestial-divider::before,
+    .celestial-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(235, 213, 171, 0.35), rgba(201, 42, 66, 0.5), transparent);
+    }
+
+    /* Logo tròn chuẩn thương hiệu */
+    .brand-emblem {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      background-color: var(--logo-red);
+      border: 2.5px solid var(--champagne);
+      box-shadow: 0 0 35px rgba(201, 42, 66, 0.55), inset 0 0 15px rgba(0,0,0,0.4);
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Chú Mèo Đen Cử Động Tự Do & Hiệu Ứng Meow */
+    @keyframes catFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes tailSway {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(14deg); }
+    }
+    @keyframes earTwitch {
+      0%, 86%, 100% { transform: rotate(0deg); }
+      90% { transform: rotate(-10deg); }
+      95% { transform: rotate(7deg); }
+    }
+    @keyframes eyeBlink {
+      0%, 92%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.08); }
+    }
+    @keyframes meowPop {
+      0% { opacity: 0; transform: translateY(10px) scale(0.7); }
+      25% { opacity: 1; transform: translateY(-6px) scale(1.08); }
+      80% { opacity: 1; transform: translateY(-18px) scale(1); }
+      100% { opacity: 0; transform: translateY(-28px) scale(0.85); }
+    }
+
+    .free-cat-wrapper {
+      animation: catFloat 3.8s ease-in-out infinite;
+      cursor: pointer;
+      filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.75));
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .free-cat-wrapper:active {
+      transform: scale(0.92);
+    }
+    .cat-tail-anim {
+      transform-origin: 78px 92px;
+      animation: tailSway 2.8s ease-in-out infinite;
+    }
+    .cat-ear-left {
+      transform-origin: 42px 38px;
+      animation: earTwitch 4.5s infinite;
+    }
+    .cat-eye-anim {
+      transform-origin: center;
+      animation: eyeBlink 4s infinite;
+    }
+    .meow-floating-note {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: linear-gradient(135deg, #c92a42, #8c1d2c);
+      color: #f7e38d;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(247, 227, 141, 0.6);
+      box-shadow: 0 4px 12px rgba(201, 42, 66, 0.5);
+      pointer-events: none;
+      animation: meowPop 1.3s ease-out forwards;
+      z-index: 20;
+      white-space: nowrap;
+    }
+
+    /* Bong bóng thoại của Mèo Đen */
+    .cat-speech-cloud {
+      background: linear-gradient(145deg, rgba(30, 25, 48, 0.95), rgba(19, 16, 32, 0.98));
+      border: 1px solid rgba(235, 213, 171, 0.3);
+      border-left: 4px solid var(--wine-bright);
+      border-radius: 22px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
+      position: relative;
+    }
+
+    /* Nút bấm & Thẻ tương tác */
+    .nav-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(235, 213, 171, 0.18);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-pill:hover {
+      background: rgba(235, 213, 171, 0.1);
+      border-color: rgba(235, 213, 171, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .cta-wine-btn {
+      background: linear-gradient(135deg, #8c1d2c 0%, #c92a42 55%, #9e1f32 100%);
+      border: 1px solid rgba(247, 227, 141, 0.45);
+      box-shadow: 0 12px 30px rgba(168, 32, 54, 0.5);
+      transition: all 0.25s ease;
+    }
+    .cta-wine-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(201, 42, 66, 0.72);
+      filter: brightness(1.08);
+    }
+
+    /* THANH TRƯỢT NGANG HIỂN THỊ RÕ RÀNG & ĐẸP MẮT */
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #c92a42 rgba(255, 255, 255, 0.06);
+      scroll-behavior: smooth;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 7px;
+      display: block;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      margin: 0 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #8c1d2c, #c92a42, #ebd5ab);
+      border-radius: 999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, #c92a42, #f7e38d);
+    }
+
+    /* Nút điều hướng trái phải cho thanh trượt */
+    .carousel-arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(235, 213, 171, 0.3);
+      color: var(--champagne);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .carousel-arrow:hover {
+      background: var(--wine-bright);
+      color: #fff;
+      border-color: var(--gold-bright);
+      transform: scale(1.08);
+    }
+
+    /* Pop-up Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 4, 12, 0.86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-box {
+      background: linear-gradient(170deg, #171429 0%, #0e0c1a 100%);
+      border: 1px solid rgba(235, 213, 171, 0.32);
+      border-top: 3.5px solid var(--wine-bright);
+      border-radius: 26px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 40px rgba(201, 42, 66, 0.22);
+      transform: translateY(12px) scale(0.97);
+      transition: all 0.25s ease;
+    }
+    .modal-overlay.open .modal-box {
+      transform: translateY(0) scale(1);
+    }
+    /* Thanh trượt dọc trong Pop-up rõ ràng, nổi bật */
+    .modal-box {
+      scrollbar-width: auto;
+      scrollbar-color: #e5384f rgba(255, 255, 255, 0.08);
+    }
+    .modal-box::-webkit-scrollbar {
+      width: 10px;
+      display: block;
+    }
+    .modal-box::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.08);
+      border-left: 1px solid rgba(235, 213, 171, 0.18);
+      border-radius: 0 26px 26px 0;
+      margin: 12px 0;
+    }
+    .modal-box::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #e5384f 0%, #c92a42 45%, #ebd5ab 100%);
+      border-radius: 999px;
+      border: 2px solid rgba(18, 14, 30, 0.85);
+      box-shadow: 0 0 10px rgba(229, 56, 79, 0.6);
+    }
+    .modal-box::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #ff4d64 0%, #f7e38d 100%);
+    }
+
+    /* Hiệu ứng nhảy số mượt cho bộ đếm Đang Online */
+    @keyframes onlinePulseChange {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.16); color: #6ee7b7; }
+      100% { transform: scale(1); }
+    }
+    .online-bump {
+      animation: onlinePulseChange 0.45s ease-out;
+    }
+
+    /* Thẻ chọn gói dịch vụ sinh động */
+    .pkg-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1.5px solid rgba(235, 213, 171, 0.18);
+      border-radius: 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pkg-card:hover {
+      border-color: rgba(235, 213, 171, 0.5);
+      transform: translateY(-2px);
+    }
+    .pkg-card.active {
+      border-color: var(--gold-bright);
+      background: linear-gradient(145deg, rgba(140, 29, 44, 0.38), rgba(201, 42, 66, 0.18));
+      box-shadow: 0 8px 26px rgba(201, 42, 66, 0.35), inset 0 0 15px rgba(247, 227, 141, 0.12);
+    }
+    .pkg-check-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: transparent;
+      transition: all 0.2s ease;
+    }
+    .pkg-card.active .pkg-check-badge {
+      background: var(--gold-bright);
+      border-color: var(--gold-bright);
+      color: #120e1e;
+    }
+
+    /* Chip chọn chủ đề nhanh */
+    .topic-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(235, 213, 171, 0.2);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--champagne);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .topic-chip:hover, .topic-chip.selected {
+      background: rgba(201, 42, 66, 0.35);
+      border-color: var(--gold-bright);
+      color: #fff;
+    }
+
+    /* Bong bóng chat Feedback mô phỏng chuẩn Messenger/IG */
+    .chat-bubble-user {
+      background: #26262b;
+      color: #f4f4f6;
+      border-radius: 18px 18px 18px 4px;
+      padding: 9px 13px;
+      font-size: 12.5px;
+      font-weight: 500;
+      position: relative;
+      max-width: 90%;
+      width: fit-content;
+    }
+    .chat-bubble-shop {
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 18px 18px 4px 18px;
+      padding: 8px 13px;
+      font-size: 12.5px;
+      font-weight: 500;
+      margin-left: auto;
+      position: relative;
+      max-width: 86%;
+      width: fit-content;
+    }
+    .voice-pill {
+      background: #1d6bf3;
+      border-radius: 999px;
+      padding: 6px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .reaction-badge {
+      position: absolute;
+      bottom: -9px;
+      right: 8px;
+      background: #1f1f24;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 99px;
+      padding: 1px 5px;
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+      z-index: 2;
+    }
+  </style>
+</head>
+<body class="py-7 px-3 sm:px-6 flex justify-center items-start min-h-screen">
+
+  <!-- Bầu Trời Vũ Trụ Sao Lung Linh & Chòm Sao Hoàng Đạo -->
+  <canvas id="cosmicCanvas"></canvas>
+  <div class="nebula-backdrop"></div>
+
+  <!-- Vòng Hoàng Đạo 12 Cung Xoay Huyền Bí Phía Sau -->
+  <svg class="zodiac-wheel-bg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="250" cy="250" r="240" stroke="#ebd5ab" stroke-width="1" stroke-dasharray="4 6"/>
+    <circle cx="250" cy="250" r="205" stroke="#c92a42" stroke-width="1.2"/>
+    <circle cx="250" cy="250" r="155" stroke="#ebd5ab" stroke-width="0.8" stroke-dasharray="2 4"/>
+    <circle cx="250" cy="250" r="95" stroke="#ebd5ab" stroke-width="0.6"/>
+    <!-- Các đường chia 12 cung Hoàng Đạo -->
+    <g stroke="#ebd5ab" stroke-width="0.6" opacity="0.6">
+      <line x1="250" y1="10" x2="250" y2="490"/>
+      <line x1="10" y1="250" x2="490" y2="250"/>
+      <line x1="42" y1="130" x2="458" y2="370"/>
+      <line x1="130" y1="42" x2="370" y2="458"/>
+      <line x1="42" y1="370" x2="458" y2="130"/>
+      <line x1="130" y1="458" x2="370" y2="42"/>
+    </g>
+    <!-- Ngôi sao 8 cánh trung tâm -->
+    <polygon points="250,145 272,228 355,250 272,272 250,355 228,272 145,250 228,228" stroke="#f7e38d" stroke-width="1" fill="none"/>
+  </svg>
+
+  <!-- Khung Bio Chính -->
+  <main class="cosmic-shell w-full max-w-[500px] rounded-[32px] p-4 sm:p-7 relative my-auto">
+
+    <!-- =====================================================================
+         PHẦN TRÊN: KHỐI THƯƠNG HIỆU & SLOGAN (TÁCH BIỆT RÕ RÀNG)
+         ===================================================================== -->
+    <header class="hero-top-card rounded-[26px] p-5 sm:p-6 text-center relative overflow-hidden">
+      <!-- Ánh sao trang trí góc -->
+      <span class="absolute top-3.5 left-4 text-[#ebd5ab]/50 text-xs">✦</span>
+      <span class="absolute top-3.5 right-4 text-[#ebd5ab]/50 text-xs">✦</span>
+
+      <div class="brand-emblem mb-3.5">
+        <img src="image_403e9a.png" alt="NowNow Tarot" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div style="display:none;" class="flex-col items-center justify-center text-center px-2 select-none">
+          <span class="font-extrabold text-[15px] tracking-wider text-[#f7e38d] leading-none">NOWNOW</span>
+          <span class="font-extrabold text-[14px] tracking-widest text-[#f7e38d] mt-1 leading-none">TAROT</span>
+          <span class="text-[9.5px] text-[#f7e38d]/90 mt-1.5 font-medium">@nownowtarot</span>
+        </div>
+      </div>
+
+      <h1 class="text-2xl sm:text-[28px] font-black tracking-[0.08em] uppercase text-[#f8f5f0]">
+        NOWNOW TAROT
+      </h1>
+
+      <!-- Câu nói thương hiệu: Thấu cảm lý trí -->
+      <div class="inline-flex items-center gap-2.5 mt-2 px-4 py-1.5 rounded-full bg-black/35 border border-[#ebd5ab]/35 shadow-inner">
+        <span class="text-[#c92a42] text-xs">✦</span>
+        <span class="text-[11.5px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#f7e38d]">
+          Thấu cảm lý trí
+        </span>
+        <span class="text-[#c92a42] text-xs">✦</span>
+      </div>
+
+      <!-- Hàng Icon Mạng Xã Hội Nhanh -->
+      <div class="flex justify-center items-center gap-3 mt-4">
+        <a href="https://www.facebook.com/NowNowTarot" target="_blank" rel="noopener" class="w-9 h-9 rounded-full nav-pill flex items-center justify-center text-[#ebd5ab] hover:text-white" title="Facebook">
+          <i class="fa-brands fa-facebook-f text-sm"></i>
+        </a>
+        <a href="https://www.instagram.com/nownowtarot/" target="_blank" rel="noopener" class="w-9 h-9 rounded-full nav-pill flex items-center justify-center text-[#ebd5ab] hover:text-white" title="Instagram">
+          <i class="fa-brands fa-instagram text-sm"></i>
+        </a>
+        <a href="https://www.threads.com/@nownowtarot?hl=vi" target="_blank" rel="noopener" class="w-9 h-9 rounded-full nav-pill flex items-center justify-center text-[#ebd5ab] hover:text-white" title="Threads">
+          <i class="fa-brands fa-threads text-sm"></i>
+        </a>
+        <a href="https://www.tiktok.com/@nownowtarot" target="_blank" rel="noopener" class="w-9 h-9 rounded-full nav-pill flex items-center justify-center text-[#ebd5ab] hover:text-white" title="TikTok">
+          <i class="fa-brands fa-tiktok text-sm"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Dải phân cách phần trên & phần dưới -->
+    <div class="celestial-divider">
+      <span class="text-[11px] text-[#ebd5ab]/70 tracking-[0.3em] uppercase font-semibold flex items-center gap-2">
+        <span>✦</span> <i class="fa-solid fa-moon text-[#c92a42]"></i> <span>✦</span>
+      </span>
+    </div>
+
+    <!-- =====================================================================
+         PHẦN GIỮA: LINH VẬT MÈO ĐEN KÊU "MEOW MEOW" & BONG BÓNG DẪN LỐI
+         ===================================================================== -->
+    <section class="mb-6 relative">
+      <div class="flex items-end gap-2 sm:gap-3.5">
+        <!-- Chú Mèo Đen Ngồi Tự Do (Chạm vào kêu Meow Meow) -->
+        <div id="catMascotContainer" onclick="interactWithCat()" class="free-cat-wrapper flex-shrink-0 w-24 sm:w-28 -mb-1 select-none" title="Chạm vào Mèo Đen để nghe tiếng kêu Meow Meow!">
+          <!-- Nhãn gợi ý chạm -->
+          <div class="text-center mb-1">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#c92a42]/30 border border-[#f7e38d]/40 text-[9.5px] font-bold text-[#f7e38d]">
+              <i class="fa-solid fa-volume-high text-[9px]"></i> Chạm Mèo kêu
+            </span>
+          </div>
+
+          <svg viewBox="0 0 120 125" class="w-full h-auto overflow-visible">
+            <!-- Vòng hào quang chiêm tinh dưới chân mèo -->
+            <ellipse cx="58" cy="114" rx="36" ry="7" fill="rgba(201, 42, 66, 0.22)" stroke="rgba(235, 213, 171, 0.35)" stroke-width="0.8" stroke-dasharray="3 3" />
+            <!-- Sao lấp lánh quanh mèo -->
+            <g fill="#f7e38d">
+              <path d="M16 26 L18 31 L23 33 L18 35 L16 40 L14 35 L9 33 L14 31 Z" />
+              <circle cx="104" cy="22" r="2" />
+              <circle cx="12" cy="70" r="1.5" fill="#c92a42" />
+            </g>
+            <!-- Đuôi mèo đung đưa -->
+            <path class="cat-tail-anim" d="M78 96 C106 92, 114 62, 98 46 C92 40, 86 48, 92 55" fill="none" stroke="#0b0b12" stroke-width="8.5" stroke-linecap="round" />
+            <!-- Thân mèo đen -->
+            <path d="M35 110 C32 82, 40 64, 58 64 C76 64, 84 82, 81 110 Z" fill="#0b0b12" />
+            <!-- Chân trước -->
+            <rect x="45" y="92" width="8" height="20" rx="4" fill="#151522" />
+            <rect x="63" y="92" width="8" height="20" rx="4" fill="#151522" />
+            <!-- Vòng cổ đỏ rượu & Chuông vàng -->
+            <path d="M41 67 Q58 75 75 67" fill="none" stroke="#b8253a" stroke-width="4.5" stroke-linecap="round" />
+            <circle cx="58" cy="73" r="4.8" fill="#f7e38d" />
+            <circle cx="58" cy="74" r="1.3" fill="#6d131f" />
+            <!-- Đầu mèo -->
+            <circle cx="58" cy="46" r="23" fill="#0b0b12" />
+            <!-- Hai tai mèo cử động -->
+            <g class="cat-ear-left">
+              <polygon points="37,35 31,10 51,25" fill="#0b0b12" />
+              <polygon points="39,32 35,16 48,26" fill="#8c1d2c" />
+            </g>
+            <g>
+              <polygon points="79,35 85,10 65,25" fill="#0b0b12" />
+              <polygon points="77,32 81,16 68,26" fill="#8c1d2c" />
+            </g>
+            <!-- Trăng khuyết trên trán -->
+            <path d="M55 29 A4.5 4.5 0 1 0 61 35 A3.5 3.5 0 1 1 55 29 Z" fill="#f7e38d" />
+            <!-- Đôi mắt vàng hổ phách -->
+            <g class="cat-eye-anim">
+              <ellipse cx="48" cy="46" rx="5.2" ry="5.6" fill="#f7c952" />
+              <ellipse cx="48" cy="46" rx="1.7" ry="4.5" fill="#05040a" />
+              <circle cx="46.5" cy="44" r="1.3" fill="#ffffff" />
+              <ellipse cx="68" cy="46" rx="5.2" ry="5.6" fill="#f7c952" />
+              <ellipse cx="68" cy="46" rx="1.7" ry="4.5" fill="#05040a" />
+              <circle cx="66.5" cy="44" r="1.3" fill="#ffffff" />
+            </g>
+            <!-- Mũi & Miệng -->
+            <polygon points="56,52 60,52 58,55" fill="#e07a8a" />
+            <path id="catMouthPath" d="M54 57 Q58 60 62 57" fill="none" stroke="#ebd5ab" stroke-width="1.4" stroke-linecap="round" />
+            <!-- Râu mèo -->
+            <line x1="23" y1="48" x2="37" y2="50" stroke="#ebd5ab" stroke-width="1" opacity="0.6" />
+            <line x1="22" y1="54" x2="37" y2="53" stroke="#ebd5ab" stroke-width="1" opacity="0.6" />
+            <line x1="93" y1="48" x2="79" y2="50" stroke="#ebd5ab" stroke-width="1" opacity="0.6" />
+            <line x1="94" y1="54" x2="79" y2="53" stroke="#ebd5ab" stroke-width="1" opacity="0.6" />
+          </svg>
+        </div>
+
+        <!-- Khung Bong Bóng Thoại Của Mèo Đen -->
+        <div class="cat-speech-cloud flex-1 p-4">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#f7e38d] flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#c92a42] animate-ping"></span>
+              Mèo Đen Trích Dẫn Tâm Lý
+            </span>
+            <span id="catStepBadge" class="text-[10.5px] text-[#aba3c2] font-semibold">Trích dẫn 1/18</span>
+          </div>
+
+          <p id="catSpeechContent" class="text-[12.5px] sm:text-[13px] text-[#f8f5f0]/95 font-medium leading-relaxed transition-opacity duration-200">
+            "Chừng nào bạn chưa đưa được những điều vô thức ra ánh sáng, nó sẽ điều khiển cuộc đời bạn và bạn gọi đó là ĐỊNH MỆNH."
+          </p>
+
+          <div class="mt-2 flex items-center justify-between">
+            <span id="catQuoteAuthor" class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-[#ebd5ab] bg-white/5 px-2.5 py-0.5 rounded-full border border-[#ebd5ab]/25">
+              <i class="fa-solid fa-feather-pointed text-[#c92a42] text-[10px]"></i> Carl Jung • Tâm lý học Phân tích
+            </span>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
+            <button onclick="interactWithCat()" class="text-[11.5px] font-bold text-[#f7e38d] hover:text-white flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-paw text-[#c92a42]"></i> Chạm nghe Mèo trích dẫn tiếp (Meow~)
+            </button>
+            <button onclick="openModal('approachModal')" class="text-[11px] font-semibold text-[#aba3c2] hover:text-[#f7e38d] transition">
+              Chi tiết →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PHẦN DƯỚI: CÁC NÚT MỞ POP-UP & NỘI DUNG TƯƠNG TÁC
+         ===================================================================== -->
+    <section class="space-y-3.5 mb-8">
+      <!-- Nút 1: Bảng Giá & Đặt Lịch Trải Bài -->
+      <button onclick="openModal('bookingModal')" class="cta-wine-btn w-full rounded-2xl p-4 flex items-center justify-between text-left group">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-xl bg-black/35 border border-[#f7e38d]/40 flex items-center justify-center text-[#f7e38d] text-xl shadow-inner">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="font-extrabold text-[15px] sm:text-base text-white tracking-wide">
+                Bảng Giá & Đặt Lịch Trải Bài
+              </h2>
+              <span class="px-2 py-0.5 text-[9.5px] font-extrabold uppercase rounded-full bg-[#f7e38d] text-[#140d1f]">Hot</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/85 font-medium mt-0.5">
+              Gói Cơ Bản (59K/99K) • Gói Cú Đêm (119K/169K)
+            </p>
+          </div>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-white group-hover:translate-x-1 transition">
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </div>
+      </button>
+
+      <!-- Nút 2: Giải Mã Vận Mệnh: Tâm Lý Học & Huyền Học -->
+      <button onclick="openModal('approachModal')" class="nav-pill w-full rounded-2xl p-4 flex items-center justify-between text-left group">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-xl bg-[#8c1d2c]/30 border border-[#c92a42]/45 flex items-center justify-center text-[#f7e38d] text-xl">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-[14.5px] sm:text-[15px] text-[#f8f5f0]">
+              Giải Mã Vận Mệnh: Tâm Lý Học & Huyền Học
+            </h2>
+            <p class="text-xs text-[#aba3c2] font-medium mt-0.5">
+              Mô hình nhận thức CBT, Carl Jung & thời điểm cần trải bài
+            </p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right text-xs text-[#ebd5ab]/70 group-hover:translate-x-1 transition"></i>
+      </button>
+    </section>
+
+    <!-- =====================================================================
+         MỤC VIRAL • @NOWNOWTAROT (6 BÀI VIRAL + THANH TRƯỢT NGANG RÕ RÀNG)
+         ===================================================================== -->
+    <section class="mb-8">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-fire-flame-curved text-[#c92a42]"></i>
+          <h3 class="text-xs sm:text-[13px] font-extrabold uppercase tracking-wider text-[#ebd5ab]">
+            VIRAL • @NOWNOWTAROT
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="scrollCarousel('viralCarousel', -280)" class="carousel-arrow" title="Trượt sang trái">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button onclick="scrollCarousel('viralCarousel', 280)" class="carousel-arrow" title="Trượt sang phải">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <button type="button" onclick="openModal('viralModal')" class="text-xs font-bold text-[#f7e38d] hover:underline ml-1 cursor-pointer">
+            Xem tất cả (6) →
+          </button>
+        </div>
+      </div>
+
+      <!-- Thanh trượt ngang có Scrollbar hiển thị rõ -->
+      <div id="viralCarousel" class="flex gap-3 overflow-x-auto custom-scrollbar pb-3">
+        <!-- Bài Viral 1 (Mới thêm - Bình chứa 220V/110V - 1,1K tim) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 1,1K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "Đôi khi ông trời cản lại k phải vì thứ đó xấu hay độc hại mà vì nó quá tốt và quá lớn so với bình chứa của bạn ở thời điểm hiện tại. Giống như dòng điện 220V mà cắm vào bóng đèn 110V thì đèn sẽ nổ tung vậy..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+
+        <!-- Bài Viral 2 (3,3K tim) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 3,3K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "Có 1 sự thật tâm lý cực kỳ dark mà hiếm ai dám thừa nhận: b đ hề thu hút ba cái rắc rối hay mấy ng toxic 1 cách ngẫu nhiên đâu. Vũ trụ cứ quăng đi quăng lại 1 kịch bản chỉ để test xem b đã học đc cách nói KHÔNG..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+
+        <!-- Bài Viral 3 (1,9K tim - Thuật toán Tóp Tóp) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 1,9K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "T coi bài t xong t thấy duyên vận hành y chang cái thuật toán tóp tóp á bà. Ngày nào cũng lặp đúng 1 lộ trình chỗ làm -> trường học -> hội bạn cũ thì thuật toán sẽ gắn mác bà đang full slot..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+
+        <!-- Bài Viral 4 (1,9K tim - Hyper-vigilance) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 1,9K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "T thấy bà khá giống kiểu hyper-vigilance kết hợp với romantic starvation: khao khát lãng mạn nhưng cảnh giác cao độ. Độc thân kphải vì ế, mà vì tiềm thức đang đặt tiêu chuẩn an toàn lên cao nhất..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+
+        <!-- Bài Viral 5 (1,8K tim - Outliers) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 1,8K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "Cốt lõi của Outliers là: thử chạm vào một thứ -> thấy mình chịu đựng được sự nhàm chán của nó lâu hơn người khác -> nhận được phản hồi tốt -> não tiết dopamine -> cày tiếp tới 10.000 giờ..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+
+        <!-- Bài Viral 6 (1,2K tim) -->
+        <div onclick="openModal('viralModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-4 cursor-pointer flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-2">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#c92a42]"></span> @nownowtarot
+              </span>
+              <span class="text-[#f7e38d] font-bold"><i class="fa-solid fa-heart text-[#c92a42]"></i> 1,2K</span>
+            </div>
+            <p class="text-xs text-[#f8f5f0]/90 line-clamp-4 leading-relaxed font-medium">
+              "Cần phân biệt rạch ròi đua đòi, phông bạt là vấn đề đạo đức, còn nhà nghèo, ở trọ chỉ là hoàn cảnh xuất phát. Sinh ra không ngậm thìa vàng đâu có nghĩa là k đc phép đối xử với bản thân như một công chúa..."
+            </p>
+          </div>
+          <span class="text-[11px] text-[#f7e38d] mt-3 inline-block font-bold">Đọc trọn vẹn →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         MỤC FEEDBACK KHÁCH HÀNG (8 FEEDBACK + THANH TRƯỢT NGANG RÕ RÀNG)
+         ===================================================================== -->
+    <section class="mb-8">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-heart-circle-check text-[#c92a42]"></i>
+          <h3 class="text-xs sm:text-[13px] font-extrabold uppercase tracking-wider text-[#ebd5ab]">
+            FEEDBACK KHÁCH HÀNG
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="scrollCarousel('feedbackCarousel', -280)" class="carousel-arrow" title="Trượt sang trái">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button onclick="scrollCarousel('feedbackCarousel', 280)" class="carousel-arrow" title="Trượt sang phải">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <button type="button" onclick="openModal('feedbackModal')" class="text-xs font-bold text-[#f7e38d] hover:underline ml-1 cursor-pointer">
+            Xem tất cả (8) →
+          </button>
+        </div>
+      </div>
+
+      <!-- Thanh trượt ngang Feedback có Scrollbar hiển thị rõ -->
+      <div id="feedbackCarousel" class="flex gap-3 overflow-x-auto custom-scrollbar pb-3">
+        <!-- Feedback Mới 1: Nhà tiên tri lòng em -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[270px] max-w-[270px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #01</span>
+              <span class="text-emerald-400 font-semibold">✓ Trải bài tình cảm</span>
+            </div>
+            <div class="chat-bubble-user">
+              đoạn sốp xem giữa bọn em hình như không ổn
+              <span class="reaction-badge">😢</span>
+            </div>
+            <div class="chat-bubble-user">em còn không tin • vì lúc đó thật sự đang rất ổn</div>
+            <div class="chat-bubble-user">và rồi... bùm... giờ thành ra vậy lun</div>
+            <div class="chat-bubble-user font-bold text-[#f7e38d]">nhà tiên tri lòng em</div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2.5 inline-block">Chạm xem chi tiết →</span>
+        </div>
+
+        <!-- Feedback Mới 2: Update chia tay + Sticker khóc -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[265px] max-w-[265px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #02</span>
+              <span class="text-emerald-400 font-semibold">✓ Update sau trải bài</span>
+            </div>
+            <div class="chat-bubble-user">update cho sốp là...</div>
+            <div class="chat-bubble-user">sốp xem chuẩn quá ạ</div>
+            <div class="chat-bubble-user">
+              bon em chia tay rồi
+              <span class="reaction-badge">😭</span>
+            </div>
+            <div class="pt-1 pl-1 text-2xl select-none">😭🧌</div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2 inline-block">Chạm xem chi tiết →</span>
+        </div>
+
+        <!-- Feedback Mới 3: Chuẩn bị đi du học - Top 1 tin tưởng -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[275px] max-w-[275px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #03</span>
+              <span class="text-emerald-400 font-semibold">✓ Ứng nghiệm thực tế</span>
+            </div>
+            <div class="chat-bubble-user">ê chừ chuyện nớ xảy ra luôn • thằng nớ cbi đi du học • dệ sợ thặc</div>
+            <div class="chat-bubble-shop">👀👀 gớm dzị chời</div>
+            <div class="chat-bubble-user">
+              top 1 người toi luôn tin tưởng 🫶
+              <span class="reaction-badge">😆</span>
+            </div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2.5 inline-block">Chạm xem chi tiết →</span>
+        </div>
+
+        <!-- Feedback 4: Đúng giờ từng giây từng phút -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[265px] max-w-[265px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #04</span>
+              <span class="text-emerald-400 font-semibold">✓ Đúng giờ</span>
+            </div>
+            <div class="chat-bubble-user">
+              Hỏng bít là có thể trúng đc bao nhiu trong số trải vừa r nhưng mà thiệt sự rất muốn 1 lần book sốp, vs sốp đúng giờ từng giây từng phút luôn á
+              <span class="reaction-badge">❤️</span>
+            </div>
+            <div class="chat-bubble-user">
+              Tui rất nể ng đúng giờ
+              <span class="reaction-badge">❤️</span>
+            </div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2.5 inline-block">Chạm xem chi tiết →</span>
+        </div>
+
+        <!-- Feedback 5: Phiên Voice 1:59 -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[265px] max-w-[265px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #05</span>
+              <span class="text-emerald-400 font-semibold">✓ Phiên Voice</span>
+            </div>
+            <div class="flex justify-end">
+              <div class="voice-pill">
+                <i class="fa-solid fa-play text-[9px]"></i> ||||| |||||||| |||| 1:59
+              </div>
+            </div>
+            <div class="chat-bubble-user">
+              Tui thấy bà nói đúng về tui lắm luôn
+              <span class="reaction-badge">❤️</span>
+            </div>
+            <div class="chat-bubble-user">
+              Chời ơi chính xác lun
+              <span class="reaction-badge">❤️</span>
+            </div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2.5 inline-block">Chạm xem chi tiết →</span>
+        </div>
+
+        <!-- Feedback 6: Coi đúng vãi -->
+        <div onclick="openModal('feedbackModal')" class="nav-pill min-w-[245px] max-w-[245px] rounded-2xl p-3.5 cursor-pointer flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-[11px] text-[#aba3c2] mb-1">
+              <span class="font-bold text-[#ebd5ab]">Feedback #06</span>
+              <span class="text-emerald-400 font-semibold">✓ Đã trải bài</span>
+            </div>
+            <div class="chat-bubble-user">Hahha</div>
+            <div class="chat-bubble-user">M coi đúng vãi</div>
+            <div class="chat-bubble-user">Y chang luôn đó</div>
+          </div>
+          <span class="text-[10.5px] text-[#f7e38d] font-bold mt-2.5 inline-block">Chạm xem chi tiết →</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CÁC KÊNH KẾT NỐI CHÍNH THỨC
+         ===================================================================== -->
+    <section class="mb-7">
+      <div class="flex items-center gap-3 mb-3.5">
+        <div class="h-px bg-white/10 flex-1"></div>
+        <span class="text-[11px] uppercase tracking-[0.22em] text-[#ebd5ab] font-bold">Kênh Kết Nối</span>
+        <div class="h-px bg-white/10 flex-1"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <a href="https://www.facebook.com/NowNowTarot" target="_blank" rel="noopener" class="nav-pill rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#8c1d2c]/30 border border-[#c92a42]/45 flex items-center justify-center text-[#f7e38d]">
+            <i class="fa-brands fa-facebook-f"></i>
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-xs sm:text-sm font-bold text-[#f8f5f0] truncate">Facebook</p>
+            <p class="text-[11px] text-[#aba3c2] truncate">NowNow Tarot</p>
+          </div>
+        </a>
+
+        <a href="https://www.instagram.com/nownowtarot/" target="_blank" rel="noopener" class="nav-pill rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#8c1d2c]/30 border border-[#c92a42]/45 flex items-center justify-center text-[#f7e38d]">
+            <i class="fa-brands fa-instagram"></i>
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-xs sm:text-sm font-bold text-[#f8f5f0] truncate">Instagram</p>
+            <p class="text-[11px] text-[#aba3c2] truncate">@nownowtarot</p>
+          </div>
+        </a>
+
+        <a href="https://www.threads.com/@nownowtarot?hl=vi" target="_blank" rel="noopener" class="nav-pill rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#8c1d2c]/30 border border-[#c92a42]/45 flex items-center justify-center text-[#f7e38d]">
+            <i class="fa-brands fa-threads"></i>
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-xs sm:text-sm font-bold text-[#f8f5f0] truncate">Threads</p>
+            <p class="text-[11px] text-[#aba3c2] truncate">@nownowtarot</p>
+          </div>
+        </a>
+
+        <a href="https://www.tiktok.com/@nownowtarot" target="_blank" rel="noopener" class="nav-pill rounded-xl p-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#8c1d2c]/30 border border-[#c92a42]/45 flex items-center justify-center text-[#f7e38d]">
+            <i class="fa-brands fa-tiktok"></i>
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-xs sm:text-sm font-bold text-[#f8f5f0] truncate">TikTok</p>
+            <p class="text-[11px] text-[#aba3c2] truncate">@nownowtarot</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         FOOTER & BỘ ĐẾM LƯỢT TRUY CẬP + ĐANG ONLINE TỰ NHIÊN NHƯ THẬT
+         ===================================================================== -->
+    <footer class="pt-4 border-t border-white/10 text-center space-y-2.5">
+      <div class="inline-flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 px-4 py-2 rounded-full bg-black/45 border border-[#ebd5ab]/25 text-[11.5px] text-[#aba3c2] shadow-inner">
+        <!-- Lượt ghé thăm tăng theo ngày -->
+        <span class="flex items-center gap-1.5">
+          <i class="fa-solid fa-eye text-[#ebd5ab] text-[11px]"></i>
+          <span class="text-[#f7e38d] font-extrabold" id="visitorCountDisplay">1,245</span> lượt ghé thăm
+        </span>
+
+        <span class="text-white/20">|</span>
+
+        <!-- Đang online chạy tự nhiên từ 1 - 99 -->
+        <span class="flex items-center gap-1.5">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+          </span>
+          <span>Đang online:</span>
+          <strong id="onlineNowDisplay" class="text-emerald-300 font-extrabold inline-block transition-transform">24</strong>
+          <span>người</span>
+        </span>
+      </div>
+
+      <p class="text-[11px] text-[#aba3c2]/65 font-medium">
+        © NowNow Tarot • Thấu cảm lý trí • @nownowtarot
+      </p>
+    </footer>
+  </main>
+
+  <!-- =========================================================================
+       POP-UP 1: PHƯƠNG PHÁP TIẾP CẬN (THIẾT KẾ INFOGRAPHIC HIỆN ĐẠI, CHUYÊN NGHIỆP)
+       ========================================================================= -->
+  <div id="approachModal" class="modal-overlay" onclick="outsideClick(event, 'approachModal')">
+    <div class="modal-box p-5 sm:p-7">
+      <!-- Header Pop-up -->
+      <div class="flex items-start justify-between pb-4 mb-5 border-b border-white/10">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c92a42]/20 border border-[#c92a42]/50 text-[10.5px] font-extrabold uppercase tracking-widest text-[#f7e38d] mb-2">
+            <span>✦ Phương Pháp Tiếp Cận</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-black text-white leading-tight">
+            Giải Mã Vận Mệnh: Khi Tâm Lý Học Gặp Gỡ Huyền Học
+          </h3>
+        </div>
+        <button onclick="closeModal('approachModal')" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white flex-shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-5 text-[13px] leading-relaxed">
+        <!-- KHỐI 01: CÔNG THỨC CỦA SỐ PHẬN (CBT) -->
+        <div class="rounded-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.015] border border-[#ebd5ab]/20 p-4 sm:p-5">
+          <div class="flex items-center gap-2.5 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-[#c92a42] text-white font-black text-xs flex items-center justify-center">01</span>
+            <h4 class="font-extrabold text-[#f7e38d] text-sm sm:text-[15px] uppercase tracking-wide">
+              Công Thức Của Số Phận (Mô hình Tam Giác Nhận Thức CBT)
+            </h4>
+          </div>
+
+          <p class="text-white/85 mb-3.5">
+            Bạn nghĩ vận mệnh là sự sắp đặt ngẫu nhiên của vũ trụ? Không hẳn! Trong <b>Liệu pháp Nhận thức Hành vi (CBT)</b>, cuộc đời bạn vận hành theo dây chuyền sản xuất:
+          </p>
+
+          <!-- Sơ đồ 4 bước trực quan -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+            <div class="p-2.5 rounded-xl bg-[#8c1d2c]/35 border border-[#c92a42]/50 text-center">
+              <i class="fa-solid fa-brain text-[#f7e38d] text-sm mb-1 block"></i>
+              <span class="text-[11px] font-extrabold text-white block">1. Niềm tin cốt lõi</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/15 text-center">
+              <i class="fa-solid fa-cloud-bolt text-[#ebd5ab] text-sm mb-1 block"></i>
+              <span class="text-[11px] font-bold text-white/90 block">2. Suy nghĩ & Cảm xúc</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white/5 border border-white/15 text-center">
+              <i class="fa-solid fa-person-walking text-[#ebd5ab] text-sm mb-1 block"></i>
+              <span class="text-[11px] font-bold text-white/90 block">3. Hành vi</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[#f7e38d]/15 border border-[#f7e38d]/40 text-center">
+              <i class="fa-solid fa-star text-[#f7e38d] text-sm mb-1 block"></i>
+              <span class="text-[11px] font-extrabold text-[#f7e38d] block">4. Kết quả (Số phận)</span>
+            </div>
+          </div>
+
+          <!-- 2 cột so sánh Ví dụ & Sự thật -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-3.5 rounded-xl bg-black/35 border border-white/10">
+              <span class="text-[#c92a42] font-extrabold uppercase block mb-1">⚠️ Ví dụ vòng lặp sai lệch:</span>
+              Tin rằng <i>"mình không đủ giỏi"</i> (do tổn thương cũ) ➔ Cơ hội đến lại vô thức từ chối hoặc làm hời hợt vì sợ thất bại ➔ Dậm chân tại chỗ ➔ Tự trách: <i>"Số mình lận đận công danh"</i>.
+            </div>
+            <div class="p-3.5 rounded-xl bg-[#8c1d2c]/20 border border-[#c92a42]/40">
+              <span class="text-[#f7e38d] font-extrabold uppercase block mb-1">💡 Sự thật tâm lý:</span>
+              Chính <b>Niềm tin cốt lõi</b> đang âm thầm lái hành vi của bạn. Nếu không sửa hệ thống tư duy gốc rễ này, dù đi cúng sao giải hạn 100 lần kết quả đầu ra vẫn y nguyên!
+            </div>
+          </div>
+        </div>
+
+        <!-- KHỐI 02: VAI TRÒ THỰC SỰ CỦA VIỆC COI BÓI (CARL JUNG) -->
+        <div class="rounded-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.015] border border-[#ebd5ab]/20 p-4 sm:p-5">
+          <div class="flex items-center gap-2.5 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-[#c92a42] text-white font-black text-xs flex items-center justify-center">02</span>
+            <h4 class="font-extrabold text-[#f7e38d] text-sm sm:text-[15px] uppercase tracking-wide">
+              Vai Trò Thực Sự Của Việc Coi Bói
+            </h4>
+          </div>
+
+          <!-- Quote Carl Jung nổi bật -->
+          <div class="p-3.5 rounded-xl bg-black/40 border-l-4 border-[#f7e38d] mb-3">
+            <p class="italic text-xs sm:text-[13px] text-[#ebd5ab] font-medium">
+              "Until you make the unconscious conscious, it will direct your life and you will call it fate."
+            </p>
+            <p class="text-[11.5px] text-white/80 mt-1">
+              — <b>Carl Jung</b> (Chừng nào bạn chưa đưa được những điều vô thức ra ánh sáng, nó sẽ điều khiển cuộc đời bạn và bạn gọi đó là ĐỊNH MỆNH).
+            </p>
+          </div>
+
+          <p class="text-xs sm:text-[13px] text-white/85 mb-3">
+            Tarot, Tử vi hay Thần số học không phải công cụ tiên tri tương lai, mà là <b>công cụ phóng chiếu</b> giúp lôi những nỗi sợ, ham muốn và mô thức sai lầm ra ngoài ánh sáng:
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-3 rounded-xl bg-[#8c1d2c]/25 border border-[#c92a42]/40 text-[11.5px] font-bold text-[#f7e38d]">
+            <span>Nhận thức đổi</span>
+            <i class="fa-solid fa-arrow-right text-[#c92a42] text-[10px]"></i>
+            <span>Hành vi đổi</span>
+            <i class="fa-solid fa-arrow-right text-[#c92a42] text-[10px]"></i>
+            <span>Thói quen đổi</span>
+            <i class="fa-solid fa-arrow-right text-[#c92a42] text-[10px]"></i>
+            <span class="px-2 py-0.5 rounded bg-[#f7e38d] text-[#140d1f] font-black">Vận mệnh đổi</span>
+          </div>
+        </div>
+
+        <!-- KHỐI 03: KHI NÀO BẠN CẦN MỘT PHIÊN TRẢI BÀI? -->
+        <div class="rounded-2xl bg-gradient-to-br from-white/[0.05] to-white/[0.015] border border-[#ebd5ab]/20 p-4 sm:p-5">
+          <div class="flex items-center gap-2.5 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-[#c92a42] text-white font-black text-xs flex items-center justify-center">03</span>
+            <h4 class="font-extrabold text-[#f7e38d] text-sm sm:text-[15px] uppercase tracking-wide">
+              Khi Nào Bạn Cần Một Phiên Trải Bài?
+            </h4>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-black/35 border border-white/10">
+              <i class="fa-solid fa-arrows-spin text-[#c92a42] text-base mb-1.5 block"></i>
+              <b class="text-[#ebd5ab] block mb-1">Cần phá vỡ vòng lặp</b>
+              Khi vấp ngã mãi ở 1 chỗ (yêu 5 người cùng 1 kịch bản, mất tiền cùng 1 cách). Tìm ra pattern sai lệch trong tiềm thức.
+            </div>
+            <div class="p-3 rounded-xl bg-black/35 border border-white/10">
+              <i class="fa-solid fa-scale-balanced text-[#f7e38d] text-base mb-1.5 block"></i>
+              <b class="text-[#ebd5ab] block mb-1">Khách quan hóa nội tâm</b>
+              Khi lý trí & trực giác đánh nhau. Lá bài đóng vai trò trọng tài trung lập giúp nhìn rõ bức tranh toàn cảnh.
+            </div>
+            <div class="p-3 rounded-xl bg-black/35 border border-white/10">
+              <i class="fa-solid fa-hourglass-half text-emerald-400 text-base mb-1.5 block"></i>
+              <b class="text-[#ebd5ab] block mb-1">Xác định "Thiên thời"</b>
+              Trong kinh doanh hay sự nghiệp, nắm bắt chu kỳ năng lượng để hành động hiệu quả nhất.
+            </div>
+          </div>
+        </div>
+
+        <!-- KHỐI CHỐT: AI LÀ NGƯỜI ÔM VÔ LĂNG? -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-[#8c1d2c]/40 via-[#c92a42]/25 to-[#8c1d2c]/40 border border-[#f7e38d]/40 text-center">
+          <p class="text-xs sm:text-[13px] font-semibold text-white">
+            🚗 <b>CHỐT LẠI LÀ:</b> Tương lai là thứ để tự tay nhào nặn, chứ không phải ngồi rung đùi đoán xem chừng nào thời mới tới. Đi xem bói bản chất là đi <b>thu thập thông tin tình báo để thấu hiểu nội tâm mình</b>. Còn người ôm vô lăng, đạp ga và chốt điểm đến vẫn là <b>CHÍNH CÁC BÀ ĐÓ!</b>
+          </p>
+        </div>
+      </div>
+
+      <button onclick="closeModal('approachModal'); openModal('bookingModal');" class="cta-wine-btn w-full rounded-xl py-3.5 font-extrabold text-sm text-white mt-5 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Đặt Lịch Trải Bài Ngay →
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       POP-UP 2: BẢNG GIÁ & ĐẶT LỊCH (ĐÃ FIX LỖI DƯ THẺ DIV BẪY CÁC POP-UP SAU)
+       ========================================================================= -->
+  <div id="bookingModal" class="modal-overlay" onclick="outsideClick(event, 'bookingModal')">
+    <div class="modal-box p-5 sm:p-7">
+      <!-- Header -->
+      <div class="flex items-start justify-between pb-4 mb-4 border-b border-white/10">
+        <div>
+          <span class="text-[10.5px] uppercase tracking-widest text-[#f7e38d] font-extrabold block">
+            ✦ NowNow Tarot • Thấu Cảm Lý Trí
+          </span>
+          <h3 class="text-xl sm:text-2xl font-black text-white mt-0.5">
+            Bảng Giá & Đặt Lịch Trải Bài
+          </h3>
+        </div>
+        <button onclick="closeModal('bookingModal')" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Bước 1: Chọn Gói Dịch Vụ Sinh Động -->
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs sm:text-[13px] font-extrabold text-[#f7e38d] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-amber-400/20 border border-amber-300/40 flex items-center justify-center text-amber-300">
+              <i class="fa-solid fa-sun text-xs"></i>
+            </span>
+            GÓI DỊCH VỤ CƠ BẢN
+          </span>
+          <span class="text-[11px] font-semibold text-[#ebd5ab] bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
+            9h00 sáng – trước 00:00
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div onclick="choosePkg(this, 'Gói Cơ Bản - 30 phút (59K)')" class="pkg-card active p-4">
+            <div class="pkg-check-badge"><i class="fa-solid fa-check"></i></div>
+            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#ebd5ab] mb-1.5">
+              Gỡ rối nhanh
+            </span>
+            <p class="text-xs font-bold text-white/90">Gói 30 phút</p>
+            <p class="text-2xl font-black text-[#f7e38d] mt-0.5">59K</p>
+          </div>
+
+          <div onclick="choosePkg(this, 'Gói Cơ Bản - 60 phút (99K)')" class="pkg-card p-4">
+            <div class="pkg-check-badge"><i class="fa-solid fa-check"></i></div>
+            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-[#c92a42]/40 text-[#f7e38d] mb-1.5">
+              🔥 Phổ biến nhất
+            </span>
+            <p class="text-xs font-bold text-white/90">Gói 60 phút</p>
+            <p class="text-2xl font-black text-[#f7e38d] mt-0.5">99K</p>
+          </div>
+        </div>
+        <p class="text-[11px] text-[#aba3c2] italic mt-2">
+          ***Lưu ý: Nếu khách vẫn muốn trò chuyện thêm, mỗi 1 phút thêm 1,5K.
+        </p>
+      </div>
+
+      <!-- Gói Cú Đêm -->
+      <div class="mb-5">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs sm:text-[13px] font-extrabold text-[#f7e38d] flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-indigo-400/20 border border-indigo-300/40 flex items-center justify-center text-indigo-300">
+              <i class="fa-solid fa-moon text-xs"></i>
+            </span>
+            GÓI DỊCH VỤ CÚ ĐÊM
+          </span>
+          <span class="text-[11px] font-semibold text-[#ebd5ab] bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">
+            00:00 – 4:00 sáng
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div onclick="choosePkg(this, 'Gói Cú Đêm - 30 phút (119K)')" class="pkg-card p-4">
+            <div class="pkg-check-badge"><i class="fa-solid fa-check"></i></div>
+            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 mb-1.5">
+              Tâm sự đêm
+            </span>
+            <p class="text-xs font-bold text-white/90">Gói 30 phút</p>
+            <p class="text-2xl font-black text-[#f7e38d] mt-0.5">119K</p>
+          </div>
+
+          <div onclick="choosePkg(this, 'Gói Cú Đêm - 60 phút (169K)')" class="pkg-card p-4">
+            <div class="pkg-check-badge"><i class="fa-solid fa-check"></i></div>
+            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/25 text-purple-200 mb-1.5">
+              Chuyên sâu đêm
+            </span>
+            <p class="text-xs font-bold text-white/90">Gói 60 phút</p>
+            <p class="text-2xl font-black text-[#f7e38d] mt-0.5">169K</p>
+          </div>
+        </div>
+        <p class="text-[11px] text-[#aba3c2] italic mt-2">
+          ***Lưu ý: Nếu khách vẫn muốn trò chuyện thêm, mỗi 1 phút thêm 2,5K.
+        </p>
+      </div>
+
+      <!-- Khung Đặt Lịch Tối Giản & Sinh Động -->
+      <div class="p-4 rounded-2xl bg-black/45 border border-[#ebd5ab]/25 space-y-3.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-[#ebd5ab]">Gói đang chọn:</span>
+          <span id="selectedPkgBadge" class="text-xs sm:text-sm font-black text-[#f7e38d] bg-[#8c1d2c]/40 px-3 py-1 rounded-lg border border-[#c92a42]/50">
+            Gói Cơ Bản - 30 phút (59K)
+          </span>
+        </div>
+
+        <!-- Gợi ý chủ đề bấm chọn nhanh -->
+        <div>
+          <label class="text-[11.5px] font-semibold text-[#aba3c2] block mb-2">
+            Chủ đề bạn muốn gỡ rối (chạm chọn nhanh hoặc nhập bên dưới):
+          </label>
+          <div class="flex flex-wrap gap-1.5 mb-2.5">
+            <button type="button" onclick="addTopicTag(this, 'Tình cảm & Mối quan hệ')" class="topic-chip">💘 Tình cảm</button>
+            <button type="button" onclick="addTopicTag(this, 'Công việc & Sự nghiệp')" class="topic-chip">💼 Sự nghiệp</button>
+            <button type="button" onclick="addTopicTag(this, 'Phá vỡ vòng lặp tâm lý')" class="topic-chip">🔄 Phá vỡ vòng lặp</button>
+            <button type="button" onclick="addTopicTag(this, 'Định hướng & Thiên thời')" class="topic-chip">🧭 Định hướng</button>
+          </div>
+          <input id="bookingTopicInput" type="text" placeholder="Ghi chú thêm vấn đề bạn muốn xem (không bắt buộc)..." class="w-full rounded-xl bg-white/5 border border-white/15 px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-[#f7e38d]">
+        </div>
+
+        <!-- DÒNG HƯỚNG DẪN LUÔN HIỂN THỊ SẴN (ĐÃ ĐÓNG THẺ CHUẨN CHỈNH) -->
+        <div id="bookingGuideBanner" class="p-3 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-center transition-transform">
+          <p class="text-xs font-bold text-emerald-300">
+            ✓ Đã tự động sao chép thông tin đặt lịch! Bạn chỉ cần Dán (Paste) vào khung chat của Shop nhé.
+          </p>
+        </div>
+
+        <!-- Nút Duy Nhất Vào Thẳng Messenger (https://m.me/NowNowTarot) -->
+        <a href="https://m.me/NowNowTarot" target="_blank" rel="noopener" onclick="handleDirectMessengerBooking(event)" class="cta-wine-btn w-full rounded-xl py-4 px-5 font-extrabold text-xs sm:text-sm text-white flex items-center justify-center gap-2.5 text-center shadow-lg">
+          <i class="fa-brands fa-facebook-messenger text-lg text-[#f7e38d]"></i>
+          <span>Gửi Tin Nhắn Đặt Lịch Qua Messenger</span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-80"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       POP-UP 3: TRỌN BỘ 6 BÀI VIRAL TRÊN THREADS (@NOWNOWTAROT)
+       ========================================================================= -->
+  <div id="viralModal" class="modal-overlay" onclick="outsideClick(event, 'viralModal')">
+    <div class="modal-box p-5 sm:p-6">
+      <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-white/10">
+        <div>
+          <span class="text-[11px] uppercase tracking-widest text-[#c92a42] font-extrabold">Threads • @nownowtarot</span>
+          <h3 class="text-xl sm:text-2xl font-black text-[#f7e38d]">Tổng Hợp Bài Viết Viral (6)</h3>
+        </div>
+        <button onclick="closeModal('viralModal')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-[13px] leading-relaxed">
+        <!-- Bài Viral Mới #1 (Dòng điện 220V & Bình chứa 110V) -->
+        <article class="p-4 rounded-2xl bg-white/[0.04] border border-[#ebd5ab]/25">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 1,1K • 💬 3 • 🔁 95 • ✈️ 58</span>
+          </div>
+          <p class="text-white/95 font-medium">
+            T làm tâm linh nên cực kỳ tin câu này nhma theo góc hơi ngược. Đôi khi ông trời cản lại k phải vì thứ đó xấu hay độc hại mà vì nó quá tốt và quá lớn so với bình chứa của bạn ở thời điểm hiện tại. Giống như dòng điện 220V mà cắm vào bóng đèn 110V thì đèn sẽ nổ tung vậy. Nếu vũ trụ cho bạn đạt đc thành tựu đó hoặc có được người đó ngay lúc tâm tính bạn chưa đủ vững, chính cái phước phần đó sẽ làm hại bạn. Sự k thành này là cái phanh gấp để chờ bạn nâng cấp xong bản thân rồi mới trao trả lại
+          </p>
+        </article>
+
+        <!-- Bài Viral #2 -->
+        <article class="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot • 18/07/2026</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 3,3K • 🔁 335</span>
+          </div>
+          <p class="text-white/90 mb-2">
+            có 1 sự thật tâm lý cực kỳ dark mà hiếm ai dám thừa nhận:<br>
+            b đ hề thu hút ba cái rắc rối hay mấy ng toxic 1 cách ngẫu nhiên đâu. vũ trụ hay tiềm thức của b cứ quăng đi quăng lại 1 kiểu người, 1 kịch bản đau khổ y chang nhau vào cuộc đời b, chỉ để test xem b đã học đc cách nói KHÔNG và từ bỏ thói quen cứu rỗi ng khác chưa thôi. (1/2)
+          </p>
+          <p class="text-white/85 pl-3 border-l-2 border-[#c92a42]">
+            chừng nào b còn bám víu và chưa học đc bài học đó, thì vòng lặp cũ vẫn cứ tiếp diễn, chỉ là đổi tên diễn viên thôi =))) đừng trách số phận xui xẻo nx, trách mình đang bị đứt gãy vs trực giác của chính mình á. lúc mới quen cấn cấn r nhg b lờ đi đúng k? nhận ra r thì tự cắt đứt đi, khóc lóc gì nữa. (2/2)
+          </p>
+        </article>
+
+        <!-- Bài Viral #3 -->
+        <article class="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot • 24/09/2026</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 1,9K • 🔁 83</span>
+          </div>
+          <p class="text-white/90">
+            T coi bài t xong t thấy duyên vận hành y chang cái thuật toán tóp tóp á bà. Ngày nào bà cũng lặp đúng 1 lộ trình chỗ làm -> trường học -> hội bạn cũ thì thuật toán sẽ gắn mác bà đang full slot và ngừng đề xuất nhân tố mới. Duyên ngẫu nhiên nó là dạng nội dung khám phá. Muốn duyên phân phối bồ tới thì bà phải chủ động nạp từ khóa lạ kiểu rẽ nhầm một con đường, ngồi một quán cafe chưa từng tới hay học một thứ chả liên quan gì đến ngành của mình. Đổi hành vi thì thuật toán mới trả kết quả mới nha bà
+          </p>
+        </article>
+
+        <!-- Bài Viral #4 -->
+        <article class="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot • 20/09/2026</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 1,9K • 🔁 170</span>
+          </div>
+          <p class="text-white/90">
+            t thấy bà khá giống kiểu hyper-vigilance kết hợp với romantic starvation nói nôm na là khao khát lãng mạn nhưng cảnh giác cao độ í. Kiểu bà khao khát được iu thương nên dễ rung động với những điều nhỏ nhặt nhma bộ não lại sợ hãi sự rủi ro nên liên tục ptích và kiềm chế. Kiểu bà độc thân kphải vì ế, mà vì tiềm thức đang đặt tiêu chuẩn an toàn lên mức cao nhất để k ai có thể làm tổn thương bà thêm một lần nào nữa. Cứ thong thả ikk khi nào não bộ thấy thực sự an toàn nó sẽ tự tắt chế độ phòng vệ
+          </p>
+        </article>
+
+        <!-- Bài Viral #5 -->
+        <article class="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot • 08/10/2026</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 1,8K • 🔁 180</span>
+          </div>
+          <p class="text-white/90">
+            Thực ra t thấy mấy người trong Outliers của Gladwell cũng đâu có tự dưng biết mình giỏi gì đâu :))) Cốt lõi của Outliers là: thử chạm vào một thứ -> thấy mình chịu đựng được sự nhàm chán của nó lâu hơn người khác -> nhận được phản hồi tốt -> não tiết dopamine -> cày tiếp cho tới khi chạm mốc 10.000 giờ. Nên bí quyết để phát hiện ra điểm mạnh không phải là ngồi nghĩ xem mình giỏi gì mà là va đập đủ nhiều để xem mình lì đòn với thứ gì nhất í
+          </p>
+        </article>
+
+        <!-- Bài Viral #6 -->
+        <article class="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="flex items-center justify-between text-xs text-[#aba3c2] mb-2">
+            <span class="font-bold text-white">@nownowtarot • 22/09/2026</span>
+            <span class="text-[#f7e38d] font-bold">❤️ 1,2K • 🔁 34</span>
+          </div>
+          <p class="text-white/90">
+            Ưng cái bụng post này vô cùng. T nghĩ cần phân biệt rạch ròi đua đòi, phông bạt là vấn đề đạo đức, còn nhà nghèo, ở trọ chỉ là hoàn cảnh xuất phát. Lấy hoàn cảnh ra để chế giễu quyền được yêu thương và tiêu chuẩn sống của ng khác là tận cùng của sự nghèo nàn trong nhận thức. Sinh ra không ngậm thìa vàng đâu có nghĩa là k đc phép đối xử với bản thân như một công chúa
+          </p>
+        </article>
+      </div>
+
+      <a href="https://www.threads.com/@nownowtarot?hl=vi" target="_blank" rel="noopener" class="cta-wine-btn w-full rounded-xl py-3.5 font-extrabold text-sm text-white mt-5 flex items-center justify-center gap-2">
+        <i class="fa-brands fa-threads"></i> Đọc thêm trên Threads @nownowtarot
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       POP-UP 4: FEEDBACK KHÁCH HÀNG (8 FEEDBACK THỰC TẾ)
+       ========================================================================= -->
+  <div id="feedbackModal" class="modal-overlay" onclick="outsideClick(event, 'feedbackModal')">
+    <div class="modal-box p-5 sm:p-6">
+      <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-white/10">
+        <div>
+          <span class="text-[11px] uppercase tracking-widest text-[#c92a42] font-extrabold">NowNow Tarot</span>
+          <h3 class="text-xl sm:text-2xl font-black text-[#f7e38d]">Feedback Khách Hàng (8)</h3>
+        </div>
+        <button onclick="closeModal('feedbackModal')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Feedback #01 (Mới - Nhà tiên tri lòng em) -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-[#ebd5ab]/20 space-y-2">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #01</span>
+            <span>Trải bài mối quan hệ</span>
+          </div>
+          <div class="chat-bubble-user mb-2">
+            đoạn sốp xem giữa bọn em hình như không ổn
+            <span class="reaction-badge">😢</span>
+          </div>
+          <div class="chat-bubble-user">em còn không tin</div>
+          <div class="chat-bubble-user">vì lúc đó thật sự đang rất ổn</div>
+          <div class="chat-bubble-user">và rồi</div>
+          <div class="chat-bubble-user">bùm</div>
+          <div class="chat-bubble-user">giờ thành ra vậy lun</div>
+          <div class="chat-bubble-user">...</div>
+          <div class="chat-bubble-user font-bold text-[#f7e38d]">nhà tiên tri lòng em</div>
+        </div>
+
+        <!-- Feedback #02 (Mới - Update chia tay) -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-[#ebd5ab]/20 space-y-2">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #02</span>
+            <span>Update từ khách</span>
+          </div>
+          <div class="chat-bubble-user">update cho sốp là...</div>
+          <div class="chat-bubble-user">sốp xem chuẩn quá ạ</div>
+          <div class="chat-bubble-user mb-2">
+            bon em chia tay rồi
+            <span class="reaction-badge">😭</span>
+          </div>
+          <div class="pt-2 pl-2">
+            <div class="w-20 h-20 rounded-2xl bg-[#5c7863]/30 border border-[#7ea387]/40 flex items-center justify-center text-4xl">
+              😭
+            </div>
+          </div>
+        </div>
+
+        <!-- Feedback #03 (Mới - Đi du học / Top 1 tin tưởng) -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-[#ebd5ab]/20 space-y-2">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #03</span>
+            <span>Ứng nghiệm thực tế</span>
+          </div>
+          <div class="chat-bubble-user">bữa m nhớ t trải bài tarot cho t khôm</div>
+          <div class="chat-bubble-user">ê chừ chuyện nớ xảy ra luôn</div>
+          <div class="chat-bubble-user">thằng nớ cbi đi du học</div>
+          <div class="chat-bubble-user">dệ sợ thặc</div>
+          <div class="text-right text-xl pr-2">👀👀</div>
+          <div class="chat-bubble-shop">gớm dzị chời</div>
+          <div class="chat-bubble-user mb-2">
+            xợ
+            <span class="reaction-badge">😢</span>
+          </div>
+          <div class="chat-bubble-shop">thoi kệ ik đại đại ikkk</div>
+          <div class="chat-bubble-user font-bold text-[#f7e38d]">
+            top 1 người toi luôn tin tưởng 🫶
+            <span class="reaction-badge">😆</span>
+          </div>
+        </div>
+
+        <!-- Feedback #04 -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-white/10 space-y-2.5">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #04</span>
+            <span>Đúng giờ từng giây từng phút</span>
+          </div>
+          <div class="chat-bubble-user">đọc cái này ấm váaaa</div>
+          <div class="chat-bubble-user">
+            Hỏng bít là có thể trúng đc bao nhiu trong số trải vừa r nhưng mà thiệt sự rất muốn 1 lần book sốp, vs sốp đúng giờ từng giây từng phút luôn á
+            <span class="reaction-badge">❤️</span>
+          </div>
+          <div class="chat-bubble-user">
+            Tui rất nể ng đúng giờ
+            <span class="reaction-badge">❤️</span>
+          </div>
+        </div>
+
+        <!-- Feedback #05 -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-white/10 space-y-2.5">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #05</span>
+            <span>Trải bài chi tiết & thấu cảm</span>
+          </div>
+          <div class="flex flex-col items-end gap-1.5">
+            <div class="voice-pill"><i class="fa-solid fa-play text-[10px]"></i> |||| ||||||||| |||||| 1:59</div>
+            <div class="voice-pill"><i class="fa-solid fa-play text-[10px]"></i> ||||||| |||||| ||||| 1:42</div>
+            <div class="voice-pill"><i class="fa-solid fa-play text-[10px]"></i> ||||| |||| ||| 0:40</div>
+          </div>
+          <div class="chat-bubble-user">
+            Okii bà, được rồi nhaa. Tui cảm ơn bà nhiều
+            <span class="reaction-badge">❤️</span>
+          </div>
+          <div class="chat-bubble-shop">uki bà nè</div>
+          <div class="chat-bubble-shop">cảm ơn bà đã xem bói bên tui nha</div>
+          <div class="chat-bubble-user">
+            Tui thấy bà nói đúng về tui lắm luôn
+            <span class="reaction-badge">❤️</span>
+          </div>
+        </div>
+
+        <!-- Feedback #06 -->
+        <div class="p-4 rounded-2xl bg-black/45 border border-white/10 space-y-2.5">
+          <div class="flex justify-between items-center text-xs text-[#aba3c2] pb-1 border-b border-white/5">
+            <span class="font-bold text-[#f7e38d]">Feedback #06</span>
+            <span>Phiên trải bài Voice</span>
+          </div>
+          <div class="flex flex-col items-end gap-1.5">
+            <div class="voice-pill"><i class="fa-solid fa-play text-[10px]"></i> |||||| |||||||| |||| 1:31</div>
+            <div class="voice-pill"><i class="fa-solid fa-play text-[10px]"></i> ||||| ||||||||| |||| 1:43</div>
+          </div>
+          <div class="chat-bubble-user">
+            Chời ơi chính xác lun
+            <span class="reaction-badge">❤️</span>
+          </div>
+        </div>
+
+        <!-- Feedback #07 & #08 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-4 rounded-2xl bg-black/45 border border-white/10 space-y-2">
+            <div class="text-xs font-bold text-[#f7e38d] pb-1 border-b border-white/5">Feedback #07</div>
+            <div class="chat-bubble-user">Hahha</div>
+            <div class="chat-bubble-user">M coi đúng vãi</div>
+            <div class="chat-bubble-user">Y chang luôn đó</div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-black/45 border border-white/10 space-y-2">
+            <div class="text-xs font-bold text-[#f7e38d] pb-1 border-b border-white/5">Feedback #08</div>
+            <div class="chat-bubble-shop text-xs">
+              còn có gì muốn hỏi thì cứ hỏi nếu thấy cấn nghen bà
+              <span class="reaction-badge">❤️</span>
+            </div>
+            <div class="chat-bubble-user text-xs">
+              tui thấy <b>đúng</b> nha bà
+              <span class="reaction-badge">❤️</span>
+            </div>
+            <div class="chat-bubble-shop text-xs">ò ukiuki</div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="closeModal('feedbackModal'); openModal('bookingModal');" class="cta-wine-btn w-full rounded-xl py-3.5 font-extrabold text-sm text-white mt-5">
+        Đặt Lịch Trải Nghiệm Ngay →
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT: TIẾNG MÈO THẬT 100%, 18+ TRÍCH DẪN TÂM LÝ, LIVE ONLINE & VŨ TRỤ
+       ========================================================================= -->
+  <script>
+    /* 1. HỆ THỐNG PHÁT TIẾNG MÈO KÊU THẬT 100% (REAL RECORDED CAT MEOW AUDIO) */
+    const realCatMeowUrls = [
+      'https://actions.google.com/sounds/v1/animals/cat_purr_and_meow.ogg',
+      'https://upload.wikimedia.org/wikipedia/commons/6/62/Meow.ogg',
+      'https://upload.wikimedia.org/wikipedia/commons/0/05/Cat_meow_2.ogg'
+    ];
+
+    const preloadedMeows = realCatMeowUrls.map(url => {
+      const audio = new Audio(url);
+      audio.preload = 'auto';
+      audio.volume = 0.85;
+      return audio;
+    });
+
+    let meowSoundIndex = 0;
+    let fallbackAudioCtx = null;
+
+    function playRealisticMeowFallback() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        if (!fallbackAudioCtx) fallbackAudioCtx = new AudioCtx();
+        if (fallbackAudioCtx.state === 'suspended') fallbackAudioCtx.resume();
+
+        const now = fallbackAudioCtx.currentTime;
+        const dur = 0.52;
+
+        const saw = fallbackAudioCtx.createOscillator();
+        const lfo = fallbackAudioCtx.createOscillator();
+        const lfoGain = fallbackAudioCtx.createGain();
+        saw.type = 'sawtooth';
+        lfo.frequency.value = 6.5;
+        lfoGain.gain.value = 9;
+        lfo.connect(lfoGain);
+        lfoGain.connect(saw.frequency);
+
+        saw.frequency.setValueAtTime(490, now);
+        saw.frequency.exponentialRampToValueAtTime(840, now + 0.14);
+        saw.frequency.exponentialRampToValueAtTime(720, now + 0.30);
+        saw.frequency.exponentialRampToValueAtTime(410, now + dur);
+
+        const f1 = fallbackAudioCtx.createBiquadFilter();
+        const f2 = fallbackAudioCtx.createBiquadFilter();
+        f1.type = 'bandpass';
+        f2.type = 'bandpass';
+        f1.Q.value = 4.5;
+        f2.Q.value = 5.5;
+
+        f1.frequency.setValueAtTime(550, now);
+        f1.frequency.exponentialRampToValueAtTime(1150, now + 0.16);
+        f1.frequency.exponentialRampToValueAtTime(480, now + dur);
+
+        f2.frequency.setValueAtTime(1600, now);
+        f2.frequency.exponentialRampToValueAtTime(2450, now + 0.16);
+        f2.frequency.exponentialRampToValueAtTime(1150, now + dur);
+
+        const masterGain = fallbackAudioCtx.createGain();
+        masterGain.gain.setValueAtTime(0.001, now);
+        masterGain.gain.linearRampToValueAtTime(0.26, now + 0.07);
+        masterGain.gain.exponentialRampToValueAtTime(0.18, now + 0.32);
+        masterGain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        saw.connect(f1);
+        saw.connect(f2);
+        f1.connect(masterGain);
+        f2.connect(masterGain);
+        masterGain.connect(fallbackAudioCtx.destination);
+
+        saw.start(now);
+        lfo.start(now);
+        saw.stop(now + dur);
+        lfo.stop(now + dur);
+      } catch (err) {}
+    }
+
+    function playCuteMeowSound() {
+      const sound = preloadedMeows[meowSoundIndex % preloadedMeows.length];
+      meowSoundIndex++;
+      try {
+        sound.currentTime = 0;
+        const playPromise = sound.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            playRealisticMeowFallback();
+          });
+        }
+      } catch (e) {
+        playRealisticMeowFallback();
+      }
+    }
+
+    function spawnMeowBubble() {
+      const container = document.getElementById('catMascotContainer');
+      if (!container) return;
+      const note = document.createElement('div');
+      note.className = 'meow-floating-note';
+      note.innerHTML = 'Meow~ 🐾';
+      container.appendChild(note);
+
+      const mouth = document.getElementById('catMouthPath');
+      if (mouth) {
+        mouth.setAttribute('d', 'M54 57 Q58 64 62 57');
+        setTimeout(() => mouth.setAttribute('d', 'M54 57 Q58 60 62 57'), 650);
+      }
+
+      setTimeout(() => {
+        if (note.parentNode) note.parentNode.removeChild(note);
+      }, 1300);
+    }
+
+    /* 2. KHO 18 TRÍCH DẪN NỔI TIẾNG VỀ TÂM LÝ HỌC CHO MÈO ĐEN NOWNOW */
+    const catPsychologyQuotes = [
+      {
+        quote: `"Chừng nào bạn chưa đưa được những điều vô thức ra ánh sáng, nó sẽ điều khiển cuộc đời bạn và bạn gọi đó là ĐỊNH MỆNH."`,
+        author: "Carl Jung • Cha đẻ Tâm lý học Phân tích"
+      },
+      {
+        quote: `"Con người không bị tổn thương bởi chính sự việc xảy ra, mà bị tổn thương bởi góc nhìn và niềm tin của họ về sự việc đó."`,
+        author: "Aaron T. Beck & Epictetus • Nền tảng Liệu pháp CBT"
+      },
+      {
+        quote: `"Giữa kích thích và phản ứng luôn có một khoảng trống. Trong khoảng trống đó là quyền tự do lựa chọn phản ứng của bạn — và sự trưởng thành nằm ở chính lựa chọn ấy."`,
+        author: "Viktor Frankl • Đi Tìm Lẽ Sống"
+      },
+      {
+        quote: `"Cảm xúc chưa được bộc lộ sẽ không bao giờ chết. Chúng chỉ bị chôn sống và sẽ trỗi dậy sau đó theo những cách xù xì hơn."`,
+        author: "Sigmund Freud • Phân tâm học"
+      },
+      {
+        quote: `"Nghịch lý kỳ lạ của tâm lý con người là: chỉ khi tôi chấp nhận bản thân mình đúng như những gì tôi đang có, tôi mới có thể bắt đầu thay đổi."`,
+        author: "Carl Rogers • Tâm lý học Nhân văn"
+      },
+      {
+        quote: `"Trải nghiệm của bạn không phải là nguyên nhân dẫn đến thành công hay thất bại. Chính ý nghĩa mà bạn tự gán cho trải nghiệm đó mới là thứ quyết định cuộc đời bạn."`,
+        author: "Alfred Adler • Tâm lý học Cá nhân"
+      },
+      {
+        quote: `"Sự rập khuôn lặp đi lặp lại trong tình cảm không phải là xui xẻo, mà là cách tiềm thức cố gắng diễn lại một vết thương cũ với hy vọng lần này sẽ có một cái kết khác."`,
+        author: "Gabor Maté • Chuyên gia Tâm lý & Sang chấn"
+      },
+      {
+        quote: `"Nhìn ra bên ngoài, bạn chỉ đang mơ; nhìn sâu vào bên trong nội tâm, bạn mới thực sự tỉnh thức."`,
+        author: "Carl Jung • Thấu cảm lý trí"
+      },
+      {
+        quote: `"Chúng ta thường sợ hãi sự thân mật không phải vì ghét bỏ tình yêu, mà vì bộ não đang bật chế độ cảnh giác cao độ (Hyper-vigilance) để bảo vệ đứa trẻ từng tổn thương bên trong."`,
+        author: "Tâm lý học Gắn bó (Attachment Theory)"
+      },
+      {
+        quote: `"Không ai có thể khiến bạn cảm thấy thấp kém nếu không có sự đồng ý ngầm từ Niềm tin cốt lõi của chính bạn."`,
+        author: "Eleanor Roosevelt & Tâm lý học Nhận thức"
+      },
+      {
+        quote: `"Tình yêu trưởng thành tuân theo nguyên tắc: Tôi được yêu vì tôi dám là chính mình, chứ không phải tôi cố gắng làm hài lòng người khác để đổi lấy tình yêu."`,
+        author: "Erich Fromm • Nghệ Thuật Yêu"
+      },
+      {
+        quote: `"Đặt ranh giới và học cách nói KHÔNG không phải là ích kỷ. Đó là lúc bạn ngừng phản bội trực giác của chính mình để làm vừa lòng người khác."`,
+        author: "Brené Brown • Tâm lý học về Sự tổn thương"
+      },
+      {
+        quote: `"Thứ gì bạn né tránh đối diện trong nội tâm, bạn sẽ phải gặp lại nó ở thế giới bên ngoài dưới hình hài của một 'số phận' hay một 'kiếp nạn'."`,
+        author: "Carl Jung • Cơ chế Phóng chiếu Tâm lý"
+      },
+      {
+        quote: `"Trong bất kỳ thời điểm nào, bạn luôn có hai lựa chọn: bước lùi về phía sự an toàn quen thuộc, hoặc bước tới về phía sự trưởng thành."`,
+        author: "Abraham Maslow • Tháp nhu cầu tâm lý"
+      },
+      {
+        quote: `"Bộ não con người rất dễ nhầm lẫn giữa 'cảm giác quen thuộc' và 'tình yêu'. Đôi khi bạn bị thu hút bởi một người độc hại chỉ vì họ mang lại đúng cảm giác bất an quen thuộc thuở nhỏ."`,
+        author: "Tâm lý học Hành vi & Mối quan hệ"
+      },
+      {
+        quote: `"Đầu tiên bạn tạo ra niềm tin và suy nghĩ, sau đó suy nghĩ tạo ra hành vi, và cuối cùng hành vi nhào nặn nên vận mệnh của chính bạn."`,
+        author: "Marisa Peer • Trị liệu Nhận thức"
+      },
+      {
+        quote: `"Trực giác không phải là phép thuật huyền bí, mà là khả năng bộ não nhận diện các quy luật ngầm nhanh hơn cả khi lý trí kịp gọi tên."`,
+        author: "Daniel Kahneman • Tư Duy Nhanh Và Chậm"
+      },
+      {
+        quote: `"Đi xem bài bản chất là thu thập thông tin tình báo để thấu hiểu nội tâm mình. Còn người ôm vô lăng, đạp ga và chốt điểm đến vẫn luôn là chính bạn!"`,
+        author: "Irvin D. Yalom & Triết lý NowNow Tarot"
+      }
+    ];
+
+    let catSpeechIdx = 0;
+    function interactWithCat() {
+      playCuteMeowSound();
+      spawnMeowBubble();
+      catSpeechIdx = (catSpeechIdx + 1) % catPsychologyQuotes.length;
+      const item = catPsychologyQuotes[catSpeechIdx];
+      const speechEl = document.getElementById('catSpeechContent');
+      const authorEl = document.getElementById('catQuoteAuthor');
+      const badgeEl = document.getElementById('catStepBadge');
+
+      speechEl.style.opacity = '0';
+      setTimeout(() => {
+        speechEl.innerHTML = item.quote;
+        authorEl.innerHTML = `<i class="fa-solid fa-feather-pointed text-[#c92a42] text-[10px]"></i> ${item.author}`;
+        badgeEl.textContent = `Trích dẫn ${catSpeechIdx + 1}/${catPsychologyQuotes.length}`;
+        speechEl.style.opacity = '1';
+      }, 150);
+    }
+
+    /* 3. ĐIỀU KHIỂN THANH TRƯỢT NGANG (CAROUSEL) */
+    function scrollCarousel(id, amount) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollBy({ left: amount, behavior: 'smooth' });
+      }
+    }
+
+    /* 4. HỆ THỐNG POP-UP MODAL & VÀO THẲNG MESSENGER KHI ĐẶT LỊCH */
+    let currentSelectedPkg = 'Gói Cơ Bản - 30 phút (59K)';
+
+    function openModal(id) {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add('open');
+      }
+      if (id === 'bookingModal') {
+        copyBookingInfoSilently();
+      }
+    }
+    function closeModal(id) {
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.remove('open');
+      }
+    }
+    function outsideClick(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+
+    function choosePkg(el, pkgTitle) {
+      document.querySelectorAll('.pkg-card').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+      currentSelectedPkg = pkgTitle;
+      document.getElementById('selectedPkgBadge').textContent = pkgTitle;
+      copyBookingInfoSilently();
+    }
+
+    function addTopicTag(btn, topicText) {
+      btn.classList.toggle('selected');
+      const input = document.getElementById('bookingTopicInput');
+      const selectedTopics = Array.from(document.querySelectorAll('.topic-chip.selected')).map(b => b.textContent.trim());
+      input.value = selectedTopics.join(', ');
+      copyBookingInfoSilently();
+    }
+
+    function buildBookingMessage() {
+      const topic = document.getElementById('bookingTopicInput').value.trim() || 'Nhờ shop tư vấn trải bài gỡ rối';
+      return `Chào NowNow Tarot (Thấu cảm lý trí)!\nMình muốn đặt lịch xem bài:\n- Gói đăng ký: ${currentSelectedPkg}\n- Chủ đề quan tâm: ${topic}`;
+    }
+
+    function copyBookingInfoSilently() {
+      const msg = buildBookingMessage();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).catch(() => fallbackCopy(msg));
+      } else {
+        fallbackCopy(msg);
+      }
+    }
+
+    function handleDirectMessengerBooking(e) {
+      copyBookingInfoSilently();
+      const banner = document.getElementById('bookingGuideBanner');
+      if (banner) {
+        banner.classList.add('scale-[1.03]');
+        setTimeout(() => banner.classList.remove('scale-[1.03]'), 280);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+
+    /* 5. BỘ ĐẾM LƯỢT TRUY CẬP THEO NGÀY & BỘ ĐẾM "ĐANG ONLINE (1-99)" NHƯ THẬT */
+    function initVisitorCounter() {
+      const baseVisitors = 1000;
+      const launchDate = new Date('2026-09-15T00:00:00');
+      const now = new Date();
+      const diffDays = Math.max(1, Math.floor((now - launchDate) / (1000 * 60 * 60 * 24)));
+
+      let total = baseVisitors;
+      for (let d = 1; d <= diffDays; d++) {
+        const dailyAdd = 5 + ((d * 7 + 3) % 6);
+        total += dailyAdd;
+      }
+
+      const hourBonus = Math.floor(now.getHours() / 5);
+      let localVisits = parseInt(localStorage.getItem('nownow_visit_bump') || '0', 10) + 1;
+      localStorage.setItem('nownow_visit_bump', localVisits);
+
+      const finalCount = total + hourBonus + Math.min(localVisits, 5);
+      const countEl = document.getElementById('visitorCountDisplay');
+      if (countEl) {
+        countEl.textContent = finalCount.toLocaleString('vi-VN');
+      }
+    }
+
+    function initRealisticOnlineCounter() {
+      const onlineEl = document.getElementById('onlineNowDisplay');
+      if (!onlineEl) return;
+
+      const hour = new Date().getHours();
+      let minOnline = 12, maxOnline = 48;
+      if (hour >= 20 || hour <= 1) {
+        minOnline = 24;
+        maxOnline = 68;
+      } else if (hour >= 2 && hour <= 7) {
+        minOnline = 6;
+        maxOnline = 22;
+      } else if (hour >= 11 && hour <= 14) {
+        minOnline = 18;
+        maxOnline = 45;
+      }
+
+      let currentOnline = Math.floor(minOnline + (maxOnline - minOnline) * 0.45 + (Math.random() * 6 - 3));
+      currentOnline = Math.max(1, Math.min(99, currentOnline));
+      onlineEl.textContent = currentOnline;
+
+      function scheduleNextOnlineTick() {
+        const nextDelay = 3800 + Math.floor(Math.random() * 4800);
+        setTimeout(() => {
+          const deltas = [-2, -1, -1, 1, 1, 2, 1, -1, 3, -2];
+          let delta = deltas[Math.floor(Math.random() * deltas.length)];
+
+          if (currentOnline <= minOnline) delta = Math.abs(delta);
+          if (currentOnline >= maxOnline) delta = -Math.abs(delta);
+
+          currentOnline = Math.max(1, Math.min(99, currentOnline + delta));
+          onlineEl.textContent = currentOnline;
+
+          onlineEl.classList.remove('online-bump');
+          void onlineEl.offsetWidth;
+          onlineEl.classList.add('online-bump');
+
+          scheduleNextOnlineTick();
+        }, nextDelay);
+      }
+
+      scheduleNextOnlineTick();
+    }
+
+    /* 6. BẦU TRỜI VŨ TRỤ, CÁC CHÒM SAO & 12 CUNG HOÀNG ĐẠO LUNG LINH */
+    function initCosmicCanvas() {
+      const canvas = document.getElementById('cosmicCanvas');
+      const ctx = canvas.getContext('2d');
+      let width, height, stars = [], zodiacGlyphs = [], shootingStar = null;
+      const glyphs = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        createCosmicElements();
+      }
+
+      function createCosmicElements() {
+        const starCount = Math.min(145, Math.floor((width * height) / 9000));
+        stars = [];
+        for (let i = 0; i < starCount; i++) {
+          stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 1.9 + 0.4,
+            vx: (Math.random() - 0.5) * 0.15,
+            vy: (Math.random() - 0.5) * 0.15,
+            alpha: Math.random() * 0.7 + 0.25,
+            dAlpha: (Math.random() * 0.014 + 0.004) * (Math.random() < 0.5 ? 1 : -1),
+            hue: Math.random() < 0.25 ? '#f7e38d' : (Math.random() < 0.15 ? '#e06377' : '#ffffff')
+          });
+        }
+
+        zodiacGlyphs = glyphs.map((g, idx) => ({
+          symbol: g,
+          x: ((idx + 0.5) / glyphs.length) * width + (Math.random() - 0.5) * 60,
+          y: Math.random() * height,
+          vy: -0.08 - Math.random() * 0.08,
+          alpha: 0.12 + Math.random() * 0.14,
+          size: 14 + (idx % 3) * 3
+        }));
+      }
+
+      function spawnShootingStar() {
+        if (!shootingStar && Math.random() < 0.012) {
+          shootingStar = {
+            x: Math.random() * width * 0.85,
+            y: Math.random() * height * 0.4,
+            len: 85 + Math.random() * 50,
+            speed: 10 + Math.random() * 5,
+            alpha: 1
+          };
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        ctx.font = '600 15px Montserrat, sans-serif';
+        for (let z of zodiacGlyphs) {
+          z.y += z.vy;
+          if (z.y < -20) z.y = height + 20;
+          ctx.save();
+          ctx.fillStyle = '#ebd5ab';
+          ctx.globalAlpha = z.alpha;
+          ctx.fillText(z.symbol, z.x, z.y);
+          ctx.restore();
+        }
+
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          if (s.x < 0) s.x = width;
+          if (s.x > width) s.x = 0;
+          if (s.y < 0) s.y = height;
+          if (s.y > height) s.y = 0;
+
+          s.alpha += s.dAlpha;
+          if (s.alpha > 0.98 || s.alpha < 0.2) s.dAlpha *= -1;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = s.hue;
+          ctx.globalAlpha = Math.max(0.15, Math.min(1, s.alpha));
+          ctx.fill();
+
+          for (let j = i + 1; j < stars.length; j++) {
+            const s2 = stars[j];
+            const dx = s.x - s2.x;
+            const dy = s.y - s2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(s.x, s.y);
+              ctx.lineTo(s2.x, s2.y);
+              ctx.strokeStyle = '#ebd5ab';
+              ctx.globalAlpha = (1 - dist / 100) * 0.14;
+              ctx.lineWidth = 0.65;
+              ctx.stroke();
+            }
+          }
+        }
+
+        spawnShootingStar();
+        if (shootingStar) {
+          ctx.save();
+          ctx.globalAlpha = shootingStar.alpha;
+          const grad = ctx.createLinearGradient(
+            shootingStar.x, shootingStar.y,
+            shootingStar.x - shootingStar.len, shootingStar.y - shootingStar.len * 0.6
+          );
+          grad.addColorStop(0, '#f7e38d');
+          grad.addColorStop(0.4, '#c92a42');
+          grad.addColorStop(1, 'transparent');
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.moveTo(shootingStar.x, shootingStar.y);
+          ctx.lineTo(shootingStar.x - shootingStar.len, shootingStar.y - shootingStar.len * 0.6);
+          ctx.stroke();
+          ctx.restore();
+
+          shootingStar.x += shootingStar.speed;
+          shootingStar.y += shootingStar.speed * 0.6;
+          shootingStar.alpha -= 0.022;
+          if (shootingStar.alpha <= 0) shootingStar = null;
+        }
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      animate();
+    }
+
+    window.onload = function() {
+      initVisitorCounter();
+      initRealisticOnlineCounter();
+      initCosmicCanvas();
+      const topicInput = document.getElementById('bookingTopicInput');
+      if (topicInput) {
+        topicInput.addEventListener('input', copyBookingInfoSilently);
+      }
+    };
+  </script>
+</body>
+</html>

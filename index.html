@@ -2957,9 +2957,18 @@ Mình muốn đặt lịch xem bài:
       playCuteMeowSound();
 
       const encoded = encodeURIComponent(msg);
-      const targetUrl = platform === 'Messenger'
-        ? `https://m.me/NowNowTarot?text=${encoded}`
-        : `https://ig.me/m/nownowtarot`;
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
+      let targetUrl = '';
+      if (platform === 'Messenger') {
+        targetUrl = `https://m.me/NowNowTarot?text=${encoded}`;
+      } else {
+        // Trên điện thoại: Bắn thẳng vào App Instagram để né sạch màn hình đăng nhập web!
+        // Trên máy tính: Mở trang web Instagram bình thường
+        targetUrl = isMobile 
+          ? `instagram://user?username=nownowtarot` 
+          : `https://www.instagram.com/nownowtarot/`;
+      }
 
       const modal = document.getElementById('copyConfirmModal');
       const platNameEl = document.getElementById('copyModalPlatformName');
@@ -2969,7 +2978,15 @@ Mình muốn đặt lịch xem bài:
 
       const triggerRedirectNow = () => {
         closeCopyModal();
-        window.location.href = targetUrl;
+        if (platform === 'Instagram' && isMobile) {
+          // Kích hoạt App Instagram, nếu máy không có app thì tự lùi về web sau 1.2s
+          window.location.href = targetUrl;
+          setTimeout(() => {
+            window.location.href = `https://www.instagram.com/nownowtarot/`;
+          }, 1200);
+        } else {
+          window.location.href = targetUrl;
+        }
       };
 
       if (openNowBtn) {

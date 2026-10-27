@@ -4,11 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>NowNow Tarot | Thấu Cảm Lý Trí (@nownowtarot)</title>
+  <meta name="description" content="Gỡ từng nút thắt tình cảm, công việc & nội tâm bằng Bài Tarot kết hợp Tâm lý học Nhận thức (CBT & Carl Jung). 0đ đặt cọc, nhẹ lòng mới tính phí, tâm sự 0đ trọn đời.">
+  <meta name="theme-color" content="#080409">
+
+  <!-- OpenGraph / Facebook / Messenger / Zalo / Threads Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nownowtarot.github.io/">
+  <meta property="og:title" content="NowNow Tarot | Thấu Cảm Lý Trí (@nownowtarot)">
+  <meta property="og:description" content="Tarot x Tâm lý học Nhận thức (CBT & Carl Jung). Không phán bừa hù dọa, 0đ đặt cọc, nhẹ lòng mới dừng đồng hồ & làm bạn tâm sự 0đ trọn đời.">
+  <meta property="og:image" content="https://nownowtarot.github.io/banner.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="vi_VN">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NowNow Tarot | Thấu Cảm Lý Trí (@nownowtarot)">
+  <meta name="twitter:description" content="Gỡ rối nhận thức & định hướng tinh thần cùng NowNow Tarot. 0đ đặt cọc, xem xong nhẹ lòng mới thanh toán.">
+  <meta name="twitter:image" content="https://nownowtarot.github.io/banner.jpg">
+
+  <!-- Favicon Hình Mặt Trăng & Mèo Đen Huyền Bí -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23160812' stroke='%23ffdf85' stroke-width='4'/%3E%3Cpath d='M58 22 A28 28 0 1 0 82 64 A22 22 0 1 1 58 22 Z' fill='%23ffdf85'/%3E%3Ccircle cx='65' cy='38' r='3' fill='%23e85d75'/%3E%3C/svg%3E">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root {
@@ -21,19 +42,25 @@
       --muted-text: #c4b5be;
     }
 
-    * {
+    /* =========================================================================
+       0. BỘ CSS UTILITY ĐÃ COMPILE SẴN (THAY THẾ HOÀN TOÀN CDN TAILWIND)
+       ========================================================================= */
+    *, ::before, ::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Montserrat', sans-serif;
+      border-width: 0;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.15);
       -webkit-tap-highlight-color: transparent;
     }
-
     html {
       scroll-behavior: smooth;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
-
     body {
+      font-family: 'Montserrat', sans-serif;
       background-color: var(--bg-deep);
       color: var(--ivory);
       min-height: 100vh;
@@ -46,8 +73,188 @@
         radial-gradient(circle at 50% 92%, rgba(145, 29, 48, 0.28) 0%, transparent 55%);
       background-attachment: fixed;
     }
+    button, input {
+      font-family: inherit;
+      font-size: 100%;
+      line-height: inherit;
+      color: inherit;
+      background-color: transparent;
+    }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: inherit; }
+    img, svg { display: block; max-width: 100%; }
 
-    /* Trên điện thoại: nền tối sâu tập trung ở giữa giúp chữ cực kỳ rõ nét, không bị rối */
+    /* Layout & Flex/Grid Utilities */
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .max-w-md { max-width: 28rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .min-w-0 { min-width: 0px; }
+    .shrink-0 { flex-shrink: 0; }
+    .block { display: block; }
+    .inline-block { display: inline-block; }
+    .hidden { display: none !important; }
+    .relative { position: relative; }
+    .z-10 { z-index: 10; }
+    .overflow-visible { overflow: visible; }
+    .object-cover { object-fit: cover; }
+    .select-none { user-select: none; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .flex-wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .items-end { align-items: flex-end; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-1\.5 { gap: 0.375rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-2\.5 { gap: 0.625rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-3\.5 { gap: 0.875rem; }
+    .gap-4 { gap: 1rem; }
+
+    /* Spacing Utilities */
+    .mt-0\.5 { margin-top: 0.125rem; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-1\.5 { margin-top: 0.375rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-3 { margin-top: 0.75rem; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-1\.5 { margin-bottom: 0.375rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-2\.5 { margin-bottom: 0.625rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-5 { margin-bottom: 1.25rem; }
+    .ml-1 { margin-left: 0.25rem; }
+    .p-2\.5 { padding: 0.625rem; }
+    .p-3\.5 { padding: 0.875rem; }
+    .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+    .px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+    .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .pt-1 { padding-top: 0.25rem; }
+    .pt-2 { padding-top: 0.5rem; }
+    .pb-1 { padding-bottom: 0.25rem; }
+    .pb-3 { padding-bottom: 0.75rem; }
+
+    .space-y-0\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.125rem; }
+    .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem; }
+    .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.375rem; }
+    .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
+    .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.625rem; }
+    .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem; }
+    .space-y-3\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.875rem; }
+    .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+    .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+    .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+
+    /* Typography Utilities */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-right { text-align: right; }
+    .text-xs { font-size: 0.75rem; line-height: 1rem; }
+    .text-base { font-size: 1rem; line-height: 1.5rem; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .text-\[9px\] { font-size: 9px; }
+    .text-\[10px\] { font-size: 10px; }
+    .text-\[10\.5px\] { font-size: 10.5px; }
+    .text-\[11px\] { font-size: 11px; }
+    .text-\[11\.5px\] { font-size: 11.5px; }
+    .text-\[11\.8px\] { font-size: 11.8px; }
+    .text-\[12\.2px\] { font-size: 12.2px; }
+    .text-\[12\.5px\] { font-size: 12.5px; }
+    .text-\[12\.8px\] { font-size: 12.8px; }
+    .text-\[13px\] { font-size: 13px; }
+    .text-\[13\.5px\] { font-size: 13.5px; }
+    .text-\[13\.8px\] { font-size: 13.8px; }
+    .text-\[14px\] { font-size: 14px; }
+    .text-\[15px\] { font-size: 15px; }
+
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .font-extrabold { font-weight: 800; }
+    .italic { font-style: italic; }
+    .not-italic { font-style: normal; }
+    .uppercase { text-transform: uppercase; }
+    .underline { text-decoration: underline; }
+    .tracking-wider { letter-spacing: 0.05em; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+    .tracking-\[0\.22em\] { letter-spacing: 0.22em; }
+    .tracking-\[0\.25em\] { letter-spacing: 0.25em; }
+    .leading-relaxed { line-height: 1.625; }
+
+    /* Colors, Backgrounds & Borders */
+    .text-white { color: #ffffff; }
+    .text-emerald-400 { color: #34d399; }
+    .text-emerald-300 { color: #6ee7b7; }
+    .text-rose-200 { color: #fecdd3; }
+    .text-\[\#ffdf85\] { color: #ffdf85; }
+    .text-\[\#ffdf85\]\/90 { color: rgba(255, 223, 133, 0.9); }
+    .text-\[\#faf6f0\]\/95 { color: rgba(250, 246, 240, 0.95); }
+    .text-\[\#faf6f0\]\/90 { color: rgba(250, 246, 240, 0.9); }
+    .text-\[\#faf6f0\]\/85 { color: rgba(250, 246, 240, 0.85); }
+    .text-\[\#f2dec4\] { color: #f2dec4; }
+    .text-\[\#f2dec4\]\/90 { color: rgba(242, 222, 196, 0.9); }
+    .text-\[\#f2dec4\]\/85 { color: rgba(242, 222, 196, 0.85); }
+    .text-\[\#c4b5be\] { color: #c4b5be; }
+    .text-\[\#c4b5be\]\/60 { color: rgba(196, 181, 190, 0.6); }
+
+    .bg-white\/\[0\.045\] { background-color: rgba(255, 255, 255, 0.045); }
+    .bg-white\/10 { background-color: rgba(255, 255, 255, 0.1); }
+    .bg-black\/25 { background-color: rgba(0, 0, 0, 0.25); }
+    .bg-black\/40 { background-color: rgba(0, 0, 0, 0.4); }
+    .bg-\[\#ffdf85\]\/15 { background-color: rgba(255, 223, 133, 0.15); }
+    .bg-rose-500\/25 { background-color: rgba(244, 63, 94, 0.25); }
+    .bg-rose-500\/20 { background-color: rgba(244, 63, 94, 0.2); }
+
+    .border { border-width: 1px; }
+    .border-b { border-bottom-width: 1px; }
+    .border-t { border-top-width: 1px; }
+    .border-white\/5 { border-color: rgba(255, 255, 255, 0.05); }
+    .border-white\/10 { border-color: rgba(255, 255, 255, 0.1); }
+    .border-white\/15 { border-color: rgba(255, 255, 255, 0.15); }
+    .border-\[\#ffdf85\]\/25 { border-color: rgba(255, 223, 133, 0.25); }
+    .border-\[\#ffdf85\]\/35 { border-color: rgba(255, 223, 133, 0.35); }
+    .border-\[\#ffdf85\]\/40 { border-color: rgba(255, 223, 133, 0.4); }
+    .border-rose-400\/50 { border-color: rgba(251, 113, 133, 0.5); }
+    .border-rose-400\/40 { border-color: rgba(251, 113, 133, 0.4); }
+
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-r-xl { border-top-right-radius: 0.75rem; border-bottom-right-radius: 0.75rem; }
+    .rounded-full { border-radius: 9999px; }
+
+    .cursor-pointer { cursor: pointer; }
+    .transition-transform { transition: transform 0.2s ease; }
+    .group:hover .group-hover\:translate-x-1 { transform: translateX(0.25rem); }
+    .hover\:text-white:hover { color: #ffffff; }
+    .hover\:text-\[\#ffdf85\]:hover { color: #ffdf85; }
+    .hover\:underline:hover { text-decoration: underline; }
+    .focus\:outline-none:focus { outline: none; }
+    .focus\:border-\[\#ffdf85\]:focus { border-color: #ffdf85; }
+
+    @media (min-width: 640px) {
+      .sm\:text-base { font-size: 1rem; line-height: 1.5rem; }
+      .sm\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+      .sm\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .sm\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      .sm\:text-\[15px\] { font-size: 15px; }
+      .sm\:text-\[17px\] { font-size: 17px; }
+      .sm\:text-\[26px\] { font-size: 26px; }
+    }
+
     @media (max-width: 767px) {
       body {
         background-attachment: scroll;
@@ -67,7 +274,7 @@
     }
 
     /* =========================================================================
-       1. NỀN VŨ TRỤ TOÀN TRANG (TỐI ƯU RIÊNG CHO PC & ĐIỆN THOẠI)
+       1. NỀN VŨ TRỤ TOÀN TRANG
        ========================================================================= */
     #cosmicCanvas {
       position: fixed;
@@ -201,7 +408,7 @@
       width: 100%;
       max-width: 610px;
       margin: 0 auto;
-      padding: 44px 20px 115px 20px;
+      padding: 40px 18px 96px 18px;
       transition: opacity 0.32s ease, filter 0.32s ease;
     }
 
@@ -228,7 +435,7 @@
       font-size: 12.5px;
       opacity: 0.6;
       letter-spacing: 3px;
-      margin: 34px 0;
+      margin: 32px 0;
       user-select: none;
     }
 
@@ -287,7 +494,7 @@
     }
 
     /* =========================================================================
-       5. 2 CÁNH CỔNG "WEB LỒNG WEB" & KHUNG IPHONE 14 PRO FEEDBACK
+       5. 2 CÁNH CỔNG "WEB LỒNG WEB" & KHUNG IPHONE 14 PRO TỐI ƯU MOBILE
        ========================================================================= */
     .portal-launch-card {
       position: relative;
@@ -314,15 +521,16 @@
       transform: scale(0.985);
     }
 
-    .portal-url-preview {
+    .portal-tag-header {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 10.5px;
-      color: #c4b5be;
-      background: rgba(0, 0, 0, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      padding: 3px 10px;
+      font-weight: 700;
+      color: var(--gold-warm);
+      background: rgba(255, 223, 133, 0.12);
+      border: 1px solid rgba(255, 223, 133, 0.32);
+      padding: 3.5px 11px;
       border-radius: 999px;
       margin-bottom: 10px;
     }
@@ -331,7 +539,7 @@
       position: fixed;
       inset: 0;
       z-index: 100;
-      background: rgba(5, 2, 6, 0.86);
+      background: rgba(5, 2, 6, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       display: flex;
@@ -346,7 +554,7 @@
     @media (min-width: 640px) {
       .subweb-overlay {
         align-items: center;
-        padding: 20px;
+        padding: 18px;
       }
     }
 
@@ -355,29 +563,30 @@
       pointer-events: auto;
     }
 
+    /* Đã xoá khoảng đen thừa trên điện thoại: nâng chiều cao lên 96dvh */
     .subweb-browser-window {
       width: 100%;
       max-width: 650px;
-      height: 89dvh;
-      max-height: 89dvh;
+      height: 96dvh;
+      max-height: 96dvh;
       background:
         radial-gradient(circle at 50% 0%, rgba(158, 42, 59, 0.3) 0%, transparent 55%),
         #0e070d;
       border: 1.5px solid rgba(255, 223, 133, 0.48);
-      border-radius: 24px 24px 0 0;
+      border-radius: 22px 22px 0 0;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.85), 0 0 40px rgba(158, 42, 59, 0.35);
-      transform: translateY(28px) scale(0.98);
+      transform: translateY(24px) scale(0.98);
       transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
       overscroll-behavior: contain;
     }
 
     @media (min-width: 640px) {
       .subweb-browser-window {
-        height: 88vh;
-        max-height: 88vh;
+        height: 90vh;
+        max-height: 90vh;
         border-radius: 22px;
         transform: translateY(20px) scale(0.96);
       }
@@ -392,7 +601,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       background: rgba(22, 11, 19, 0.98);
       border-bottom: 1px solid rgba(255, 223, 133, 0.22);
       flex-shrink: 0;
@@ -420,26 +629,22 @@
       transform: scale(0.97);
     }
 
-    .subweb-address-pill {
-      flex: 1;
-      display: flex;
+    .subweb-title-pill {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 10.5px;
-      color: #d6c5ce;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--champagne);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .subweb-close-icon {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.18);
@@ -465,7 +670,7 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
       touch-action: pan-y;
-      padding: 14px 16px 22px 16px;
+      padding: 10px 14px 16px 14px;
     }
 
     .subweb-subtle-cta {
@@ -475,8 +680,8 @@
       gap: 8px;
       padding: 8px 16px;
       border-radius: 999px;
-      background: rgba(168, 42, 60, 0.42);
-      border: 1px solid rgba(255, 223, 133, 0.5);
+      background: rgba(168, 42, 60, 0.48);
+      border: 1px solid rgba(255, 223, 133, 0.55);
       color: var(--gold-warm);
       font-size: 11.5px;
       font-weight: 700;
@@ -485,32 +690,32 @@
     }
     .subweb-subtle-cta:hover,
     .subweb-subtle-cta:active {
-      background: rgba(185, 42, 64, 0.78);
+      background: rgba(185, 42, 64, 0.85);
       color: #ffffff;
       border-color: var(--gold-warm);
       transform: translateY(-1px);
     }
 
-    /* KHUNG ĐIỆN THOẠI IPHONE 14 PRO SPACE BLACK */
+    /* KHUNG ĐIỆN THOẠI IPHONE 14 PRO (PHÓNG TO RÕ NÉT TRÊN MOBILE) */
     .iphone-stage-wrapper {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      margin: 2px auto 8px auto;
+      gap: 14px;
+      margin: 2px auto 6px auto;
       user-select: none;
       width: 100%;
     }
 
     .iphone-14-pro-frame {
       position: relative;
-      width: 288px;
-      height: 530px;
+      width: 306px;
+      height: 556px;
       background: linear-gradient(145deg, #27252b 0%, #121015 50%, #1f1c24 100%);
-      border-radius: 44px;
-      padding: 10px;
-      border: 2px solid rgba(255, 223, 133, 0.45);
+      border-radius: 42px;
+      padding: 9px;
+      border: 2px solid rgba(255, 223, 133, 0.48);
       box-shadow:
         0 16px 42px rgba(0, 0, 0, 0.85),
         0 0 28px rgba(212, 50, 72, 0.22),
@@ -522,16 +727,30 @@
       touch-action: pan-y;
     }
 
+    /* Trên điện thoại: Phóng to khung iPhone rộng 88vw và cao 64dvh, nút mũi tên nổi nhẹ ở mép */
     @media (max-width: 640px) {
       .iphone-stage-wrapper {
-        gap: 8px;
+        gap: 0;
       }
       .iphone-14-pro-frame {
-        width: min(252px, 66vw);
-        height: min(435px, 53dvh);
-        border-radius: 36px;
-        padding: 8px;
+        width: min(340px, 88vw);
+        height: min(560px, 63dvh);
+        border-radius: 34px;
+        padding: 7px;
       }
+      .iphone-nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 15;
+        width: 36px !important;
+        height: 36px !important;
+        background: rgba(24, 10, 18, 0.82) !important;
+        backdrop-filter: blur(6px);
+      }
+      .iphone-nav-arrow.nav-prev { left: 2px; }
+      .iphone-nav-arrow.nav-next { right: 2px; }
+      .iphone-nav-arrow:active { transform: translateY(-50%) scale(0.9) !important; }
     }
 
     .iphone-screen-inner {
@@ -539,7 +758,7 @@
       width: 100%;
       height: 100%;
       background: #09060a;
-      border-radius: 34px;
+      border-radius: 33px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -548,12 +767,12 @@
 
     @media (max-width: 640px) {
       .iphone-screen-inner {
-        border-radius: 28px;
+        border-radius: 27px;
       }
     }
 
     .iphone-status-bar {
-      height: 30px;
+      height: 26px;
       background: rgba(12, 8, 14, 0.95);
       display: flex;
       align-items: center;
@@ -568,8 +787,8 @@
     }
 
     .dynamic-island-pill {
-      width: 72px;
-      height: 18px;
+      width: 68px;
+      height: 16px;
       background: #000000;
       border-radius: 999px;
       display: flex;
@@ -580,8 +799,8 @@
     }
 
     .dynamic-island-Dot {
-      width: 6px;
-      height: 6px;
+      width: 5.5px;
+      height: 5.5px;
       border-radius: 50%;
       background: radial-gradient(circle, #3b5bdb 0%, #0b132b 75%);
     }
@@ -606,21 +825,21 @@
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
-      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .iphone-fb-img.sliding-left {
       opacity: 0;
-      transform: translateX(-22px) scale(0.96);
+      transform: translateX(-20px) scale(0.97);
     }
 
     .iphone-fb-img.sliding-right {
       opacity: 0;
-      transform: translateX(22px) scale(0.96);
+      transform: translateX(20px) scale(0.97);
     }
 
     .iphone-home-indicator {
-      height: 15px;
+      height: 13px;
       background: rgba(12, 8, 14, 0.95);
       display: flex;
       align-items: center;
@@ -628,7 +847,7 @@
       flex-shrink: 0;
     }
     .iphone-home-bar {
-      width: 84px;
+      width: 80px;
       height: 3.5px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.35);
@@ -650,12 +869,6 @@
       flex-shrink: 0;
       touch-action: manipulation;
     }
-    @media (max-width: 640px) {
-      .iphone-nav-arrow {
-        width: 38px;
-        height: 38px;
-      }
-    }
     .iphone-nav-arrow:hover {
       transform: scale(1.08);
       background: linear-gradient(135deg, rgba(212, 50, 72, 0.95), rgba(110, 20, 35, 0.98));
@@ -667,15 +880,15 @@
     }
 
     .fb-dot-indicator {
-      width: 7px;
-      height: 7px;
+      width: 6.5px;
+      height: 6.5px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.22);
       cursor: pointer;
       transition: all 0.25s ease;
     }
     .fb-dot-indicator.active {
-      width: 20px;
+      width: 18px;
       background: var(--gold-warm);
       box-shadow: 0 0 8px rgba(255, 223, 133, 0.8);
     }
@@ -695,7 +908,7 @@
     }
 
     /* =========================================================================
-       6. KHUNG "3 BƯỚC ĐỒNG HÀNH & ƯỚC LƯỢNG THỜI LƯỢNG" NỔI BẬT HÀI HÒA
+       6. KHUNG "3 BƯỚC ĐỒNG HÀNH & ƯỚC LƯỢNG THỜI LƯỢNG" + THANH TRƯỢT CHUẨN TỌA ĐỘ
        ========================================================================= */
     .booking-sanctuary-card {
       position: relative;
@@ -761,7 +974,7 @@
     }
     .soft-tag.active {
       background: linear-gradient(135deg, rgba(185, 42, 64, 0.78), rgba(115, 22, 38, 0.9));
-      border-color: var(--gold-warm);
+      border: 1px solid var(--gold-warm);
       color: var(--gold-warm);
       box-shadow: 0 4px 14px rgba(212, 50, 72, 0.35);
     }
@@ -772,9 +985,10 @@
       width: 100%;
       height: 7px;
       border-radius: 999px;
-      background: linear-gradient(90deg, #e85d75 0%, #ffdf85 27%, rgba(255, 255, 255, 0.14) 27%);
+      background: linear-gradient(90deg, #e85d75 0%, #ffdf85 40%, rgba(255, 255, 255, 0.14) 40%);
       outline: none;
       cursor: pointer;
+      display: block;
     }
     .time-range-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -791,9 +1005,62 @@
     .time-range-slider::-webkit-slider-thumb:active {
       transform: scale(1.2);
     }
+    .time-range-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffdf85;
+      border: 3px solid #6d131f;
+      box-shadow: 0 0 16px rgba(255, 223, 133, 0.95);
+      cursor: grab;
+    }
+
+    /* Các mốc thời gian bên dưới thanh trượt khớp 100% vị trí cục tròn */
+    .slider-milestones-bar {
+      position: relative;
+      width: 100%;
+      height: 26px;
+      margin-top: 6px;
+      user-select: none;
+    }
+    .milestone-tick-btn {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #c4b5be;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .milestone-tick-btn:first-child {
+      transform: translateX(0%);
+      left: 0% !important;
+    }
+    .milestone-tick-btn:last-child {
+      transform: translateX(-100%);
+      left: 100% !important;
+    }
+    .milestone-tick-btn:hover {
+      color: #ffffff;
+    }
+    .milestone-tick-btn.active {
+      color: var(--gold-warm);
+      font-weight: 800;
+      text-shadow: 0 0 10px rgba(255, 223, 133, 0.55);
+      transform: translateX(-50%) scale(1.08);
+    }
+    .milestone-tick-btn:first-child.active {
+      transform: translateX(0%) scale(1.06);
+    }
+    .milestone-tick-btn:last-child.active {
+      transform: translateX(-100%) scale(1.06);
+    }
 
     /* =========================================================================
-       7. 2 NÚT ĐẶT LỊCH ĐẶC TRƯNG (MESSENGER & INSTAGRAM SIGNATURE CARDS)
+       7. 2 NÚT ĐẶT LỊCH & POPUP XÁC NHẬN COPY 1.2 GIÂY
        ========================================================================= */
     .booking-cta-special {
       position: relative;
@@ -877,24 +1144,84 @@
       color: #2b0810;
     }
 
+    /* POPUP XÁC NHẬN COPY LỊCH HẸN (1.2 GIÂY) */
+    .copy-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(6, 2, 8, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .copy-modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .copy-modal-box {
+      width: 100%;
+      max-width: 370px;
+      background: linear-gradient(160deg, rgba(44, 16, 29, 0.98) 0%, rgba(18, 7, 14, 0.99) 100%);
+      border: 1.5px solid var(--gold-warm);
+      border-radius: 24px;
+      padding: 22px 20px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 223, 133, 0.25);
+      transform: scale(0.92) translateY(10px);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .copy-modal-overlay.open .copy-modal-box {
+      transform: scale(1) translateY(0);
+    }
+    .copy-progress-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .copy-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose-warm), var(--gold-warm));
+      border-radius: 999px;
+      transition: width 1.15s linear;
+    }
+    .copy-modal-overlay.open .copy-progress-bar {
+      width: 100%;
+    }
+
     /* =========================================================================
-       8. KHU VỰC MỜI GHÉ THĂM TRANG CÁ NHÂN (SOCIAL INVITATION CARDS)
+       8. KHU VỰC MỜI GHÉ THĂM TRANG CÁ NHÂN (BENTO 2X2 TINH TẾ TRÊN MOBILE)
        ========================================================================= */
+    .social-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
     .social-invite-card {
       display: flex;
       align-items: center;
       gap: 11px;
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 223, 133, 0.26);
-      border-radius: 16px;
+      padding: 13px 14px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(158, 42, 59, 0.14) 100%);
+      border: 1px solid rgba(255, 223, 133, 0.28);
+      border-radius: 18px;
       text-decoration: none;
       text-align: left;
       transition: all 0.28s ease;
     }
     .social-invite-card:hover {
       transform: translateY(-3px);
-      background: rgba(158, 42, 59, 0.25);
+      background: rgba(158, 42, 59, 0.28);
       border-color: var(--gold-warm);
       box-shadow: 0 8px 22px rgba(158, 42, 59, 0.3);
     }
@@ -915,8 +1242,35 @@
       flex-shrink: 0;
     }
 
+    /* Tối ưu riêng cho điện thoại: Bento 2x2 cân đối, sang trọng */
+    @media (max-width: 639px) {
+      .social-invite-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 7px;
+        padding: 13px 10px;
+        border-radius: 16px;
+      }
+      .social-invite-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        border-radius: 50%;
+      }
+      .social-sub-desc {
+        white-space: normal !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.35;
+        font-size: 10.5px;
+      }
+    }
+
     /* =========================================================================
-       9. BÉ MÈO ĐEN
+       9. BÉ MÈO ĐEN BIẾT ĐI DẠO & CẦM KÉO TỰ DO (ROAMING + DRAGGABLE)
        ========================================================================= */
     @keyframes floatCat {
       0%, 100% { transform: translateY(0px); }
@@ -936,66 +1290,89 @@
 
     .floating-cat-buddy {
       position: fixed;
-      bottom: 16px;
-      right: 16px;
+      left: 0;
+      top: 0;
       z-index: 90;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       pointer-events: none;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      will-change: transform;
+      transition: transform 2.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .floating-cat-buddy.cat-on-left {
+      align-items: flex-start;
+    }
+
+    .floating-cat-buddy.dragging {
+      transition: none !important;
     }
 
     body.portal-open .floating-cat-buddy {
       opacity: 0;
       pointer-events: none;
-      transform: translateY(16px) scale(0.9);
     }
 
     .cat-cloud-tip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      right: 0;
       pointer-events: auto;
       background: rgba(20, 12, 18, 0.96);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 223, 133, 0.52);
       border-radius: 16px 16px 4px 16px;
       padding: 8px 12px;
-      max-width: 210px;
+      width: max-content;
+      max-width: 205px;
       font-size: 11px;
       line-height: 1.42;
       color: var(--ivory);
-      margin-bottom: 6px;
       box-shadow: 0 8px 22px rgba(0,0,0,0.75), 0 0 12px rgba(255, 223, 133, 0.12);
-      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
       opacity: 1;
       transform: translateY(0) scale(1);
       transform-origin: bottom right;
     }
+
+    .floating-cat-buddy.cat-on-left .cat-cloud-tip {
+      right: auto;
+      left: 0;
+      border-radius: 16px 16px 16px 4px;
+      transform-origin: bottom left;
+    }
+
     .cat-cloud-tip.hidden-tip {
       opacity: 0;
-      transform: translateY(8px) scale(0.92);
+      transform: translateY(8px) scale(0.9);
       pointer-events: none;
     }
+
     .cat-sprite-btn {
       pointer-events: auto;
-      width: 58px;
-      height: 58px;
-      cursor: pointer;
+      width: 56px;
+      height: 56px;
+      cursor: grab;
       animation: floatCat 3.5s ease-in-out infinite;
       filter: drop-shadow(0 8px 16px rgba(0,0,0,0.85));
       transition: transform 0.2s ease;
+      touch-action: none;
     }
+    .floating-cat-buddy.dragging .cat-sprite-btn {
+      cursor: grabbing;
+      animation: none !important;
+      transform: scale(1.14) rotate(-10deg);
+    }
+
     @media (max-width: 640px) {
-      .floating-cat-buddy {
-        bottom: 12px;
-        right: 12px;
-      }
       .cat-cloud-tip {
-        max-width: 162px;
+        max-width: 165px;
         font-size: 10px;
         line-height: 1.36;
         padding: 6px 9.5px;
-        border-radius: 13px 13px 3px 13px;
-        margin-bottom: 5px;
       }
       .cat-sprite-btn {
         width: 48px;
@@ -1152,7 +1529,7 @@
 
     <div class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🚪 ୧₊‿︵‧˚₊⊹</div>
 
-    <!-- 3. "2 CÁNH CỔNG WEB LỒNG WEB" -->
+    <!-- 3. "2 CÁNH CỔNG WEB LỒNG WEB" (ĐÃ XOÁ URL GIẢ & VIẾT LẠI TINH TẾ) -->
     <section class="reveal-item space-y-4">
       <div class="text-center space-y-1 mb-2">
         <span class="text-[10.5px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Không gian lưu trữ riêng</span>
@@ -1160,26 +1537,26 @@
           Khám Phá Hộp Thư Khách Hàng & Tạp Chí Threads
         </h2>
         <p class="text-xs text-[#c4b5be]">
-          Chạm vào từng cánh cổng để mở cửa sổ trang riêng ngay tại đây mà không sợ trôi trang nha
+          Chạm vào từng cánh cổng để mở cửa sổ đọc ngay tại đây mà không sợ trôi trang nha
         </p>
       </div>
 
       <!-- CỔNG 1 -->
       <button type="button" data-sound="open" onclick="openSubWeb('feedback')" class="portal-launch-card group">
         <div class="flex items-center justify-between">
-          <span class="portal-url-preview">
-            <i class="fa-solid fa-lock text-[9px] text-emerald-400"></i>
-            nownowtarot.space/hoi-am-khach-hang
+          <span class="portal-tag-header">
+            <i class="fa-solid fa-envelope-open-text text-[10px] text-[#ffdf85]"></i>
+            Nhật ký hồi âm thực tế
           </span>
           <span class="text-[11px] font-bold text-[#ffdf85] group-hover:translate-x-1 transition-transform">
-            Mở xem ảnh tin nhắn thật <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+            Mở xem hồi âm thật <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
           </span>
         </div>
-        <h3 class="text-base sm:text-[17px] font-extrabold text-white mt-1 flex items-center gap-2">
+        <h3 class="text-base sm:text-[17px] font-extrabold text-white mt-0.5 flex items-center gap-2">
           <span>💌 Hộp Thư Mật: Những Lời Thủ Thỉ Sau Phiên Trải Bài</span>
         </h3>
         <p class="text-[12.5px] text-[#f2dec4]/90 italic mt-2 bg-black/25 p-2.5 rounded-xl border border-white/10">
-          "Trực tiếp ảnh chụp màn hình tin nhắn và cảm xúc thật từ những người đã cùng NowNow tháo gỡ nút thắt, lướt xem mượt mà trên giao diện điện thoại..."
+          "Lưu giữ nguyên vẹn những dòng tin nhắn tâm tình, những cái thở phào nhẹ nhõm và sự chuyển hóa thực tế từ những vị khách đã cùng NowNow tháo gỡ nút thắt..."
         </p>
         <div class="flex flex-wrap items-center gap-2 mt-3 text-[11px] text-[#ffdf85]">
           <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">✦ 100% Tin Nhắn Thật</span>
@@ -1191,15 +1568,15 @@
       <!-- CỔNG 2 -->
       <button type="button" data-sound="open" onclick="openSubWeb('viral')" class="portal-launch-card group">
         <div class="flex items-center justify-between">
-          <span class="portal-url-preview">
-            <i class="fa-brands fa-threads text-[10px] text-[#ffdf85]"></i>
-            threads.net/@nownowtarot/viral-notes
+          <span class="portal-tag-header">
+            <i class="fa-brands fa-threads text-[11px] text-[#ffdf85]"></i>
+            Góc nhìn Tâm lý & Thực chứng
           </span>
           <span class="text-[11px] font-bold text-[#ffdf85] group-hover:translate-x-1 transition-transform">
             Mở đọc trọn vẹn <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
           </span>
         </div>
-        <div class="flex items-center justify-between gap-2 mt-1">
+        <div class="flex items-center justify-between gap-2 mt-0.5">
           <h3 class="text-base sm:text-[17px] font-extrabold text-white">
             🧵 Tạp Chí Tâm Thức: Các Bài Viết Nghìn Tim
           </h3>
@@ -1269,7 +1646,7 @@
             <button type="button" onclick="addTopicTag(this)" class="soft-tag active">🔄 Thoát vòng lặp cũ</button>
             <button type="button" onclick="addTopicTag(this)" class="soft-tag">🌱 Hiểu rõ bản thân</button>
           </div>
-          <input id="bookingTopicInput" type="text" value="" placeholder="✍️ Nếu bà có vấn đề khác muốn gỡ rối hoặc nhắn khung giờ rảnh thì nhập vào đây nha..." oninput="updateDeepLinks()" class="w-full bg-black/40 border border-[#ffdf85]/35 rounded-xl py-2.5 px-3.5 text-xs text-white placeholder-[#f2dec4]/55 focus:outline-none focus:border-[#ffdf85]">
+          <input id="bookingTopicInput" type="text" value="" placeholder="✍️ Nếu bà có vấn đề khác muốn gỡ rối hoặc nhắn khung giờ rảnh thì nhập vào đây nha..." class="w-full bg-black/40 border border-[#ffdf85]/35 rounded-xl py-2.5 px-3.5 text-xs text-white focus:outline-none focus:border-[#ffdf85]">
         </div>
 
         <!-- THẺ 3 -->
@@ -1283,7 +1660,7 @@
         </div>
       </div>
 
-      <!-- PHẦN ƯỚC LƯỢNG -->
+      <!-- PHẦN ƯỚC LƯỢNG (ĐÃ ĐỒNG BỘ 100% TỌA ĐỘ THANH TRƯỢT & MỐC CHÚ THÍCH) -->
       <div class="pt-2 border-t border-white/10 space-y-4">
         <div class="flex justify-center gap-3">
           <button type="button" onclick="selectTimeframe('day')" id="tfBtnDay" class="soft-tag active px-5 py-2 font-semibold">
@@ -1306,16 +1683,16 @@
           </div>
         </div>
 
-        <!-- Thanh trượt -->
-        <div class="space-y-2">
-          <input id="storyTimeSlider" type="range" min="15" max="180" step="5" value="60" oninput="updateTimeSlider(this.value, true)" class="time-range-slider">
-          <div class="flex justify-between text-[11px] text-[#c4b5be]">
-            <span class="cursor-pointer hover:text-white" data-sound="tap" onclick="setSliderMilestone(15)">15p (Tối thiểu)</span>
-            <span class="cursor-pointer hover:text-white" data-sound="tap" onclick="setSliderMilestone(30)">30p</span>
-            <span class="cursor-pointer text-[#ffdf85] font-bold" data-sound="tap" onclick="setSliderMilestone(60)">60p</span>
-            <span class="cursor-pointer hover:text-white" data-sound="tap" onclick="setSliderMilestone(90)">90p</span>
-            <span class="cursor-pointer hover:text-white" data-sound="tap" onclick="setSliderMilestone(120)">2h</span>
-            <span class="cursor-pointer hover:text-white" data-sound="tap" onclick="setSliderMilestone(180)">3h</span>
+        <!-- Thanh trượt Nội Suy Chuẩn Tọa Độ (0 -> 1000) -->
+        <div>
+          <input id="storyTimeSlider" type="range" min="0" max="1000" step="10" value="400" oninput="onSliderTrackInput(this.value)" class="time-range-slider">
+          <div class="slider-milestones-bar">
+            <span class="milestone-tick-btn" data-min="15" style="left: 0%;" data-sound="tap" onclick="setSliderMilestone(15)">15p (Tối thiểu)</span>
+            <span class="milestone-tick-btn" data-min="30" style="left: 20%;" data-sound="tap" onclick="setSliderMilestone(30)">30p</span>
+            <span class="milestone-tick-btn active" data-min="60" style="left: 40%;" data-sound="tap" onclick="setSliderMilestone(60)">60p</span>
+            <span class="milestone-tick-btn" data-min="90" style="left: 60%;" data-sound="tap" onclick="setSliderMilestone(90)">90p</span>
+            <span class="milestone-tick-btn" data-min="120" style="left: 80%;" data-sound="tap" onclick="setSliderMilestone(120)">2h</span>
+            <span class="milestone-tick-btn" data-min="180" style="left: 100%;" data-sound="tap" onclick="setSliderMilestone(180)">3h</span>
           </div>
         </div>
 
@@ -1333,13 +1710,9 @@
         </p>
       </div>
 
-      <p id="bookingSuccessToast" class="hidden text-center text-xs font-bold text-emerald-300 bg-emerald-950/50 border border-emerald-400/40 py-2 px-3 rounded-xl">
-        ✓ Đã tự động chép số phút & chủ đề! Vào khung chat bà chỉ cần nhấn Dán (Paste) là xong nha!
-      </p>
-
-      <!-- 2 NÚT ĐẶT LỊCH -->
+      <!-- 2 NÚT ĐẶT LỊCH (<button> MỞ POPUP XÁC NHẬN COPY 1.2 GIÂY) -->
       <div class="space-y-3 pt-1">
-        <a id="messengerBookingLink" data-sound="open" href="https://m.me/NowNowTarot" target="_blank" rel="noopener" onclick="handleBookingRedirect('Messenger')" class="booking-cta-special booking-cta-messenger">
+        <button type="button" data-sound="open" onclick="handleBookingRedirect('Messenger')" class="booking-cta-special booking-cta-messenger">
           <div class="flex items-center gap-3.5 min-w-0">
             <div class="cta-icon-orb cta-messenger-orb">
               <i class="fa-brands fa-facebook-messenger"></i>
@@ -1354,9 +1727,9 @@
             </div>
           </div>
           <span class="cta-action-pill">Gửi ngay ➔</span>
-        </a>
+        </button>
 
-        <a id="instagramBookingLink" data-sound="open" href="https://ig.me/m/nownowtarot" target="_blank" rel="noopener" onclick="handleBookingRedirect('Instagram')" class="booking-cta-special booking-cta-instagram">
+        <button type="button" data-sound="open" onclick="handleBookingRedirect('Instagram')" class="booking-cta-special booking-cta-instagram">
           <div class="flex items-center gap-3.5 min-w-0">
             <div class="cta-icon-orb cta-instagram-orb">
               <i class="fa-brands fa-instagram"></i>
@@ -1371,13 +1744,13 @@
             </div>
           </div>
           <span class="cta-action-pill">Mở IG ➔</span>
-        </a>
+        </button>
       </div>
     </section>
 
     <div class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🌷 ୧₊‿︵‧˚₊⊹</div>
 
-    <!-- 5. CHÂN TRANG -->
+    <!-- 5. CHÂN TRANG (BENTO 2X2 TINH TẾ TRÊN ĐIỆN THOẠI & LAPTOP) -->
     <footer class="reveal-item space-y-5">
       <div class="text-center space-y-1.5">
         <span class="text-[10.5px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Giữ kết nối duyên lành</span>
@@ -1389,36 +1762,36 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      <div class="social-bento-grid">
         <a href="https://www.threads.com/@nownowtarot?hl=vi" data-sound="tap" target="_blank" rel="noopener" class="social-invite-card">
           <div class="social-invite-icon"><i class="fa-brands fa-threads"></i></div>
           <div class="min-w-0">
-            <div class="text-xs font-extrabold text-white">Threads @nownowtarot</div>
-            <div class="text-[11px] text-[#c4b5be] truncate">Đọc tản văn tâm lý & góc nhìn nghìn tim</div>
+            <div class="text-xs font-extrabold text-white">Threads</div>
+            <div class="text-[11px] text-[#c4b5be] truncate social-sub-desc">Tản văn tâm lý & góc nhìn nghìn tim</div>
           </div>
         </a>
 
         <a href="https://www.instagram.com/nownowtarot/" data-sound="tap" target="_blank" rel="noopener" class="social-invite-card">
           <div class="social-invite-icon"><i class="fa-brands fa-instagram"></i></div>
           <div class="min-w-0">
-            <div class="text-xs font-extrabold text-white">Instagram @nownowtarot</div>
-            <div class="text-[11px] text-[#c4b5be] truncate">Story thủ thỉ mỗi ngày & Hộp thư chính</div>
+            <div class="text-xs font-extrabold text-white">Instagram</div>
+            <div class="text-[11px] text-[#c4b5be] truncate social-sub-desc">Story thủ thỉ & Hộp thư chính</div>
           </div>
         </a>
 
         <a href="https://www.facebook.com/NowNowTarot" data-sound="tap" target="_blank" rel="noopener" class="social-invite-card">
           <div class="social-invite-icon"><i class="fa-brands fa-facebook-f"></i></div>
           <div class="min-w-0">
-            <div class="text-xs font-extrabold text-white">Facebook NowNow Tarot</div>
-            <div class="text-[11px] text-[#c4b5be] truncate">Trang thông tin & Đặt lịch tư vấn nhanh</div>
+            <div class="text-xs font-extrabold text-white">Facebook</div>
+            <div class="text-[11px] text-[#c4b5be] truncate social-sub-desc">Trang thông tin & Đặt lịch nhanh</div>
           </div>
         </a>
 
         <a href="https://www.tiktok.com/@nownowtarot" data-sound="tap" target="_blank" rel="noopener" class="social-invite-card">
           <div class="social-invite-icon"><i class="fa-brands fa-tiktok"></i></div>
           <div class="min-w-0">
-            <div class="text-xs font-extrabold text-white">TikTok @nownowtarot</div>
-            <div class="text-[11px] text-[#c4b5be] truncate">Video thông điệp & Trải bài ngắn chữa lành</div>
+            <div class="text-xs font-extrabold text-white">TikTok</div>
+            <div class="text-[11px] text-[#c4b5be] truncate social-sub-desc">Video thông điệp & Trải bài chữa lành</div>
           </div>
         </a>
       </div>
@@ -1431,7 +1804,29 @@
   </main>
 
   <!-- =========================================================================
-       SUB-WEB 1: FEEDBACK
+       POPUP XÁC NHẬN COPY LỊCH HẸN TRƯỚC KHI MỞ MESSENGER / INSTAGRAM
+       ========================================================================= -->
+  <div id="copyConfirmModal" class="copy-modal-overlay" onclick="closeCopyModal()">
+    <div class="copy-modal-box" onclick="event.stopPropagation()">
+      <div class="text-2xl mb-1">📋✨</div>
+      <h3 class="text-[15px] font-extrabold text-[#ffdf85]">
+        Đã Chép Sẵn Nội Dung Lịch Hẹn!
+      </h3>
+      <p class="text-xs text-[#faf6f0]/90 mt-1.5 leading-relaxed">
+        Khi sang <b id="copyModalPlatformName" class="text-[#ffdf85]">Messenger</b>, bà chỉ cần nhấn <b>Dán (Paste)</b> vào ô chat rồi gửi cho NowNow nha!
+      </p>
+      <div class="copy-progress-track">
+        <div class="copy-progress-bar"></div>
+      </div>
+      <button type="button" id="copyModalOpenNowBtn" class="subweb-subtle-cta w-full py-2.5 text-xs">
+        <span>Mở ứng dụng ngay</span>
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       SUB-WEB 1: FEEDBACK (ĐÃ TỐI ƯU KHUNG ẢNH RỘNG RÕ NÉT & XOÁ URL GIẢ)
        ========================================================================= -->
   <div id="subwebFeedback" class="subweb-overlay" onclick="handleOverlayBackdropClick(event, 'feedback')">
     <div class="subweb-browser-window" onclick="event.stopPropagation()">
@@ -1440,9 +1835,8 @@
           <i class="fa-solid fa-arrow-left"></i>
           <span>Quay về trang chính</span>
         </button>
-        <div class="subweb-address-pill">
-          <i class="fa-solid fa-lock text-[10px] text-emerald-400"></i>
-          <span>nownowtarot.space/hoi-am</span>
+        <div class="subweb-title-pill">
+          <span>💌 Hộp Thư Khách Hàng</span>
         </div>
         <button type="button" data-sound="close" onclick="closeSubWeb('feedback')" class="subweb-close-icon" title="Đóng cửa sổ">
           <i class="fa-solid fa-xmark"></i>
@@ -1456,12 +1850,12 @@
             Những Lời Thủ Thỉ Sau Phiên Trải Bài
           </h2>
           <p class="text-[11px] text-[#c4b5be]">
-            Bấm mũi tên 2 bên hoặc vuốt ngang màn hình iPhone để qua ảnh nha
+            Bấm mũi tên 2 bên hoặc vuốt ngang màn hình để xem tiếp nha
           </p>
         </div>
 
         <div class="iphone-stage-wrapper">
-          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="iphone-nav-arrow" title="Tin nhắn trước">
+          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="iphone-nav-arrow nav-prev" title="Tin nhắn trước">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
 
@@ -1479,7 +1873,7 @@
               </div>
 
               <div class="iphone-viewport-body">
-                <img id="iphoneFeedbackImg" src="fb1.jpg" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img" onerror="this.onerror=null; this.src='https://placehold.co/540x960/160b13/ffdf85?text=Tin+Nhan+Feedback+NowNow+Tarot';">
+                <img id="iphoneFeedbackImg" src="fb1.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
               </div>
 
               <div class="iphone-home-indicator">
@@ -1488,27 +1882,27 @@
             </div>
           </div>
 
-          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="iphone-nav-arrow" title="Tin nhắn tiếp theo">
+          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="iphone-nav-arrow nav-next" title="Tin nhắn tiếp theo">
             <i class="fa-solid fa-chevron-right"></i>
           </button>
         </div>
 
         <div class="flex flex-col items-center gap-1.5 mt-1 w-full">
           <div class="flex items-center gap-4">
-            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-1 px-2">
+            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
               ◀ Ảnh trước
             </button>
             <span id="fbSlideCounter" class="text-xs font-extrabold bg-white/10 border border-[#ffdf85]/40 text-[#ffdf85] px-3 py-0.5 rounded-full">
               Tin nhắn 1 / 12
             </span>
-            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-1 px-2">
+            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
               Ảnh tiếp ▶
             </button>
           </div>
 
           <div id="fbDotsContainer" class="flex items-center justify-center gap-1.5 py-0.5"></div>
 
-          <div class="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+          <div class="flex flex-wrap items-center justify-center gap-2.5 pt-0.5">
             <button type="button" data-sound="open" onclick="jumpToBookingFromSubWeb('feedback')" class="subweb-subtle-cta">
               <span>✨ Chọn số phút & Đặt lịch</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -1523,7 +1917,7 @@
   </div>
 
   <!-- =========================================================================
-       SUB-WEB 2: THREADS
+       SUB-WEB 2: THREADS (ĐÃ XOÁ URL GIẢ & TỐI ƯU KHUNG CAO)
        ========================================================================= -->
   <div id="subwebViral" class="subweb-overlay" onclick="handleOverlayBackdropClick(event, 'viral')">
     <div class="subweb-browser-window" onclick="event.stopPropagation()">
@@ -1532,9 +1926,9 @@
           <i class="fa-solid fa-arrow-left"></i>
           <span>Quay về trang chính</span>
         </button>
-        <div class="subweb-address-pill">
-          <i class="fa-brands fa-threads text-[11px] text-[#ffdf85]"></i>
-          <span>threads.net/@nownowtarot/viral-notes</span>
+        <div class="subweb-title-pill">
+          <i class="fa-brands fa-threads text-[12px] text-[#ffdf85]"></i>
+          <span>Tạp Chí Tâm Thức</span>
         </div>
         <button type="button" data-sound="close" onclick="closeSubWeb('viral')" class="subweb-close-icon" title="Đóng cửa sổ">
           <i class="fa-solid fa-xmark"></i>
@@ -1552,7 +1946,7 @@
           </p>
           <div class="pt-1">
             <button type="button" data-sound="tap" onclick="switchSubWeb('viral', 'feedback')" class="text-[11.5px] text-[#ffdf85] underline hover:text-white">
-              👉 Chuyển sang xem Hộp Thư Ảnh Feedback Thật trên iPhone
+              👉 Chuyển sang xem Hộp Thư Tin Nhắn Hồi Âm Thực Tế
             </button>
           </div>
         </div>
@@ -1648,14 +2042,14 @@
   </div>
 
   <!-- =========================================================================
-       BÉ MÈO ĐEN: HỆ THỐNG ÂM THANH MÈO THẬT TỪ FILE INDEX.HTML
+       BÉ MÈO ĐEN: ĐI DẠO QUANH MÀN HÌNH + CẦM KÉO TỰ DO + TIẾNG MÈO THẬT
        ========================================================================= -->
-  <div class="floating-cat-buddy">
+  <div id="floatingCatContainer" class="floating-cat-buddy">
     <div id="catBubbleTip" class="cat-cloud-tip">
-      <span id="catBubbleText">Meo~ meo! Bấm vào tui nghe tiếng mèo thật kêu nha sen ơi! 🐾🎄</span>
+      <span id="catBubbleText">Meo~ meo! Bấm vào tui nghe tiếng mèo kêu, hoặc nắm cổ tui kéo đi chơi nha sen! 🐾🎄</span>
     </div>
 
-    <div data-sound="none" onclick="pokeRealCatMeow()" class="cat-sprite-btn" id="catBtnEl" title="Chạm vào Mèo Đen nghe tiếng mèo kêu thật!">
+    <div data-sound="none" class="cat-sprite-btn" id="catBtnEl" title="Chạm nghe mèo kêu hoặc giữ chuột/ngón tay để kéo mèo đi chơi!">
       <svg viewBox="0 0 120 130" class="w-full h-full overflow-visible">
         <path class="cat-tail-svg" d="M80 100 C108 95, 114 66, 98 52 C92 46, 86 54, 92 60" fill="none" stroke="#0b0b12" stroke-width="8" stroke-linecap="round" />
         <path d="M36 114 C33 86, 41 68, 58 68 C75 68, 83 86, 80 114 Z" fill="#0b0b12" />
@@ -1679,7 +2073,7 @@
 
   <script>
     /* =========================================================================
-       1. CỖ MÁY ÂM THANH NÚT BẤM IPHONE + TIẾNG MÈO THẬT 100% TỪ FILE INDEX.HTML
+       1. CỖ MÁY ÂM THANH NÚT BẤM IPHONE + TIẾNG MÈO THẬT 100%
        ========================================================================= */
     let sharedAudioCtx = null;
     let isAudioUnlocked = false;
@@ -1695,7 +2089,6 @@
       return sharedAudioCtx;
     }
 
-    // ÂM NÚT BẤM IPHONE
     function playIOSButtonSound(mode = 'tap') {
       try {
         if (navigator.vibrate) {
@@ -1763,7 +2156,6 @@
           return;
         }
 
-        // Tap
         const osc = ctx.createOscillator();
         const sub = ctx.createOscillator();
         const filter = ctx.createBiquadFilter();
@@ -1807,7 +2199,7 @@
       document.addEventListener('click', unlock, { passive: true, once: true });
 
       document.addEventListener('pointerdown', (e) => {
-        const el = e.target.closest('button, a, .soft-tag, .portal-launch-card, .fb-dot-indicator, [data-sound]');
+        const el = e.target.closest('button, a, .soft-tag, .portal-launch-card, .fb-dot-indicator, .milestone-tick-btn, [data-sound]');
         if (!el) return;
         const soundType = el.getAttribute('data-sound');
         if (soundType === 'none') return;
@@ -1815,9 +2207,7 @@
       }, { passive: true });
     }
 
-    /* =========================================================================
-       HỆ THỐNG PHÁT TIẾNG MÈO KÊU THẬT 100% ĐƯỢC ĐƯA TỪ FILE INDEX.HTML SANG
-       ========================================================================= */
+    /* HỆ THỐNG TIẾNG MÈO THẬT */
     const realCatMeowUrls = [
       'https://actions.google.com/sounds/v1/animals/cat_purr_and_meow.ogg',
       'https://upload.wikimedia.org/wikipedia/commons/6/62/Meow.ogg',
@@ -1908,13 +2298,8 @@
       }
     }
 
-    // Kết nối hàm gọi của file gemini vào thẳng bộ âm thanh mèo của file index
-    function triggerCatMeowGuarantee() {
-      playCuteMeowSound();
-    }
-
     /* =========================================================================
-       2. CUỘN & AVATAR JIGGLE
+       2. CUỘN TRANG & AVATAR JIGGLE
        ========================================================================= */
     function initScrollReveal() {
       const items = document.querySelectorAll('.reveal-item');
@@ -1936,31 +2321,61 @@
       void wrap.offsetWidth;
       wrap.classList.add('jiggling');
       playCuteMeowSound();
-      showCatTip('Meo~ meo! Avatar của sốp nằm ngay chính tâm vũ trụ luôn nè! Xem bài 1 lần làm bạn 0đ trọn đời nha 🎅✨', 4200);
+      showCatTip('Meo~ meo! Avatar của sốp nằm ngay chính tâm vũ trụ luôn nè! Xem bài 1 lần làm bạn 0đ trọn đời nha 🎅✨', 4000);
       setTimeout(() => wrap.classList.remove('jiggling'), 700);
     }
 
     /* =========================================================================
-       3. IPHONE 14 PRO CAROUSEL
+       3. IPHONE 14 PRO CAROUSEL (.WEBP + FALLBACK .JPG + PRELOAD THÔNG MINH)
        ========================================================================= */
-    const feedbackImages = [
-      'fb1.jpg', 'fb2.jpg', 'fb3.jpg', 'fb4.jpg',
-      'fb5.jpg', 'fb6.jpg', 'fb7.jpg', 'fb8.jpg',
-      'fb9.jpg', 'fb10.jpg', 'fb11.jpg', 'fb12.jpg'
-    ];
+    const TOTAL_FEEDBACK_SLIDES = 12;
     let currentFbIndex = 0;
+    const preloadedImageCache = {};
+
+    function loadFeedbackImageWithFallback(imgElement, slideIdx) {
+      const num = slideIdx + 1;
+      const webpSrc = `fb${num}.webp`;
+      const jpgSrc = `fb${num}.jpg`;
+
+      imgElement.onerror = function() {
+        if (this.src.endsWith('.webp')) {
+          this.src = jpgSrc;
+        } else {
+          this.onerror = null;
+          this.src = 'https://placehold.co/540x960/160b13/ffdf85?text=Tin+Nhan+Feedback+NowNow+Tarot';
+        }
+      };
+      imgElement.src = webpSrc;
+    }
+
+    function preloadAdjacentFeedbackSlides(centerIdx) {
+      const nextIdx = (centerIdx + 1) % TOTAL_FEEDBACK_SLIDES;
+      const prevIdx = (centerIdx - 1 + TOTAL_FEEDBACK_SLIDES) % TOTAL_FEEDBACK_SLIDES;
+      [nextIdx, prevIdx].forEach(idx => {
+        if (!preloadedImageCache[idx]) {
+          const tempImg = new Image();
+          loadFeedbackImageWithFallback(tempImg, idx);
+          preloadedImageCache[idx] = tempImg;
+        }
+      });
+    }
 
     function initFeedbackCarousel() {
       const dotsWrap = document.getElementById('fbDotsContainer');
       if (!dotsWrap) return;
       dotsWrap.innerHTML = '';
-      feedbackImages.forEach((_, idx) => {
+      for (let idx = 0; idx < TOTAL_FEEDBACK_SLIDES; idx++) {
         const dot = document.createElement('span');
         dot.className = 'fb-dot-indicator' + (idx === 0 ? ' active' : '');
         dot.setAttribute('data-sound', 'tap');
         dot.onclick = () => goToFeedbackSlide(idx, idx > currentFbIndex ? 1 : -1);
         dotsWrap.appendChild(dot);
-      });
+      }
+
+      const mainImg = document.getElementById('iphoneFeedbackImg');
+      if (mainImg) {
+        loadFeedbackImageWithFallback(mainImg, 0);
+      }
 
       const touchArea = document.getElementById('iphoneTouchArea');
       if (touchArea) {
@@ -1984,7 +2399,7 @@
     }
 
     function goToFeedbackSlide(index, direction = 1) {
-      currentFbIndex = (index + feedbackImages.length) % feedbackImages.length;
+      currentFbIndex = (index + TOTAL_FEEDBACK_SLIDES) % TOTAL_FEEDBACK_SLIDES;
       const imgEl = document.getElementById('iphoneFeedbackImg');
       const counterEl = document.getElementById('fbSlideCounter');
       const dots = document.querySelectorAll('.fb-dot-indicator');
@@ -1994,13 +2409,14 @@
         imgEl.classList.remove('sliding-left', 'sliding-right');
         imgEl.classList.add(outClass);
         setTimeout(() => {
-          imgEl.src = feedbackImages[currentFbIndex];
+          loadFeedbackImageWithFallback(imgEl, currentFbIndex);
           imgEl.classList.remove('sliding-left', 'sliding-right');
-        }, 120);
+          preloadAdjacentFeedbackSlides(currentFbIndex);
+        }, 110);
       }
 
       if (counterEl) {
-        counterEl.textContent = `Tin nhắn ${currentFbIndex + 1} / ${feedbackImages.length}`;
+        counterEl.textContent = `Tin nhắn ${currentFbIndex + 1} / ${TOTAL_FEEDBACK_SLIDES}`;
       }
 
       dots.forEach((d, idx) => {
@@ -2013,30 +2429,77 @@
     }
 
     /* =========================================================================
-       4. SUB-WEB PORTAL
+       4. SUB-WEB PORTAL + BẮT SỰ KIỆN NÚT BACK ĐIỆN THOẠI (HISTORY API)
        ========================================================================= */
-    function openSubWeb(type) {
+    let activeSubWebType = null;
+
+    function openSubWeb(type, pushToHistory = true) {
       const modalId = type === 'feedback' ? 'subwebFeedback' : 'subwebViral';
       const modal = document.getElementById(modalId);
       if (!modal) return;
+
+      activeSubWebType = type;
       document.body.classList.add('portal-open');
       modal.classList.add('open');
 
       const scrollBody = modal.querySelector('.subweb-body-scroll');
       if (scrollBody) scrollBody.scrollTop = 0;
+
+      if (type === 'feedback') {
+        preloadAdjacentFeedbackSlides(currentFbIndex);
+      }
+
+      if (pushToHistory && window.history && window.history.pushState) {
+        window.history.pushState({ subweb: type }, '', `#${type}`);
+      }
     }
 
-    function closeSubWeb(type) {
-      const modalId = type === 'feedback' ? 'subwebFeedback' : 'subwebViral';
+    function closeSubWeb(type, fromPopState = false) {
+      const targetType = type || activeSubWebType;
+      if (!targetType) return;
+
+      const modalId = targetType === 'feedback' ? 'subwebFeedback' : 'subwebViral';
       const modal = document.getElementById(modalId);
       if (modal) modal.classList.remove('open');
       document.body.classList.remove('portal-open');
+      activeSubWebType = null;
+
+      if (!fromPopState && window.location.hash) {
+        if (window.history && window.history.state && window.history.state.subweb) {
+          window.history.back();
+        } else if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      }
     }
 
     function switchSubWeb(fromType, toType) {
-      closeSubWeb(fromType);
-      setTimeout(() => openSubWeb(toType), 160);
+      const fromModal = document.getElementById(fromType === 'feedback' ? 'subwebFeedback' : 'subwebViral');
+      if (fromModal) fromModal.classList.remove('open');
+
+      setTimeout(() => {
+        const toModal = document.getElementById(toType === 'feedback' ? 'subwebFeedback' : 'subwebViral');
+        if (toModal) {
+          activeSubWebType = toType;
+          toModal.classList.add('open');
+          const scrollBody = toModal.querySelector('.subweb-body-scroll');
+          if (scrollBody) scrollBody.scrollTop = 0;
+          if (toType === 'feedback') preloadAdjacentFeedbackSlides(currentFbIndex);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState({ subweb: toType }, '', `#${toType}`);
+          }
+        }
+      }, 150);
     }
+
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.subweb) {
+        openSubWeb(e.state.subweb, false);
+      } else if (activeSubWebType) {
+        playIOSButtonSound('close');
+        closeSubWeb(activeSubWebType, true);
+      }
+    });
 
     function handleOverlayBackdropClick(e, type) {
       if (e.target.classList.contains('subweb-overlay')) {
@@ -2050,7 +2513,7 @@
       setTimeout(() => {
         const bookingSec = document.getElementById('sec-booking');
         if (bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        showCatTip('Meo~ meo! Bà chọn kênh, chọn chủ đề rồi kéo thanh trượt số phút nha! 🐾', 4800);
+        showCatTip('Meo~ meo! Bà chọn kênh, chọn chủ đề rồi kéo thanh trượt số phút nha! 🐾', 4200);
       }, 240);
     }
 
@@ -2066,17 +2529,16 @@
           changeFeedbackSlide(-1);
         }
       }
-      if (e.key === 'Escape') {
-        closeSubWeb('feedback');
-        closeSubWeb('viral');
+      if (e.key === 'Escape' && activeSubWebType) {
+        closeSubWeb(activeSubWebType);
       }
     });
 
     /* =========================================================================
-       5. HỘI THOẠI MÈO
+       5. BÉ MÈO ĐEN: CHU KỲ 6 GIÂY + ẨN KHI CUỘN + ĐI DẠO & CẦM KÉO (DRAGGABLE)
        ========================================================================= */
     const catPassiveDialogues = [
-      "Meo~ meo! Bấm vào tui nghe tiếng mèo con kêu thiệt nha! 🐾",
+      "Meo~ meo! Bấm vào tui nghe tiếng mèo kêu, hoặc nắm cổ tui kéo đi chơi nha! 🐾",
       "Miaow~ Xem 1 lần là tâm sự 0đ trọn đời với sốp đó! 💝",
       "Mew~ Ở đây 0đ đặt cọc, nhẹ lòng mới tính phí nè! ✨",
       "Meo~ meo! Sốp đọc vị tâm lý đỉnh lắm, ko cần tên tuổi luôn! 🧠",
@@ -2096,27 +2558,138 @@
     const catActiveClickDialogues = [
       "Meo~ meo~! Tiếng mèo con kêu trong veo vang lên rồi nè sen ơi! 🐾✨",
       "Miaow~ Gãi đúng chỗ ngứa của tui rồi! Thương bà nhất luôn! 😻",
-      "Meo~ meo! Nhớ là xem bài xong được làm bạn tâm sự 0đ trọn đời nha! 💝",
+      "Meo~ meo! Sen có thể giữ chuột hoặc ngón tay xách tui đi khắp màn hình đó! 🐾",
       "Mew~ Đừng giữ chuyện buồn một mình, để sốp gỡ rối cùng bà! 🕯️",
       "Meo~ meo? Bà nhắm chọn mấy chục phút rồi? Bấm đặt lịch liền nha! 🎄"
     ];
 
     let tipTimer = null;
     let passiveLoopTimer = null;
+    let roamLoopTimer = null;
     let passiveIdx = 0;
     let currentMeowClickIdx = 0;
     let lastUserInteractionTime = 0;
 
+    let catPosX = 0;
+    let catPosY = 0;
+    let isDraggingCat = false;
+    let hasDraggedDistance = false;
+
+    function getCatDimensions() {
+      const isMob = window.innerWidth <= 640;
+      return { w: isMob ? 48 : 56, h: isMob ? 48 : 56, margin: isMob ? 12 : 18 };
+    }
+
+    function setCatScreenPosition(x, y) {
+      const container = document.getElementById('floatingCatContainer');
+      if (!container) return;
+      const { w, h, margin } = getCatDimensions();
+      const maxX = window.innerWidth - w - margin;
+      const maxY = window.innerHeight - h - margin;
+
+      catPosX = Math.max(margin, Math.min(maxX, x));
+      catPosY = Math.max(68, Math.min(maxY, y));
+
+      container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
+      container.classList.toggle('cat-on-left', catPosX < window.innerWidth * 0.45);
+    }
+
+    function initCatRoamingAndDragging() {
+      const container = document.getElementById('floatingCatContainer');
+      const catBtn = document.getElementById('catBtnEl');
+      if (!container || !catBtn) return;
+
+      const { w, h, margin } = getCatDimensions();
+      setCatScreenPosition(window.innerWidth - w - margin, window.innerHeight - h - margin);
+
+      let startClientX = 0;
+      let startClientY = 0;
+      let initialCatX = 0;
+      let initialCatY = 0;
+
+      catBtn.addEventListener('pointerdown', (e) => {
+        isDraggingCat = true;
+        hasDraggedDistance = false;
+        lastUserInteractionTime = Date.now();
+        startClientX = e.clientX;
+        startClientY = e.clientY;
+        initialCatX = catPosX;
+        initialCatY = catPosY;
+        container.classList.add('dragging');
+        if (catBtn.setPointerCapture) {
+          try { catBtn.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+      });
+
+      catBtn.addEventListener('pointermove', (e) => {
+        if (!isDraggingCat) return;
+        const dx = e.clientX - startClientX;
+        const dy = e.clientY - startClientY;
+        if (Math.hypot(dx, dy) > 8) {
+          if (!hasDraggedDistance) {
+            hasDraggedDistance = true;
+            showCatTip('Á á~ Sen xách cổ tui bay đi đâu đó?! 🐾😹', 2500);
+          }
+          setCatScreenPosition(initialCatX + dx, initialCatY + dy);
+        }
+      });
+
+      const finishCatDrag = (e) => {
+        if (!isDraggingCat) return;
+        isDraggingCat = false;
+        container.classList.remove('dragging');
+        lastUserInteractionTime = Date.now();
+
+        if (!hasDraggedDistance) {
+          pokeRealCatMeow();
+        } else {
+          playCuteMeowSound();
+          showCatTip('Hạ cánh an toàn! Góc này phong thủy đẹp nè sen ơi! 🐾✨', 3600);
+        }
+      };
+
+      catBtn.addEventListener('pointerup', finishCatDrag);
+      catBtn.addEventListener('pointercancel', finishCatDrag);
+
+      // Mèo tự động đi dạo nhẹ nhàng dọc hai bên mép màn hình
+      if (roamLoopTimer) clearInterval(roamLoopTimer);
+      roamLoopTimer = setInterval(() => {
+        if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+        if (Date.now() - lastUserInteractionTime < 4000) return;
+
+        const { w, h, margin } = getCatDimensions();
+        const chooseRightSide = Math.random() > 0.32;
+        const targetX = chooseRightSide ? (window.innerWidth - w - margin) : margin;
+        const minY = Math.max(90, window.innerHeight * 0.28);
+        const maxY = window.innerHeight - h - margin;
+        const targetY = minY + Math.random() * (maxY - minY);
+
+        setCatScreenPosition(targetX, targetY);
+      }, 10500);
+
+      window.addEventListener('resize', () => {
+        setCatScreenPosition(catPosX, catPosY);
+      });
+    }
+
     function triggerCatGentleWiggle() {
       const catBtn = document.getElementById('catBtnEl');
-      if (!catBtn) return;
+      if (!catBtn || isDraggingCat) return;
       catBtn.classList.remove('cat-bouncing');
       void catBtn.offsetWidth;
       catBtn.classList.add('cat-bouncing');
       setTimeout(() => catBtn.classList.remove('cat-bouncing'), 580);
     }
 
-    function showCatTip(text, duration = 4500) {
+    function hideCatTipImmediately() {
+      const tip = document.getElementById('catBubbleTip');
+      if (tip && !tip.classList.contains('hidden-tip')) {
+        tip.classList.add('hidden-tip');
+      }
+      if (tipTimer) clearTimeout(tipTimer);
+    }
+
+    function showCatTip(text, duration = 4200) {
       if (document.body.classList.contains('portal-open')) return;
       const tip = document.getElementById('catBubbleTip');
       const txt = document.getElementById('catBubbleText');
@@ -2129,16 +2702,22 @@
       }, duration);
     }
 
+    // Tự động ẩn bong bóng thoại ngay lập tức khi người dùng cuộn trang
+    window.addEventListener('scroll', () => {
+      hideCatTipImmediately();
+    }, { passive: true });
+
+    // Chu kỳ 6 giây (6000ms) đúng theo yêu cầu của Sếp
     function startPassiveCatDialogueLoop() {
       if (passiveLoopTimer) clearInterval(passiveLoopTimer);
       passiveLoopTimer = setInterval(() => {
-        if (document.body.classList.contains('portal-open')) return;
-        if (Date.now() - lastUserInteractionTime < 5500) return;
+        if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+        if (Date.now() - lastUserInteractionTime < 3500) return;
         const msg = catPassiveDialogues[passiveIdx % catPassiveDialogues.length];
         passiveIdx++;
         triggerCatGentleWiggle();
-        showCatTip(msg, 4800);
-      }, 9000);
+        showCatTip(msg, 4200);
+      }, 6000);
     }
 
     function pokeRealCatMeow() {
@@ -2147,17 +2726,42 @@
       triggerCatGentleWiggle();
 
       const activeMsg = catActiveClickDialogues[currentMeowClickIdx % catActiveClickDialogues.length];
-      showCatTip(activeMsg, 4800);
+      showCatTip(activeMsg, 4500);
       currentMeowClickIdx++;
     }
 
     /* =========================================================================
-       6. THANH TRƯỢT THỜI GIAN
+       6. THANH TRƯỢT THỜI GIAN CHUẨN TỌA ĐỘ 100% VỚI 6 MỐC (15p, 30p, 60p, 90p, 2h, 3h)
        ========================================================================= */
+    const SLIDER_MILESTONES = [15, 30, 60, 90, 120, 180];
     let currentTimeframe = 'day';
     let currentMinutes = 60;
     let currentChannel = 'Voice Note 2 chiều';
     let lastTickMinute = 60;
+
+    // Chuyển đổi vị trí thanh trượt (0 -> 1000) sang số phút chuẩn theo từng chặng
+    function sliderPosToMinutes(pos) {
+      const p = Math.max(0, Math.min(1000, parseFloat(pos)));
+      const seg = p / 200; // 5 đoạn đều nhau: 0, 1, 2, 3, 4, 5
+      const idx = Math.min(4, Math.floor(seg));
+      const frac = seg - idx;
+      const rawMin = SLIDER_MILESTONES[idx] + frac * (SLIDER_MILESTONES[idx + 1] - SLIDER_MILESTONES[idx]);
+      return Math.round(rawMin / 5) * 5;
+    }
+
+    // Chuyển đổi số phút ngược lại sang vị trí thanh trượt (0 -> 1000)
+    function minutesToSliderPos(min) {
+      const m = Math.max(15, Math.min(180, parseInt(min, 10)));
+      for (let i = 0; i < SLIDER_MILESTONES.length - 1; i++) {
+        const start = SLIDER_MILESTONES[i];
+        const end = SLIDER_MILESTONES[i + 1];
+        if (m <= end) {
+          const frac = (m - start) / (end - start);
+          return Math.round((i + frac) * 200);
+        }
+      }
+      return 1000;
+    }
 
     function calculatePriceK(minutes, tf) {
       const m = parseInt(minutes, 10);
@@ -2207,29 +2811,49 @@
       } else {
         ruleSummary.innerHTML = 'Giá Cú Đêm (0h–4h): <b>30p (119K)</b> • <b>60p (169K)</b> • Trò chuyện thêm <b>+2,5K/phút</b> (Xem xong mới thanh toán).';
       }
-      updateTimeSlider(currentMinutes, true);
+      renderMinutesState(currentMinutes, true);
     }
 
-    function setSliderMilestone(val) {
+    function setSliderMilestone(targetMin) {
       const slider = document.getElementById('storyTimeSlider');
-      if (slider) {
-        slider.value = val;
-        updateTimeSlider(val, true);
-      }
+      const pos = minutesToSliderPos(targetMin);
+      if (slider) slider.value = pos;
+      renderMinutesState(targetMin, true);
     }
 
-    function updateTimeSlider(val, notifyCat = false) {
-      currentMinutes = parseInt(val, 10);
+    function onSliderTrackInput(posVal) {
+      const mins = sliderPosToMinutes(posVal);
+      renderMinutesState(mins, true, posVal / 10);
+    }
+
+    function renderMinutesState(mins, notifyCat = false, exactPct = null) {
+      currentMinutes = parseInt(mins, 10);
       if (notifyCat && currentMinutes !== lastTickMinute) {
         lastTickMinute = currentMinutes;
         playIOSButtonSound('tick');
       }
 
       const slider = document.getElementById('storyTimeSlider');
-      const pct = Math.round(((currentMinutes - 15) / (180 - 15)) * 100);
+      const pct = exactPct !== null ? exactPct : (minutesToSliderPos(currentMinutes) / 10);
       if (slider) {
         slider.style.background = `linear-gradient(90deg, #e85d75 0%, #ffdf85 ${pct}%, rgba(255, 255, 255, 0.14) ${pct}%)`;
       }
+
+      // Highlight chính xác mốc bên dưới thanh trượt
+      const tickBtns = document.querySelectorAll('.milestone-tick-btn');
+      let closestMilestone = SLIDER_MILESTONES[0];
+      let minDiff = Math.abs(currentMinutes - closestMilestone);
+      SLIDER_MILESTONES.forEach(m => {
+        const diff = Math.abs(currentMinutes - m);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestMilestone = m;
+        }
+      });
+      tickBtns.forEach(btn => {
+        const mVal = parseInt(btn.getAttribute('data-min'), 10);
+        btn.classList.toggle('active', mVal === closestMilestone);
+      });
 
       const minDisplay = document.getElementById('sliderMinutesDisplay');
       const subDisplay = document.getElementById('sliderHoursSubtext');
@@ -2237,17 +2861,25 @@
       const priceK = calculatePriceK(currentMinutes, currentTimeframe);
 
       minDisplay.textContent = `${currentMinutes} phút`;
-      subDisplay.textContent = currentMinutes === 60 ? '(Phổ biến nhất ✨)' : (currentMinutes === 15 ? '(Tối thiểu)' : '');
+      if (currentMinutes === 60) {
+        subDisplay.textContent = '(Phổ biến nhất ✨)';
+      } else if (currentMinutes === 15) {
+        subDisplay.textContent = '(Tối thiểu)';
+      } else if (currentMinutes >= 120) {
+        const hrs = (currentMinutes / 60).toFixed(currentMinutes % 60 === 0 ? 0 : 1);
+        subDisplay.textContent = `(${hrs} tiếng)`;
+      } else {
+        subDisplay.textContent = '';
+      }
       priceDisplay.textContent = `${priceK}K`;
 
       const details = getMilestoneDetails(currentMinutes);
       document.getElementById('storyStageBadge').innerHTML = details.badge;
       document.getElementById('storyStageSolve').innerHTML = details.solve;
 
-      updateDeepLinks();
-
       if (notifyCat) {
-        showCatTip(`Meo~ meo! Bà đang chọn <b>${currentMinutes} phút (~${priceK}K)</b>. Bấm nút đặt lịch là tui tự động chép sẵn nha! 🐾`, 3500);
+        lastUserInteractionTime = Date.now();
+        showCatTip(`Meo~ meo! Bà đang chọn <b>${currentMinutes} phút (~${priceK}K)</b>. Bấm nút đặt lịch là tui tự động chép sẵn nha! 🐾`, 3400);
       }
     }
 
@@ -2255,12 +2887,10 @@
       currentChannel = chan;
       document.getElementById('chanVoiceBtn').classList.toggle('active', chan.includes('Voice'));
       document.getElementById('chanMeetBtn').classList.toggle('active', chan.includes('Meet'));
-      updateDeepLinks();
     }
 
     function addTopicTag(btn) {
       btn.classList.toggle('active');
-      updateDeepLinks();
     }
 
     function buildBookingMessage() {
@@ -2291,13 +2921,6 @@ Mình muốn đặt lịch xem bài:
 • Chuyện mình đang vướng: ${combinedTopic}`;
     }
 
-    function updateDeepLinks() {
-      const msg = buildBookingMessage();
-      const encoded = encodeURIComponent(msg);
-      const msgLink = document.getElementById('messengerBookingLink');
-      if (msgLink) msgLink.href = `https://m.me/NowNowTarot?text=${encoded}`;
-    }
-
     function copyToClipboard(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
@@ -2317,13 +2940,52 @@ Mình muốn đặt lịch xem bài:
       document.body.removeChild(ta);
     }
 
+    let copyRedirectTimer = null;
+
+    function closeCopyModal() {
+      const modal = document.getElementById('copyConfirmModal');
+      if (modal) modal.classList.remove('open');
+      if (copyRedirectTimer) {
+        clearTimeout(copyRedirectTimer);
+        copyRedirectTimer = null;
+      }
+    }
+
     function handleBookingRedirect(platform) {
       const msg = buildBookingMessage();
       copyToClipboard(msg);
-      const toast = document.getElementById('bookingSuccessToast');
-      if (toast) toast.classList.remove('hidden');
       playCuteMeowSound();
-      showCatTip(`Meo~ meo! Đã Copy sẵn <b>${currentMinutes} phút</b>! Qua ${platform} bà chỉ cần nhấn Dán (Paste) nha! 🎉`, 6000);
+
+      const encoded = encodeURIComponent(msg);
+      const targetUrl = platform === 'Messenger'
+        ? `https://m.me/NowNowTarot?text=${encoded}`
+        : `https://ig.me/m/nownowtarot`;
+
+      const modal = document.getElementById('copyConfirmModal');
+      const platNameEl = document.getElementById('copyModalPlatformName');
+      const openNowBtn = document.getElementById('copyModalOpenNowBtn');
+
+      if (platNameEl) platNameEl.textContent = platform === 'Messenger' ? 'Messenger' : 'Instagram';
+
+      const triggerRedirectNow = () => {
+        closeCopyModal();
+        window.open(targetUrl, '_blank', 'noopener');
+      };
+
+      if (openNowBtn) {
+        openNowBtn.onclick = triggerRedirectNow;
+      }
+
+      if (modal) {
+        modal.classList.remove('open');
+        void modal.offsetWidth;
+        modal.classList.add('open');
+      }
+
+      if (copyRedirectTimer) clearTimeout(copyRedirectTimer);
+      copyRedirectTimer = setTimeout(() => {
+        triggerRedirectNow();
+      }, 1200);
     }
 
     /* =========================================================================
@@ -2545,12 +3207,13 @@ Mình muốn đặt lịch xem bài:
       initCosmicCanvas();
       initScrollReveal();
       initFeedbackCarousel();
-      updateTimeSlider(60, false);
+      setSliderMilestone(60);
+      initCatRoamingAndDragging();
       startPassiveCatDialogueLoop();
       setTimeout(() => {
         const tip = document.getElementById('catBubbleTip');
         if (tip) tip.classList.add('hidden-tip');
-      }, 4800);
+      }, 4500);
     };
   </script>
 </body>

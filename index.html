@@ -2766,13 +2766,19 @@
     function calculatePriceK(minutes, tf) {
       const m = parseInt(minutes, 10);
       if (tf === 'day') {
-        if (m <= 30) return Math.round((m / 30) * 59);
-        if (m <= 60) return Math.round(59 + ((m - 30) / 30) * (99 - 59));
-        return Math.round(99 + (m - 60) * 1.5);
-      } else {
-        if (m <= 30) return Math.round((m / 30) * 119);
-        if (m <= 60) return Math.round(119 + ((m - 30) / 30) * (169 - 119));
-        return Math.round(169 + (m - 60) * 2.5);
+    // 15 - 30 phút: Tỷ lệ theo gói 30p (59K)
+    if (m <= 30) return Math.round((m / 30) * 59);
+    // 31 - 59 phút: +1.5K/phút, chạm trần 99K ở phút 57 (Chuẩn hàm MIN trong Sheets)
+    if (m <= 60) return Math.min(Math.round(59 + (m - 30) * 1.5), 99);
+    // Từ 60 phút trở lên: 99K + 1.5K cho mỗi phút dôi thêm
+    return Math.round(99 + (m - 60) * 1.5);
+  } else {
+    // 15 - 30 phút: Tỷ lệ theo gói đêm 30p (119K)
+    if (m <= 30) return Math.round((m / 30) * 119);
+    // 31 - 59 phút: +2.5K/phút, chạm trần 169K ở phút 50 (Chuẩn hàm MIN trong Sheets)
+    if (m <= 60) return Math.min(Math.round(119 + (m - 30) * 2.5), 169);
+    // Từ 60 phút trở lên: 169K + 2.5K cho mỗi phút dôi thêm
+    return Math.round(169 + (m - 60) * 2.5);
       }
     }
 

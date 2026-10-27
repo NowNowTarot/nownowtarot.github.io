@@ -2969,7 +2969,7 @@ Mình muốn đặt lịch xem bài:
 
       const triggerRedirectNow = () => {
         closeCopyModal();
-        window.open(targetUrl, '_blank', 'noopener');
+        window.location.href = targetUrl;
       };
 
       if (openNowBtn) {

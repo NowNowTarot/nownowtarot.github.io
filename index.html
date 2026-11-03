@@ -383,33 +383,119 @@
         0 0 28px rgba(255, 223, 133, 0.55);
     }
     /* HUY HIỆU TRẠNG THÁI ONLINE THỰC TẾ & THANH ĐỔI MÙA TINH TẾ */
-    .live-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 4.5px 13px;
-      border-radius: 999px;
-      background: rgba(20, 10, 16, 0.78);
-      border: 1px solid rgba(255, 223, 133, 0.35);
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--champagne);
-      margin-top: 10px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    }
-    .status-dot-pulse {
-      width: 7.5px;
-      height: 7.5px;
-      border-radius: 50%;
-      background: #34d399;
-      box-shadow: 0 0 8px #34d399;
-      animation: pulseDot 2s infinite;
-    }
-    @keyframes pulseDot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.35); opacity: 0.65; }
-    }
+    /* NÚT NGHE THỬ GIỌNG NOWNOW (VOICE WARMTH TRUST) */
+.voice-greeting-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  margin: 12px auto 0 auto;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(185, 42, 64, 0.22) 0%, rgba(36, 14, 25, 0.85) 100%);
+  border: 1.5px solid rgba(255, 223, 133, 0.45);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.voice-greeting-banner:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-warm);
+  box-shadow: 0 10px 30px rgba(212, 50, 72, 0.35);
+}
+.voice-play-orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-warm), var(--rose-warm));
+  color: #240e19;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(255, 223, 133, 0.6);
+  transition: transform 0.2s ease;
+}
+.voice-greeting-banner:active .voice-play-orb {
+  transform: scale(0.92);
+}
+.voice-soundwave-bars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5px;
+  height: 16px;
+}
+.soundwave-bar {
+  width: 3px;
+  height: 6px;
+  background: rgba(255, 223, 133, 0.45);
+  border-radius: 999px;
+  transition: height 0.2s ease;
+}
+.voice-greeting-banner.playing .soundwave-bar {
+  animation: soundwaveBounce 0.8s ease-in-out infinite alternate;
+}
+.voice-greeting-banner.playing .soundwave-bar:nth-child(2) { animation-delay: 0.15s; }
+.voice-greeting-banner.playing .soundwave-bar:nth-child(3) { animation-delay: 0.3s; }
+.voice-greeting-banner.playing .soundwave-bar:nth-child(4) { animation-delay: 0.45s; }
+@keyframes soundwaveBounce {
+  0% { height: 6px; }
+  100% { height: 18px; background: var(--gold-warm); }
+}
+
+    /* TRẠNG THÁI ONLINE TỐI GIẢN SANG TRỌNG (FRAMELESS WHISPER + AVATAR RING) */
+.live-status-minimal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  margin-bottom: 2px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(242, 222, 196, 0.85);
+}
+.status-beacon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+}
+.status-dot-core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  z-index: 2;
+}
+.status-dot-halo {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.45);
+  animation: auraRipple 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: 1;
+}
+@keyframes auraRipple {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+.status-time-badge {
+  color: var(--gold-warm);
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(255, 223, 133, 0.35);
+}
+
 
     .celestial-season-dock {
       display: inline-flex;
@@ -1545,12 +1631,44 @@
         Thấu cảm lý trí • @nownowtarot
       </p>
       <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
-      <div>
-        <div id="liveAvailabilityBadge" class="live-status-pill">
-          <span id="liveStatusDot" class="status-dot-pulse"></span>
-          <span id="liveStatusText">Đang kết nối tần số NowNow...</span>
+      <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
+<!-- DÒNG TRẠNG THÁI HIỆN DIỆN TINH TẾ (KHÔNG VIỀN HỘP) -->
+<div>
+  <div id="liveAvailabilityBadge" class="live-status-minimal">
+    <span class="status-beacon-wrap">
+      <span id="liveStatusHalo" class="status-dot-halo"></span>
+      <span id="liveStatusDot" class="status-dot-core"></span>
+    </span>
+    <span id="liveStatusText">Đang đồng bộ tần số NowNow...</span>
+  </div>
+</div>
+
+
+<!-- NÚT NGHE THỬ GIỌNG NOWNOW (VOICE WARMTH TRUST 15S) -->
+<div>
+  <button type="button" id="voiceGreetingBtn" onclick="toggleNowNowVoiceGreeting()" class="voice-greeting-banner">
+    <div class="flex items-center gap-3 min-w-0">
+      <div id="voicePlayOrbIcon" class="voice-play-orb">
+        <i class="fa-solid fa-play ml-0.5"></i>
+      </div>
+      <div class="text-left min-w-0">
+        <div class="text-[12.5px] font-extrabold text-white truncate">
+          🎧 Nghe thử lời chào từ NowNow (15s)
+        </div>
+        <div class="text-[10.5px] text-[#f2dec4]/85 truncate font-medium">
+          Thở chậm một nhịp, lắng nghe sự ấm áp trước khi gỡ rối nha...
         </div>
       </div>
+    </div>
+    <div class="voice-soundwave-bars shrink-0 pr-1">
+      <span class="soundwave-bar"></span>
+      <span class="soundwave-bar"></span>
+      <span class="soundwave-bar"></span>
+      <span class="soundwave-bar"></span>
+    </div>
+  </button>
+</div>
+
 
       <!-- DOCK CHUYỂN ĐỔI MÙA LỄ HỘI DẠNG VIÊN NGỌC KÍNH MỜ (CHỈ BUNG CHỮ KHI CHỌN) -->
       <div>
@@ -3527,46 +3645,143 @@ Mình muốn đặt lịch xem bài:
       }
     }
 
-    function initLiveAvailabilityStatus() {
-      const dotEl = document.getElementById('liveStatusDot');
-      const txtEl = document.getElementById('liveStatusText');
-      if (!dotEl || !txtEl) return;
+    /* =========================================================================
+   9. TRẠNG THÁI HIỆN DIỆN THỰC TẾ, TRÌNH PHÁT VOICE (15S) & CLARITY
+   ========================================================================= */
+let nowNowVoiceAudio = null;
+let isVoicePlaying = false;
 
-      const hr = new Date().getHours();
-      if (hr >= 9 && hr <= 23) {
-        dotEl.style.background = '#34d399';
-        dotEl.style.boxShadow = '0 0 8px #34d399';
-        txtEl.innerHTML = 'NowNow đang Online <b>Khung Ban Ngày</b> • Sẵn sàng lắng nghe bà';
-      } else if (hr >= 0 && hr < 4) {
-        dotEl.style.background = '#ffdf85';
-        dotEl.style.boxShadow = '0 0 10px #ffdf85';
-        txtEl.innerHTML = '🌙 Đang bật đèn <b>Khung Cú Đêm (0h–4h)</b> • Trằn trọc cứ nhắn nha';
-        selectTimeframe('night'); // Tự động chuyển bảng giá sang Cú Đêm giúp khách!
-      } else {
-        dotEl.style.background = '#f43f5e';
-        dotEl.style.boxShadow = '0 0 8px #f43f5e';
-        txtEl.innerHTML = '💤 Sốp đang nghỉ ngơi (4h–9h) • Bà cứ nhắn đặt lịch trước nha!';
-      }
+function toggleNowNowVoiceGreeting() {
+  const bannerBtn = document.getElementById('voiceGreetingBtn');
+  const orbIcon = document.getElementById('voicePlayOrbIcon');
+  if (!bannerBtn || !orbIcon) return;
 
-      // Chèn câu thoại theo đúng giờ thực tế vào vị trí số 2 của mèo
-      catPassiveDialogues.splice(1, 0, getHourBasedCatDialogue());
-    }
-
-    window.onload = function() {
-      initGlobalIOSButtonSounds();
-      initCosmicCanvas();
-      initScrollReveal();
-      initFeedbackCarousel();
-      setSliderMilestone(60);
-      initCatRoamingAndDragging();
-      setSeasonalTheme('auto', true);
-      initLiveAvailabilityStatus();
-      startPassiveCatDialogueLoop();
-      setTimeout(() => {
-        const tip = document.getElementById('catBubbleTip');
-        if (tip) tip.classList.add('hidden-tip');
-      }, 4500);
+  if (!nowNowVoiceAudio) {
+    // Sếp có thể đổi link file .mp3 giọng thật của Now vào trong cặp nháy đơn bên dưới:
+    nowNowVoiceAudio = new Audio('https://google.com'); 
+    nowNowVoiceAudio.volume = 0.9;
+    nowNowVoiceAudio.onended = () => {
+      isVoicePlaying = false;
+      bannerBtn.classList.remove('playing');
+      orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
     };
+  }
+
+  if (isVoicePlaying) {
+    nowNowVoiceAudio.pause();
+    isVoicePlaying = false;
+    bannerBtn.classList.remove('playing');
+    orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
+    if (typeof playIOSButtonSound === 'function') playIOSButtonSound('close');
+  } else {
+    if (typeof playIOSButtonSound === 'function') playIOSButtonSound('open');
+    nowNowVoiceAudio.play().then(() => {
+      isVoicePlaying = true;
+      bannerBtn.classList.add('playing');
+      orbIcon.innerHTML = '<i class="fa-solid fa-pause"></i>';
+      if (typeof showCatTip === 'function') {
+        showCatTip('Meo~ meo! Lắng nghe giọng nói ấm áp của sốp để lòng nhẹ tênh nha bà ơi! 🎧💖', 5000);
+      }
+    }).catch(err => {
+      playVoiceToneFallback();
+      isVoicePlaying = true;
+      bannerBtn.classList.add('playing');
+      orbIcon.innerHTML = '<i class="fa-solid fa-pause"></i>';
+      if (typeof showCatTip === 'function') {
+        showCatTip('Meo~ meo! Lắng nghe giai điệu chữa lành từ NowNow nha! 🎧✨', 5000);
+      }
+      setTimeout(() => {
+        isVoicePlaying = false;
+        bannerBtn.classList.remove('playing');
+        orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
+      }, 4000);
+    });
+  }
+}
+
+// Hàm phát giai điệu êm dịu dự phòng (Phần bị cắt cụt lúc nãy đã được nối đầy đủ)
+function playVoiceToneFallback() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const ctx = (typeof getAudioEngine === 'function') ? getAudioEngine() : new AudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const notes = [329.63, 392.00, 440.00, 523.25, 440.00]; // Giai điệu chữa lành E-G-A-C-A
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.65);
+      gain.gain.setValueAtTime(0.001, now + idx * 0.65);
+      gain.gain.exponentialRampToValueAtTime(0.12, now + idx * 0.65 + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.65 + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.65);
+      osc.stop(now + idx * 0.65 + 0.62);
+    });
+  } catch (e) {}
+}
+
+function initLiveAvailabilityStatus() {
+  const dotEl = document.getElementById('liveStatusDot');
+  const haloEl = document.getElementById('liveStatusHalo');
+  const txtEl = document.getElementById('liveStatusText');
+  if (!dotEl || !txtEl) return;
+
+  const hr = new Date().getHours();
+  if (hr >= 9 && hr <= 23) {
+    dotEl.style.background = '#34d399';
+    dotEl.style.boxShadow = '0 0 8px #34d399';
+    if (haloEl) haloEl.style.background = 'rgba(52, 211, 153, 0.45)';
+    txtEl.innerHTML = 'Đang hiện diện <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">Khung Ban Ngày</span>';
+  } else if (hr >= 0 && hr < 4) {
+    dotEl.style.background = '#ffdf85';
+    dotEl.style.boxShadow = '0 0 10px #ffdf85';
+    if (haloEl) haloEl.style.background = 'rgba(255, 223, 133, 0.45)';
+    txtEl.innerHTML = 'Đang thức cùng bà <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">🌙 Cú Đêm (0h–4h)</span>';
+    if (typeof selectTimeframe === 'function') selectTimeframe('night');
+  } else {
+    dotEl.style.background = '#f43f5e';
+    dotEl.style.boxShadow = '0 0 8px #f43f5e';
+    if (haloEl) haloEl.style.background = 'rgba(244, 63, 94, 0.35)';
+    txtEl.innerHTML = 'Đang nạp năng lượng (4h–9h) <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">Nhận giữ lịch sớm</span>';
+  }
+
+  if (typeof getHourBasedCatDialogue === 'function' && typeof catPassiveDialogues !== 'undefined') {
+    catPassiveDialogues.splice(1, 0, getHourBasedCatDialogue());
+  }
+}
+
+
+// Tích hợp Microsoft Clarity (Thay "YOUR_CLARITY_PROJECT_ID" bằng mã ID thật khi sếp đăng ký trên ://microsoft.com)
+function initMicrosoftClarity() {
+  const clarityId = "YOUR_CLARITY_PROJECT_ID";
+  if (clarityId === "YOUR_CLARITY_PROJECT_ID") return; // Tự động bỏ qua nếu chưa điền ID thật
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://clarity.ms"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", clarityId);
+}
+
+window.onload = function() {
+  if (typeof initGlobalIOSButtonSounds === 'function') initGlobalIOSButtonSounds();
+  if (typeof initCosmicCanvas === 'function') initCosmicCanvas();
+  if (typeof initScrollReveal === 'function') initScrollReveal();
+  if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
+  if (typeof setSliderMilestone === 'function') setSliderMilestone(60);
+  if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
+  if (typeof setSeasonalTheme === 'function') setSeasonalTheme('auto', true);
+  initLiveAvailabilityStatus();
+  initMicrosoftClarity();
+  if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
+  setTimeout(() => {
+    const tip = document.getElementById('catBubbleTip');
+    if (tip) tip.classList.add('hidden-tip');
+  }, 4500);
+};
+
   </script>
 </body>
 </html>

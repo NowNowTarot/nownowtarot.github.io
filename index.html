@@ -382,7 +382,74 @@
         0 0 60px rgba(232, 93, 117, 0.75),
         0 0 28px rgba(255, 223, 133, 0.55);
     }
+    /* HUY HIỆU TRẠNG THÁI ONLINE THỰC TẾ & THANH ĐỔI MÙA TINH TẾ */
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4.5px 13px;
+      border-radius: 999px;
+      background: rgba(20, 10, 16, 0.78);
+      border: 1px solid rgba(255, 223, 133, 0.35);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--champagne);
+      margin-top: 10px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .status-dot-pulse {
+      width: 7.5px;
+      height: 7.5px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px #34d399;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.65; }
+    }
 
+    .celestial-season-dock {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3.5px 5px;
+      margin-top: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 223, 133, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    .season-orb-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: rgba(242, 222, 196, 0.65);
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+    }
+    .season-orb-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .season-orb-btn .season-label {
+      display: none;
+    }
+    .season-orb-btn.active {
+      background: linear-gradient(135deg, rgba(185, 42, 64, 0.85), rgba(110, 18, 34, 0.95));
+      color: var(--gold-warm);
+      border: 1px solid rgba(255, 223, 133, 0.6);
+      box-shadow: 0 2px 10px rgba(212, 50, 72, 0.35);
+    }
+    .season-orb-btn.active .season-label {
+      display: inline;
+    } 
     .santa-hat-svg {
       position: absolute;
       top: -32px;
@@ -1477,7 +1544,34 @@
       <p class="text-xs tracking-[0.25em] uppercase text-[#ffdf85]/90 mt-1.5 font-semibold">
         Thấu cảm lý trí • @nownowtarot
       </p>
+      <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
+      <div>
+        <div id="liveAvailabilityBadge" class="live-status-pill">
+          <span id="liveStatusDot" class="status-dot-pulse"></span>
+          <span id="liveStatusText">Đang kết nối tần số NowNow...</span>
+        </div>
+      </div>
 
+      <!-- DOCK CHUYỂN ĐỔI MÙA LỄ HỘI DẠNG VIÊN NGỌC KÍNH MỜ (CHỈ BUNG CHỮ KHI CHỌN) -->
+      <div>
+        <div class="celestial-season-dock" title="Đổi không khí lễ hội trên trang">
+          <button type="button" onclick="setSeasonalTheme('auto')" id="themeBtn-auto" class="season-orb-btn active">
+            <span>✨</span><span class="season-label">Tự động</span>
+          </button>
+          <button type="button" onclick="setSeasonalTheme('noel')" id="themeBtn-noel" class="season-orb-btn">
+            <span>🎄</span><span class="season-label">Giáng Sinh</span>
+          </button>
+          <button type="button" onclick="setSeasonalTheme('tet')" id="themeBtn-tet" class="season-orb-btn">
+            <span>🧧</span><span class="season-label">Tết Xuân</span>
+          </button>
+          <button type="button" onclick="setSeasonalTheme('summer')" id="themeBtn-summer" class="season-orb-btn">
+            <span>🏖️</span><span class="season-label">Gió Hè</span>
+          </button>
+          <button type="button" onclick="setSeasonalTheme('halloween')" id="themeBtn-halloween" class="season-orb-btn">
+            <span>🎃</span><span class="season-label">Halloween</span>
+          </button>
+        </div>
+      </div>
       <div class="carrd-divider">⊹₊˚‧︵‿₊୨ ᰔ ୧₊‿︵‧˚₊⊹</div>
 
       <div class="text-left space-y-3 text-[13.8px] text-[#faf6f0]/95">
@@ -1531,12 +1625,12 @@
       </div>
 
       <div class="key-anchor-card">
-        <span class="key-badge-pill"><i class="fa-solid fa-brain"></i> 🧠 20.500+ GIỜ ĐỐI THOẠI 1:1</span>
+        <span class="key-badge-pill"><i class="fa-solid fa-brain"></i> 🧠 7.500+ GIỜ ĐỐI THOẠI 1:1</span>
         <h3 class="text-[15px] sm:text-base font-extrabold text-[#ffdf85]">
           Tarot x Tâm Lý Học CBT • "Không cần tên tuổi, Không dùng AI"
         </h3>
         <p class="text-[12.8px] text-[#faf6f0]/85 mt-1">
-          Đúc kết từ hơn <b>20.500+ giờ lắng nghe hàng trăm câu chuyện thực tế</b>, kết hợp nền tảng kiến thức sâu về <b>Tâm lý học Nhận thức (CBT), Phân tâm học Carl Jung</b> cùng vốn trải nghiệm va đập thực tế đa chiều của sốp. 100% trực giác con người thấu cảm, tuyệt đối không dùng văn mẫu AI và không cần tên thật hay ngày sinh định danh.
+          Đúc kết từ hơn <b>7.500+ giờ lắng nghe hàng trăm câu chuyện thực tế</b>, kết hợp nền tảng kiến thức sâu về <b>Tâm lý học Nhận thức (CBT), Phân tâm học Carl Jung</b> cùng vốn trải nghiệm va đập thực tế đa chiều của sốp. 100% trực giác con người thấu cảm, tuyệt đối không dùng văn mẫu AI và không cần tên thật hay ngày sinh định danh.
         </p>
       </div>
     </section>
@@ -1609,7 +1703,7 @@
       </button>
     </section>
 
-    <div class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🎄 ୧₊‿︵‧˚₊⊹</div>
+    <div id="seasonalDivider" class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🎄 ୧₊‿︵‧˚₊⊹</div>
 
     <!-- 4. KHUNG TRUNG TÂM -->
     <section id="sec-booking" class="reveal-item booking-sanctuary-card space-y-6">
@@ -2555,27 +2649,56 @@
       "Meo~ meo! Bấm vào tui nghe tiếng mèo kêu, hoặc nắm cổ tui kéo đi chơi nha! 🐾",
       "Miaow~ Xem 1 lần là tâm sự 0đ trọn đời với sốp đó! 💝",
       "Mew~ Ở đây 0đ đặt cọc, nhẹ lòng mới tính phí nè! ✨",
-      "Meo~ meo! Sốp đọc vị tâm lý đỉnh lắm, ko cần tên tuổi luôn! 🧠",
-      "Miaow~ Lò vi sóng 3 tháng còn quay lại đc, mở Hộp Thư xem đi! 📱",
-      "Mew~ Đọc bài thuật toán Tóp Tóp 52K view ở cổng Threads nha! 🧵",
+      "Meo~ meo! Sốp đọc vị tâm lý bằng CBT & Carl Jung đỉnh lắm, ko cần tên tuổi luôn! 🧠",
+      "Miaow~ Lò vi sóng 3 tháng còn quay lại đc, mở Hộp Thư xem tin nhắn thật đi bà! 📱",
+      "Mew~ Đọc bài thuật toán Tóp Tóp 52K view ở cổng Threads chưa bà ơi? 🧵",
       "Meo~ meo! Đêm khuya trằn trọc thì chọn giờ Cú Đêm với sốp nghen! 🌙",
-      "Miaow~ Bà thích gửi Voice Note 2 chiều hay gọi Google Meet nè? 🎙️",
+      "Miaow~ Bà thích gửi Voice Note 2 chiều hay gọi Google Meet có ghi hình nè? 🎙️",
       "Mew~ Có chuyện riêng khó nói cứ gõ vào ô chữ mờ ở mục 2 nha! ✍️",
       "Meo~ meo! Mốc 15p hay 60p sốp cũng gỡ sạch mọi nút thắt cho bà! ⏳",
-      "Miaow~ Đội mũ Noel chờ bà đặt lịch mỏi cả hai cái tai gòi! 🎅🐾",
-      "Mew~ Xem xong có đủ ảnh bài + file ghi âm riêng tư nghe lại đó! 💌",
-      "Meo~ meo! Nâng cấp bình chứa lên 220V đón phước phần lớn nha! ⚡",
-      "Miaow~ Rảnh ghé Threads & IG của sốp ở cuối trang chơi nghen! 🌷",
-      "Mew~ Bấm nút đặt lịch là tự Copy sẵn, qua chat chỉ cần Dán! 🎉"
+      "Miaow~ Chạm nhẹ vào tui 3 lần liên tiếp đi, tui tặng bà 1 lá bài Tarot ngẫu nhiên liền! 🎴✨",
+      "Mew~ Xem xong có đủ ảnh bài + file ghi âm riêng tư để bà nghe lại bất cứ lúc nào! 💌",
+      "Meo~ meo! Nâng cấp bình chứa lên 220V để đón phước phần lớn cùng sốp nha! ⚡",
+      "Miaow~ Bà độc thân ko phải vì ế, mà vì tiềm thức đang bật khiên bảo vệ bà đó! 🛡️",
+      "Mew~ Đừng để vòng lặp overthinking làm bà mệt nhoài nữa, để NowNow gỡ cùng bà! 🕯️",
+      "Meo~ meo! Bấm vào cái mũ trên Avatar của sốp ở đầu trang thử xem, nhúc nhích vui lắm! 🎩",
+      "Miaow~ Bấm nút đặt lịch là tự Copy sẵn kịch bản, qua chat chỉ cần Dán cái rụp! 🎉",
+      "Mew~ Giữa hàng vạn người mà bà lướt tới góc nhỏ này, đích thị là tín hiệu vũ trụ rồi! 🌌",
+      "Meo~ meo! Tui biết tự đi dạo quanh màn hình đó, bà kéo tui thả góc nào tui ngồi góc đó! 🐾",
+      "Miaow~ Nhớ nha: Chừng nào chưa đưa vô thức ra ánh sáng, bà sẽ gọi nó là số phận! 🔮",
+      "Mew~ Cần người lắng nghe không phán xét, không văn mẫu AI thì cứ tìm sốp NowNow! 🌷"
+    ];
+
+    const catTarotMiniCards = [
+      "🎴 <b>Lá The Star (Ngôi Sao):</b> Tín hiệu chữa lành đang tới! Sau cơn bão lòng này, bà sẽ tìm lại được bình yên và hy vọng sáng rõ nhất ✨",
+      "🎴 <b>Lá Wheel of Fortune (Bánh Xe Số Phận):</b> Vòng lặp cũ sắp khép lại rồi! Một ngã rẽ bất ngờ mang theo nhân tố mới đang chuẩn bị gõ cửa nhà bà 🎡",
+      "🎴 <b>Lá The Empress (Nữ Hoàng):</b> Đã tới lúc bà quay về cưng chiều giá trị bản thân! Khi bà tỏa hương, tự khắc ong bướm xịn sẽ tìm tới 👑",
+      "🎴 <b>Lá Strength (Sức Mạnh Nội Tâm):</b> Bà kiên cường hơn bà nghĩ rất nhiều! Nút thắt này không quật ngã được bà đâu, chỉ làm bà bản lĩnh hơn thôi 🦁",
+      "🎴 <b>Lá The Lovers (Sự Lựa Chọn):</b> Đừng chọn trong lúc lòng đang hoảng sợ. Hãy lắng nghe tiếng nói thật sự dưới đáy lòng bà nha 💞",
+      "🎴 <b>Lá Ace of Cups (Khởi Đầu Cảm Xúc):</b> Bình chứa cảm xúc của bà sắp được rót đầy bởi sự dịu dàng và thấu cảm trọn vẹn rồi đó 🏆",
+      "🎴 <b>Lá The Hermit (Người Ẩn Sĩ):</b> Lùi lại một bước để nhìn thấu gốc rễ tâm lý. Câu trả lời bà tìm kiếm đang nằm ngay trong cuộc trò chuyện sắp tới 🏮"
     ];
 
     const catActiveClickDialogues = [
       "Meo~ meo~! Tiếng mèo con kêu trong veo vang lên rồi nè sen ơi! 🐾✨",
-      "Miaow~ Gãi đúng chỗ ngứa của tui rồi! Thương bà nhất luôn! 😻",
-      "Meo~ meo! Sen có thể giữ chuột hoặc ngón tay xách tui đi khắp màn hình đó! 🐾",
-      "Mew~ Đừng giữ chuyện buồn một mình, để sốp gỡ rối cùng bà! 🕯️",
-      "Meo~ meo? Bà nhắm chọn mấy chục phút rồi? Bấm đặt lịch liền nha! 🎄"
+      "Miaow~ Gãi đúng chỗ ngứa dưới cằm tui rồi! Thương bà nhất luôn! 😻",
+      "Mew~ Bấm thêm cái nữa là tui rút tặng bà 1 lá bài Tarot thông điệp ngay tại chỗ đó nha! 🎴"
     ];
+
+    function getHourBasedCatDialogue() {
+      const hr = new Date().getHours();
+      if (hr >= 0 && hr < 4) {
+        return "🌙 Đêm khuya 0h-4h rồi mà bà vẫn chưa ngủ được hả? Sốp vẫn đang thức khung Cú Đêm chờ lắng nghe bà nè!";
+      } else if (hr >= 4 && hr < 9) {
+        return "🌅 Sáng sớm tinh mơ rồi! Bà cứ chọn số phút rồi nhắn giữ lịch trước nha, 9h sốp dậy rep bà liền!";
+      } else if (hr >= 9 && hr < 12) {
+        return "☀️ Chào buổi sáng năng lượng nha bà! Gỡ sạch tơ vò đầu ngày để cả tuần nhẹ tênh nào!";
+      } else if (hr >= 12 && hr < 18) {
+        return "🌤️ Buổi chiều êm ả vầy mà lòng đang ngổn ngang chuyện tình cảm hay công việc thì nhắn sốp liền nha!";
+      } else {
+        return "✨ Tối muộn rồi, gác lại mọi mệt mỏi ngoài kia đi bà, ở góc nhỏ này có tui với sốp NowNow nghe bà kể chuyện nè!";
+      }
+    }
 
     let tipTimer = null;
     let passiveLoopTimer = null;
@@ -2734,10 +2857,25 @@
       }, 6000);
     }
 
+    let catComboClickCount = 0;
+    let catComboResetTimer = null;
+
     function pokeRealCatMeow() {
       lastUserInteractionTime = Date.now();
       playCuteMeowSound();
       triggerCatGentleWiggle();
+
+      catComboClickCount++;
+      if (catComboResetTimer) clearTimeout(catComboResetTimer);
+      catComboResetTimer = setTimeout(() => { catComboClickCount = 0; }, 5000);
+
+      // Cứ mỗi lần bấm thứ 3 liên tiếp: Mèo rút tặng 1 lá bài Tarot ngẫu nhiên!
+      if (catComboClickCount >= 3) {
+        catComboClickCount = 0;
+        const randomCard = catTarotMiniCards[Math.floor(Math.random() * catTarotMiniCards.length)];
+        showCatTip(randomCard, 6200);
+        return;
+      }
 
       const activeMsg = catActiveClickDialogues[currentMeowClickIdx % catActiveClickDialogues.length];
       showCatTip(activeMsg, 4500);
@@ -2999,11 +3137,14 @@ Mình muốn đặt lịch xem bài:
       const triggerRedirectNow = () => {
         closeCopyModal();
         if (platform === 'Instagram' && isMobile) {
-          // Kích hoạt App Instagram, nếu máy không có app thì tự lùi về web sau 1.2s
+          const startLeave = Date.now();
           window.location.href = targetUrl;
           setTimeout(() => {
-            window.location.href = `https://www.instagram.com/nownowtarot/`;
-          }, 1200);
+            // Chỉ mở bản web nếu trình duyệt KHÔNG bị ẩn (tức là máy khách không có App IG)
+            if (!document.hidden && !document.webkitHidden && (Date.now() - startLeave < 3000)) {
+              window.location.href = `https://www.instagram.com/nownowtarot/`;
+            }
+          }, 2200);
         } else {
           window.location.href = targetUrl;
         }
@@ -3239,6 +3380,178 @@ Mình muốn đặt lịch xem bài:
       animate();
     }
 
+    /* =========================================================================
+       8. HỆ THỐNG BIẾN HÌNH SỰ KIỆN (TỰ ĐỘNG THEO NGÀY THÁNG + CHUYỂN THỦ CÔNG)
+       ========================================================================= */
+    const SEASONAL_THEMES = {
+      noel: {
+        name: 'Giáng Sinh Ấm Áp',
+        dividerIcon: '🎄',
+        avatarTitle: 'Chạm nhẹ vào mũ Noel của NowNow nha!',
+        jiggleTip: 'Meo~ meo! Mũ Noel đỏ thắm ngay tâm vũ trụ nè! Xem bài 1 lần làm bạn 0đ trọn đời nha 🎅✨',
+        catGreeting: 'Miaow~ Đội mũ Noel chờ bà đặt lịch mỏi cả hai cái tai gòi! 🎅🐾',
+        avatarHatSvg: `
+          <path d="M16 64 C22 22, 68 8, 102 48 C92 52, 78 46, 68 58 Z" fill="#d43248" stroke="#8f1828" stroke-width="1.5" />
+          <path d="M45 36 Q72 30 92 47" fill="none" stroke="#ff758f" stroke-width="2" stroke-linecap="round" opacity="0.55" />
+          <path d="M10 64 Q26 53 45 57 Q64 61 78 69 Q84 74 77 80 Q58 70 38 69 Q20 69 11 74 Q4 70 10 64 Z" fill="#faf6f0" stroke="#e6dccf" stroke-width="1.2" />
+          <circle cx="14" cy="68" r="6.5" fill="#faf6f0" />
+          <circle cx="29" cy="64" r="7.5" fill="#faf6f0" />
+          <circle cx="46" cy="64" r="7.5" fill="#faf6f0" />
+          <circle cx="62" cy="67" r="7" fill="#faf6f0" />
+          <circle cx="75" cy="72" r="6.5" fill="#faf6f0" />
+          <circle cx="103" cy="52" r="10.5" fill="#faf6f0" stroke="#e6dccf" stroke-width="1.2" />
+          <circle cx="100" cy="49" r="3" fill="#ffffff" />`,
+        catHatPaths: `
+          <path d="M42 26 C48 4, 78 4, 92 28 Z" fill="#d43248" />
+          <rect x="39" y="23" width="40" height="6.5" rx="3" fill="#faf6f0" />
+          <circle cx="94" cy="29" r="5.5" fill="#faf6f0" />`
+      },
+      tet: {
+        name: 'Tết & Mùa Xuân',
+        dividerIcon: '🧧',
+        avatarTitle: 'Chạm nhẹ vào Khăn Đóng & Hoa Mai Vàng của NowNow nha!',
+        jiggleTip: 'Meo~ meo! Đầu xuân năm mới tháo gỡ mọi nút thắt để đón vía lành cả năm nha bà ơi! 🧧🌸',
+        catGreeting: 'Miaow~ Đội mấn Tết cài hoa mai chờ phát lộc chữa lành cho bà nè! 🧧🐾',
+        avatarHatSvg: `
+          <path d="M14 68 Q45 46 82 68 Q75 78 45 72 Q22 74 14 68 Z" fill="#c9182b" stroke="#ffdf85" stroke-width="1.8" />
+          <path d="M22 63 Q46 52 74 64" fill="none" stroke="#ffdf85" stroke-width="1.4" stroke-dasharray="4 3" />
+          <g transform="translate(68, 46)">
+            <circle cx="0" cy="-9" r="6.5" fill="#ffdf85" />
+            <circle cx="8.5" cy="-3" r="6.5" fill="#ffdf85" />
+            <circle cx="5.5" cy="7.5" r="6.5" fill="#ffdf85" />
+            <circle cx="-5.5" cy="7.5" r="6.5" fill="#ffdf85" />
+            <circle cx="-8.5" cy="-3" r="6.5" fill="#ffdf85" />
+            <circle cx="0" cy="0" r="4" fill="#d43248" />
+          </g>`,
+        catHatPaths: `
+          <rect x="38" y="21" width="40" height="8" rx="4" fill="#c9182b" stroke="#ffdf85" stroke-width="1.2" />
+          <circle cx="58" cy="19" r="6" fill="#ffdf85" />
+          <circle cx="58" cy="19" r="2.5" fill="#c9182b" />`
+      },
+      summer: {
+        name: 'Mùa Hè Đầy Sao',
+        dividerIcon: '🏖️',
+        avatarTitle: 'Chạm nhẹ vào Nón Cói & Hoa Nhiệt Đới của NowNow nha!',
+        jiggleTip: 'Meo~ meo! Gió hè mát rượi, trút bỏ hết muộn phiền cùng NowNow nha bà ơi! 🏖️🌺',
+        catGreeting: 'Miaow~ Đội nón cói mùa hè chờ lắng nghe tâm sự của bà nè! 🏖️🐾',
+        avatarHatSvg: `
+          <ellipse cx="48" cy="66" rx="42" ry="10" fill="#f3d078" stroke="#b8862d" stroke-width="1.5" transform="rotate(8 48 66)" />
+          <path d="M24 62 C28 36, 68 38, 72 64 Z" fill="#fae29c" stroke="#b8862d" stroke-width="1.5" />
+          <path d="M25 60 Q48 66 71 62" fill="none" stroke="#e85d75" stroke-width="4.5" stroke-linecap="round" />
+          <circle cx="68" cy="58" r="7.5" fill="#e85d75" />
+          <circle cx="68" cy="58" r="3" fill="#ffdf85" />`,
+        catHatPaths: `
+          <ellipse cx="58" cy="25" rx="26" ry="5.5" fill="#f3d078" stroke="#b8862d" stroke-width="1" />
+          <path d="M43 24 C46 11, 70 11, 73 24 Z" fill="#fae29c" />
+          <circle cx="71" cy="22" r="4.5" fill="#e85d75" />`
+      },
+      halloween: {
+        name: 'Đêm Huyền Bí Halloween',
+        dividerIcon: '🎃',
+        avatarTitle: 'Chạm nhẹ vào Mũ Phù Thủy Tarot của NowNow nha!',
+        jiggleTip: 'Meo~ meo! Đêm Halloween huyền bí, cùng soi chiếu vùng tối vô thức (Shadow Work) của Carl Jung nha! 🎃🔮',
+        catGreeting: 'Miaow~ Mèo đen đội mũ phù thủy chuẩn bài Tarot chờ bà đặt lịch nè! 🎃🐾',
+        avatarHatSvg: `
+          <ellipse cx="48" cy="68" rx="44" ry="11" fill="#2b1438" stroke="#ffdf85" stroke-width="1.4" transform="rotate(10 48 68)" />
+          <path d="M24 63 L56 12 L84 26 L70 67 Z" fill="#3a1b4d" stroke="#ffdf85" stroke-width="1.3" />
+          <path d="M26 61 Q48 69 70 65" fill="none" stroke="#ff8c24" stroke-width="5" stroke-linecap="round" />
+          <rect x="44" y="59" width="9" height="9" rx="1.5" fill="none" stroke="#ffdf85" stroke-width="1.8" />`,
+        catHatPaths: `
+          <ellipse cx="58" cy="25" rx="25" ry="5" fill="#2b1438" stroke="#ffdf85" stroke-width="1" />
+          <polygon points="44,24 58,2 72,24" fill="#3a1b4d" stroke="#ffdf85" stroke-width="1" />
+          <rect x="45" y="21" width="26" height="3.5" fill="#ff8c24" />`
+      }
+    };
+
+    function detectAutoSeasonKey() {
+      const now = new Date();
+      const month = now.getMonth() + 1; // 1 -> 12
+      const day = now.getDate();
+
+      // Tháng 10 (tới 3/11): Halloween
+      if (month === 10 || (month === 11 && day <= 3)) return 'halloween';
+      // Từ 4/11 đến hết 31/12: Giáng Sinh (Noel)
+      if (month === 11 || month === 12) return 'noel';
+      // Tháng 1 đến hết tháng 3: Tết & Mùa Xuân
+      if (month >= 1 && month <= 3) return 'tet';
+      // Tháng 4 đến hết tháng 9: Mùa Hè
+      return 'summer';
+    }
+
+    function setSeasonalTheme(mode, silent = false) {
+      ['auto', 'noel', 'tet', 'summer', 'halloween'].forEach(k => {
+        const btn = document.getElementById(`themeBtn-${k}`);
+        if (btn) btn.classList.toggle('active', k === mode);
+      });
+
+      const resolvedKey = mode === 'auto' ? detectAutoSeasonKey() : mode;
+      const theme = SEASONAL_THEMES[resolvedKey] || SEASONAL_THEMES.noel;
+
+      // 1. Đổi mũ trên Avatar chính
+      const avatarHat = document.querySelector('.santa-hat-svg');
+      if (avatarHat) avatarHat.innerHTML = theme.avatarHatSvg;
+
+      const avatarHub = document.querySelector('.avatar-cosmos-hub');
+      if (avatarHub) avatarHub.setAttribute('title', theme.avatarTitle);
+
+      // 2. Đổi mũ trên đầu Bé Mèo Đen
+      const catSvg = document.querySelector('#catBtnEl svg');
+      if (catSvg) {
+        let catHatGroup = document.getElementById('dynamicCatHatGroup');
+        if (!catHatGroup) {
+          // Xóa 3 thẻ mũ Noel mặc định cũ của mèo và thay bằng group động
+          const oldPath = catSvg.querySelector('path[d="M42 26 C48 4, 78 4, 92 28 Z"]');
+          const oldRect = catSvg.querySelector('rect[x="39"]');
+          const oldCirc = catSvg.querySelector('circle[cx="94"]');
+          if (oldPath) oldPath.remove();
+          if (oldRect) oldRect.remove();
+          if (oldCirc) oldCirc.remove();
+
+          catHatGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          catHatGroup.setAttribute('id', 'dynamicCatHatGroup');
+          const firstEye = catSvg.querySelector('ellipse');
+          catSvg.insertBefore(catHatGroup, firstEye);
+        }
+        catHatGroup.innerHTML = theme.catHatPaths;
+      }
+
+      // 3. Đổi icon Divider và câu thoại số 11 của mèo
+      const divEl = document.getElementById('seasonalDivider');
+      if (divEl) divEl.innerHTML = `⊹₊˚‧︵‿₊୨ ${theme.dividerIcon} ୧₊‿︵‧˚₊⊹`;
+      catPassiveDialogues[10] = theme.catGreeting;
+
+      // 4. Lưu lại lựa chọn của khách hoặc báo mèo kêu khi bấm nút
+      if (!silent) {
+        playIOSButtonSound('tap');
+        showCatTip(theme.jiggleTip, 4000);
+      }
+    }
+
+    function initLiveAvailabilityStatus() {
+      const dotEl = document.getElementById('liveStatusDot');
+      const txtEl = document.getElementById('liveStatusText');
+      if (!dotEl || !txtEl) return;
+
+      const hr = new Date().getHours();
+      if (hr >= 9 && hr <= 23) {
+        dotEl.style.background = '#34d399';
+        dotEl.style.boxShadow = '0 0 8px #34d399';
+        txtEl.innerHTML = 'NowNow đang Online <b>Khung Ban Ngày</b> • Sẵn sàng lắng nghe bà';
+      } else if (hr >= 0 && hr < 4) {
+        dotEl.style.background = '#ffdf85';
+        dotEl.style.boxShadow = '0 0 10px #ffdf85';
+        txtEl.innerHTML = '🌙 Đang bật đèn <b>Khung Cú Đêm (0h–4h)</b> • Trằn trọc cứ nhắn nha';
+        selectTimeframe('night'); // Tự động chuyển bảng giá sang Cú Đêm giúp khách!
+      } else {
+        dotEl.style.background = '#f43f5e';
+        dotEl.style.boxShadow = '0 0 8px #f43f5e';
+        txtEl.innerHTML = '💤 Sốp đang nghỉ ngơi (4h–9h) • Bà cứ nhắn đặt lịch trước nha!';
+      }
+
+      // Chèn câu thoại theo đúng giờ thực tế vào vị trí số 2 của mèo
+      catPassiveDialogues.splice(1, 0, getHourBasedCatDialogue());
+    }
+
     window.onload = function() {
       initGlobalIOSButtonSounds();
       initCosmicCanvas();
@@ -3246,6 +3559,8 @@ Mình muốn đặt lịch xem bài:
       initFeedbackCarousel();
       setSliderMilestone(60);
       initCatRoamingAndDragging();
+      setSeasonalTheme('auto', true);
+      initLiveAvailabilityStatus();
       startPassiveCatDialogueLoop();
       setTimeout(() => {
         const tip = document.getElementById('catBubbleTip');

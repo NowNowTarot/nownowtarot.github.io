@@ -3674,8 +3674,8 @@ function toggleNowNowVoiceGreeting() {
 
   if (!nowNowVoiceAudio) {
     // Sếp có thể đổi link file .mp3 giọng thật của Now vào trong cặp nháy đơn bên dưới:
-    nowNowVoiceAudio = new Audio('https://google.com'); 
-    nowNowVoiceAudio.volume = 0.9;
+    nowNowVoiceAudio = new Audio('voice.mp3'); 
+    nowNowVoiceAudio.volume = 0.95;
     nowNowVoiceAudio.onended = () => {
       isVoicePlaying = false;
       bannerBtn.classList.remove('playing');

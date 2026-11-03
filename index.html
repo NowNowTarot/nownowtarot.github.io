@@ -384,69 +384,95 @@
     }
     /* HUY HIỆU TRẠNG THÁI ONLINE THỰC TẾ & THANH ĐỔI MÙA TINH TẾ */
     /* NÚT NGHE THỬ GIỌNG NOWNOW (VOICE WARMTH TRUST) */
-.voice-greeting-banner {
-  display: flex;
+/* VIÊN NANG NGHE GIỌNG NÓI SIÊU MẢNH (APPLE DYNAMIC CAPSULE) */
+.voice-capsule-sleek {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  width: 100%;
-  max-width: 480px;
-  margin: 12px auto 0 auto;
-  padding: 10px 14px;
-  background: linear-gradient(135deg, rgba(185, 42, 64, 0.22) 0%, rgba(36, 14, 25, 0.85) 100%);
-  border: 1.5px solid rgba(255, 223, 133, 0.45);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  margin-top: 10px;
+  padding: 5px 14px 5px 6px;
+  border-radius: 999px;
+  background: rgba(28, 12, 20, 0.65);
+  border: 1px solid rgba(255, 223, 133, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.voice-greeting-banner:hover {
-  transform: translateY(-2px);
+.voice-capsule-sleek:hover {
+  transform: translateY(-1.5px);
+  background: rgba(42, 16, 28, 0.8);
+  border-color: rgba(255, 223, 133, 0.6);
+  box-shadow: 0 6px 24px rgba(212, 50, 72, 0.28);
+}
+.voice-capsule-sleek:active {
+  transform: scale(0.97);
+}
+.voice-capsule-sleek.playing {
   border-color: var(--gold-warm);
-  box-shadow: 0 10px 30px rgba(212, 50, 72, 0.35);
+  background: linear-gradient(90deg, rgba(140, 25, 45, 0.45), rgba(28, 12, 20, 0.85));
+  box-shadow: 0 0 20px rgba(255, 223, 133, 0.25);
 }
-.voice-play-orb {
-  width: 36px;
-  height: 36px;
+.voice-orb-mini {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-warm), var(--rose-warm));
-  color: #240e19;
+  background: linear-gradient(135deg, var(--gold-warm), #e88d72);
+  color: #1e0a14;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 10px;
   flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(255, 223, 133, 0.6);
-  transition: transform 0.2s ease;
+  box-shadow: 0 0 10px rgba(255, 223, 133, 0.45);
+  transition: transform 0.25s ease;
 }
-.voice-greeting-banner:active .voice-play-orb {
-  transform: scale(0.92);
+.voice-capsule-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255, 245, 235, 0.92);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.voice-capsule-duration {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gold-warm);
+  opacity: 0.85;
+  margin-left: 2px;
 }
 .voice-soundwave-bars {
   display: inline-flex;
   align-items: center;
-  gap: 2.5px;
-  height: 16px;
+  gap: 2px;
+  height: 12px;
+  margin-left: 2px;
 }
 .soundwave-bar {
-  width: 3px;
-  height: 6px;
-  background: rgba(255, 223, 133, 0.45);
+  width: 2px;
+  height: 4px;
+  background: rgba(255, 223, 133, 0.5);
   border-radius: 999px;
   transition: height 0.2s ease;
 }
-.voice-greeting-banner.playing .soundwave-bar {
-  animation: soundwaveBounce 0.8s ease-in-out infinite alternate;
+.voice-capsule-sleek.playing .soundwave-bar {
+  animation: soundwaveBounce 0.65s ease-in-out infinite alternate;
 }
-.voice-greeting-banner.playing .soundwave-bar:nth-child(2) { animation-delay: 0.15s; }
-.voice-greeting-banner.playing .soundwave-bar:nth-child(3) { animation-delay: 0.3s; }
-.voice-greeting-banner.playing .soundwave-bar:nth-child(4) { animation-delay: 0.45s; }
+.voice-capsule-sleek.playing .soundwave-bar:nth-child(2) { animation-delay: 0.12s; }
+.voice-capsule-sleek.playing .soundwave-bar:nth-child(3) { animation-delay: 0.24s; }
+.voice-capsule-sleek.playing .soundwave-bar:nth-child(4) { animation-delay: 0.36s; }
+.voice-capsule-sleek.playing .soundwave-bar:nth-child(5) { animation-delay: 0.18s; }
 @keyframes soundwaveBounce {
-  0% { height: 6px; }
-  100% { height: 18px; background: var(--gold-warm); }
+  0% { height: 3px; opacity: 0.5; }
+  100% { height: 12px; background: var(--gold-warm); opacity: 1; }
 }
+
+/* ẨN HOÀN TOÀN THANH CHỌN 4 MÙA THỦ CÔNG */
+.celestial-season-dock {
+  display: none !important;
+}
+
 
     /* TRẠNG THÁI ONLINE TỐI GIẢN SANG TRỌNG (FRAMELESS WHISPER + AVATAR RING) */
 .live-status-minimal {
@@ -1633,41 +1659,27 @@
       <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
       <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
 <!-- DÒNG TRẠNG THÁI HIỆN DIỆN TINH TẾ (KHÔNG VIỀN HỘP) -->
+
+
+<!-- VIÊN NANG NGHE GIỌNG NOWNOW TINH TẾ (15S) -->
 <div>
-  <div id="liveAvailabilityBadge" class="live-status-minimal">
-    <span class="status-beacon-wrap">
-      <span id="liveStatusHalo" class="status-dot-halo"></span>
-      <span id="liveStatusDot" class="status-dot-core"></span>
+  <button type="button" id="voiceGreetingBtn" onclick="toggleNowNowVoiceGreeting()" class="voice-capsule-sleek">
+    <span id="voicePlayOrbIcon" class="voice-orb-mini">
+      <i class="fa-solid fa-play ml-0.5"></i>
     </span>
-    <span id="liveStatusText">Đang đồng bộ tần số NowNow...</span>
-  </div>
-</div>
-
-
-<!-- NÚT NGHE THỬ GIỌNG NOWNOW (VOICE WARMTH TRUST 15S) -->
-<div>
-  <button type="button" id="voiceGreetingBtn" onclick="toggleNowNowVoiceGreeting()" class="voice-greeting-banner">
-    <div class="flex items-center gap-3 min-w-0">
-      <div id="voicePlayOrbIcon" class="voice-play-orb">
-        <i class="fa-solid fa-play ml-0.5"></i>
-      </div>
-      <div class="text-left min-w-0">
-        <div class="text-[12.5px] font-extrabold text-white truncate">
-          🎧 Nghe thử lời chào từ NowNow (15s)
-        </div>
-        <div class="text-[10.5px] text-[#f2dec4]/85 truncate font-medium">
-          Thở chậm một nhịp, lắng nghe sự ấm áp trước khi gỡ rối nha...
-        </div>
-      </div>
-    </div>
-    <div class="voice-soundwave-bars shrink-0 pr-1">
+    <span class="voice-capsule-label">
+      Chạm nghe lời chào từ NowNow <span class="voice-capsule-duration">• 0:15</span>
+    </span>
+    <span class="voice-soundwave-bars">
       <span class="soundwave-bar"></span>
       <span class="soundwave-bar"></span>
       <span class="soundwave-bar"></span>
       <span class="soundwave-bar"></span>
-    </div>
+      <span class="soundwave-bar"></span>
+    </span>
   </button>
 </div>
+
 
 
       <!-- DOCK CHUYỂN ĐỔI MÙA LỄ HỘI DẠNG VIÊN NGỌC KÍNH MỜ (CHỈ BUNG CHỮ KHI CHỌN) -->
@@ -3235,16 +3247,9 @@ Mình muốn đặt lịch xem bài:
       const encoded = encodeURIComponent(msg);
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       
-      let targetUrl = '';
-      if (platform === 'Messenger') {
-        targetUrl = `https://m.me/NowNowTarot?text=${encoded}`;
-      } else {
-        // Trên điện thoại: Bắn thẳng vào App Instagram để né sạch màn hình đăng nhập web!
-        // Trên máy tính: Mở trang web Instagram bình thường
-        targetUrl = isMobile 
-          ? `instagram://user?username=nownowtarot` 
-          : `https://www.instagram.com/nownowtarot/`;
-      }
+      const webUrl = platform === 'Messenger'
+        ? `https://m.me/NowNowTarot?text=${encoded}`
+        : `https://www.instagram.com/nownowtarot/`;
 
       const modal = document.getElementById('copyConfirmModal');
       const platNameEl = document.getElementById('copyModalPlatformName');
@@ -3252,24 +3257,35 @@ Mình muốn đặt lịch xem bài:
 
       if (platNameEl) platNameEl.textContent = platform === 'Messenger' ? 'Messenger' : 'Instagram';
 
-      const triggerRedirectNow = () => {
+      // Hàm mở Tab Mới (Giữ nguyên trang web cũ ở tab bên cạnh)
+      const triggerRedirectNewTab = (isDirectClick = false) => {
         closeCopyModal();
+
+        // Nếu trên điện thoại và bấm Instagram: gọi Deep Link mở App IG (Trang web vẫn nằm nguyên trong trình duyệt!)
         if (platform === 'Instagram' && isMobile) {
-          const startLeave = Date.now();
-          window.location.href = targetUrl;
+          const appOpened = window.open('instagram://user?username=nownowtarot', '_blank');
+          // Dự phòng nếu máy khách không cài app IG thì mở tab web mới
           setTimeout(() => {
-            // Chỉ mở bản web nếu trình duyệt KHÔNG bị ẩn (tức là máy khách không có App IG)
-            if (!document.hidden && !document.webkitHidden && (Date.now() - startLeave < 3000)) {
-              window.location.href = `https://www.instagram.com/nownowtarot/`;
+            if (!document.hidden && !document.webkitHidden) {
+              window.open(webUrl, '_blank', 'noopener,noreferrer');
             }
-          }, 2200);
-        } else {
-          window.location.href = targetUrl;
+          }, 1800);
+          return;
+        }
+
+        // Mở sang Tab Mới hoàn toàn, giữ nguyên tab NowNow Tarot hiện tại
+        const newWin = window.open(webUrl, '_blank', 'noopener,noreferrer');
+
+        // Nếu chạy bằng hẹn giờ 1.2s mà trình duyệt gắt quá chặn Pop-up (newWin === null)
+        // thì giữ popup lại để khách tự bấm nút "Mở ứng dụng ngay" (bấm trực tiếp 100% mở được tab mới)
+        if (!newWin && !isDirectClick && modal) {
+          modal.classList.add('open');
         }
       };
 
       if (openNowBtn) {
-        openNowBtn.onclick = triggerRedirectNow;
+        // Khi khách chủ động bấm nút trong Popup -> 100% trình duyệt cho mở Tab mới
+        openNowBtn.onclick = () => triggerRedirectNewTab(true);
       }
 
       if (modal) {
@@ -3280,7 +3296,7 @@ Mình muốn đặt lịch xem bài:
 
       if (copyRedirectTimer) clearTimeout(copyRedirectTimer);
       copyRedirectTimer = setTimeout(() => {
-        triggerRedirectNow();
+        triggerRedirectNewTab(false);
       }, 1200);
     }
 
@@ -3765,22 +3781,51 @@ function initMicrosoftClarity() {
   })(window, document, "clarity", "script", clarityId);
 }
 
+let autoSeasonTimer = null;
+const seasonCycleList = ['noel', 'tet', 'summer', 'halloween'];
+let currentSeasonIdx = 0;
+
+function startAutoSeasonCycle15s() {
+  if (typeof setSeasonalTheme !== 'function') return;
+  // Khởi chạy mùa đầu tiên một cách êm ái (silent = true để mèo không nhảy popup liên tục)
+  setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
+  
+  if (autoSeasonTimer) clearInterval(autoSeasonTimer);
+  autoSeasonTimer = setInterval(() => {
+    currentSeasonIdx = (currentSeasonIdx + 1) % seasonCycleList.length;
+    setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
+  }, 15000); // Tự động chuyển mùa sau mỗi 15.000ms (15 giây)
+}
+// TỰ ĐỘNG BẬT TAB MỚI CHO TẤT CẢ CÁC LINK RA NGOÀI (KHÔNG LÀM MẤT TRANG WEB CŨ)
+function forceExternalLinksNewTab() {
+  // 1. Tự động gắn target="_blank" cho mọi thẻ <a> dẫn ra trang ngoài
+  const allLinks = document.querySelectorAll('a[href^="http"], a[href^="https"], a[href^="fb-messenger"], a[href^="instagram"]');
+  allLinks.forEach(link => {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  });
+}
+
 window.onload = function() {
+  forceExternalLinksNewTab();
   if (typeof initGlobalIOSButtonSounds === 'function') initGlobalIOSButtonSounds();
   if (typeof initCosmicCanvas === 'function') initCosmicCanvas();
   if (typeof initScrollReveal === 'function') initScrollReveal();
   if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
   if (typeof setSliderMilestone === 'function') setSliderMilestone(60);
   if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
-  if (typeof setSeasonalTheme === 'function') setSeasonalTheme('auto', true);
+  
   initLiveAvailabilityStatus();
+  startAutoSeasonCycle15s();
   initMicrosoftClarity();
+  
   if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
   setTimeout(() => {
     const tip = document.getElementById('catBubbleTip');
     if (tip) tip.classList.add('hidden-tip');
   }, 4500);
 };
+
 
   </script>
 </body>

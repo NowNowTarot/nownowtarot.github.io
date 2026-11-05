@@ -3227,65 +3227,79 @@ Mình muốn đặt lịch xem bài:
     }
 
     function handleBookingRedirect(platform) {
-      const msg = buildBookingMessage();
-      copyToClipboard(msg);
-      playCuteMeowSound();
+  const msg = buildBookingMessage();
+  copyToClipboard(msg);
+  playCuteMeowSound();
 
-      const encoded = encodeURIComponent(msg);
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      
-      const webUrl = platform === 'Messenger'
-        ? `https://m.me/NowNowTarot?text=${encoded}`
-        : `https://www.instagram.com/nownowtarot/`;
+  const encoded = encodeURIComponent(msg);
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      const modal = document.getElementById('copyConfirmModal');
-      const platNameEl = document.getElementById('copyModalPlatformName');
-      const openNowBtn = document.getElementById('copyModalOpenNowBtn');
+  // 1. Page ID xịn đã bóc tách từ mã nguồn của Sếp
+  const FACEBOOK_PAGE_ID = '61585601939659'; 
 
-      if (platNameEl) platNameEl.textContent = platform === 'Messenger' ? 'Messenger' : 'Instagram';
+  // 2. Thiết lập đường dẫn thông minh
+  let targetUrl = '';
+  let fallbackWebUrl = '';
 
-      // Hàm mở Tab Mới (Giữ nguyên trang web cũ ở tab bên cạnh)
-      const triggerRedirectNewTab = (isDirectClick = false) => {
-        closeCopyModal();
+  if (platform === 'Messenger') {
+    fallbackWebUrl = `https://m.me/NowNowTarot?text=${encoded}`;
+    // Trên điện thoại: Nhảy thẳng vào luồng chat Messenger với Fanpage
+    // Trên máy tính: Mở link web m.me
+    targetUrl = isMobile ? `fb-messenger://user-thread/${FACEBOOK_PAGE_ID}` : fallbackWebUrl;
+  } else {
+    fallbackWebUrl = `https://www.instagram.com/nownowtarot/`;
+    targetUrl = isMobile ? `instagram://user?username=nownowtarot` : fallbackWebUrl;
+  }
 
-        // Nếu trên điện thoại và bấm Instagram: gọi Deep Link mở App IG (Trang web vẫn nằm nguyên trong trình duyệt!)
-        if (platform === 'Instagram' && isMobile) {
-          const appOpened = window.open('instagram://user?username=nownowtarot', '_blank');
-          // Dự phòng nếu máy khách không cài app IG thì mở tab web mới
-          setTimeout(() => {
-            if (!document.hidden && !document.webkitHidden) {
-              window.open(webUrl, '_blank', 'noopener,noreferrer');
-            }
-          }, 1800);
-          return;
+  const modal = document.getElementById('copyConfirmModal');
+  const platNameEl = document.getElementById('copyModalPlatformName');
+  const openNowBtn = document.getElementById('copyModalOpenNowBtn');
+
+  if (platNameEl) {
+    platNameEl.textContent = platform === 'Messenger' ? 'Messenger' : 'Instagram';
+  }
+
+  // 3. Cơ chế kích hoạt dứt điểm không bị Safari iOS chặn
+  const executeRedirect = (isManualClick = false) => {
+    closeCopyModal();
+
+    if (isMobile) {
+      // Đổi href trực tiếp - Safari cho phép 100% không lo bị chặn popup
+      window.location.href = targetUrl;
+
+      // Dự phòng nếu máy khách chưa cài app: tự động đẩy sang web sau 1.5s
+      setTimeout(() => {
+        if (!document.hidden && !document.webkitHidden) {
+          window.location.href = fallbackWebUrl;
         }
-
-        // Mở sang Tab Mới hoàn toàn, giữ nguyên tab NowNow Tarot hiện tại
-        const newWin = window.open(webUrl, '_blank', 'noopener,noreferrer');
-
-        // Nếu chạy bằng hẹn giờ 1.2s mà trình duyệt gắt quá chặn Pop-up (newWin === null)
-        // thì giữ popup lại để khách tự bấm nút "Mở ứng dụng ngay" (bấm trực tiếp 100% mở được tab mới)
-        if (!newWin && !isDirectClick && modal) {
-          modal.classList.add('open');
-        }
-      };
-
-      if (openNowBtn) {
-        // Khi khách chủ động bấm nút trong Popup -> 100% trình duyệt cho mở Tab mới
-        openNowBtn.onclick = () => triggerRedirectNewTab(true);
-      }
-
-      if (modal) {
-        modal.classList.remove('open');
-        void modal.offsetWidth;
+      }, 1500);
+    } else {
+      // Máy tính: Mở tab mới tinh
+      const newWin = window.open(fallbackWebUrl, '_blank', 'noopener,noreferrer');
+      if (!newWin && !isManualClick && modal) {
         modal.classList.add('open');
       }
-
-      if (copyRedirectTimer) clearTimeout(copyRedirectTimer);
-      copyRedirectTimer = setTimeout(() => {
-        triggerRedirectNewTab(false);
-      }, 1200);
     }
+  };
+
+  if (openNowBtn) {
+    openNowBtn.onclick = () => {
+      if (copyRedirectTimer) clearTimeout(copyRedirectTimer);
+      executeRedirect(true);
+    };
+  }
+
+  if (modal) {
+    modal.classList.remove('open');
+    void modal.offsetWidth;
+    modal.classList.add('open');
+  }
+
+  if (copyRedirectTimer) clearTimeout(copyRedirectTimer);
+  copyRedirectTimer = setTimeout(() => {
+    executeRedirect(false);
+  }, 1200);
+}
 
     /* =========================================================================
        7. NỀN VŨ TRỤ CANVAS

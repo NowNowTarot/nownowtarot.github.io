@@ -3995,10 +3995,28 @@ onclick="if(event.target === this) closeFeedbackSanctuary()"
       document.body.classList.remove('portal-open');
     }
 
-    // Tự động quét cả ?session= hoặc ?id= trên đường link
+    // Tự động quét cả dấu ? lẫn dấu # (giúp test offline trên máy tính không bao giờ lỗi)
     function checkUrlForSessionParam() {
+      let session = null;
+
+      // 1. Quét qua URL Search (?session= hoặc ?id=)
       const params = new URLSearchParams(window.location.search);
-      const session = params.get('session') || params.get('id');
+      session = params.get('session') || params.get('id');
+
+      // 2. Nếu không có ?, quét tiếp qua URL Hash (#session= hoặc #NNT-...)
+      if (!session && window.location.hash) {
+        const hashStr = window.location.hash.substring(1); // bỏ dấu #
+        if (hashStr.includes('session=')) {
+          const hashParams = new URLSearchParams(hashStr);
+          session = hashParams.get('session');
+        } else if (hashStr.includes('id=')) {
+          const hashParams = new URLSearchParams(hashStr);
+          session = hashParams.get('id');
+        } else {
+          session = hashStr; // Trường hợp gõ tắt: #NNT-202611-001
+        }
+      }
+
       if (!session) return;
 
       activeClientSessionId = session.trim();

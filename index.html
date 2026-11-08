@@ -3883,10 +3883,52 @@ window.onload = function() {
 
   </script>
 <!-- =========================================================================
-       MODAL: CHIẾC HỘP HỒI ÂM SAU PHIÊN XEM BÀI (SECRET AFTER-SESSION SANCTUARY)
+       MODAL: CHIẾC HỘP HỒI ÂM SAU PHIÊN XEM BÀI (CHUẨN MOBILE 10/10)
        ========================================================================= -->
+  <style>
+    /* Tối ưu riêng cho Căn Phòng Hồi Âm trên Mobile */
+    #sessionFeedbackModal {
+      align-items: flex-end;
+    }
+    .feedback-sanctuary-sheet {
+      width: 100%;
+      max-width: 540px;
+      height: 94dvh;
+      max-height: 94dvh;
+      background: radial-gradient(circle at 50% 0%, rgba(158, 42, 59, 0.38) 0%, transparent 60%), #0e070d;
+      border: 1.5px solid rgba(255, 223, 133, 0.5);
+      border-bottom: none;
+      border-radius: 26px 26px 0 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 -12px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(158, 42, 59, 0.35);
+      transform: translateY(30px);
+      transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #sessionFeedbackModal.open .feedback-sanctuary-sheet {
+      transform: translateY(0);
+    }
+    @media (min-width: 640px) {
+      #sessionFeedbackModal {
+        align-items: center;
+        padding: 20px;
+      }
+      .feedback-sanctuary-sheet {
+        height: auto;
+        max-height: 88vh;
+        border-bottom: 1.5px solid rgba(255, 223, 133, 0.5);
+        border-radius: 24px;
+        transform: translateY(20px) scale(0.96);
+      }
+      #sessionFeedbackModal.open .feedback-sanctuary-sheet {
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+
   <div id="sessionFeedbackModal" class="subweb-overlay" style="z-index: 250;" onclick="if(event.target === this) closeFeedbackSanctuary()">
-    <div class="subweb-browser-window" style="max-width: 520px; height: auto; max-height: 92dvh;" onclick="event.stopPropagation()">
+    <div class="feedback-sanctuary-sheet" onclick="event.stopPropagation()">
       <div class="subweb-topbar">
         <div class="subweb-title-pill">
           <span>🕯️ Chiếc Hộp Hồi Âm • NowNow Tarot</span>
@@ -3896,27 +3938,29 @@ window.onload = function() {
         </button>
       </div>
 
-      <div class="subweb-body-scroll p-4 space-y-4">
-        <!-- VÙNG LOADING KHI KIỂM TRA LINK -->
-        <div id="fbLoadingState" class="text-center py-8 space-y-2">
-          <div class="inline-block animate-spin text-2xl text-[#ffdf85]"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
-          <p class="text-xs text-[#f2dec4]">Đang mở căn phòng hồi âm dành riêng cho bà...</p>
+      <div class="subweb-body-scroll flex flex-col flex-1 p-4" style="padding-bottom: 52px;">
+        <!-- VÙNG LOADING: CĂN GIỮA TOÀN MÀN HÌNH CHÍNH XÁC -->
+        <div id="fbLoadingState" class="flex flex-col items-center justify-center flex-1 py-24 space-y-3">
+          <div class="inline-block text-3xl text-[#ffdf85]"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+          <p class="text-xs sm:text-sm font-medium text-[#f2dec4] tracking-wide">Đang mở căn phòng hồi âm dành riêng cho bà...</p>
         </div>
 
-        <!-- VÙNG BÁO ĐÃ HOÀN TẤT HOẶC MÃ SAI -->
-        <div id="fbNoticeState" class="hidden text-center py-6 space-y-3">
-          <div class="text-3xl" id="fbNoticeIcon">💌</div>
-          <h3 id="fbNoticeTitle" class="text-base font-bold text-[#ffdf85]">Lời nhắn từ NowNow</h3>
-          <p id="fbNoticeDesc" class="text-xs text-[#faf6f0]/90 leading-relaxed max-w-sm mx-auto"></p>
-          <button type="button" onclick="closeFeedbackSanctuary()" class="subweb-subtle-cta mt-2">
-            <span>Dạo chơi trang chính nha</span>
-          </button>
+        <!-- VÙNG THÔNG BÁO (ĐÃ GỬI / MÃ SAI): CĂN GIỮA ĐẸP MẮT -->
+        <div id="fbNoticeState" class="hidden flex flex-col items-center justify-center flex-1 py-16 text-center space-y-3">
+          <div class="text-4xl" id="fbNoticeIcon">💌</div>
+          <h3 id="fbNoticeTitle" class="text-base sm:text-lg font-bold text-[#ffdf85]">Lời nhắn từ NowNow</h3>
+          <p id="fbNoticeDesc" class="text-xs sm:text-[13px] text-[#faf6f0]/90 leading-relaxed max-w-sm mx-auto px-2"></p>
+          <div class="pt-2">
+            <button type="button" onclick="closeFeedbackSanctuary()" class="subweb-subtle-cta">
+              <span>Dạo chơi trang chính nha</span>
+            </button>
+          </div>
         </div>
 
         <!-- FORM ĐIỀN HỒI ÂM THỰC TẾ -->
         <div id="fbFormState" class="hidden space-y-4">
-          <div class="text-center space-y-1">
-            <span class="text-[10.5px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Dành riêng cho <span id="fbClientNameSpan">bà</span></span>
+          <div class="text-center space-y-1 mb-2">
+            <span class="text-[10px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Dành riêng cho <span id="fbClientNameSpan">bà</span></span>
             <h2 class="font-serif-title text-xl text-white italic">Cùng Now Nhìn Lại Sự Chuyển Hóa</h2>
             <p class="text-[11.5px] text-[#c4b5be]">Gửi chút thủ thỉ để tụi mình cùng nhau khép lại phiên đối thoại hôm nay nha (｡･ω･｡)ﾉ♡</p>
           </div>
@@ -3966,10 +4010,10 @@ window.onload = function() {
             <input type="checkbox" id="fbAllowShareCheck" class="w-4 h-4 accent-[#ffdf85] cursor-pointer">
           </div>
 
-          <!-- NÚT GỬI -->
-          <div class="pt-1">
-            <button type="button" id="fbSubmitBtn" onclick="submitFeedbackToSheets()" class="booking-cta-special booking-cta-messenger py-3 justify-center">
-              <span class="text-xs font-extrabold text-white">Gửi Hồi Âm Cho NowNow ➔</span>
+          <!-- NÚT GỬI (ĐÃ CÓ KHOẢNG ĐỆM TRÁNH THANH TRÌNH DUYỆT) -->
+          <div class="pt-2 pb-6">
+            <button type="button" id="fbSubmitBtn" onclick="submitFeedbackToSheets()" class="booking-cta-special booking-cta-messenger py-3.5 justify-center">
+              <span class="text-xs font-extrabold text-white tracking-wider">Gửi Hồi Âm Cho NowNow ➔</span>
             </button>
           </div>
         </div>

@@ -3886,6 +3886,7 @@ window.onload = function() {
        MODAL: CHIẾC HỘP HỒI ÂM SAU PHIÊN XEM BÀI (SECRET AFTER-SESSION SANCTUARY)
        ========================================================================= -->
   <div id="sessionFeedbackModal" class="subweb-overlay" style="z-index: 250;">
+onclick="if(event.target === this) closeFeedbackSanctuary()"
     <div class="subweb-browser-window" style="max-width: 520px; height: auto; max-height: 92dvh;" onclick="event.stopPropagation()">
       <div class="subweb-topbar">
         <div class="subweb-title-pill">
@@ -3899,7 +3900,7 @@ window.onload = function() {
       <div class="subweb-body-scroll p-4 space-y-4">
         <!-- VÙNG LOADING KHI KIỂM TRA LINK -->
         <div id="fbLoadingState" class="text-center py-8 space-y-2">
-          <div class="inline-block animate-spin text-2xl text-[#ffdf85]"><i class="fa-solid fa-circle-notch"></i></div>
+          <div class="inline-block animate-spin text-2xl text-[#ffdf85]"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
           <p class="text-xs text-[#f2dec4]">Đang mở căn phòng hồi âm dành riêng cho bà...</p>
         </div>
 
@@ -3979,7 +3980,7 @@ window.onload = function() {
 
   <script>
     // DÁN URL WEB APP CỦA SẾP VÀO TRONG CẶP NHÁY DƯỚI ĐÂY:
-    const NOWNOW_FEEDBACK_API = "DÁN_URL_WEB_APP_Ở_BƯỚC_1_VÀO_ĐÂY";
+    const NOWNOW_FEEDBACK_API = "https://script.google.com/macros/s/AKfycbwHsjoBYSxz5u26cTxSZ6idEPat02sUZJ8RprQkEX3ccCNuQPMmwjiS9aMiXl1F0zpIwA/exec";
     
     let activeClientSessionId = null;
     let activeClientName = "";

@@ -61,7 +61,76 @@
       --wine-soft: #9e2a3b;
       --muted-text: #c4b5be;
     }
-
+     /* =========================================================================
+       DẢI CHẠY CHỮ LOVE WALL TICKER (TỰ ĐỘNG KÉO TỪ GOOGLE SHEETS)
+       ========================================================================= */
+    .love-wall-marquee-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(90deg, rgba(32, 13, 23, 0.95), rgba(18, 8, 15, 0.98));
+      border: 1px solid rgba(255, 223, 133, 0.35);
+      border-radius: 18px;
+      padding: 10px 0;
+      margin: 18px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+    }
+    .love-wall-marquee-container::before,
+    .love-wall-marquee-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 32px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .love-wall-marquee-container::before {
+      left: 0;
+      background: linear-gradient(to right, rgba(14, 7, 13, 0.95), transparent);
+    }
+    .love-wall-marquee-container::after {
+      right: 0;
+      background: linear-gradient(to left, rgba(14, 7, 13, 0.95), transparent);
+    }
+    .love-wall-marquee-track {
+      display: flex;
+      gap: 24px;
+      white-space: nowrap;
+      animation: marqueeScroll 36s linear infinite;
+      will-change: transform;
+    }
+    .love-wall-marquee-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .love-wall-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.2px;
+      color: rgba(250, 246, 240, 0.92);
+      padding: 4px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 999px;
+      border: 1px solid rgba(255, 223, 133, 0.22);
+    }
+    .love-wall-name {
+      color: var(--gold-warm);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .love-wall-quote {
+      color: rgba(242, 222, 196, 0.9);
+      font-style: italic;
+    }
     /* =========================================================================
        0. BỘ CSS UTILITY ĐÃ COMPILE SẴN (THAY THẾ HOÀN TOÀN CDN TAILWIND)
        ========================================================================= */
@@ -1821,7 +1890,32 @@
     </section>
 
     <div id="seasonalDivider" class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🎄 ୧₊‿︵‧˚₊⊹</div>
-
+<!-- DẢI CHẠY CHỮ LOVE WALL: NHẬT KÝ HỒI ÂM NOWNOW (TỰ ĐỘNG TỪ SHEET) -->
+      <div id="loveWallSection" class="reveal-item space-y-1.5 mb-2">
+        <div class="flex items-center justify-between px-1">
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">
+            <i class="fa-solid fa-heart-pulse text-rose-400 mr-1"></i> Nhật ký hồi âm mới nhất
+          </span>
+          <span class="text-[10px] text-[#c4b5be]/70 italic">Tự động cập nhật từ khách hàng</span>
+        </div>
+        <div class="love-wall-marquee-container" title="Dừng lại khi rê chuột vào">
+          <div class="love-wall-marquee-track" id="loveWallTrack">
+            <!-- Mặc định tải sẵn dữ liệu dự phòng -->
+            <div class="love-wall-item">
+              <span class="love-wall-name">🕊️ Diem Ngoc:</span>
+              <span class="love-wall-quote">"Reader nói chuyện ấm áp, lắng nghe, mình như được chữa lành sau chuỗi ngày tăm tối..."</span>
+            </div>
+            <div class="love-wall-item">
+              <span class="love-wall-name">🌤️ Quynh Nhu:</span>
+              <span class="love-wall-quote">"Không chỉ bói bài mà như được coaching tâm lý định hướng, lời khuyên vô cùng thực tế!"</span>
+            </div>
+            <div class="love-wall-item">
+              <span class="love-wall-name">✨ Hùng:</span>
+              <span class="love-wall-quote">"Bóc đúng gốc rễ tiềm thức, giải tỏa nút thắt nhẹ nhõm cả người!"</span>
+            </div>
+          </div>
+        </div>
+      </div>
     <!-- 4. KHUNG TRUNG TÂM -->
     <section id="sec-booking" class="reveal-item booking-sanctuary-card space-y-6">
       <div class="text-center space-y-2.5">
@@ -4149,7 +4243,43 @@ window.onload = function() {
       });
     }
 
-    window.addEventListener('DOMContentLoaded', checkUrlForSessionParam);
+    window.addEventListener('DOMContentLoaded', () => {
+      checkUrlForSessionParam();
+      loadApprovedFeedbackToLoveWall();
+    });
+// HÀM TỰ ĐỘNG KÉO CÁC PHẢN HỒI ĐÃ DUYỆT TỪ TAB FEEDBACK VỀ DẢI CHẠY CHỮ
+    function loadApprovedFeedbackToLoveWall() {
+      const track = document.getElementById('loveWallTrack');
+      if (!track) return;
+
+      fetch(`${NOWNOW_FEEDBACK_API}?action=get_approved`)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.status === 'success' && resData.data && resData.data.length > 0) {
+            let htmlContent = '';
+            // Nhân đôi danh sách để tạo vòng lặp vô tận (Infinite Loop) không bị giật
+            const list = [...resData.data, ...resData.data];
+            
+            list.forEach(item => {
+              const icon = item.stateAfter ? (item.stateAfter.split(' ')[0] || '💌') : '💌';
+              const cleanMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
+              htmlContent += `
+                <div class="love-wall-item">
+                  <span class="love-wall-name">${icon} ${item.name}:</span>
+                  <span class="love-wall-quote">"${cleanMsg}"</span>
+                </div>
+              `;
+            });
+
+            track.innerHTML = htmlContent;
+          }
+        })
+        .catch(err => {
+          // Nếu có trục trặc mạng thì giữ nguyên 3 phản hồi mẫu mặc định
+        });
+    }
+
+    // Kích hoạt nạp Love Wall cùng lúc tải trang
   </script>
 </body>
 </html>

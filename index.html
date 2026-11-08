@@ -3882,5 +3882,212 @@ window.onload = function() {
 
 
   </script>
+<!-- =========================================================================
+       MODAL: CHIẾC HỘP HỒI ÂM SAU PHIÊN XEM BÀI (SECRET AFTER-SESSION SANCTUARY)
+       ========================================================================= -->
+  <div id="sessionFeedbackModal" class="subweb-overlay" style="z-index: 250;">
+    <div class="subweb-browser-window" style="max-width: 520px; height: auto; max-height: 92dvh;" onclick="event.stopPropagation()">
+      <div class="subweb-topbar">
+        <div class="subweb-title-pill">
+          <span>🕯️ Chiếc Hộp Hồi Âm • NowNow Tarot</span>
+        </div>
+        <button type="button" onclick="closeFeedbackSanctuary()" class="subweb-close-icon" title="Đóng">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="subweb-body-scroll p-4 space-y-4">
+        <!-- VÙNG LOADING KHI KIỂM TRA LINK -->
+        <div id="fbLoadingState" class="text-center py-8 space-y-2">
+          <div class="inline-block animate-spin text-2xl text-[#ffdf85]"><i class="fa-solid fa-circle-notch"></i></div>
+          <p class="text-xs text-[#f2dec4]">Đang mở căn phòng hồi âm dành riêng cho bà...</p>
+        </div>
+
+        <!-- VÙNG BÁO ĐÃ HOÀN TẤT HOẶC MÃ SAI -->
+        <div id="fbNoticeState" class="hidden text-center py-6 space-y-3">
+          <div class="text-3xl" id="fbNoticeIcon">💌</div>
+          <h3 id="fbNoticeTitle" class="text-base font-bold text-[#ffdf85]">Lời nhắn từ NowNow</h3>
+          <p id="fbNoticeDesc" class="text-xs text-[#faf6f0]/90 leading-relaxed max-w-sm mx-auto"></p>
+          <button type="button" onclick="closeFeedbackSanctuary()" class="subweb-subtle-cta mt-2">
+            <span>Dạo chơi trang chính nha</span>
+          </button>
+        </div>
+
+        <!-- FORM ĐIỀN HỒI ÂM THỰC TẾ -->
+        <div id="fbFormState" class="hidden space-y-4">
+          <div class="text-center space-y-1">
+            <span class="text-[10.5px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Dành riêng cho <span id="fbClientNameSpan">bà</span></span>
+            <h2 class="font-serif-title text-xl text-white italic">Cùng Now Nhìn Lại Sự Chuyển Hóa</h2>
+            <p class="text-[11.5px] text-[#c4b5be]">Gửi chút thủ thỉ để tụi mình cùng nhau khép lại phiên đối thoại hôm nay nha (｡･ω･｡)ﾉ♡</p>
+          </div>
+
+          <!-- 1. CHUYỂN BIẾN TÂM TRẠNG -->
+          <div class="interactive-step-card space-y-2">
+            <div class="text-xs font-bold text-[#ffdf85]">1. Nhịp thở cảm xúc của bà:</div>
+            <div class="text-[11px] text-[#c4b5be]">Trước khi xem lòng bà thấy thế nào?</div>
+            <div class="flex flex-wrap gap-1.5" id="groupStateBefore">
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌪️ Ngổn ngang</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌫️ Bế tắc</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🫀 Bồn chồn</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🥀 Kiệt sức</button>
+            </div>
+            <div class="text-[11px] text-[#c4b5be] pt-1">Sau khi trò chuyện xong cùng Now:</div>
+            <div class="flex flex-wrap gap-1.5" id="groupStateAfter">
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag active">🌤️ Nhẹ lòng</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">💡 Thấu suốt</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🕊️ An yên</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">⚡ Có động lực</button>
+            </div>
+          </div>
+
+          <!-- 2. ĐIỂM CHẠM THẤU CẢM -->
+          <div class="interactive-step-card space-y-2">
+            <div class="text-xs font-bold text-[#ffdf85]">2. Điều bà thấy tâm đắc nhất ở NowNow:</div>
+            <div class="flex flex-wrap gap-1.5" id="groupTouchpoints">
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag active">🧠 Bóc đúng gốc rễ tiềm thức</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🎙️ Giọng nói ấm áp xoa dịu</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌱 Định hướng thực tế, tỉnh táo</button>
+              <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🤝 Không phán xét hay hù dọa</button>
+            </div>
+          </div>
+
+          <!-- 3. LỜI NHẮN THỦ THỈ -->
+          <div class="interactive-step-card space-y-2">
+            <div class="text-xs font-bold text-[#ffdf85]">3. Vài dòng thủ thỉ gửi riêng cho Now:</div>
+            <textarea id="fbMessageText" rows="3" placeholder="Viết những điều bà chưa kịp nói, hoặc cảm giác nhẹ nhõm lúc này nha..." class="w-full bg-black/40 border border-[#ffdf85]/35 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#ffdf85]"></textarea>
+          </div>
+
+          <!-- 4. TOGGLE QUYỀN RIÊNG TƯ -->
+          <div class="flex items-center justify-between bg-white/[0.04] p-3 rounded-xl border border-white/10">
+            <div class="space-y-0.5 pr-2">
+              <div class="text-xs font-semibold text-[#faf6f0]">Chia sẻ ẩn danh lan tỏa năng lượng</div>
+              <div class="text-[10px] text-[#c4b5be]">Cho phép Now trích đăng ẩn danh lời nhắn này lên Tạp chí/Hộp thư mật</div>
+            </div>
+            <input type="checkbox" id="fbAllowShareCheck" class="w-4 h-4 accent-[#ffdf85] cursor-pointer">
+          </div>
+
+          <!-- NÚT GỬI -->
+          <div class="pt-1">
+            <button type="button" id="fbSubmitBtn" onclick="submitFeedbackToSheets()" class="booking-cta-special booking-cta-messenger py-3 justify-center">
+              <span class="text-xs font-extrabold text-white">Gửi Hồi Âm Cho NowNow ➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DÁN URL WEB APP CỦA SẾP VÀO TRONG CẶP NHÁY DƯỚI ĐÂY:
+    const NOWNOW_FEEDBACK_API = "DÁN_URL_WEB_APP_Ở_BƯỚC_1_VÀO_ĐÂY";
+    
+    let activeClientSessionId = null;
+    let activeClientName = "";
+
+    function toggleFbTag(el) {
+      el.classList.toggle('active');
+    }
+
+    function closeFeedbackSanctuary() {
+      const modal = document.getElementById('sessionFeedbackModal');
+      if (modal) modal.classList.remove('open');
+      document.body.classList.remove('portal-open');
+    }
+
+    // Tự động quét cả ?session= hoặc ?id= trên đường link
+    function checkUrlForSessionParam() {
+      const params = new URLSearchParams(window.location.search);
+      const session = params.get('session') || params.get('id');
+      if (!session) return;
+
+      activeClientSessionId = session.trim();
+      const modal = document.getElementById('sessionFeedbackModal');
+      if (!modal) return;
+
+      document.body.classList.add('portal-open');
+      modal.classList.add('open');
+
+      document.getElementById('fbLoadingState').classList.remove('hidden');
+      document.getElementById('fbFormState').classList.add('hidden');
+      document.getElementById('fbNoticeState').classList.add('hidden');
+
+      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('fbLoadingState').classList.add('hidden');
+          if (data.status === 'valid') {
+            activeClientName = data.clientName || 'bà';
+            document.getElementById('fbClientNameSpan').textContent = activeClientName;
+            document.getElementById('fbFormState').classList.remove('hidden');
+            if (typeof showCatTip === 'function') {
+              showCatTip(`Meo~ meo! Chào mừng ${activeClientName} đã ghé thăm căn phòng hồi âm nha! 🐾✨`, 4500);
+            }
+          } else if (data.status === 'completed') {
+            document.getElementById('fbNoticeIcon').textContent = '✨💖';
+            document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || 'bà'} một cái thật chặt!`;
+            document.getElementById('fbNoticeDesc').textContent = data.message;
+            document.getElementById('fbNoticeState').classList.remove('hidden');
+          } else {
+            document.getElementById('fbNoticeIcon').textContent = '🕯️';
+            document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
+            document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
+            document.getElementById('fbNoticeState').classList.remove('hidden');
+          }
+        })
+        .catch(err => {
+          document.getElementById('fbLoadingState').classList.add('hidden');
+          document.getElementById('fbNoticeTitle').textContent = 'Lỗi kết nối';
+          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra phiên trải bài lúc này, bà thử lại sau nhé.';
+          document.getElementById('fbNoticeState').classList.remove('hidden');
+        });
+    }
+
+    function submitFeedbackToSheets() {
+      const submitBtn = document.getElementById('fbSubmitBtn');
+      const msgText = document.getElementById('fbMessageText').value.trim();
+      const allowShare = document.getElementById('fbAllowShareCheck').checked;
+
+      const getActiveText = (containerId) => {
+        return Array.from(document.querySelectorAll(`#${containerId} .soft-tag.active`))
+          .map(el => el.textContent.trim()).join(', ');
+      };
+
+      const payload = {
+        session: activeClientSessionId,
+        clientName: activeClientName,
+        platform: "Website",
+        stateBefore: getActiveText('groupStateBefore'),
+        stateAfter: getActiveText('groupStateAfter'),
+        touchpoints: getActiveText('groupTouchpoints'),
+        message: msgText,
+        allowShare: allowShare
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Đang gửi đến NowNow... ✨</span>';
+
+      fetch(NOWNOW_FEEDBACK_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(resData => {
+        document.getElementById('fbFormState').classList.add('hidden');
+        document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
+        document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
+        document.getElementById('fbNoticeDesc').innerHTML = 'Cảm ơn bà đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡';
+        document.getElementById('fbNoticeState').classList.remove('hidden');
+        if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+      })
+      .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Gửi lại thử nha bà</span>';
+        alert('Có lỗi nhỏ khi lưu, bà thử bấm gửi lại giúp Now nghen!');
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', checkUrlForSessionParam);
+  </script>
 </body>
 </html>

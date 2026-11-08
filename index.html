@@ -62,119 +62,6 @@
       --muted-text: #c4b5be;
     }
 /* =========================================================================
-       THANH CHUYỂN TAB 2 MẢNG FEEDBACK (CHUẨN CAPSULE TỐI GIẢN - ĐÃ XOÁ 17+)
-       ========================================================================= */
-    .feedback-segment-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 223, 133, 0.3);
-      padding: 4px;
-      border-radius: 999px;
-      margin: 4px auto 14px auto;
-      max-width: 360px;
-      width: 100%;
-    }
-    .segment-tab-btn {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: rgba(242, 222, 196, 0.75);
-      background: transparent;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-      white-space: nowrap;
-    }
-    .segment-tab-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .segment-tab-btn.active {
-      background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98));
-      color: var(--gold-warm);
-      font-weight: 700;
-      border-color: rgba(255, 223, 133, 0.65);
-      box-shadow: 0 4px 14px rgba(212, 50, 72, 0.4);
-    }
-    .feedback-tab-pane {
-      display: none;
-      width: 100%;
-      animation: fadeInFeedbackTab 0.25s ease;
-    }
-    .feedback-tab-pane.active {
-      display: block;
-    }
-    @keyframes fadeInFeedbackTab {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-/* =========================================================================
-       THANH CHUYỂN TAB 2 MẢNG FEEDBACK (APPLE SEGMENTED CAPSULE)
-       ========================================================================= */
-    .feedback-segment-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 223, 133, 0.3);
-      padding: 4px;
-      border-radius: 999px;
-      margin: 4px auto 14px auto;
-      max-width: 380px;
-      width: 100%;
-    }
-    .segment-tab-btn {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: rgba(242, 222, 196, 0.75);
-      background: transparent;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-      white-space: nowrap;
-    }
-    .segment-tab-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .segment-tab-btn.active {
-      background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98));
-      color: var(--gold-warm);
-      font-weight: 700;
-      border-color: rgba(255, 223, 133, 0.65);
-      box-shadow: 0 4px 14px rgba(212, 50, 72, 0.4);
-    }
-
-    .feedback-tab-pane {
-      display: none;
-      width: 100%;
-      animation: fadeInFeedbackTab 0.28s ease;
-    }
-    .feedback-tab-pane.active {
-      display: block;
-    }
-    @keyframes fadeInFeedbackTab {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-/* =========================================================================
        GIAO DIỆN FEEDBACK CHUẨN SHOPEE REVIEW TRÊN MOBILE & DESKTOP
        ========================================================================= */
     .shopee-review-header {
@@ -1860,110 +1747,6 @@
     }
   </style>
 </head>
-<!-- FIX TOÀN BỘ THANH CUỘN: VỪA VẶN KHUNG HÌNH KHÔNG TRÀN MÀN HÌNH -->
-  <style>
-    .feedback-segment-nav-wrap {
-      padding: 8px 14px 4px 14px;
-      flex-shrink: 0;
-      background: rgba(14, 7, 13, 0.95);
-      border-bottom: 1px solid rgba(255, 223, 133, 0.15);
-    }
-    .feedback-segment-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 223, 133, 0.3);
-      padding: 3.5px;
-      border-radius: 999px;
-      max-width: 340px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .segment-tab-btn {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 6.5px 12px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(242, 222, 196, 0.75);
-      background: transparent;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.22s ease;
-      white-space: nowrap;
-    }
-    .segment-tab-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .segment-tab-btn.active {
-      background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98)) !important;
-      color: var(--gold-warm) !important;
-      font-weight: 700;
-      border-color: rgba(255, 223, 133, 0.65) !important;
-      box-shadow: 0 3px 12px rgba(212, 50, 72, 0.4);
-    }
-
-    /* MẢNG ẢNH: KHÓA CHẾT THANH CUỘN, VỪA VẶN 100% TRONG 1 KHUNG NHÌN */
-    #paneFeedbackPhotos {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-      overflow: hidden;
-      padding: 6px 12px 10px 12px;
-    }
-    #paneFeedbackPhotos.active {
-      display: flex !important;
-    }
-
-    /* Tự động co giãn iPhone theo chiều cao màn hình laptop/PC */
-    @media (min-width: 641px) {
-      .iphone-14-pro-frame {
-        height: clamp(370px, calc(90vh - 210px), 510px) !important;
-        width: auto !important;
-        aspect-ratio: 9 / 16.3;
-        border-radius: 36px !important;
-        padding: 7.5px !important;
-      }
-    }
-    @media (max-width: 640px) {
-      .iphone-14-pro-frame {
-        height: clamp(340px, 54dvh, 480px) !important;
-        width: auto !important;
-        aspect-ratio: 9 / 16.3;
-      }
-    }
-
-    /* MẢNG WEB: CHỈ CUỘN NỘI DUNG VỚI THANH KÍNH MỜ SIÊU MẢNH 5PX */
-    #paneFeedbackWeb {
-      display: none;
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      padding: 12px 14px 18px 14px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 223, 133, 0.3) transparent;
-    }
-    #paneFeedbackWeb.active {
-      display: block !important;
-    }
-    #paneFeedbackWeb::-webkit-scrollbar {
-      width: 5px;
-    }
-    #paneFeedbackWeb::-webkit-scrollbar-thumb {
-      background: rgba(255, 223, 133, 0.3);
-      border-radius: 999px;
-    }
-  </style>
 <body>
 
   <!-- 1. BẦU TRỜI VŨ TRỤ TOÀN TRANG -->
@@ -2177,16 +1960,16 @@
           <div class="love-wall-marquee-container" style="margin: 0; padding: 7px 0; background: rgba(18, 8, 15, 0.65); border-color: rgba(255, 223, 133, 0.28);" title="Dừng lại khi rê chuột vào">
             <div class="love-wall-marquee-track" id="loveWallTrack">
               <div class="love-wall-item">
-                <span class="love-wall-name">🌤️ LinhLinh:</span>
-                <span class="love-wall-quote">"Nên thử nha mọi người"</span>
-              </div>
-              <div class="love-wall-item">
-                <span class="love-wall-name">🌤️ Chó:</span>
-                <span class="love-wall-quote">"Thích giọng bà Now gheee á"</span>
-              </div>
-              <div class="love-wall-item">
                 <span class="love-wall-name">🕊️ Diem Ngoc:</span>
                 <span class="love-wall-quote">"Reader nói chuyện ấm áp, lắng nghe, mình như được chữa lành sau chuỗi ngày tăm tối..."</span>
+              </div>
+              <div class="love-wall-item">
+                <span class="love-wall-name">🌤️ Quỳnh Chi:</span>
+                <span class="love-wall-quote">"Phân tích tâm lý nhận thức rất thực tế, trò chuyện xong nhẹ nhõm cả người!"</span>
+              </div>
+              <div class="love-wall-item">
+                <span class="love-wall-name">✨ Sogeum won:</span>
+                <span class="love-wall-quote">"Tháo gỡ đúng nút thắt gốc rễ, 0đ đặt cọc, xem xong nhẹ lòng mới dừng đồng hồ..."</span>
               </div>
             </div>
           </div>
@@ -3102,7 +2885,7 @@
     }
 
     window.addEventListener('keydown', (e) => {
-      const fbOpen = document.getElementById('subwebFeedback')?.classList.contains('open');
+      const fbOpen = document.getElementById('subwebFeedbackUnified')?.classList.contains('open');
       if (fbOpen) {
         if (e.key === 'ArrowRight') {
           playIOSButtonSound('tap');
@@ -4344,72 +4127,6 @@ window.onload = function() {
       document.body.classList.remove('portal-open');
     }
 
-    // Tự động quét cả dấu ? lẫn dấu # (giúp test offline trên máy tính không bao giờ lỗi)
-    function checkUrlForSessionParam() {
-      let session = null;
-
-      // 1. Quét qua URL Search (?session= hoặc ?id=)
-      const params = new URLSearchParams(window.location.search);
-      session = params.get('session') || params.get('id');
-
-      // 2. Nếu không có ?, quét tiếp qua URL Hash (#session= hoặc #NNT-...)
-      if (!session && window.location.hash) {
-        const hashStr = window.location.hash.substring(1); // bỏ dấu #
-        if (hashStr.includes('session=')) {
-          const hashParams = new URLSearchParams(hashStr);
-          session = hashParams.get('session');
-        } else if (hashStr.includes('id=')) {
-          const hashParams = new URLSearchParams(hashStr);
-          session = hashParams.get('id');
-        } else {
-          session = hashStr; // Trường hợp gõ tắt: #NNT-202611-001
-        }
-      }
-
-      if (!session) return;
-
-      activeClientSessionId = session.trim();
-      const modal = document.getElementById('sessionFeedbackModal');
-      if (!modal) return;
-
-      document.body.classList.add('portal-open');
-      modal.classList.add('open');
-
-      document.getElementById('fbLoadingState').classList.remove('hidden');
-      document.getElementById('fbFormState').classList.add('hidden');
-      document.getElementById('fbNoticeState').classList.add('hidden');
-
-      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('fbLoadingState').classList.add('hidden');
-          if (data.status === 'valid') {
-            activeClientName = data.clientName || 'bà';
-            document.getElementById('fbClientNameSpan').textContent = activeClientName;
-            document.getElementById('fbFormState').classList.remove('hidden');
-            if (typeof showCatTip === 'function') {
-              showCatTip(`Meo~ meo! Chào mừng ${activeClientName} đã ghé thăm căn phòng hồi âm nha! 🐾✨`, 4500);
-            }
-          } else if (data.status === 'completed') {
-            document.getElementById('fbNoticeIcon').textContent = '✨💖';
-            document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || 'bà'} một cái thật chặt!`;
-            document.getElementById('fbNoticeDesc').textContent = data.message;
-            document.getElementById('fbNoticeState').classList.remove('hidden');
-          } else {
-            document.getElementById('fbNoticeIcon').textContent = '🕯️';
-            document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
-            document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
-            document.getElementById('fbNoticeState').classList.remove('hidden');
-          }
-        })
-        .catch(err => {
-          document.getElementById('fbLoadingState').classList.add('hidden');
-          document.getElementById('fbNoticeTitle').textContent = 'Lỗi kết nối';
-          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra phiên trải bài lúc này, bà thử lại sau nhé.';
-          document.getElementById('fbNoticeState').classList.remove('hidden');
-        });
-    }
-
     function submitFeedbackToSheets() {
       const submitBtn = document.getElementById('fbSubmitBtn');
       const msgText = document.getElementById('fbMessageText').value.trim();
@@ -4455,10 +4172,6 @@ window.onload = function() {
       });
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      checkUrlForSessionParam();
-      loadApprovedFeedbackToLoveWall();
-    });
 // HÀM TỰ ĐỘNG KÉO CÁC PHẢN HỒI ĐÃ DUYỆT TỪ TAB FEEDBACK VỀ DẢI CHẠY CHỮ
     function loadApprovedFeedbackToLoveWall() {
       const track = document.getElementById('loveWallTrack');
@@ -4749,7 +4462,7 @@ window.onload = function() {
     </div>
   </div>
 
-  <!-- SCRIPT ĐIỀU KHIỂN & ĐỒNG BỘ SIÊU TỐC -->
+  <!-- SCRIPT ĐIỀU KHIỂN & ĐỒNG BỘ 100% TỪ GOOGLE SHEETS -->
   <script>
     /* 1. CHUYỂN TAB ẢNH / WEB */
     let currentFeedbackTab = 'photos';
@@ -4780,33 +4493,13 @@ window.onload = function() {
       }
     }
 
-    /* 2. DỮ LIỆU THỰC TRÍCH 100% TỪ GOOGLE SHEET */
-    let currentReviewDataset = [
-      {
-        name: "LinhLinh",
-        platform: "Instagram",
-        time: "Gần đây",
-        service: "Phiên trải bài thấu cảm 1:1",
-        stateBefore: "🌪️ Ngổn ngang, 🫀 Bồn chồn, 🥀 Kiệt sức",
-        stateAfter: "🌤️ Nhẹ lòng",
-        touchpoints: "🧠 Bóc đúng gốc rễ tiềm thức",
-        message: "Nên thử nha mọi người",
-        shopReply: "Now cảm ơn LinhLinh nhiều nghen! Bình chứa của bà đang ngày càng vững vàng rồi đó (｡･ω･｡)ﾉ♡",
-        likes: 18
-      },
-      {
-        name: "mèo",
-        platform: "Threads",
-        time: "Gần đây",
-        service: "Phiên trải bài thấu cảm 1:1",
-        stateBefore: "",
-        stateAfter: "🌤️ Nhẹ lòng",
-        touchpoints: "🧠 Bóc đúng gốc rễ tiềm thức",
-        message: "ổn lắm nha mấy bà",
-        shopReply: "Dạ Now cảm ơn bà nha! Chúc bà luôn an yên và tự tin với lựa chọn của mình nè ✨",
-        likes: 12
-      }
-    ];
+    /* 2. DỮ LIỆU THỰC 100% TỪ GOOGLE SHEETS (ĐÃ XÓA SẠCH FEEDBACK TEST) */
+    let currentReviewDataset = [];
+
+    // Hàm tạo số ngẫu nhiên từ 10 đến 100
+    function getRandomHelpfulCount() {
+      return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+    }
 
     function renderShopeeReviews(filterTag = 'all') {
       const container = document.getElementById('shopeeReviewContainer');
@@ -4822,55 +4515,66 @@ window.onload = function() {
       }
 
       if (list.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-xs text-[#c4b5be]">Chưa có phản hồi nào ở mục lọc này. Bà chọn "Tất cả" nha!</div>`;
+        container.innerHTML = `
+          <div class="text-center py-10 text-xs text-[#c4b5be]/80 italic">
+            Đang đồng bộ các hồi âm thực tế mới nhất từ Google Sheets của NowNow... ✨
+          </div>`;
         return;
       }
 
       let html = '';
-      list.forEach((r, idx) => {
-        const likes = r.likes || (10 + idx * 3);
+      list.forEach((r) => {
+        const likes = r.likes || getRandomHelpfulCount();
+        const realReply = (r.shopReply || '').trim();
+
         html += `
           <div class="shopee-review-card">
+            <!-- TÊN KHÁCH & SAO (ĐÃ XÓA CHỮ ĐÃ TRẢI BÀI) -->
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-2.5">
                 <div class="shopee-user-avatar">${(r.name || 'K').charAt(0).toUpperCase()}</div>
                 <div>
                   <div class="flex items-center gap-1.5">
-                    <span class="text-[13px] font-bold text-white">${r.name || 'Khách nhà Now'}</span>
-                    <span class="text-[9.5px] bg-[#34d399]/20 text-[#34d399] px-1.5 py-0.2 rounded font-semibold">✔ Đã trải bài</span>
+                    <span class="text-[13.5px] font-bold text-white">${r.name || 'Khách nhà Now'}</span>
                   </div>
                   <div class="shopee-star-rating text-[11px] mt-0.5">★★★★★</div>
                 </div>
               </div>
-              <span class="text-[10.5px] text-[#c4b5be]/70">${r.time || 'Gần đây'}</span>
+              <span class="text-[10px] text-[#c4b5be]/50">${r.time || 'Gần đây'}</span>
             </div>
 
-            <div class="text-[11px] text-[#ffdf85]/80 mt-2 font-medium">
-              <i class="fa-solid fa-circle-check text-[9px] mr-1 text-emerald-400"></i> ${r.service || 'Phiên trải bài thấu cảm 1:1'}
+            <!-- CÁC TAG TRƯỚC/SAU ĐƯỢC LÀM MỜ NHẸ NHÀNG ĐỂ KHÔNG LẤN ÁT LỜI NHẮN -->
+            <div style="opacity: 0.48;" class="mt-2 mb-2.5 space-y-1.5 transition-opacity hover:opacity-80">
+              <div class="text-[10px] text-[#c4b5be] font-normal">
+                <i class="fa-solid fa-sparkles text-[8.5px] mr-1"></i> ${r.service || 'Phiên trải bài thấu cảm 1:1'}
+              </div>
+              <div class="flex flex-wrap gap-1">
+                ${r.stateBefore ? `<span class="text-[9.5px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${r.stateBefore}</span>` : ''}
+                ${r.stateAfter ? `<span class="text-[9.5px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Sau: ${r.stateAfter}</span>` : ''}
+                ${r.touchpoints ? `<span class="text-[9.5px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">${r.touchpoints}</span>` : ''}
+              </div>
             </div>
 
-            <div class="flex flex-wrap gap-1.5 my-2">
-              ${r.stateBefore ? `<span class="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${r.stateBefore}</span>` : ''}
-              ${r.stateAfter ? `<span class="text-[10px] bg-[#ffdf85]/15 border border-[#ffdf85]/30 px-2 py-0.5 rounded-full text-[#ffdf85] font-semibold">Sau: ${r.stateAfter}</span>` : ''}
-              ${r.touchpoints ? `<span class="text-[10px] bg-rose-500/15 border border-rose-400/30 px-2 py-0.5 rounded-full text-rose-200">${r.touchpoints}</span>` : ''}
+            <!-- LỜI FEEDBACK CỦA KHÁCH ĐƯỢC LÀM NỔI BẬT RÕ RÀNG -->
+            <div class="my-3 pl-3 py-1 border-l-2 border-[#ffdf85]">
+              <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
+                "${r.message || ''}"
+              </p>
             </div>
 
-            <p class="text-[12.8px] text-[#faf6f0]/95 leading-relaxed mt-1">
-              "${r.message || ''}"
-            </p>
-
-            ${r.shopReply ? `
+            <!-- PHẢN HỒI THẬT CỦA NOW TỪ CỘT L TRÊN GOOGLE SHEETS -->
+            ${realReply ? `
             <div class="shopee-shop-reply">
               <div class="text-[10.5px] font-bold text-[#ffdf85] mb-0.5">
                 <i class="fa-solid fa-reply fa-rotate-180 mr-1"></i> Phản hồi của NowNow Tarot:
               </div>
-              <p class="text-[11.5px] text-[#f2dec4]/90 italic leading-relaxed">
-                ${r.shopReply}
+              <p class="text-[12px] text-[#f2dec4]/95 italic leading-relaxed">
+                ${realReply}
               </p>
             </div>` : ''}
 
-            <div class="flex items-center justify-between pt-2 mt-2 border-t border-white/5">
-              <span class="text-[10px] text-[#c4b5be]/60">Nền tảng: ${r.platform || 'Direct'}</span>
+            <!-- NÚT HỮU ÍCH RANDOM 10-100 (ĐÃ XÓA NỀN TẢNG DIRECT) -->
+            <div class="flex items-center justify-end pt-2 mt-2 border-t border-white/5">
               <button type="button" onclick="likeShopeeReview(this, ${likes})" class="shopee-helpful-btn">
                 <i class="fa-regular fa-thumbs-up"></i>
                 <span>Hữu ích (${likes})</span>
@@ -4897,13 +4601,17 @@ window.onload = function() {
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
-    /* 3. TỰ ĐỘNG KÉO THÊM REVIEW MỚI NHẤT TỪ GOOGLE SHEET VỀ WEB */
+    /* 3. KÉO 100% FEEDBACK THẬT ĐÃ DUYỆT TỪ GOOGLE SHEETS */
     function syncApprovedReviewsFromSheets() {
+      // Xóa cache cũ chứa 2 feedback test
+      try { localStorage.removeItem('nownow_cached_reviews'); } catch (e) {}
+
+      // Nạp cache thật mới (nếu có)
       try {
-        const cached = localStorage.getItem('nownow_cached_reviews');
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) {
+        const cachedReal = localStorage.getItem('nownow_real_sheet_reviews');
+        if (cachedReal) {
+          const parsed = JSON.parse(cachedReal);
+          if (Array.isArray(parsed)) {
             currentReviewDataset = parsed;
             renderShopeeReviews('all');
           }
@@ -4913,44 +4621,67 @@ window.onload = function() {
       fetch(`${NOWNOW_FEEDBACK_API}?action=get_approved`)
         .then(res => res.json())
         .then(resData => {
-          if (resData.status === 'success' && resData.data && resData.data.length > 0) {
-            currentReviewDataset = resData.data.map((item, idx) => ({
+          if (resData.status === 'success' && Array.isArray(resData.data)) {
+            currentReviewDataset = resData.data.map((item) => ({
               name: item.name || 'Khách nhà Now',
-              platform: item.platform || 'Direct',
-              time: item.time || 'Gần đây',
+              time: item.date || item.time || 'Gần đây',
               service: 'Phiên trải bài thấu cảm 1:1',
               stateBefore: item.stateBefore || '',
-              stateAfter: item.stateAfter || '🌤️ Nhẹ lòng',
-              touchpoints: item.touchpoints || '🧠 Bóc đúng gốc rễ tiềm thức',
+              stateAfter: item.stateAfter || '',
+              touchpoints: item.touchpoints || '',
               message: item.message || '',
-              shopReply: 'Now cảm ơn bà đã mở lòng cùng Now nha! Chúc bà luôn bình an và thấu suốt (｡･ω･｡)ﾉ♡',
-              likes: 12 + idx * 3
+              // Lấy phản hồi thật của Now từ Cột L trên Sheet
+              shopReply: item.shopReply || item.reply || item.nowReply || '',
+              likes: getRandomHelpfulCount()
             }));
 
             try {
-              localStorage.setItem('nownow_cached_reviews', JSON.stringify(currentReviewDataset));
+              localStorage.setItem('nownow_real_sheet_reviews', JSON.stringify(currentReviewDataset));
             } catch (e) {}
 
             renderShopeeReviews('all');
+
+            // Cập nhật luôn dải chạy chữ Love Wall từ cùng 1 lần tải
+            const track = document.getElementById('loveWallTrack');
+            if (track && resData.data.length > 0) {
+              let htmlContent = '';
+              const list = [...resData.data, ...resData.data];
+              list.forEach(item => {
+                const icon = item.stateAfter ? (item.stateAfter.split(' ')[0] || '💌') : '💌';
+                const cleanMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
+                htmlContent += `
+                  <div class="love-wall-item">
+                    <span class="love-wall-name">${icon} ${item.name}:</span>
+                    <span class="love-wall-quote">"${cleanMsg}"</span>
+                  </div>
+                `;
+              });
+              track.innerHTML = htmlContent;
+            }
           }
         })
         .catch(() => {});
     }
 
-    /* 4. CHỮA DỨT ĐIỂM XOAY VÔ TẬN Ở CĂN PHÒNG HỒI ÂM (?session=) */
+    /* 4. FIX TRIỆT ĐỂ LỖI TẢI LẠI TRANG BỊ NHẢY VÀO HỘP THƯ RIÊNG */
     function checkUrlForSessionParam() {
       let session = null;
       const params = new URLSearchParams(window.location.search);
       session = params.get('session') || params.get('id');
 
+      // Chỉ nhận qua dấu # nếu viết rõ #session=... hoặc #id=... (Không bắt nhầm #feedbackUnified hay #viral)
       if (!session && window.location.hash) {
         const hashStr = window.location.hash.substring(1);
-        if (hashStr.includes('session=')) session = new URLSearchParams(hashStr).get('session');
-        else if (hashStr.includes('id=')) session = new URLSearchParams(hashStr).get('id');
-        else session = hashStr;
+        if (hashStr.startsWith('session=') || hashStr.includes('&session=')) {
+          session = new URLSearchParams(hashStr).get('session');
+        } else if (hashStr.startsWith('id=') || hashStr.includes('&id=')) {
+          session = new URLSearchParams(hashStr).get('id');
+        }
       }
 
-      if (!session) return;
+      // Bỏ qua các từ khóa điều hướng popup của trang web
+      const reservedHashes = ['feedbackUnified', 'feedback', 'viral', 'shopeeFeedback', 'sec-booking'];
+      if (!session || reservedHashes.includes(session.trim())) return;
 
       activeClientSessionId = session.trim();
       const modal = document.getElementById('sessionFeedbackModal');
@@ -4967,10 +4698,6 @@ window.onload = function() {
       document.getElementById('fbLoadingState').classList.add('hidden');
       document.getElementById('fbNoticeState').classList.add('hidden');
       document.getElementById('fbFormState').classList.remove('hidden');
-
-      if (typeof showCatTip === 'function') {
-        showCatTip(`Meo~ meo! Chào mừng ${activeClientName} đã ghé thăm căn phòng hồi âm nha! 🐾✨`, 4000);
-      }
 
       fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
         .then(res => res.json())
@@ -4997,11 +4724,11 @@ window.onload = function() {
         .catch(() => {});
     }
 
-    // Nạp dữ liệu ngay khi mở trang
+    // Khởi chạy khi mở trang
     window.addEventListener('DOMContentLoaded', () => {
+      checkUrlForSessionParam();
       renderShopeeReviews('all');
       syncApprovedReviewsFromSheets();
-      if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
     });
   </script>
 </body>

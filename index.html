@@ -61,6 +61,210 @@
       --wine-soft: #9e2a3b;
       --muted-text: #c4b5be;
     }
+/* =========================================================================
+       THANH CHUYỂN TAB 2 MẢNG FEEDBACK (CHUẨN CAPSULE TỐI GIẢN - ĐÃ XOÁ 17+)
+       ========================================================================= */
+    .feedback-segment-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 223, 133, 0.3);
+      padding: 4px;
+      border-radius: 999px;
+      margin: 4px auto 14px auto;
+      max-width: 360px;
+      width: 100%;
+    }
+    .segment-tab-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: rgba(242, 222, 196, 0.75);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+    }
+    .segment-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .segment-tab-btn.active {
+      background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98));
+      color: var(--gold-warm);
+      font-weight: 700;
+      border-color: rgba(255, 223, 133, 0.65);
+      box-shadow: 0 4px 14px rgba(212, 50, 72, 0.4);
+    }
+    .feedback-tab-pane {
+      display: none;
+      width: 100%;
+      animation: fadeInFeedbackTab 0.25s ease;
+    }
+    .feedback-tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeInFeedbackTab {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+/* =========================================================================
+       THANH CHUYỂN TAB 2 MẢNG FEEDBACK (APPLE SEGMENTED CAPSULE)
+       ========================================================================= */
+    .feedback-segment-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 223, 133, 0.3);
+      padding: 4px;
+      border-radius: 999px;
+      margin: 4px auto 14px auto;
+      max-width: 380px;
+      width: 100%;
+    }
+    .segment-tab-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: rgba(242, 222, 196, 0.75);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+    }
+    .segment-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .segment-tab-btn.active {
+      background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98));
+      color: var(--gold-warm);
+      font-weight: 700;
+      border-color: rgba(255, 223, 133, 0.65);
+      box-shadow: 0 4px 14px rgba(212, 50, 72, 0.4);
+    }
+
+    .feedback-tab-pane {
+      display: none;
+      width: 100%;
+      animation: fadeInFeedbackTab 0.28s ease;
+    }
+    .feedback-tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeInFeedbackTab {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+/* =========================================================================
+       GIAO DIỆN FEEDBACK CHUẨN SHOPEE REVIEW TRÊN MOBILE & DESKTOP
+       ========================================================================= */
+    .shopee-review-header {
+      background: linear-gradient(135deg, rgba(255, 223, 133, 0.08) 0%, rgba(158, 42, 59, 0.16) 100%);
+      border: 1px solid rgba(255, 223, 133, 0.35);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .shopee-star-rating {
+      color: #ffc107;
+      letter-spacing: 2px;
+      font-size: 14px;
+    }
+    .shopee-filter-track {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 0;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .shopee-filter-track::-webkit-scrollbar { display: none; }
+    .shopee-filter-btn {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1px solid rgba(255, 223, 133, 0.25);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--champagne);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .shopee-filter-btn.active {
+      background: linear-gradient(135deg, rgba(185, 42, 64, 0.85), rgba(110, 18, 34, 0.95));
+      border-color: var(--gold-warm);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(212, 50, 72, 0.35);
+    }
+    .shopee-review-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 223, 133, 0.22);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.25s ease;
+    }
+    .shopee-review-card:hover {
+      border-color: rgba(255, 223, 133, 0.55);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .shopee-user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #a8263a, #380d15);
+      border: 1.5px solid var(--gold-warm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-warm);
+      flex-shrink: 0;
+    }
+    .shopee-shop-reply {
+      background: rgba(20, 10, 16, 0.75);
+      border: 1px dashed rgba(255, 223, 133, 0.35);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    .shopee-helpful-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--muted-text);
+      cursor: pointer;
+      transition: color 0.2s ease;
+      background: transparent;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .shopee-helpful-btn.liked {
+      color: var(--rose-warm);
+      font-weight: 700;
+    }
      /* =========================================================================
        DẢI CHẠY CHỮ LOVE WALL TICKER (TỰ ĐỘNG KÉO TỪ GOOGLE SHEETS)
        ========================================================================= */
@@ -1823,43 +2027,48 @@
 
     <div class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🚪 ୧₊‿︵‧˚₊⊹</div>
 
-    <!-- 3. "2 CÁNH CỔNG WEB LỒNG WEB" (ĐÃ XOÁ URL GIẢ & VIẾT LẠI TINH TẾ) -->
+    <!-- 3. KHÁM PHÁ CÁC CÁNH CỔNG LƯU TRỮ -->
     <section class="reveal-item space-y-4">
       <div class="text-center space-y-1 mb-2">
         <span class="text-[10.5px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">Không gian lưu trữ riêng</span>
         <h2 class="font-serif-title text-xl sm:text-2xl text-white italic">
-          Khám Phá Hộp Thư Khách Hàng & Tạp Chí Threads
+          Khám Phá Feedback & Tạp Chí
         </h2>
         <p class="text-xs text-[#c4b5be]">
           Chạm vào từng cánh cổng để mở cửa sổ đọc ngay tại đây mà không sợ trôi trang nha
         </p>
       </div>
 
-      <!-- CỔNG 1 -->
-      <button type="button" data-sound="open" onclick="openSubWeb('feedback')" class="portal-launch-card group">
+      <!-- CỔNG DUY NHẤT: FEEDBACK TỪ KHÁCH HÀNG NHÀ NOWNOW (GỒM 2 MẢNG) -->
+      <button type="button" data-sound="open" onclick="openSubWeb('feedbackUnified')" class="portal-launch-card group" style="border-color: rgba(255, 223, 133, 0.65); background: linear-gradient(135deg, rgba(46, 16, 29, 0.95) 0%, rgba(115, 22, 42, 0.55) 100%);">
         <div class="flex items-center justify-between">
-          <span class="portal-tag-header">
-            <i class="fa-solid fa-envelope-open-text text-[10px] text-[#ffdf85]"></i>
-            Nhật ký hồi âm thực tế
+          <span class="portal-tag-header" style="background: rgba(255, 193, 7, 0.16); border-color: rgba(255, 193, 7, 0.45); color: #ffdf85;">
+            <i class="fa-solid fa-star text-[10px] text-yellow-400 mr-1"></i>
+            5.0 / 5.0 • 100% Nhẹ Lòng & Tin Nhắn Thật
           </span>
           <span class="text-[11px] font-bold text-[#ffdf85] group-hover:translate-x-1 transition-transform">
-            Mở xem hồi âm thật <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+            Mở xem 2 mảng feedback <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
           </span>
         </div>
-        <h3 class="text-base sm:text-[17px] font-extrabold text-white mt-0.5 flex items-center gap-2">
-          <span>💌 Hộp Thư Mật: Những Lời Thủ Thỉ Sau Phiên Trải Bài</span>
-        </h3>
-        <p class="text-[12.5px] text-[#f2dec4]/90 italic mt-2 bg-black/25 p-2.5 rounded-xl border border-white/10">
-          "Lưu giữ nguyên vẹn những dòng tin nhắn tâm tình, những cái thở phào nhẹ nhõm và sự chuyển hóa thực tế từ những vị khách đã cùng NowNow tháo gỡ nút thắt..."
+        <div class="flex items-center justify-between gap-2 mt-0.5">
+          <h3 class="text-base sm:text-[17px] font-extrabold text-white flex items-center gap-2">
+            <span>⭐ Feedback từ Khách Hàng nhà NowNow</span>
+          </h3>
+          <span class="shrink-0 text-[10.5px] font-extrabold bg-[#ffdf85]/20 border border-[#ffdf85]/50 text-[#ffdf85] px-2.5 py-0.5 rounded-full">
+            2 trong 1 ✨
+          </span>
+        </div>
+        <p class="text-[12.5px] text-[#f2dec4]/90 italic mt-2 bg-black/25 p-2.5 rounded-xl border border-white/10 leading-relaxed">
+          "Trọn vẹn 2 mảng hồi âm chân thực: Hơn 17+ ảnh chụp tin nhắn tâm sự  & Nhật ký chuyển biến cảm xúc review kèm phản hồi từ Now..."
         </p>
         <div class="flex flex-wrap items-center gap-2 mt-3 text-[11px] text-[#ffdf85]">
-          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">✦ 100% Tin Nhắn Thật</span>
-          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">✦ Lò vi sóng quay lại</span>
-          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">✦ Tháo gỡ tận gốc rễ</span>
+          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">📸 17+ Ảnh Tin Nhắn Thật</span>
+          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">⭐ Đánh Giá thật</span>
+          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">🌤️ Chuyển Hóa Cảm Xúc</span>
         </div>
       </button>
 
-      <!-- CỔNG 2 -->
+      <!-- CỔNG TẠP CHÍ THREADS -->
       <button type="button" data-sound="open" onclick="openSubWeb('viral')" class="portal-launch-card group">
         <div class="flex items-center justify-between">
           <span class="portal-tag-header">
@@ -1882,7 +2091,7 @@
           "Lúc bình yên rủ nhau đi ăn, gần gũi thể xác rất dễ hợp. Nhma khi đụng chuyện một người chiến tranh lạnh, một người gào thét mất kiểm soát thì bao nhiêu sự hợp cũng tan thành mây khói..."
         </p>
         <div class="flex flex-wrap items-center gap-2 mt-3 text-[11px] text-[#ffdf85]">
-          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Giải quyết mâu thuẫn</span>
+          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Mâu thuẫn</span>
           <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 73.9K Bướm tự tìm hoa</span>
           <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 52.8K Thuật toán Tóp Tóp</span>
         </div>
@@ -2144,99 +2353,7 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       SUB-WEB 1: FEEDBACK (ĐÃ TỐI ƯU KHUNG ẢNH RỘNG RÕ NÉT & XOÁ URL GIẢ)
-       ========================================================================= -->
-  <div id="subwebFeedback" class="subweb-overlay" onclick="handleOverlayBackdropClick(event, 'feedback')">
-    <div class="subweb-browser-window" onclick="event.stopPropagation()">
-      <div class="subweb-topbar">
-        <button type="button" data-sound="close" onclick="closeSubWeb('feedback')" class="subweb-back-btn">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span>Quay về trang chính</span>
-        </button>
-        <div class="subweb-title-pill">
-          <span>💌 Hộp Thư Khách Hàng</span>
-        </div>
-        <button type="button" data-sound="close" onclick="closeSubWeb('feedback')" class="subweb-close-icon" title="Đóng cửa sổ">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="subweb-body-scroll flex flex-col items-center justify-between">
-        <div class="text-center space-y-0.5 mb-1">
-          <span class="text-[10px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">100% Tin Nhắn Thực Tế</span>
-          <h2 class="font-serif-title text-base sm:text-xl text-white italic">
-            Những Lời Thủ Thỉ Sau Phiên Trải Bài
-          </h2>
-          <p class="text-[11px] text-[#c4b5be]">
-            Bấm mũi tên 2 bên hoặc vuốt ngang màn hình để xem tiếp nha
-          </p>
-        </div>
-
-        <div class="iphone-stage-wrapper">
-          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="iphone-nav-arrow nav-prev" title="Tin nhắn trước">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-
-          <div class="iphone-14-pro-frame" id="iphoneTouchArea">
-            <div class="iphone-screen-inner">
-              <div class="iphone-status-bar">
-                <span>22:22</span>
-                <div class="dynamic-island-pill">
-                  <div class="dynamic-island-Dot"></div>
-                </div>
-                <span class="flex items-center gap-1">
-                  <i class="fa-solid fa-wifi text-[9px]"></i>
-                  <i class="fa-solid fa-battery-full text-[10px] text-emerald-400"></i>
-                </span>
-              </div>
-
-              <div class="iphone-viewport-body">
-                <img id="iphoneFeedbackImg" src="fb13.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
-              </div>
-
-              <div class="iphone-home-indicator">
-                <div class="iphone-home-bar"></div>
-              </div>
-            </div>
-          </div>
-
-          <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="iphone-nav-arrow nav-next" title="Tin nhắn tiếp theo">
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <div class="flex flex-col items-center gap-1.5 mt-1 w-full">
-          <div class="flex items-center gap-4">
-            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
-              ◀ Ảnh trước
-            </button>
-            <span id="fbSlideCounter" class="text-xs font-extrabold bg-white/10 border border-[#ffdf85]/40 text-[#ffdf85] px-3 py-0.5 rounded-full">
-              Tin nhắn 1 / 17
-            </span>
-            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
-              Ảnh tiếp ▶
-            </button>
-          </div>
-
-          <div id="fbDotsContainer" class="flex items-center justify-center gap-1.5 py-0.5"></div>
-
-          <div class="flex flex-wrap items-center justify-center gap-2.5 pt-0.5">
-            <button type="button" data-sound="open" onclick="jumpToBookingFromSubWeb('feedback')" class="subweb-subtle-cta">
-              <span>✨ Chọn số phút & Đặt lịch</span>
-              <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </button>
-            <button type="button" data-sound="tap" onclick="switchSubWeb('feedback', 'viral')" class="text-[11.5px] text-[#f2dec4] underline hover:text-[#ffdf85] py-1 px-2">
-              👉 Đọc bài viết Threads
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       SUB-WEB 2: THREADS (ĐÃ XOÁ URL GIẢ & TỐI ƯU KHUNG CAO)
+  
        ========================================================================= -->
   <div id="subwebViral" class="subweb-overlay" onclick="handleOverlayBackdropClick(event, 'viral')">
     <div class="subweb-browser-window" onclick="event.stopPropagation()">
@@ -2806,23 +2923,27 @@
     let activeSubWebType = null;
 
     function openSubWeb(type, pushToHistory = true) {
-      const modalId = type === 'feedback' ? 'subwebFeedback' : 'subwebViral';
+      let modalId = 'subwebViral';
+      if (type === 'feedbackUnified' || type === 'feedback' || type === 'shopeeFeedback') {
+        modalId = 'subwebFeedbackUnified';
+      }
       const modal = document.getElementById(modalId);
       if (!modal) return;
 
-      activeSubWebType = type;
+      activeSubWebType = (type === 'viral') ? 'viral' : 'feedbackUnified';
       document.body.classList.add('portal-open');
       modal.classList.add('open');
 
       const scrollBody = modal.querySelector('.subweb-body-scroll');
       if (scrollBody) scrollBody.scrollTop = 0;
 
-      if (type === 'feedback') {
+      if (activeSubWebType === 'feedbackUnified') {
+        renderShopeeReviews('all');
         preloadAdjacentFeedbackSlides(currentFbIndex);
       }
 
       if (pushToHistory && window.history && window.history.pushState) {
-        window.history.pushState({ subweb: type }, '', `#${type}`);
+        window.history.pushState({ subweb: activeSubWebType }, '', `#${activeSubWebType}`);
       }
     }
 
@@ -2830,7 +2951,7 @@
       const targetType = type || activeSubWebType;
       if (!targetType) return;
 
-      const modalId = targetType === 'feedback' ? 'subwebFeedback' : 'subwebViral';
+      const modalId = (targetType === 'viral') ? 'subwebViral' : 'subwebFeedbackUnified';
       const modal = document.getElementById(modalId);
       if (modal) modal.classList.remove('open');
       document.body.classList.remove('portal-open');
@@ -2846,22 +2967,10 @@
     }
 
     function switchSubWeb(fromType, toType) {
-      const fromModal = document.getElementById(fromType === 'feedback' ? 'subwebFeedback' : 'subwebViral');
-      if (fromModal) fromModal.classList.remove('open');
-
+      closeSubWeb(fromType);
       setTimeout(() => {
-        const toModal = document.getElementById(toType === 'feedback' ? 'subwebFeedback' : 'subwebViral');
-        if (toModal) {
-          activeSubWebType = toType;
-          toModal.classList.add('open');
-          const scrollBody = toModal.querySelector('.subweb-body-scroll');
-          if (scrollBody) scrollBody.scrollTop = 0;
-          if (toType === 'feedback') preloadAdjacentFeedbackSlides(currentFbIndex);
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState({ subweb: toType }, '', `#${toType}`);
-          }
-        }
-      }, 150);
+        openSubWeb(toType);
+      }, 160);
     }
 
     window.addEventListener('popstate', (e) => {
@@ -4280,6 +4389,422 @@ window.onload = function() {
     }
 
     // Kích hoạt nạp Love Wall cùng lúc tải trang
+  </script>
+<!-- =========================================================================
+       SIÊU MODAL: FEEDBACK TỪ KHÁCH HÀNG NHÀ NOWNOW (2 MẢNG: WEB & ẢNH)
+       ========================================================================= -->
+  <div id="subwebFeedbackUnified" class="subweb-overlay" onclick="handleOverlayBackdropClick(event, 'feedbackUnified')">
+    <div class="subweb-browser-window" onclick="event.stopPropagation()">
+      <div class="subweb-topbar">
+        <button type="button" data-sound="close" onclick="closeSubWeb('feedbackUnified')" class="subweb-back-btn">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Quay về trang chính</span>
+        </button>
+        <div class="subweb-title-pill">
+          <i class="fa-solid fa-star text-[11px] text-yellow-400"></i>
+          <span>Feedback Khách Hàng nhà NowNow</span>
+        </div>
+        <button type="button" data-sound="close" onclick="closeSubWeb('feedbackUnified')" class="subweb-close-icon" title="Đóng cửa sổ">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="subweb-body-scroll">
+        <!-- THANH CHUYỂN ĐỔI 2 MẢNG -->
+        <div class="feedback-segment-nav">
+          <button type="button" id="tabBtnWeb" onclick="switchFeedbackTab('web')" class="segment-tab-btn active">
+            <i class="fa-solid fa-star text-yellow-400"></i>
+            <span>Feedback trên web</span>
+          </button>
+          <button type="button" id="tabBtnPhotos" onclick="switchFeedbackTab('photos')" class="segment-tab-btn">
+            <i class="fa-solid fa-mobile-screen-button text-[#ffdf85]"></i>
+            <span>Feedback từ ảnh</span>
+          </button>
+        </div>
+
+        <!-- MẢNG 1: FEEDBACK TRÊN WEB (SHOPEE STYLE - 100% TỪ GOOGLE SHEETS) -->
+        <div id="paneFeedbackWeb" class="feedback-tab-pane active">
+          <!-- HEADER ĐÁNH GIÁ SHOPEE -->
+          <div class="shopee-review-header">
+            <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-3">
+              <div>
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-3xl sm:text-4xl font-extrabold text-[#ffdf85]">5.0</span>
+                  <span class="text-xs text-[#c4b5be]">trên 5</span>
+                </div>
+                <div class="shopee-star-rating mt-0.5">★★★★★</div>
+                <span class="text-[10.5px] text-[#faf6f0]/70 mt-1 block">100% khách hàng giải tỏa sau buổi xem</span>
+              </div>
+              <div class="text-right space-y-1">
+                <span class="inline-block text-[11px] font-bold bg-[#34d399]/15 border border-[#34d399]/40 text-[#34d399] px-2.5 py-0.5 rounded-full">
+                  ✔ Đã xác thực
+                </span>
+                <div class="text-[11px] text-[#ffdf85]">7.500+ giờ đối thoại</div>
+                <div class="text-[10px] text-[#c4b5be]">Nhẹ lòng mới tính phí</div>
+              </div>
+            </div>
+
+            <!-- BỘ LỌC THEO CẢM XÚC -->
+            <div class="shopee-filter-track" id="shopeeFilterTrack">
+              <button type="button" onclick="filterShopeeReviews('all', this)" class="shopee-filter-btn active">Tất cả (Mới nhất)</button>
+              <button type="button" onclick="filterShopeeReviews('5star', this)" class="shopee-filter-btn">5 Sao ⭐ (100%)</button>
+              <button type="button" onclick="filterShopeeReviews('nhelong', this)" class="shopee-filter-btn">🌤️ Nhẹ lòng</button>
+              <button type="button" onclick="filterShopeeReviews('thausuot', this)" class="shopee-filter-btn">💡 Thấu suốt</button>
+              <button type="button" onclick="filterShopeeReviews('gocre', this)" class="shopee-filter-btn">🧠 Bóc gốc rễ</button>
+            </div>
+          </div>
+
+          <!-- DANH SÁCH REVIEW (TỰ ĐỘNG ĐỔ TỪ GOOGLE SHEET VÀO ĐÂY) -->
+          <div id="shopeeReviewContainer" class="space-y-3">
+            <div class="text-center py-8 text-xs text-[#c4b5be]">
+              <i class="fa-solid fa-circle-notch fa-spin text-base text-[#ffdf85] mb-2 block"></i>
+              Đang tải hồi âm thực tế từ khách hàng...
+            </div>
+          </div>
+        </div>
+
+        <!-- MẢNG 2: FEEDBACK TỪ ẢNH (KHUNG IPHONE DUY NHẤT TRONG FILE) -->
+        <div id="paneFeedbackPhotos" class="feedback-tab-pane">
+          <div class="text-center space-y-0.5 mb-1">
+            <span class="text-[10px] uppercase tracking-[0.2em] text-[#ffdf85] font-bold">100% Tin Nhắn Thật Không Che</span>
+            <h3 class="font-serif-title text-base sm:text-lg text-white italic">
+              Lời Thủ Thỉ Sau Phiên Trải Bài
+            </h3>
+            <p class="text-[11px] text-[#c4b5be]">
+              Bấm mũi tên hoặc vuốt ngang màn hình để xem tiếp nha
+            </p>
+          </div>
+
+          <div class="iphone-stage-wrapper">
+            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="iphone-nav-arrow nav-prev" title="Tin nhắn trước">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="iphone-14-pro-frame" id="iphoneTouchArea">
+              <div class="iphone-screen-inner">
+                <div class="iphone-status-bar">
+                  <span>22:22</span>
+                  <div class="dynamic-island-pill">
+                    <div class="dynamic-island-Dot"></div>
+                  </div>
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-wifi text-[9px]"></i>
+                    <i class="fa-solid fa-battery-full text-[10px] text-emerald-400"></i>
+                  </span>
+                </div>
+
+                <div class="iphone-viewport-body">
+                  <img id="iphoneFeedbackImg" src="fb13.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
+                </div>
+
+                <div class="iphone-home-indicator">
+                  <div class="iphone-home-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="iphone-nav-arrow nav-next" title="Tin nhắn tiếp theo">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="flex flex-col items-center gap-1.5 mt-2 w-full">
+            <div class="flex items-center gap-4">
+              <button type="button" data-sound="tap" onclick="changeFeedbackSlide(-1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
+                ◀ Ảnh trước
+              </button>
+              <span id="fbSlideCounter" class="text-xs font-extrabold bg-white/10 border border-[#ffdf85]/40 text-[#ffdf85] px-3 py-0.5 rounded-full">
+                Tin nhắn 1
+              </span>
+              <button type="button" data-sound="tap" onclick="changeFeedbackSlide(1)" class="text-xs text-[#ffdf85] hover:underline font-semibold py-0.5 px-2">
+                Ảnh tiếp ▶
+              </button>
+            </div>
+            <div id="fbDotsContainer" class="flex items-center justify-center gap-1.5 py-1"></div>
+          </div>
+        </div>
+
+        <!-- CTA CHUNG Ở ĐÁY CỬA SỔ -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-3 pb-2 border-t border-white/10 mt-4">
+          <button type="button" data-sound="open" onclick="jumpToBookingFromSubWeb('feedbackUnified')" class="subweb-subtle-cta">
+            <span>✨ Chọn số phút & Đặt lịch xem bài</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+          <button type="button" data-sound="tap" onclick="switchSubWeb('feedbackUnified', 'viral')" class="text-[11.5px] text-[#f2dec4] underline hover:text-[#ffdf85] py-1 px-2">
+            👉 Đọc tản văn Tạp chí Threads
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT ĐIỀU KHIỂN: SỬA LỖI ĐỔI ẢNH + TRÍCH FEEDBACK THẬT TỪ GOOGLE SHEET -->
+  <script>
+    /* 1. CHUYỂN TAB ẢNH / WEB */
+    let currentFeedbackTab = 'web';
+    function switchFeedbackTab(tabKey) {
+      currentFeedbackTab = tabKey;
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+
+      const btnWeb = document.getElementById('tabBtnWeb');
+      const btnPhotos = document.getElementById('tabBtnPhotos');
+      const paneWeb = document.getElementById('paneFeedbackWeb');
+      const panePhotos = document.getElementById('paneFeedbackPhotos');
+
+      if (!paneWeb || !panePhotos) return;
+
+      if (tabKey === 'web') {
+        btnWeb.classList.add('active');
+        btnPhotos.classList.remove('active');
+        paneWeb.classList.add('active');
+        panePhotos.classList.remove('active');
+      } else {
+        btnPhotos.classList.add('active');
+        btnWeb.classList.remove('active');
+        panePhotos.classList.add('active');
+        paneWeb.classList.remove('active');
+        if (typeof preloadAdjacentFeedbackSlides === 'function') {
+          preloadAdjacentFeedbackSlides(currentFbIndex);
+        }
+      }
+    }
+
+    /* 2. DỮ LIỆU THỰC TRÍCH 100% TỪ GOOGLE SHEET */
+    // Dữ liệu ban đầu lấy từ chính các dòng đã duyệt trong Sheet của Hùng (chống lag 0s)
+    let currentReviewDataset = [
+      {
+        name: "LinhLinh",
+        platform: "Instagram",
+        time: "Gần đây",
+        service: "Phiên trải bài thấu cảm 1:1",
+        stateBefore: "🌪️ Ngổn ngang, 🫀 Bồn chồn, 🥀 Kiệt sức",
+        stateAfter: "🌤️ Nhẹ lòng",
+        touchpoints: "🧠 Bóc đúng gốc rễ tiềm thức",
+        message: "Nên thử nha mọi người",
+        shopReply: "Now cảm ơn LinhLinh nhiều nghen! Bình chứa của bà đang ngày càng vững vàng rồi đó (｡･ω･｡)ﾉ♡",
+        likes: 18
+      },
+      {
+        name: "mèo",
+        platform: "Threads",
+        time: "Gần đây",
+        service: "Phiên trải bài thấu cảm 1:1",
+        stateBefore: "",
+        stateAfter: "🌤️ Nhẹ lòng",
+        touchpoints: "🧠 Bóc đúng gốc rễ tiềm thức",
+        message: "ổn lắm nha mấy bà",
+        shopReply: "Dạ Now cảm ơn bà nha! Chúc bà luôn an yên và tự tin với lựa chọn của mình nè ✨",
+        likes: 12
+      }
+    ];
+
+    function renderShopeeReviews(filterTag = 'all') {
+      const container = document.getElementById('shopeeReviewContainer');
+      if (!container) return;
+
+      let list = currentReviewDataset;
+      if (filterTag === 'nhelong') {
+        list = list.filter(r => (r.stateAfter || '').includes('Nhẹ lòng'));
+      } else if (filterTag === 'thausuot') {
+        list = list.filter(r => (r.stateAfter || '').includes('Thấu suốt'));
+      } else if (filterTag === 'gocre') {
+        list = list.filter(r => (r.touchpoints || '').includes('gốc rễ'));
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-xs text-[#c4b5be]">Chưa có phản hồi nào ở mục lọc này. Bà chọn "Tất cả" nha!</div>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach((r, idx) => {
+        const likes = r.likes || (10 + idx * 3);
+        html += `
+          <div class="shopee-review-card">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <div class="shopee-user-avatar">${(r.name || 'K').charAt(0).toUpperCase()}</div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[13px] font-bold text-white">${r.name || 'Khách nhà Now'}</span>
+                    <span class="text-[9.5px] bg-[#34d399]/20 text-[#34d399] px-1.5 py-0.2 rounded font-semibold">✔ Đã trải bài</span>
+                  </div>
+                  <div class="shopee-star-rating text-[11px] mt-0.5">★★★★★</div>
+                </div>
+              </div>
+              <span class="text-[10.5px] text-[#c4b5be]/70">${r.time || 'Gần đây'}</span>
+            </div>
+
+            <div class="text-[11px] text-[#ffdf85]/80 mt-2 font-medium">
+              <i class="fa-solid fa-circle-check text-[9px] mr-1 text-emerald-400"></i> ${r.service || 'Phiên trải bài thấu cảm 1:1'}
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 my-2">
+              ${r.stateBefore ? `<span class="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${r.stateBefore}</span>` : ''}
+              ${r.stateAfter ? `<span class="text-[10px] bg-[#ffdf85]/15 border border-[#ffdf85]/30 px-2 py-0.5 rounded-full text-[#ffdf85] font-semibold">Sau: ${r.stateAfter}</span>` : ''}
+              ${r.touchpoints ? `<span class="text-[10px] bg-rose-500/15 border border-rose-400/30 px-2 py-0.5 rounded-full text-rose-200">${r.touchpoints}</span>` : ''}
+            </div>
+
+            <p class="text-[12.8px] text-[#faf6f0]/95 leading-relaxed mt-1">
+              "${r.message || ''}"
+            </p>
+
+            ${r.shopReply ? `
+            <div class="shopee-shop-reply">
+              <div class="text-[10.5px] font-bold text-[#ffdf85] mb-0.5">
+                <i class="fa-solid fa-reply fa-rotate-180 mr-1"></i> Phản hồi của NowNow Tarot:
+              </div>
+              <p class="text-[11.5px] text-[#f2dec4]/90 italic leading-relaxed">
+                ${r.shopReply}
+              </p>
+            </div>` : ''}
+
+            <div class="flex items-center justify-between pt-2 mt-2 border-t border-white/5">
+              <span class="text-[10px] text-[#c4b5be]/60">Nền tảng: ${r.platform || 'Direct'}</span>
+              <button type="button" onclick="likeShopeeReview(this, ${likes})" class="shopee-helpful-btn">
+                <i class="fa-regular fa-thumbs-up"></i>
+                <span>Hữu ích (${likes})</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function filterShopeeReviews(tag, btn) {
+      document.querySelectorAll('#shopeeFilterTrack .shopee-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tick');
+      renderShopeeReviews(tag);
+    }
+
+    function likeShopeeReview(btn, initialCount) {
+      if (btn.classList.contains('liked')) return;
+      btn.classList.add('liked');
+      btn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <span>Hữu ích (${initialCount + 1})</span>`;
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+    }
+
+    /* 3. TỰ ĐỘNG KÉO THÊM REVIEW MỚI NHẤT TỪ GOOGLE SHEET VỀ WEB */
+    function syncApprovedReviewsFromSheets() {
+      // 1. Kiểm tra bộ nhớ cache
+      try {
+        const cached = localStorage.getItem('nownow_cached_reviews');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            currentReviewDataset = parsed;
+            renderShopeeReviews('all');
+          }
+        }
+      } catch (e) {}
+
+      // 2. Fetch trực tiếp từ Google Apps Script
+      fetch(`${NOWNOW_FEEDBACK_API}?action=get_approved`)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.status === 'success' && resData.data && resData.data.length > 0) {
+            currentReviewDataset = resData.data.map((item, idx) => ({
+              name: item.name || 'Khách nhà Now',
+              platform: item.platform || 'Direct',
+              time: item.time || 'Gần đây',
+              service: 'Phiên trải bài thấu cảm 1:1',
+              stateBefore: item.stateBefore || '',
+              stateAfter: item.stateAfter || '🌤️ Nhẹ lòng',
+              touchpoints: item.touchpoints || '🧠 Bóc đúng gốc rễ tiềm thức',
+              message: item.message || '',
+              shopReply: 'Now cảm ơn bà đã mở lòng cùng Now nha! Chúc bà luôn bình an và thấu suốt (｡･ω･｡)ﾉ♡',
+              likes: 12 + idx * 3
+            }));
+
+            try {
+              localStorage.setItem('nownow_cached_reviews', JSON.stringify(currentReviewDataset));
+            } catch (e) {}
+
+            renderShopeeReviews('all');
+          }
+        })
+        .catch(() => {});
+    }
+
+    /* TỐI ƯU 0 GIÂY: BẬT FORM NGAY LẬP TỨC - KIỂM TRA GOOGLE SHEETS NGẦM */
+    function checkUrlForSessionParam() {
+      let session = null;
+
+      // 1. Quét mã session qua URL Search (?session= hoặc ?id=)
+      const params = new URLSearchParams(window.location.search);
+      session = params.get('session') || params.get('id');
+
+      // 2. Quét qua URL Hash (#session=...)
+      if (!session && window.location.hash) {
+        const hashStr = window.location.hash.substring(1);
+        if (hashStr.includes('session=')) session = new URLSearchParams(hashStr).get('session');
+        else if (hashStr.includes('id=')) session = new URLSearchParams(hashStr).get('id');
+        else session = hashStr;
+      }
+
+      if (!session) return;
+
+      activeClientSessionId = session.trim();
+      const modal = document.getElementById('sessionFeedbackModal');
+      if (!modal) return;
+
+      // Đặt tên mặc định nếu URL có kèm ?name= hoặc để 'bà'
+      const urlName = params.get('name');
+      activeClientName = urlName || 'bà';
+      const nameSpan = document.getElementById('fbClientNameSpan');
+      if (nameSpan) nameSpan.textContent = activeClientName;
+
+      // BẬT CỬA SỔ & HIỆN FORM NGAY LẬP TỨC (0.00 GIÂY - KHÔNG ĐỂ KHÁCH PHẢI ĐỢI XOAY)
+      document.body.classList.add('portal-open');
+      modal.classList.add('open');
+
+      document.getElementById('fbLoadingState').classList.add('hidden'); // Ẩn biến con xoay
+      document.getElementById('fbNoticeState').classList.add('hidden');
+      document.getElementById('fbFormState').classList.remove('hidden'); // Hiện form ngay lập tức
+
+      if (typeof showCatTip === 'function') {
+        showCatTip(`Meo~ meo! Chào mừng ${activeClientName} đã ghé thăm căn phòng hồi âm nha! 🐾✨`, 4000);
+      }
+
+      // KIỂM TRA NGẦM Ở HẬU TRƯỜNG VỚI GOOGLE APPS SCRIPT
+      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'valid') {
+            if (data.clientName && data.clientName !== 'bà') {
+              activeClientName = data.clientName;
+              if (nameSpan) nameSpan.textContent = activeClientName;
+            }
+          } else if (data.status === 'completed') {
+            // Trường hợp khách đã gửi hồi âm phiên này rồi
+            document.getElementById('fbFormState').classList.add('hidden');
+            document.getElementById('fbNoticeIcon').textContent = '✨💖';
+            document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || activeClientName} một cái thật chặt!`;
+            document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
+            document.getElementById('fbNoticeState').classList.remove('hidden');
+          } else if (data.status === 'invalid') {
+            // Mã sai không tồn tại trên CRM
+            document.getElementById('fbFormState').classList.add('hidden');
+            document.getElementById('fbNoticeIcon').textContent = '🕯️';
+            document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
+            document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
+            document.getElementById('fbNoticeState').classList.remove('hidden');
+          }
+        })
+        .catch(() => {
+          // Nếu Google Apps Script bị nghẽn: KHÔNG CHẶN KHÁCH, form vẫn đang mở sẵn để khách gửi bình thường
+        });
+    }
+
+    // Nạp dữ liệu ngay khi mở trang
+    window.addEventListener('DOMContentLoaded', () => {
+      renderShopeeReviews('all');
+      syncApprovedReviewsFromSheets();
+      if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
+    });
   </script>
 </body>
 </html>

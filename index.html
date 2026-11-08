@@ -2098,7 +2098,7 @@
               </div>
 
               <div class="iphone-viewport-body">
-                <img id="iphoneFeedbackImg" src="fb1.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
+                <img id="iphoneFeedbackImg" src="fb13.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
               </div>
 
               <div class="iphone-home-indicator">
@@ -2584,16 +2584,36 @@
     }
 
     /* =========================================================================
-       3. IPHONE 14 PRO CAROUSEL (.WEBP + FALLBACK .JPG + PRELOAD THÔNG MINH)
+       3. IPHONE 14 PRO CAROUSEL (DANH SÁCH THỨ TỰ TÙY CHỈNH THEO Ý SẾP)
        ========================================================================= */
-    const TOTAL_FEEDBACK_SLIDES = 17;
+    const FEEDBACK_LIST = [
+      'fb13', // 1. Ảnh 13 lên đầu tiên làm át chủ bài
+      'fb1',  // 2. Ảnh 1 thành số 2
+      'fb2',  // 3. Ảnh 2
+      'fb3',  // 4. Ảnh 3 thành số 4
+      'fb4',  // 5
+      'fb5',  // 6
+      'fb6',  // 7
+      'fb7',  // 8
+      'fb8',  // 9
+      'fb9',  // 10
+      'fb10', // 11
+      'fb11', // 12
+      'fb12', // 13
+      'fb14', // 14
+      'fb15', // 15
+      'fb16', // 16
+      'fb17'  // 17. Đầy đủ trọn bộ 17 ảnh trong thư mục
+    ];
+
+    const TOTAL_FEEDBACK_SLIDES = FEEDBACK_LIST.length;
     let currentFbIndex = 0;
     const preloadedImageCache = {};
 
     function loadFeedbackImageWithFallback(imgElement, slideIdx) {
-      const num = slideIdx + 1;
-      const webpSrc = `fb${num}.webp`;
-      const jpgSrc = `fb${num}.jpg`;
+      const fileBase = FEEDBACK_LIST[slideIdx] || `fb${slideIdx + 1}`;
+      const webpSrc = `${fileBase}.webp`;
+      const jpgSrc = `${fileBase}.jpg`;
 
       imgElement.onerror = function() {
         if (this.src.endsWith('.webp')) {

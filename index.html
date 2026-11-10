@@ -5134,7 +5134,7 @@ window.onload = function() {
     <span></span>
     <span></span>
   </div>
-  <span class="toc-trigger-label">Mục lục</span>
+  <span class="toc-trigger-label">Menuuu</span>
 </button>
 
 <!-- LỚP NỀN MỜ KHI MỞ MENU -->
@@ -5333,6 +5333,433 @@ window.onload = function() {
       });
     }, { passive: true });
   })();
+</script>
+<!-- =========================================================================
+     HỆ THỐNG CHUYỂN NGỮ SONG NGỮ VI / EN TỰ ĐỘNG (DOM SNAPSHOT & DYNAMIC HOOK)
+     ========================================================================= -->
+<style>
+  .nownow-lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 140;
+    display: inline-flex;
+    align-items: center;
+    background: rgba(20, 9, 16, 0.82);
+    border: 1.2px solid rgba(255, 223, 133, 0.48);
+    border-radius: 999px;
+    padding: 3.5px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 223, 133, 0.15);
+    user-select: none;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  body.portal-open .nownow-lang-switcher {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(20px);
+  }
+  .lang-pill-btn {
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: rgba(242, 222, 196, 0.7);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .lang-pill-btn.active {
+    background: linear-gradient(135deg, #b9263e, #701224);
+    color: #ffdf85;
+    border: 1px solid rgba(255, 223, 133, 0.65);
+    box-shadow: 0 2px 10px rgba(212, 50, 72, 0.4);
+  }
+  @media (max-width: 480px) {
+    .nownow-lang-switcher {
+      top: 12px;
+      right: 12px;
+      padding: 3px;
+    }
+    .lang-pill-btn {
+      padding: 4px 8.5px;
+      font-size: 10.5px;
+    }
+  }
+</style>
+
+<!-- NÚT CHUYỂN NGÔN NGỮ NỔI GÓC TRÊN BÊN PHẢI -->
+<div class="nownow-lang-switcher" title="Switch Language / Đổi ngôn ngữ">
+  <button type="button" id="langBtnVI" data-sound="tap" onclick="setNowNowLanguage('vi')" class="lang-pill-btn active">🇻🇳 VI</button>
+  <button type="button" id="langBtnEN" data-sound="tap" onclick="setNowNowLanguage('en')" class="lang-pill-btn">🇬🇧 EN</button>
+</div>
+
+<script>
+(function initNowNowBilingualEngine() {
+  window.currentNowNowLang = 'vi';
+  const viDomMemory = new Map();
+  let origCatPassive = [];
+  let origCatTarot = [];
+  let origCatActive = [];
+
+  // 1. BỘ TỪ ĐIỂN CHUYỂN NGỮ VĂN HÓA BẢN XỨ (THEO SELECTOR CHUẨN)
+  const EN_SELECTOR_MAP = {
+    // Header & Hero
+    '#sec-hero > p.uppercase': 'Rational Empathy • @nownowtarot',
+    '#sec-hero > .text-left > p:nth-of-type(1)': 'Hey soul, out of millions of posts out there, crossing paths in this little sanctuary is definitely a meaningful synchronicity (｡･ω･｡)ﾉ♡',
+    '#sec-hero > .text-left > p:nth-of-type(2)': 'If your mind feels tangled in love, career, or stuck replaying the same old emotional loop, I am here to help you untangle every knot using <b>Tarot blended with Cognitive Behavioral Psychology (CBT & Carl Jung)</b>—no fear-mongering, no vague fortune-telling, just straight to the root cause.',
+    '#sec-hero > .text-left > div.italic': '🧠 <b>Gentle Note:</b> Readings and dialogues at NowNow are designed for emotional resonance, cognitive reframing, and spiritual clarity—they do not replace clinical therapy or medical care.',
+    '#sec-hero .whisper-quote': '"Until we bring our hidden subconscious patterns into the light, they quietly steer our lives—and we end up calling it FATE."<span class="text-xs not-italic text-[#ffdf85] block mt-1">Carl Jung</span>',
+
+    // 3 Promises
+    '#sec-promises > .text-center > span': 'Signature Values',
+    '#sec-promises > .text-center > h2': '3 Promises Only at NowNow Tarot',
+    '#sec-promises .key-anchor-card:nth-of-type(2) .key-badge-pill': '<i class="fa-solid fa-heart-pulse"></i> 💝 LIFELONG COMPANIONSHIP',
+    '#sec-promises .key-anchor-card:nth-of-type(2) h3': 'Free Venting Forever • "One Reading, Friends for Life"',
+    '#sec-promises .key-anchor-card:nth-of-type(2) p': 'Our connection doesn’t end when the session is over! Whenever life feels heavy or late-night loneliness hits, you can always reach out and vent with me <b>100% free of charge ($0)</b> without booking a new reading ✧◝(⁰▿⁰)◜✧.',
+    '#sec-promises .key-anchor-card:nth-of-type(3) .key-badge-pill': '<i class="fa-solid fa-hourglass-half"></i> ⏳ COMPLETE PEACE OF MIND',
+    '#sec-promises .key-anchor-card:nth-of-type(3) h3': '$0 Deposit, Pay Only When Relieved • "Stop the Clock When You’re Ready"',
+    '#sec-promises .key-anchor-card:nth-of-type(3) p': 'Zero upfront deposit and no rigid packages cutting off your emotions mid-sentence. We talk until your mind feels truly clear, and you only pay for the actual minutes spent.',
+    '#sec-promises .key-anchor-card:nth-of-type(4) .key-badge-pill': '<i class="fa-solid fa-brain"></i> 🧠 7,500+ HOURS OF 1:1 DIALOGUE',
+    '#sec-promises .key-anchor-card:nth-of-type(4) h3': 'Tarot x CBT Psychology • "No Real Names Needed, 100% Human Intuition"',
+    '#sec-promises .key-anchor-card:nth-of-type(4) p': 'Distilled from over <b>7,500+ hours of deep 1:1 listening</b>, combining <b>Cognitive Behavioral Therapy (CBT) principles, Jungian shadow work</b>, and real-world life experience. 100% human empathy—never AI-generated scripts, and no personal birth data or legal names required.',
+
+    // Portals Section
+    '#sec-portals > .text-center > span': 'Curated Sanctuary Archives',
+    '#sec-portals > .text-center > h2': 'Explore Client Stories & Mindful Journal',
+    '#sec-portals > .text-center > p': 'Tap each portal to open an instant reading window right here without losing your spot',
+
+    // Portal 1: Feedback
+    '#sec-portals button[onclick*="feedbackUnified"] .portal-tag-header': '<i class="fa-solid fa-star text-[10px] text-yellow-400 mr-1"></i> 5.0 / 5.0 • 100% Authentic Chats & Relief',
+    '#sec-portals button[onclick*="feedbackUnified"] > div:first-child > span:last-child': 'Explore 2 feedback hubs <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>',
+    '#sec-portals button[onclick*="feedbackUnified"] h3 span': '⭐ Soulful Reviews from NowNow Clients',
+    '#sec-portals button[onclick*="feedbackUnified"] > div:nth-child(2) > span': '2-in-1 ✨',
+    '#sec-portals button[onclick*="feedbackUnified"] > p.italic': '"Explore two real-life archives: Unfiltered iPhone chat screenshots & emotional shift journals with personal replies from Now..."',
+    '#sec-portals button[onclick*="feedbackUnified"] .mt-2\\.5 > div:first-child > span:first-child': '<i class="fa-solid fa-heart-pulse text-rose-400 mr-1"></i> Latest Soulful Echoes',
+    '#sec-portals button[onclick*="feedbackUnified"] .mt-2\\.5 > div:first-child > span:last-child': 'Auto-synced from real clients',
+    '#sec-portals button[onclick*="feedbackUnified"] > div:last-child': '<span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">📸 Real Chat Captures</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">⭐ Verified Reviews</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">🌤️ Emotional Shifts</span>',
+
+    // Portal 2: Viral Threads
+    '#sec-portals button[onclick*="viral"] .portal-tag-header': '<i class="fa-brands fa-threads text-[11px] text-[#ffdf85]"></i> Psychology & Grounded Perspectives',
+    '#sec-portals button[onclick*="viral"] > div:first-child > span:last-child': 'Read full journal <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>',
+    '#sec-portals button[onclick*="viral"] h3': '🧵 Mindful Journal: Viral Threads Insights',
+    '#sec-portals button[onclick*="viral"] > div:nth-child(2) > span': '🔥 200K+ Views',
+    '#sec-portals button[onclick*="viral"] > p.italic': '"When everything is peaceful, grabbing food, small talk, or physical intimacy feels effortlessly compatible. But when conflict hits and one person stonewalls while the other spirals—all that initial chemistry turns to dust..."',
+    '#sec-portals button[onclick*="viral"] > div:last-child': '<span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Conflict Styles</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 73.9K Blooming Garden</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 52.8K Fate Algorithm</span>',
+
+    // Booking Section
+    '#sec-booking > .text-center > span': '✨ Personalized 1:1 Sanctuary ✨',
+    '#sec-booking > .text-center > h2': '3-Step Journey & Duration Estimator',
+    '#sec-booking .highlight-motto-banner': '✦ No rigid packages cutting off your feelings • Pay only for the time we actually talk ✦',
+
+    // 3 Steps
+    '#sec-booking .interactive-step-card:nth-of-type(1) > div:first-child': 'Before the Session • Pick Your Vibe',
+    '#sec-booking .interactive-step-card:nth-of-type(1) > p': 'Share a quick note about your current situation (no need to prepare formal questions). Pick the channel you feel most comfortable with:',
+    '#chanVoiceBtn': '🎙️ Two-Way Voice Notes',
+    '#chanMeetBtn': '💻 Live Call (Google Meet + Recording)',
+
+    '#sec-booking .interactive-step-card:nth-of-type(2) > div:first-child': 'During the Session • What’s on Your Mind?',
+    '#sec-booking .interactive-step-card:nth-of-type(2) > p': 'Two-way deep dialogue getting straight to the root without a ticking countdown. Tap one or more areas below:',
+    '#topicTagGroup button:nth-child(1)': '💘 Love / Crush / Exes',
+    '#topicTagGroup button:nth-child(2)': '💼 Career & Life Direction',
+    '#topicTagGroup button:nth-child(3)': '🔄 Breaking Old Loops',
+    '#topicTagGroup button:nth-child(4)': '🌱 Deep Self-Discovery',
+
+    '#sec-booking .interactive-step-card:nth-of-type(3) > div:first-child': 'After the Session • Keep Your Recordings & Pay with Peace',
+    '#sec-booking .interactive-step-card:nth-of-type(3) > p': 'Receive full spread photos + private audio/YouTube recordings to revisit anytime. <b>Only settle payment once your heart feels lighter</b> & unlock lifetime free check-ins!',
+
+    // Slider & Buttons
+    '#tfBtnDay': '☀️ Daytime (9 AM – 12 AM)',
+    '#tfBtnNight': '🌙 Night Owl (12 AM – 4 AM)',
+    '#sec-booking .pt-2 > div:nth-child(2) > div:first-child > span:first-child': 'Estimated duration:',
+    '#sec-booking .pt-2 > div:nth-child(2) > div:last-child > span:first-child': 'Estimated fee (VND):',
+    '.milestone-tick-btn[data-min="15"]': '15m (Min)',
+    '.milestone-tick-btn[data-min="30"]': '30m',
+    '.milestone-tick-btn[data-min="60"]': '60m',
+    '.milestone-tick-btn[data-min="90"]': '90m',
+    '.milestone-tick-btn[data-min="120"]': '2h',
+    '.milestone-tick-btn[data-min="180"]': '3h',
+
+    '.booking-cta-messenger .text-left > div:first-child': 'Book Session via Messenger',
+    '.booking-cta-messenger .text-left > div:last-child': '⚡ Auto-copies your duration & topic • Just Paste & Send',
+    '.booking-cta-messenger .cta-action-pill': 'Send Now ➔',
+    '.booking-cta-instagram .text-left > div:first-child': 'Message via Instagram @nownowtarot',
+    '.booking-cta-instagram .text-left > div:last-child': '✨ Auto-copies your booking note • Instant DM',
+    '.booking-cta-instagram .cta-action-pill': 'Open IG ➔',
+
+    // Footer
+    '#sec-social > .text-center > span': 'Stay Connected in Good Energy',
+    '#sec-social > .text-center > h3': 'Visit NowNow’s Little Cozy Corners',
+    '#sec-social > .text-center > p': 'Not ready for a full reading today? Feel free to drop by my social channels for daily psychology insights, collective spreads, and gentle reminders (｡･ω･｡)ﾉ♡',
+    '#sec-social .social-invite-card:nth-child(1) .social-sub-desc': 'Psychology essays & viral reflections',
+    '#sec-social .social-invite-card:nth-child(2) .social-sub-desc': 'Daily stories & Primary DM inbox',
+    '#sec-social .social-invite-card:nth-child(3) .social-sub-desc': 'Official Page & Quick Booking',
+    '#sec-social .social-invite-card:nth-child(4) .social-sub-desc': 'Healing videos & collective Tarot',
+    '#sec-social > p:last-child': '© NowNow Tarot • Rational Empathy (@nownowtarot)',
+
+    // Table of Contents Drawer
+    '#tocHamburgerBtn .toc-trigger-label': 'Menu',
+    '#tocDrawer .toc-brand-mini > div:last-child > div:last-child': 'Navigation Compass • Tap to jump',
+    '#tocDrawer .toc-section-caption:nth-of-type(1)': '📍 Main Sanctuary Sections',
+    '#tocDrawer button[data-target="sec-hero"] .toc-item-title': 'Introduction',
+    '#tocDrawer button[data-target="sec-hero"] .toc-item-sub': 'Tarot x CBT & Carl Jung Psychology',
+    '#tocDrawer button[data-target="sec-promises"] .toc-item-title': '3 Signature Promises',
+    '#tocDrawer button[data-target="sec-promises"] .toc-item-sub': 'Lifetime free venting • $0 deposit',
+    '#tocDrawer button[data-target="sec-portals"] .toc-item-title': 'Client Stories & Journal',
+    '#tocDrawer button[data-target="sec-portals"] .toc-item-sub': 'Real chat captures & viral essays',
+    '#tocDrawer button[data-target="sec-booking"] .toc-item-title': 'Pricing & Booking Flow',
+    '#tocDrawer button[data-target="sec-booking"] .toc-item-sub': 'Interactive duration slider (15m - 3h)',
+    '#tocDrawer button[data-target="sec-social"] .toc-item-title': 'Cozy Social Channels',
+    '#tocDrawer button[data-target="sec-social"] .toc-item-sub': 'Threads, IG, Facebook & TikTok',
+    '#tocDrawer .toc-section-caption:nth-of-type(2)': '⚡ Quick Archive Portals',
+    '#tocDrawer button[onclick*="feedbackUnified"] .toc-item-title': 'Open Client Feedback Hub',
+    '#tocDrawer button[onclick*="feedbackUnified"] .toc-item-sub': '20 iPhone captures & shift journals',
+    '#tocDrawer button[onclick*="viral"] .toc-item-title': 'Open Mindful Journal',
+    '#tocDrawer button[onclick*="viral"] .toc-item-sub': 'Read 200K+ view Threads reflections',
+    '#tocDrawer .toc-drawer-footer button span': '💌 Pick Duration & Book Now',
+
+    // Copy Modal & Subwebs
+    '#copyConfirmModal h3': 'Booking Note Copied to Clipboard!',
+    '#copyConfirmModal p': 'Once inside <b id="copyModalPlatformName" class="text-[#ffdf85]">Messenger</b>, simply <b>Paste</b> your note into the chat box and hit send!',
+    '#copyModalOpenNowBtn span': 'Open App Now',
+
+    '#subwebFeedbackUnified .subweb-back-btn span': 'Back to Main Page',
+    '#subwebFeedbackUnified .subweb-title-pill span': 'NowNow Client Feedback Hub',
+    '#tabBtnPhotos span': 'Chat Screenshots',
+    '#tabBtnWeb span': 'Web Reviews',
+    '#paneFeedbackPhotos h3': 'Heartfelt Whispers After Our Sessions',
+    '#paneFeedbackPhotos > div:last-child button[onclick*="-1"]': '◀ Prev',
+    '#paneFeedbackPhotos > div:last-child button[onclick*="1"]': 'Next ▶',
+    '#paneFeedbackPhotos .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
+    '#paneFeedbackWeb .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
+
+    // Viral Threads Subweb
+    '#subwebViral .subweb-back-btn span': 'Back to Main Page',
+    '#subwebViral .subweb-title-pill span': 'Mindful Journal',
+    '#subwebViral .subweb-body-scroll > .text-center > span': 'Psychological Perspectives • Original Threads Insights',
+    '#subwebViral .subweb-body-scroll > .text-center > h2': 'Mindful Journal on Threads @nownowtarot',
+    '#subwebViral .subweb-body-scroll > .text-center > p': 'Grounded reflections resonating with hundreds of thousands of young souls',
+    '#subwebViral .subweb-body-scroll > .text-center button': '👉 Switch to Real Client Chat Screenshots',
+    '#subwebViral .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
+
+    // 11 Viral Threads Posts (Culturally Adapted to Western Psychology & Gen-Z/Millennial Tone)
+    '#subwebViral .threads-post-card:nth-of-type(1) p': '"Let me add one crucial thing: compatibility in how you resolve conflict. When everything is peaceful, grabbing good food, small talk, or physical chemistry is super easy. But when conflict hits and one person chooses stonewalling and silent treatment while the other spirals into emotional outbursts—all that initial compatibility vanishes into thin air."',
+    '#subwebViral .threads-post-card:nth-of-type(2) p': '"Spot on—or more accurately, real love shows up when you’re busy pouring energy back into yourself. When you stop treating a relationship like a life KPI and redirect that focus into upgrading your skills, wellness, and career, you naturally bloom. When a tree blossoms, butterflies come on their own—nobody attracts butterflies by whistling in an empty dirt lot."',
+    '#subwebViral .threads-post-card:nth-of-type(3) p': '"Fun neuroscience fact: about 90% of your serotonin is produced in your gut, not your brain. So when your mental health hits rock bottom and your gut microbiome gets thrown off balance, sugar-craving bacteria send signals straight up the vagus nerve to hijack your brain into craving sweets. Half the time it’s not even you wanting cake—it’s your gut bacteria driving the wheel 👀👀🥹"',
+    '#subwebViral .threads-post-card:nth-of-type(4) p': '"Reading Tarot made me realize fate works just like the TikTok algorithm. If you repeat the exact same daily route—work -> school -> same old friend group—the algorithm tags your life as \'full capacity\' and stops recommending new people. Serendipity is like the \'For You\' discovery feed. To trigger new connections, you have to feed the algorithm new keywords: take a different street, work at a new café, or learn a random skill."',
+    '#subwebViral .threads-post-card:nth-of-type(5) p': '"Working in spirituality, I deeply believe this—with a twist. Sometimes the universe blocks something not because it’s toxic, but because it’s too massive for your current emotional vessel. Like plugging 220V current into a 110V lightbulb—it’ll shatter. A delayed blessing is often an emergency brake giving you time to upgrade your inner grounding before receiving it."',
+    '#subwebViral .threads-post-card:nth-of-type(6) p': '"You sound like a classic blend of hyper-vigilance and romantic starvation—craving deep romance while keeping your guard at maximum alert. You’re not single because you lack options; your subconscious has simply raised its safety threshold so high that no one can hurt you again. Be gentle with yourself—when your nervous system truly feels safe, it’ll lower the shield."',
+    '#subwebViral .threads-post-card:nth-of-type(7) p': '"Honestly, the people in Gladwell’s Outliers didn’t magically know their passion from day one either :))) The real loop is: try something -> realize you can tolerate its boredom longer than others -> get positive feedback -> brain releases dopamine -> keep grinding until you hit 10,000 hours. Finding your strength comes from experimenting enough to see what kind of struggle you’re most resilient to."',
+    '#subwebViral .threads-post-card:nth-of-type(8) p': '"Couldn’t agree more. We need to draw a clear line: fake flexing is an ego issue, while living in a humble rented room is just your starting point. Not being born with a silver spoon never means you aren’t allowed to treat yourself with dignity and grace."',
+    '#subwebViral .threads-post-card:nth-of-type(9) p': '"I believe in divine timing, but where empirical psychology meets mysticism. The \'right time\' isn’t a fixed date on a cosmic calendar—it’s the intersection of inner readiness and expanding your surface area for luck by stepping out into the world. When your mindset is ready, you naturally broadcast signals on the right frequency."',
+    '#subwebViral .threads-post-card:nth-of-type(10) p': '"You aren’t heartless at all—you’re actually deeply sensitive. Because your heart bruises so easily, your brain puts on an \'I don’t care either way\' armor to protect you. Feeling emotionally numb or floating is just your nervous system flipping the circuit breaker to prevent overload. Stop being so hard on yourself."',
+    '#subwebViral .threads-post-card:nth-of-type(11) p': '"I used to get trapped in this exact same mental loop. It’s like passing through 3 layers: Layer 1 is Awareness (knowing what you’re doing) -> Layer 2 is Metacognition (analyzing the root cause of why you did it) -> Layer 3 is Over-analysis (dissecting every thought until you’re exhausted and nauseous :)))))"'
+  };
+
+  // 2. BỘ LỜI THOẠI BÉ MÈO ĐEN & LÁ BÀI TAROT BẰNG TIẾNG ANH BẢN XỨ
+  const EN_CAT_PASSIVE = [
+    "Meow~ Tap me to hear a real kitten purr, or drag me around the screen to hang out! 🐾",
+    "Miaow~ One session with NowNow unlocks free lifetime venting ($0 forever)! 💝",
+    "Mew~ $0 upfront deposit here—you only pay when your heart feels lighter! ✨",
+    "Meow~ Combining Tarot with CBT & Carl Jung psychology—no real name or birth date needed! 🧠",
+    "Miaow~ Even 3-month silent exes come back! Open the Feedback Hub to read real iPhone chats! 📱",
+    "Mew~ Have you read the 52K-view 'TikTok Algorithm of Fate' post in our Journal yet? 🧵",
+    "Meow~ Tossing and turning late at night? Pick the Night Owl slot (12 AM – 4 AM)! 🌙",
+    "Miaow~ Do you prefer two-way Voice Notes or a live Google Meet call with recording? 🎙️",
+    "Mew~ Got something specific on your mind? Type it into the note box in Step 2! ✍️",
+    "Meow~ Whether it’s 15 mins or 60 mins, we’ll untangle every emotional knot together! ⏳",
+    "Miaow~ Tap me 3 times in a row and I’ll pull a free mini Tarot card just for you! 🎴✨"
+  ];
+
+  const EN_CAT_TAROT = [
+    "🎴 <b>The Star:</b> Healing energy is on its way! After this emotional storm, you will rediscover crystal-clear peace and hope ✨",
+    "🎴 <b>Wheel of Fortune:</b> Old exhausting cycles are closing! An unexpected turning point bringing fresh energy is knocking on your door 🎡",
+    "🎴 <b>The Empress:</b> Time to pour love back into yourself! When you nurture your own garden, the right butterflies naturally arrive 👑",
+    "🎴 <b>Strength:</b> You are far more resilient than you realize! This knot won’t break you—it’s only sharpening your inner wisdom 🦁",
+    "🎴 <b>The Lovers:</b> Don’t make permanent choices out of temporary fear. Listen to the quiet truth beneath your anxiety 💞",
+    "🎴 <b>Ace of Cups:</b> Your emotional cup is about to be replenished with genuine warmth, clarity, and empathy 🏆",
+    "🎴 <b>The Hermit:</b> Step back to see the deeper psychological root. The answer you seek is waiting in our upcoming conversation 🏮"
+  ];
+
+  const EN_CAT_ACTIVE = [
+    "Meow~ purr~! Hear that little kitten meow cheering you on, bestie? 🐾✨",
+    "Miaow~ Right under the chin! Sending you the warmest cozy vibes! 😻",
+    "Mew~ Tap me one more time and I’ll draw a special Tarot message for you right now! 🎴"
+  ];
+
+  // 3. CHỤP ẢNH DOM TIẾNG VIỆT GỐC TRƯỚC KHI DỊCH
+  function captureVietnameseSnapshot() {
+    if (viDomMemory.size > 0) return;
+    Object.keys(EN_SELECTOR_MAP).forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) viDomMemory.set(sel, el.innerHTML);
+    });
+    const inputEl = document.getElementById('bookingTopicInput');
+    if (inputEl) viDomMemory.set('#bookingTopicInput_placeholder', inputEl.getAttribute('placeholder'));
+
+    if (typeof catPassiveDialogues !== 'undefined') origCatPassive = [...catPassiveDialogues];
+    if (typeof catTarotMiniCards !== 'undefined') origCatTarot = [...catTarotMiniCards];
+    if (typeof catActiveClickDialogues !== 'undefined') origCatActive = [...catActiveClickDialogues];
+  }
+
+  // 4. OVERRIDE CÁC HÀM ĐỘNG (SLIDER, BÁO GIÁ, TIN NHẮN COPY) ĐỂ TỰ ĐỘNG HIỂU SONG NGỮ
+  const origGetMilestoneDetails = window.getMilestoneDetails;
+  window.getMilestoneDetails = function(m) {
+    if (window.currentNowNowLang !== 'en') return origGetMilestoneDetails(m);
+    if (m <= 30) {
+      return {
+        badge: '✦ 15 – 30 Mins: Straight to the Core & Quick Clarity',
+        solve: '<b>What we cover:</b> Tackles <b>any pressing question on your mind</b> (love, career, or a specific crossroads). Ideal when your story is concise and you need to see the core truth and practical direction right away.'
+      };
+    } else if (m <= 60) {
+      return {
+        badge: '✦ 35 – 60 Mins: Deep & Holistic Unpacking (Most Popular ✨)',
+        solve: '<b>What we cover:</b> Explores <b>all aspects from relationships and career to inner patterns</b>. The sweet spot to not only untangle surface symptoms but also bring subconscious roots into the light at a relaxed, thorough pace.'
+      };
+    } else if (m <= 120) {
+      return {
+        badge: '✦ 65 – 120 Mins: Multi-Layered Dive for Complex Stories',
+        solve: '<b>What we cover:</b> Covers <b>intertwined life areas and complex relationship dynamics</b>. Perfect when your situation has multiple overlapping layers or long-standing loops that need deep cognitive reframing.'
+      };
+    } else {
+      return {
+        badge: '✦ 2 – 3 Hours (125 – 180m): Unlimited In-Depth Sanctuary',
+        solve: '<b>What we cover:</b> Complete roadmap for <b>major life transitions, love, career, and personal healing</b>. For days when your heart feels overwhelmed and you want to pour everything out and rebuild an A-to-Z action plan.'
+      };
+    }
+  };
+
+  const origRenderMinutesState = window.renderMinutesState;
+  window.renderMinutesState = function(mins, notifyCat = false, exactPct = null) {
+    origRenderMinutesState(mins, notifyCat, exactPct);
+    if (window.currentNowNowLang === 'en') {
+      const m = parseInt(mins, 10);
+      const minDisplay = document.getElementById('sliderMinutesDisplay');
+      const subDisplay = document.getElementById('sliderHoursSubtext');
+      const priceK = calculatePriceK(m, currentTimeframe);
+
+      if (minDisplay) minDisplay.textContent = `${m} mins`;
+      if (subDisplay) {
+        if (m === 60) subDisplay.textContent = '(Most Popular ✨)';
+        else if (m === 15) subDisplay.textContent = '(Minimum)';
+        else if (m >= 120) {
+          const hrs = (m / 60).toFixed(m % 60 === 0 ? 0 : 1);
+          subDisplay.textContent = `(${hrs} hrs)`;
+        } else subDisplay.textContent = '';
+      }
+      if (notifyCat && typeof showCatTip === 'function') {
+        showCatTip(`Meow~! You selected <b>${m} mins (~${priceK}K VND)</b>. Hit the booking button and I’ll auto-copy your note! 🐾`, 3400);
+      }
+    }
+  };
+
+  const origSelectTimeframe = window.selectTimeframe;
+  window.selectTimeframe = function(tf) {
+    origSelectTimeframe(tf);
+    if (window.currentNowNowLang === 'en') {
+      const ruleSummary = document.getElementById('pricingRuleSummary');
+      if (ruleSummary) {
+        ruleSummary.innerHTML = tf === 'day'
+          ? 'Transparent Rate: <b>30m (59K VND)</b> • <b>60m (99K VND)</b> • Extra time only <b>+1.5K/min</b> (Pay only after your session).'
+          : 'Night Owl Rate (12 AM–4 AM): <b>30m (119K VND)</b> • <b>60m (169K VND)</b> • Extra time <b>+2.5K/min</b> (Pay after session).';
+      }
+    }
+  };
+
+  const origBuildBookingMessage = window.buildBookingMessage;
+  window.buildBookingMessage = function() {
+    if (window.currentNowNowLang !== 'en') return origBuildBookingMessage();
+    const tfLabel = currentTimeframe === 'day' ? 'Daytime (9:00 AM – 12:00 AM)' : 'Night Owl (12:00 AM – 4:00 AM)';
+    const priceK = calculatePriceK(currentMinutes, currentTimeframe);
+    const chanEN = currentChannel.includes('Voice') ? 'Two-Way Voice Notes' : 'Live Call (Google Meet + Recording)';
+    const selectedTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active')).map(b => b.textContent.trim());
+    const customNote = document.getElementById('bookingTopicInput').value.trim();
+    const combinedTopic = [selectedTags.join(', '), customNote].filter(Boolean).join(' | ') || 'Looking for deep clarity & guidance with NowNow';
+
+    return `Hi NowNow Tarot! 🐾
+I'd love to book a 1:1 Tarot & CBT session:
+• Estimated Duration: ~${currentMinutes} mins (~${priceK}K VND - billed by actual time)
+• Time Slot: ${tfLabel}
+• Preferred Channel: ${chanEN}
+• What's on my mind: ${combinedTopic}`;
+  };
+
+  // 5. HÀM CHUYỂN NGỮ CHÍNH (CHẠY MƯỢT TRONG 0.05 GIÂY)
+  window.setNowNowLanguage = function(lang) {
+    captureVietnameseSnapshot();
+    window.currentNowNowLang = lang;
+    document.documentElement.lang = lang;
+
+    document.getElementById('langBtnVI')?.classList.toggle('active', lang === 'vi');
+    document.getElementById('langBtnEN')?.classList.toggle('active', lang === 'en');
+
+    const inputEl = document.getElementById('bookingTopicInput');
+
+    if (lang === 'en') {
+      Object.entries(EN_SELECTOR_MAP).forEach(([sel, enHtml]) => {
+        const el = document.querySelector(sel);
+        if (el) el.innerHTML = enHtml;
+      });
+      if (inputEl) inputEl.setAttribute('placeholder', '✍️ Or type any specific story, context, or preferred time slot right here...');
+
+      if (typeof catPassiveDialogues !== 'undefined') {
+        catPassiveDialogues.length = 0;
+        catPassiveDialogues.push(...EN_CAT_PASSIVE);
+      }
+      if (typeof catTarotMiniCards !== 'undefined') {
+        catTarotMiniCards.length = 0;
+        catTarotMiniCards.push(...EN_CAT_TAROT);
+      }
+      if (typeof catActiveClickDialogues !== 'undefined') {
+        catActiveClickDialogues.length = 0;
+        catActiveClickDialogues.push(...EN_CAT_ACTIVE);
+      }
+      if (typeof showCatTip === 'function') {
+        showCatTip('Meow~! Switched to English! Ready to untangle your thoughts together 🐾✨', 3800);
+      }
+    } else {
+      viDomMemory.forEach((viHtml, sel) => {
+        if (sel === '#bookingTopicInput_placeholder') return;
+        const el = document.querySelector(sel);
+        if (el) el.innerHTML = viHtml;
+      });
+      if (inputEl && viDomMemory.has('#bookingTopicInput_placeholder')) {
+        inputEl.setAttribute('placeholder', viDomMemory.get('#bookingTopicInput_placeholder'));
+      }
+      if (typeof catPassiveDialogues !== 'undefined' && origCatPassive.length) {
+        catPassiveDialogues.length = 0;
+        catPassiveDialogues.push(...origCatPassive);
+      }
+      if (typeof catTarotMiniCards !== 'undefined' && origCatTarot.length) {
+        catTarotMiniCards.length = 0;
+        catTarotMiniCards.push(...origCatTarot);
+      }
+      if (typeof catActiveClickDialogues !== 'undefined' && origCatActive.length) {
+        catActiveClickDialogues.length = 0;
+        catActiveClickDialogues.push(...origCatActive);
+      }
+      if (typeof showCatTip === 'function') {
+        showCatTip('Meo~ meo! Đã quay về Tiếng Việt thân thương của nhà NowNow rồi nè bà ơi! 🐾💖', 3800);
+      }
+    }
+
+    // Đồng bộ lại trạng thái Thanh trượt & Khung giờ theo ngôn ngữ mới
+    window.selectTimeframe(currentTimeframe);
+    window.renderMinutesState(currentMinutes, false);
+    try { localStorage.setItem('nownow_preferred_lang', lang); } catch (e) {}
+  };
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      captureVietnameseSnapshot();
+      try {
+        const savedLang = localStorage.getItem('nownow_preferred_lang');
+        if (savedLang === 'en') window.setNowNowLanguage('en');
+      } catch (e) {}
+    }, 120);
+  });
+})();
 </script>
 </body>
 </html>

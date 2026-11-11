@@ -1364,6 +1364,75 @@
       color: var(--gold-warm);
       box-shadow: 0 4px 14px rgba(212, 50, 72, 0.35);
     }
+/* =========================================================================
+       NÚT NGÀY / ĐÊM ĐỘC QUYỀN: TO ĐẸP TRÊN PC - GỌN GÀNG RỚT DÒNG TRÊN MOBILE
+       ========================================================================= */
+    .timeframe-select-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--champagne);
+      border: 1.5px solid rgba(242, 222, 196, 0.28);
+      background: rgba(0, 0, 0, 0.38);
+      border-radius: 999px;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+    .timeframe-select-btn:hover {
+      border-color: rgba(255, 223, 133, 0.65);
+      color: #ffffff;
+      transform: translateY(-1.5px);
+    }
+    .timeframe-select-btn.active {
+      background: linear-gradient(135deg, rgba(185, 42, 64, 0.88), rgba(115, 22, 38, 0.98));
+      border-color: var(--gold-warm);
+      color: var(--gold-warm);
+      box-shadow: 0 4px 18px rgba(212, 50, 72, 0.45);
+    }
+    .timeframe-subtext {
+      font-weight: 500;
+      opacity: 0.85;
+    }
+
+    /* 💻 TRÊN PC (Màn hình rộng): TO RÕ, NẰM 1 HÀNG NGANG BẤM SƯỚNG TAY */
+    @media (min-width: 641px) {
+      .timeframe-select-btn {
+        padding: 11px 26px !important;
+        font-size: 15px !important;
+      }
+      .timeframe-subtext {
+        font-size: 13.5px !important;
+        margin-left: 2px;
+      }
+    }
+
+    /* 📱 TRÊN ĐIỆN THOẠI: 2 NÚT CHIA ĐÔI 50/50 CÂN ĐÉT, GIỜ RỚT XUỐNG DÒNG DƯỚI */
+    @media (max-width: 640px) {
+      .timeframe-box-wrap {
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: 360px !important;
+        margin: 0 auto !important;
+        padding: 0 4px !important;
+      }
+      .timeframe-select-btn {
+        flex: 1 !important; /* Chia đều 2 bên cân xứng tuyệt đối */
+        flex-direction: column !important; /* Buộc chữ giờ nhảy xuống dòng dưới */
+        padding: 8px 6px !important;
+        border-radius: 16px !important; /* Dáng bo viền kính mờ chuẩn iOS */
+        font-size: 12.5px !important;
+        gap: 2px !important;
+        text-align: center !important;
+      }
+      .timeframe-subtext {
+        display: block !important;
+        font-size: 10.5px !important;
+        white-space: nowrap !important; /* Khóa chết cả cụm giờ, không bao giờ bị gãy chữ */
+      }
+    }
 
     .time-range-slider {
       -webkit-appearance: none;
@@ -2032,9 +2101,9 @@
           "Lúc bình yên rủ nhau đi ăn, gần gũi thể xác rất dễ hợp. Nhma khi đụng chuyện một người chiến tranh lạnh, một người gào thét mất kiểm soát thì bao nhiêu sự hợp cũng tan thành mây khói..."
         </p>
         <div class="flex flex-wrap items-center gap-2 mt-3 text-[11px] text-[#ffdf85]">
+          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 121.3K Tam quan</span>
           <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Mâu thuẫn</span>
           <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 73.9K Bướm tự tìm hoa</span>
-          <span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 52.8K Thuật toán Tóp Tóp</span>
         </div>
       </button>
     </section>
@@ -2103,14 +2172,13 @@
         </div>
       </div>
 
-      <!-- PHẦN ƯỚC LƯỢNG (ĐÃ ĐỒNG BỘ 100% TỌA ĐỘ THANH TRƯỢT & MỐC CHÚ THÍCH) -->
-      <div class="pt-2 border-t border-white/10 space-y-4">
-        <div class="flex justify-center gap-3">
-          <button type="button" onclick="selectTimeframe('day')" id="tfBtnDay" class="soft-tag active px-5 py-2 font-semibold">
-            ☀️ Ban Ngày (9h – 0h)
+      <!-- CỤM CHỌN KHUNG GIỜ NGÀY / ĐÊM (ĐÃ TỐI ƯU TO PC & TỰ XUỐNG DÒNG MOBILE) -->
+        <div class="flex justify-center gap-3 timeframe-box-wrap">
+          <button type="button" onclick="selectTimeframe('day')" id="tfBtnDay" class="timeframe-select-btn active">
+            <span>☀️ Ban Ngày</span> <span class="timeframe-subtext">(9h – 0h)</span>
           </button>
-          <button type="button" onclick="selectTimeframe('night')" id="tfBtnNight" class="soft-tag px-5 py-2 font-semibold">
-            🌙 Cú Đêm (0h – 4h sáng)
+          <button type="button" onclick="selectTimeframe('night')" id="tfBtnNight" class="timeframe-select-btn">
+            <span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>
           </button>
         </div>
 
@@ -2299,8 +2367,18 @@
             </button>
           </div>
         </div>
-
-        <!-- BÀI VIRAL 1: 203.6K VIEW (CHIẾN TRANH LẠNH & MÂU THUẪN) -->
+        
+<!-- BÀI VIRAL TOP 1: 121.3K VIEW (TAM QUAN VỮNG VÀNG & CHẤP NHẬN SỰ KHÁC BIỆT) -->
+        <div class="threads-post-card">
+          <div class="flex items-center justify-between text-xs text-[#ffdf85] font-bold mb-2">
+            <span>@nownowtarot • 09/11/2026</span>
+            <span class="bg-rose-500/20 border border-rose-400/40 text-rose-200 px-2.5 py-0.5 rounded-full">🔥 121,3K View • 4,4K Tim</span>
+          </div>
+          <p class="text-[13.5px] text-[#faf6f0]/95 leading-relaxed">
+            "Theo mình thì 1ng có tam quan vững vàng và văn minh thật sự thể hiện rõ nhất ở năng lực chấp nhận sự khác biệt. Họ hiểu rằng trải nghiệm sống, môi trường lớn lên của mỗi người khác nhau nên góc nhìn sẽ khác nhau. Họ có thể k đồng tình với quan điểm của ngkhac nhưng họ k bao giờ dùng sự phán xét hay miệt thị để dìm ngta xuống nhằm chứng minh mình thượng đẳng. Ở cạnh một người như vậy sẽ luôn cảm thấy an toàn, vì họ k cố nhào nặn mình thành cái khuôn của họ"
+          </p>
+        </div>
+        <!-- BÀI VIRAL 2: 203.6K VIEW (CHIẾN TRANH LẠNH & MÂU THUẪN) -->
         <div class="threads-post-card">
           <div class="flex items-center justify-between text-xs text-[#ffdf85] font-bold mb-2">
             <span>@nownowtarot • 07/11/2026</span>
@@ -2311,7 +2389,7 @@
           </p>
         </div>
 
-        <!-- BÀI VIRAL 2: 73.9K VIEW (BƯỚM HOA & BẬN YÊU BẢN THÂN) -->
+        <!-- BÀI VIRAL 3: 73.9K VIEW (BƯỚM HOA & BẬN YÊU BẢN THÂN) -->
         <div class="threads-post-card">
           <div class="flex items-center justify-between text-xs text-[#ffdf85] font-bold mb-2">
             <span>@nownowtarot • 07/11/2026</span>
@@ -2322,7 +2400,7 @@
           </p>
         </div>
 
-        <!-- BÀI VIRAL 3: 54.7K VIEW (TRỤC NÃO - RUỘT & 90% SEROTONIN) -->
+        <!-- BÀI VIRAL 4: 54.7K VIEW (TRỤC NÃO - RUỘT & 90% SEROTONIN) -->
         <div class="threads-post-card">
           <div class="flex items-center justify-between text-xs text-[#ffdf85] font-bold mb-2">
             <span>@nownowtarot • 06/11/2026</span>
@@ -5756,8 +5834,8 @@ window.onload = function() {
     '#sec-booking .interactive-step-card:nth-of-type(3) > p': 'Receive full spread photos + private audio/YouTube recordings to revisit anytime. <b>Only settle payment once your heart feels lighter</b> & unlock lifetime free check-ins!',
 
     // Slider & Buttons
-    '#tfBtnDay': '☀️ Daytime (9 AM – 12 AM)',
-    '#tfBtnNight': '🌙 Night Owl (12 AM – 4 AM)',
+    '#tfBtnDay': '<span>☀️ Daytime</span> <span class="timeframe-subtext">(9 AM – 12 AM)</span>',
+    '#tfBtnNight': '<span>🌙 Night Owl</span> <span class="timeframe-subtext">(12 AM – 4 AM)</span>',
     '#sec-booking .pt-2 > div:nth-child(2) > div:first-child > span:first-child': 'Estimated duration:',
     '#sec-booking .pt-2 > div:nth-child(2) > div:last-child > span:first-child': 'Estimated fee (VND):',
     '.milestone-tick-btn[data-min="15"]': '15m (Min)',
@@ -5829,18 +5907,22 @@ window.onload = function() {
     '#subwebViral .subweb-body-scroll > .text-center button': '👉 Switch to Real Client Chat Screenshots',
     '#subwebViral .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
 
-    // 11 Viral Threads Posts (Culturally Adapted to Western Psychology & Gen-Z/Millennial Tone)
-    '#subwebViral .threads-post-card:nth-of-type(1) p': '"Let me add one crucial thing: compatibility in how you resolve conflict. When everything is peaceful, grabbing good food, small talk, or physical chemistry is super easy. But when conflict hits and one person chooses stonewalling and silent treatment while the other spirals into emotional outbursts—all that initial compatibility vanishes into thin air."',
-    '#subwebViral .threads-post-card:nth-of-type(2) p': '"Spot on—or more accurately, real love shows up when you’re busy pouring energy back into yourself. When you stop treating a relationship like a life KPI and redirect that focus into upgrading your skills, wellness, and career, you naturally bloom. When a tree blossoms, butterflies come on their own—nobody attracts butterflies by whistling in an empty dirt lot."',
-    '#subwebViral .threads-post-card:nth-of-type(3) p': '"Fun neuroscience fact: about 90% of your serotonin is produced in your gut, not your brain. So when your mental health hits rock bottom and your gut microbiome gets thrown off balance, sugar-craving bacteria send signals straight up the vagus nerve to hijack your brain into craving sweets. Half the time it’s not even you wanting cake—it’s your gut bacteria driving the wheel 👀👀🥹"',
-    '#subwebViral .threads-post-card:nth-of-type(4) p': '"Reading Tarot made me realize fate works just like the TikTok algorithm. If you repeat the exact same daily route—work -> school -> same old friend group—the algorithm tags your life as \'full capacity\' and stops recommending new people. Serendipity is like the \'For You\' discovery feed. To trigger new connections, you have to feed the algorithm new keywords: take a different street, work at a new café, or learn a random skill."',
-    '#subwebViral .threads-post-card:nth-of-type(5) p': '"Working in spirituality, I deeply believe this—with a twist. Sometimes the universe blocks something not because it’s toxic, but because it’s too massive for your current emotional vessel. Like plugging 220V current into a 110V lightbulb—it’ll shatter. A delayed blessing is often an emergency brake giving you time to upgrade your inner grounding before receiving it."',
-    '#subwebViral .threads-post-card:nth-of-type(6) p': '"You sound like a classic blend of hyper-vigilance and romantic starvation—craving deep romance while keeping your guard at maximum alert. You’re not single because you lack options; your subconscious has simply raised its safety threshold so high that no one can hurt you again. Be gentle with yourself—when your nervous system truly feels safe, it’ll lower the shield."',
-    '#subwebViral .threads-post-card:nth-of-type(7) p': '"Honestly, the people in Gladwell’s Outliers didn’t magically know their passion from day one either :))) The real loop is: try something -> realize you can tolerate its boredom longer than others -> get positive feedback -> brain releases dopamine -> keep grinding until you hit 10,000 hours. Finding your strength comes from experimenting enough to see what kind of struggle you’re most resilient to."',
-    '#subwebViral .threads-post-card:nth-of-type(8) p': '"Couldn’t agree more. We need to draw a clear line: fake flexing is an ego issue, while living in a humble rented room is just your starting point. Not being born with a silver spoon never means you aren’t allowed to treat yourself with dignity and grace."',
-    '#subwebViral .threads-post-card:nth-of-type(9) p': '"I believe in divine timing, but where empirical psychology meets mysticism. The \'right time\' isn’t a fixed date on a cosmic calendar—it’s the intersection of inner readiness and expanding your surface area for luck by stepping out into the world. When your mindset is ready, you naturally broadcast signals on the right frequency."',
-    '#subwebViral .threads-post-card:nth-of-type(10) p': '"You aren’t heartless at all—you’re actually deeply sensitive. Because your heart bruises so easily, your brain puts on an \'I don’t care either way\' armor to protect you. Feeling emotionally numb or floating is just your nervous system flipping the circuit breaker to prevent overload. Stop being so hard on yourself."',
-    '#subwebViral .threads-post-card:nth-of-type(11) p': '"I used to get trapped in this exact same mental loop. It’s like passing through 3 layers: Layer 1 is Awareness (knowing what you’re doing) -> Layer 2 is Metacognition (analyzing the root cause of why you did it) -> Layer 3 is Over-analysis (dissecting every thought until you’re exhausted and nauseous :)))))"'
+    // Cập nhật huy hiệu bài viết mới ngoài trang chủ
+    '#sec-portals button[onclick*="viral"] > div:last-child': '<span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 121.3K Grounded Mindset</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Conflict Styles</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 73.9K Blooming Garden</span>',
+
+    // 12 BÀI VIẾT TẠP CHÍ THREADS (ĐÃ ĐỒNG BỘ THỨ TỰ BÀI MỚI VÀO TOP 1)
+    '#subwebViral .threads-post-card:nth-of-type(1) p': '"In my view, a truly grounded worldview and emotional maturity are best revealed in the capacity to embrace differences. They understand that distinct lived experiences and upbringings naturally shape unique perspectives. They may disagree with someone\'s outlook, but they never resort to judgment, contempt, or belittling to assert moral superiority. Being around someone like that feels deeply safe—because they never attempt to force you into their own mold."',
+    '#subwebViral .threads-post-card:nth-of-type(2) p': '"Let me add one crucial thing: compatibility in how you resolve conflict. When everything is peaceful, grabbing good food, small talk, or physical chemistry is super easy. But when conflict hits and one person chooses stonewalling and silent treatment while the other spirals into emotional outbursts—all that initial compatibility vanishes into thin air."',
+    '#subwebViral .threads-post-card:nth-of-type(3) p': '"Spot on—or more accurately, real love shows up when you’re busy pouring energy back into yourself. When you stop treating a relationship like a life KPI and redirect that focus into upgrading your skills, wellness, and career, you naturally bloom. When a tree blossoms, butterflies come on their own—nobody attracts butterflies by whistling in an empty dirt lot."',
+    '#subwebViral .threads-post-card:nth-of-type(4) p': '"Fun neuroscience fact: about 90% of your serotonin is produced in your gut, not your brain. So when your mental health hits rock bottom and your gut microbiome gets thrown off balance, sugar-craving bacteria send signals straight up the vagus nerve to hijack your brain into craving sweets. Half the time it’s not even you wanting cake—it’s your gut bacteria driving the wheel 👀👀🥹"',
+    '#subwebViral .threads-post-card:nth-of-type(5) p': '"Reading Tarot made me realize fate works just like the TikTok algorithm. If you repeat the exact same daily route—work -> school -> same old friend group—the algorithm tags your life as \'full capacity\' and stops recommending new people. Serendipity is like the \'For You\' discovery feed. To trigger new connections, you have to feed the algorithm new keywords: take a different street, work at a new café, or learn a random skill."',
+    '#subwebViral .threads-post-card:nth-of-type(6) p': '"Working in spirituality, I deeply believe this—with a twist. Sometimes the universe blocks something not because it’s toxic, but because it’s too massive for your current emotional vessel. Like plugging 220V current into a 110V lightbulb—it’ll shatter. A delayed blessing is often an emergency brake giving you time to upgrade your inner grounding before receiving it."',
+    '#subwebViral .threads-post-card:nth-of-type(7) p': '"You sound like a classic blend of hyper-vigilance and romantic starvation—craving deep romance while keeping your guard at maximum alert. You’re not single because you lack options; your subconscious has simply raised its safety threshold so high that no one can hurt you again. Be gentle with yourself—when your nervous system truly feels safe, it’ll lower the shield."',
+    '#subwebViral .threads-post-card:nth-of-type(8) p': '"Honestly, the people in Gladwell’s Outliers didn’t magically know their passion from day one either :))) The real loop is: try something -> realize you can tolerate its boredom longer than others -> get positive feedback -> brain releases dopamine -> keep grinding until you hit 10,000 hours. Finding your strength comes from experimenting enough to see what kind of struggle you’re most resilient to."',
+    '#subwebViral .threads-post-card:nth-of-type(9) p': '"Couldn’t agree more. We need to draw a clear line: fake flexing is an ego issue, while living in a humble rented room is just your starting point. Not being born with a silver spoon never means you aren’t allowed to treat yourself with dignity and grace."',
+    '#subwebViral .threads-post-card:nth-of-type(10) p': '"I believe in divine timing, but where empirical psychology meets mysticism. The \'right time\' isn’t a fixed date on a cosmic calendar—it’s the intersection of inner readiness and expanding your surface area for luck by stepping out into the world. When your mindset is ready, you naturally broadcast signals on the right frequency."',
+    '#subwebViral .threads-post-card:nth-of-type(11) p': '"You aren’t heartless at all—you’re actually deeply sensitive. Because your heart bruises so easily, your brain puts on an \'I don’t care either way\' armor to protect you. Feeling emotionally numb or floating is just your nervous system flipping the circuit breaker to prevent overload. Stop being so hard on yourself."',
+    '#subwebViral .threads-post-card:nth-of-type(12) p': '"I used to get trapped in this exact same mental loop. It’s like passing through 3 layers: Layer 1 is Awareness (knowing what you’re doing) -> Layer 2 is Metacognition (analyzing the root cause of why you did it) -> Layer 3 is Over-analysis (dissecting every thought until you’re exhausted and nauseous :)))))"'
   };
 
   // 2. BỘ LỜI THOẠI BÉ MÈO ĐEN & LÁ BÀI TAROT BẰNG TIẾNG ANH BẢN XỨ

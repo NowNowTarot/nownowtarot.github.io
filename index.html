@@ -5846,5 +5846,38 @@ I'd love to book a 1:1 Tarot & CBT session:
   });
 })();
 </script>
+<script>
+  // 🛡️ KHIÊN BẢO VỆ BẢN QUYỀN NOWNOW TAROT (DOMAIN LOCK & ANTI-INSPECT)
+  (function protectNowNowSanctuary() {
+    const h = window.location.hostname;
+    // 1. Bẫy Tên Miền: Nếu kẻ cắp bê code lên domain lạ -> Tự động đá khách về lại nhà chính chủ!
+    if (h && h !== 'nownowtarot.github.io' && h !== 'localhost' && h !== '127.0.0.1' && !h.endsWith('.googleusercontent.com')) {
+      window.location.replace('https://nownowtarot.github.io/');
+      return;
+    }
+
+    // 2. Chặn kéo thả ảnh & chuột phải chôm ảnh feedback
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.tagName === 'IMG' || e.target.closest('.iphone-14-pro-frame')) {
+        e.preventDefault();
+        if (typeof showCatTip === 'function') {
+          showCatTip('Meo~ meo! Kỷ niệm riêng tư của khách nhà NowNow, đừng lưu trộm nha sen ơi! 🐾🛡️', 3500);
+        }
+      }
+    });
+
+    // 3. Chặn phím tắt Ctrl+U (Xem nguồn), Ctrl+S (Lưu web), F12 (DevTools) của dân copy dạo
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j'))) {
+        e.preventDefault();
+        if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+        if (typeof showCatTip === 'function') {
+          showCatTip('Miaow~ Bản quyền thuộc về NowNow Tarot (@nownowtarot) nha! 🐾🔒', 3500);
+        }
+        return false;
+      }
+    });
+  })();
+</script>
 </body>
 </html>

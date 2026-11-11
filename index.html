@@ -1781,10 +1781,24 @@
       transition: none !important;
     }
 
-    body.portal-open .floating-cat-buddy {
-      opacity: 0;
-      pointer-events: none;
-    }
+    /* Mèo đen thông minh: Tự động biến hình thành Bạn đồng hành khi mở Tạp chí */
+body.portal-open #floatingCatContainer {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 120 !important;
+}
+body.portal-open .cat-cloud-tip {
+  max-width: 185px;
+  background: rgba(28, 14, 24, 0.96);
+  border-color: var(--gold-warm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 16px rgba(232, 93, 117, 0.3);
+}
+@media (max-width: 640px) {
+  body.portal-open .cat-cloud-tip {
+    max-width: 155px;
+    font-size: 9.5px;
+  }
+}
 
     .cat-cloud-tip {
       position: absolute;
@@ -2952,6 +2966,13 @@
         preloadAdjacentFeedbackSlides(currentFbIndex);
       }
 
+      if (activeSubWebType === 'viral') {
+        setTimeout(() => {
+          if (typeof initThreadsPostObserver === 'function') initThreadsPostObserver();
+          showCatTip('Chạm trán Tạp Chí Tâm Thức rồi nha! Đọc bài nào thấy nhột thì nhớ nhìn xuống tui tâm sự nghen 🧵🐾', 4800);
+        }, 400);
+      }
+
       if (pushToHistory && window.history && window.history.pushState) {
         window.history.pushState({ subweb: activeSubWebType }, '', `#${activeSubWebType}`);
       }
@@ -3468,7 +3489,8 @@
     }
 
     function showCatTip(text, duration = 5400) {
-      if (document.body.classList.contains('portal-open')) return;
+      // Cho phép hiện thoại khi đang ở Tạp Chí Threads, chỉ chặn ở các popup form khác
+      if (document.body.classList.contains('portal-open') && activeSubWebType !== 'viral') return;
       const tip = document.getElementById('catBubbleTip');
       const txt = document.getElementById('catBubbleText');
       if (!tip || !txt) return;
@@ -3521,6 +3543,120 @@
 
     // Hỗ trợ hàm cũ initLiveAvailabilityStatus()
     window.getHourBasedCatDialogue = getCircadianQuote;
+    
+    // =========================================================================
+    // 1. KHO BÌNH LUẬN ĐỘC BẢN CHO TỪNG BÀI VIẾT TẠP CHÍ THREADS (12 BÀI VIRAL)
+    // =========================================================================
+    const THREADS_POST_COMMENTARY = {
+      0: [
+        "Đọc bài này thấm ghê hơm bà? Người có tam quan xịn là không bao giờ phán xét để tỏ vẻ thượng đẳng đâu 🌿✨",
+        "Gật gù hoài dạ! Ở cạnh một người biết tôn trọng sự khác biệt của bà mới là nơi an toàn nhất nè 🛋️💖"
+      ],
+      1: [
+        "Á à! Đoạn 'một người chiến tranh lạnh, một người gào thét' trúng tim đen bà đúng hơm? Đau nhói luôn á 💔🧊",
+        "Lúc vui thì dễ hợp lắm, lúc đụng chuyện mà dở trò im lặng bỏ mặc mới là thuốc độc giết chết tình cảm đó bà! 🛑⚡"
+      ],
+      2: [
+        "Nghe mèo dặn nè: Đừng đứng giữa bãi đất trống huýt sáo nữa! Cứ tưới cho cái cây của mình nở hoa rực rỡ đi 🌺🦋",
+        "Khi bà bận yêu và nâng cấp bản thân, tự khắc người cùng tần số cao sẽ bị hút tới à, khỏi cần đi săn lùng! 👑💅"
+      ],
+      3: [
+        "Thấy fact khoa học chấn động hơm? Nhiều khi không phải bà thèm trà sữa bánh ngọt đâu, vi khuẩn đường ruột xúi đó! 🍰😹",
+        "Buồn tình thì đi ăn bát cháo nóng hoặc món gì ấm ruột nha, nạp serotonin cứu hệ thần kinh liền nè! 🍲🧠"
+      ],
+      4: [
+        "Duyên phận y chang thuật toán For You luôn! Cứ đi hoài một con đường cũ thì lấy đâu ra nhân tố mới nhảy vào? 🛵✨",
+        "Mai thử rẽ vào một quán cafe lạ hoặc đổi lộ trình đi làm đi bà, nạp 'từ khóa mới' cho vũ trụ phân phối duyên nha! ☕🧭"
+      ],
+      5: [
+        "Câu này đắt giá nhất Tạp chí nè: Vũ trụ phanh gấp lại là để bảo vệ bà khỏi bị dòng điện 220V làm nổ tung đó ⚡🛡️",
+        "Thứ chưa thành lúc này là để bà có thời gian nâng cấp bình chứa của mình lên. Đừng vội trách số phận nghen 🕯️🌟"
+      ],
+      6: [
+        "Vừa thèm yêu đương mà vừa cảnh giác dựng gai nhọn bảo vệ... Tui bắt bài hết trơn nha! Đừng gồng nữa nè 🥺🦔",
+        "Bà không có ế đâu, chẳng qua bộ não đang đặt chuẩn an toàn tối đa để bà khỏi bị tổn thương lần nữa thôi 🛡️💖"
+      ],
+      7: [
+        "Muốn biết mình giỏi gì thì xem mình 'lì đòn' và chịu được sự nhàm chán của thứ gì lâu nhất. Quá thực tế luôn! 🔨🔥",
+        "Đừng ngồi một chỗ tưởng tượng nữa bà ơiii, cứ va đập thực tế đủ nhiều là ngọc tự khắc sáng à! 💎🐾"
+      ],
+      8: [
+        "Chuẩn không cần chỉnh! Ở trọ hay nhà nghèo chỉ là vạch xuất phát, bà hoàn toàn có quyền cưng chiều bản thân như công chúa! 👑🌷",
+        "Phông bạt mới là vấn đề nhân cách, còn sống tự trọng và tử tế với chính mình thì nghèo mấy cũng sang trọng! ✨💎"
+      ],
+      9: [
+        "Thời điểm chín muồi là khi tâm lý đã sẵn sàng và bà chịu bước ra ngoài phát tín hiệu kết nối đó nha 📡🌸",
+        "Ru rú trong phòng trùm chăn lướt điện thoại hoài thì thần Cupid cũng chịu thua không bắn tên trúng được đâu! 🏹😹"
+      ],
+      10: [
+        "Bà thấy mình trôi lửng lơ là do não đang bật chế độ bảo vệ chống sập nguồn đó. Đừng tự dằn vặt bản thân nữa nha 🥺🔋",
+        "Tâm hồn nhạy cảm là một món quà chứ không phải gánh nặng. Cho phép mình được nghỉ ngơi một xíu đi nè 🕊️💖"
+      ],
+      11: [
+        "Ui cha! Cái loop phân tích hành vi rồi over-thinking tới buồn nôn... Bệnh chung của mấy bà thông minh đây nè! 😵‍💫🌀",
+        "Dừng mổ xẻ lại bà ơiii! Bước ra khỏi cái vòng lặp đó bằng cách hít sâu 3 nhịp rồi nhắn Now gỡ cùng nha 🧘‍♀️✨"
+      ]
+    };
+
+    // =========================================================================
+    // 2. KHO CHUYỆN PHIẾM HÀI HƯỚC & EASTER EGGS HẬU TRƯỜNG NOWNOW
+    // =========================================================================
+    const CAT_GOSSIP_STORIES = [
+      "Kể bà nghe chuyện này cười xỉu: Bữa trước có bà khách vừa khóc vừa bốc bài, xong nghe Now đọc trúng tim đen quá tự dưng cười sặc nước ngọt luôn 😹🥤",
+      "Bí mật hậu trường nè: Hồi sáng tui lén cắn góc bộ bài Tarot của Now bị Now phạt úp mặt vào tường 15 phút đó, quê xệ luôn á 😿📦",
+      "Ê bà biết hơm, Now nhìn trên mạng nói chuyện tâm lý điềm tĩnh sắc bén vậy thôi chứ ngoài đời nuôi tui toàn nói giọng em bé cưng nựng sến rện à 😹🍼",
+      "Hôm qua có bà khách xem bài xong nhẹ nhõm tới mức nửa đêm gửi tặng tui hẳn 2 hộp súp thưởng cá hồi, ăn no nứt cả bụng mỡ! 🐟✨",
+      "Tui nghe đồn ai chạm vào đệm thịt chân mèo của tui liên tiếp 7 lần trong ngày hôm nay là tuần này crush tự động rep story đó nha! 🐾🔮",
+      "Nhiều bà hỏi tui mèo đen có biết coi bói không? Tui không biết bói, tui chỉ biết con người các bà hay tự làm khổ mình vì mấy chuyện cỏn con thôi à 😼📜",
+      "Chuyện tâm linh có thật nè: Cứ hễ khách nào book khung Cú Đêm (0h - 4h) mà khóc sướt mướt là y như rằng sáng hôm sau nhắn tin khoe trút được tảng đá trong lòng liền! 🌙✨",
+      "Tui mới hack được nhật ký của Now: Now bảo khách nhà Now toàn mấy người ngoài đời nhìn mạnh mẽ, giỏi giang nhma bên trong thì thiếu thốn sự vỗ về kinh khủng 🥺🫂",
+      "Bà có tin vào trực giác hơm? Hồi nãy lúc bà vừa bấm vào trang web là chuông cảm ứng giác quan của tui reo lên báo: 'Có một tâm hồn xinh đẹp đang cần gỡ rối ghé thăm' liền á! 🔔🌸",
+      "Hôm nọ có ông kia vào hỏi bài xem người yêu cũ có quay lại không, bài ra bảo 'Lo tập trung kiếm tiền đi', ổng nghe lời giờ lên chức quản lý luôn rồi đó, đỉnh hơm! 💼🚀"
+    ];
+
+    // =========================================================================
+    // 3. CÔNG NGHỆ BẮT TỌA ĐỘ CUỘN BÀI VIẾT TRONG MODAL THREADS
+    // =========================================================================
+    let threadsObserverInstance = null; // Tránh tạo trùng lặp Observer khi mở đóng nhiều lần
+    function initThreadsPostObserver() {
+      const scrollContainer = document.querySelector('#subwebViral .subweb-body-scroll');
+      const postCards = document.querySelectorAll('#subwebViral .threads-post-card');
+      if (!scrollContainer || !postCards.length) return;
+
+      if (threadsObserverInstance) {
+        threadsObserverInstance.disconnect();
+      }
+
+      let postTimer = null;
+      let lastObservedIndex = -1;
+
+      threadsObserverInstance = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+            const index = Array.from(postCards).indexOf(entry.target);
+            if (index !== -1 && index !== lastObservedIndex) {
+              if (postTimer) clearTimeout(postTimer);
+              // Khách dừng lại đọc bài ~2.2 giây -> Mèo meo nhẹ và bình luận đúng bài đó
+              postTimer = setTimeout(() => {
+                lastObservedIndex = index;
+                const commentaryList = THREADS_POST_COMMENTARY[index];
+                if (commentaryList && commentaryList.length) {
+                  triggerCatGentleWiggle();
+                  playCuteMeowSound();
+                  const comment = commentaryList[Math.floor(Math.random() * commentaryList.length)];
+                  showCatTip(comment, 5500);
+                }
+              }, 2200);
+            }
+          }
+        });
+      }, {
+        root: scrollContainer,
+        threshold: [0.3, 0.45, 0.6] // Nhạy và bắt dính cực tốt trên cả iPhone & Android
+      });
+
+      postCards.forEach(card => threadsObserverInstance.observe(card));
+    }
 
     // -------------------------------------------------------------------------
     // F. SỰ KIỆN CLICK MÈO (XOAY TUA 5 TẦNG + RÚT BÀI TAROT ẨN CHÍNH MỖI 4 CLICK)
@@ -3556,6 +3692,13 @@
       if (totalSessionClicks % 4 === 0) {
         const tarotCard = deckTarot.next();
         showCatTip(`✨ <b>Mèo Đen rút tặng bà 1 lá bài ngẫu nhiên nè:</b><br>${tarotCard}`, 6800);
+        return;
+      }
+      
+      // 3.5. Cứ mỗi 7 lần chạm, Mèo Đen bật mí 1 mẩu Chuyện phiếm hậu trường siêu hài!
+      if (totalSessionClicks % 7 === 0) {
+        const gossip = CAT_GOSSIP_STORIES[Math.floor(Math.random() * CAT_GOSSIP_STORIES.length)];
+        showCatTip(`🤫 <b>Chuyện phiếm độc quyền:</b><br>${gossip}`, 6500);
         return;
       }
 

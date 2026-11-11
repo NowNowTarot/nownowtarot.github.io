@@ -5458,9 +5458,26 @@ window.onload = function() {
 </style>
 
 <!-- NÚT CHUYỂN NGÔN NGỮ NỔI GÓC TRÊN BÊN PHẢI -->
+<!-- NÚT CHUYỂN NGÔN NGỮ NỔI GÓC TRÊN BÊN PHẢI (CHỈ HIỆN 2 LÁ CỜ MÀU SẮC NÉT TRÊN MỌI THIẾT BỊ) -->
 <div class="nownow-lang-switcher" title="Switch Language / Đổi ngôn ngữ">
-  <button type="button" id="langBtnVI" data-sound="tap" onclick="setNowNowLanguage('vi')" class="lang-pill-btn active">🇻🇳 VI</button>
-  <button type="button" id="langBtnEN" data-sound="tap" onclick="setNowNowLanguage('en')" class="lang-pill-btn">🇬🇧 EN</button>
+  <button type="button" id="langBtnVI" data-sound="tap" onclick="setNowNowLanguage('vi')" class="lang-pill-btn active" aria-label="Tiếng Việt" style="padding: 5px 8px; display: inline-flex; align-items: center; justify-content: center;">
+    <svg width="20" height="14" viewBox="0 0 30 20" style="border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); display: block;">
+      <rect width="30" height="20" fill="#da251d"/>
+      <polygon points="15,4 11.47,14.85 20.71,8.15 9.29,8.15 18.53,14.85" fill="#ffff00"/>
+    </svg>
+  </button>
+  <button type="button" id="langBtnEN" data-sound="tap" onclick="setNowNowLanguage('en')" class="lang-pill-btn" aria-label="English" style="padding: 5px 8px; display: inline-flex; align-items: center; justify-content: center;">
+    <svg width="20" height="14" viewBox="0 0 60 30" style="border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); display: block;">
+      <clipPath id="gbClip"><rect width="60" height="30"/></clipPath>
+      <g clip-path="url(#gbClip)">
+        <rect width="60" height="30" fill="#012169"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#ffffff" stroke-width="6"/>
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#ffffff" stroke-width="10"/>
+        <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+      </g>
+    </svg>
+  </button>
 </div>
 
 <script>

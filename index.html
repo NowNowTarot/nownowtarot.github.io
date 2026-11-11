@@ -1409,28 +1409,43 @@
       }
     }
 
-    /* 📱 TRÊN ĐIỆN THOẠI: 2 NÚT CHIA ĐÔI 50/50 CÂN ĐÉT, GIỜ RỚT XUỐNG DÒNG DƯỚI */
+    /* 📱 TRÊN ĐIỆN THOẠI: BO TRÒN VIÊN NANG SANG TRỌNG NHƯ PC, TÁCH KHOẢNG CÁCH THỞ */
     @media (max-width: 640px) {
       .timeframe-box-wrap {
         gap: 8px !important;
         width: 100% !important;
         max-width: 360px !important;
-        margin: 0 auto !important;
+        margin: 22px auto 14px auto !important; /* Tạo khoảng thở 22px phía trên, dứt điểm lỗi dính thẻ */
         padding: 0 4px !important;
       }
       .timeframe-select-btn {
-        flex: 1 !important; /* Chia đều 2 bên cân xứng tuyệt đối */
-        flex-direction: column !important; /* Buộc chữ giờ nhảy xuống dòng dưới */
-        padding: 8px 6px !important;
-        border-radius: 16px !important; /* Dáng bo viền kính mờ chuẩn iOS */
-        font-size: 12.5px !important;
-        gap: 2px !important;
+        flex: 1 !important;
+        display: inline-flex !important;
+        flex-direction: row !important; /* Đưa text và giờ về 1 hàng ngang thanh thoát như PC */
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 9px 8px !important;
+        border-radius: 999px !important; /* Dáng viên nang mượt mà đồng bộ với bản desktop */
+        font-size: 12px !important;
+        gap: 4px !important;
         text-align: center !important;
+        border: 1px solid rgba(255, 223, 133, 0.3) !important;
+        background: rgba(20, 9, 16, 0.65) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+      }
+      .timeframe-select-btn.active {
+        border-color: var(--gold-warm) !important;
+        background: linear-gradient(135deg, rgba(185, 42, 64, 0.92), rgba(110, 18, 34, 0.98)) !important;
+        box-shadow: 0 3px 14px rgba(212, 50, 72, 0.4) !important;
       }
       .timeframe-subtext {
-        display: block !important;
+        display: inline-block !important;
         font-size: 10.5px !important;
-        white-space: nowrap !important; /* Khóa chết cả cụm giờ, không bao giờ bị gãy chữ */
+        font-weight: 500 !important;
+        opacity: 0.82 !important;
+        white-space: nowrap !important;
       }
     }
 
@@ -3026,26 +3041,366 @@
     });
 
     /* =========================================================================
-       /* =========================================================================
-       /* =========================================================================
-       5. BÉ MÈO ĐEN: HOÀNG THƯỢNG BÓC TRẦN VÔ THỨC (SUPER CAT SOUL V2 - MAX LEVEL)
-       - 55+ Kịch bản thoại: Cute lầy lội x Tâm lý học CBT/Jung x Dẫn đường tinh tế
-       - 6 Giác quan bắt bài: Bắt thóp chọn Tag, Gõ phím, Đổi kênh, Đổi giờ, Kéo Slider, Đóng Modal
+       5. BÉ MÈO ĐEN: HOÀNG THƯỢNG BÓC TRẦN VÔ THỨC (OMEGA SENTIENT SOUL ENGINE v2.0)
+       - 240+ Kịch bản thoại độc bản chia 9 tầng tâm lý (CBT, Jung, Tình cảm, Sự nghiệp, Cà khịa...)
+       - Trọn bộ 22 Lá Ẩn Chính (Major Arcana) rút bài ngẫu nhiên khi tương tác
+       - Persistent Ring Buffer (Lưu LocalStorage nhớ 70 câu gần nhất xuyên qua cả F5)
+       - Cảm biến từ khóa trực tiếp khi khách gõ phím & Phản xạ đa kịch bản cho từng mốc phút
        ========================================================================= */
 
-    // Khôi phục ngầm kho bài quà tặng riêng cho Hộp Hồi Âm (Không hiện khi click mèo)
+    // -------------------------------------------------------------------------
+    // A. BỘ 22 LÁ ẨN CHÍNH TAROT x TÂM LÝ HỌC CBT (TƯƠNG THÍCH HỘP HỒI ÂM & RÚT BÀI)
+    // -------------------------------------------------------------------------
     const catTarotMiniCards = [
-      "🎴 <b>Lá The Star (Ngôi Sao):</b> Tín hiệu chữa lành đang tới! Sau cơn bão lòng này, bà sẽ tìm lại được bình yên và hy vọng sáng rõ nhất ✨",
-      "🎴 <b>Lá Wheel of Fortune (Bánh Xe Số Phận):</b> Vòng lặp cũ sắp khép lại rồi! Một ngã rẽ bất ngờ mang theo nhân tố mới đang chuẩn bị gõ cửa nhà bà 🎡",
-      "🎴 <b>Lá The Empress (Nữ Hoàng):</b> Đã tới lúc bà quay về cưng chiều giá trị bản thân! Khi bà tỏa hương, tự khắc ong bướm xịn sẽ tìm tới 👑",
-      "🎴 <b>Lá Strength (Sức Mạnh Nội Tâm):</b> Bà kiên cường hơn bà nghĩ rất nhiều! Nút thắt này không quật ngã được bà đâu, chỉ làm bà bản lĩnh hơn thôi 🦁",
-      "🎴 <b>Lá The Lovers (Sự Lựa Chọn):</b> Đừng chọn trong lúc lòng đang hoảng sợ. Hãy lắng nghe tiếng nói thật sự dưới đáy lòng bà nha 💞",
-      "🎴 <b>Lá Ace of Cups (Khởi Đầu Cảm Xúc):</b> Bình chứa cảm xúc của bà sắp được rót đầy bởi sự dịu dàng và thấu cảm trọn vẹn rồi đó 🏆",
-      "🎴 <b>Lá The Hermit (Người Ẩn Sĩ):</b> Lùi lại một bước để nhìn thấu gốc rễ tâm lý. Câu trả lời bà tìm kiếm đang nằm ngay trong cuộc trò chuyện sắp tới 🏮"
+      "🎴 <b>0. The Fool (Khởi Đầu Mới):</b> Đừng để nỗi sợ quá khứ trói chân bà nữa! Hãy cho phép bản thân bước một bước liều lĩnh ra khỏi vùng an toàn cũ kỹ nha 🌱✨",
+      "🎴 <b>I. The Magician (Người Kiến Tạo):</b> Mọi nguồn lực bà cần đều đã nằm sẵn trong tay bà rồi. Ngừng nghi ngờ năng lực bản thân (Imposter Syndrome) và bắt đầu hành động thôi! 🪄🔥",
+      "🎴 <b>II. The High Priestess (Trực Giác Tối Thượng):</b> Câu trả lời bà đang ráo riết đi tìm bên ngoài thực ra tiềm thức bà đã biết tỏng từ lâu. Lắng nghe linh cảm đầu tiên của mình nha 🌙🔮",
+      "🎴 <b>III. The Empress (Nữ Hoàng Tự Thân):</b> Đã tới lúc thu hồi năng lượng đang rải khắp nơi về lại để cưng chiều chính mình! Khi cây nở hoa, ong bướm xịn tự khắc tìm tới 👑🌷",
+      "🎴 <b>IV. The Emperor (Ranh Giới Vững Chãi):</b> Dịu dàng không có nghĩa là để ai muốn bước qua ranh giới của mình cũng được. Hãy thiết lập lại kỷ luật và nguyên tắc bảo vệ tâm hồn bà 🛡️⚡",
+      "🎴 <b>V. The Hierophant (Sự Thấu Hiểu Cốt Lõi):</b> Đừng ép mình phải vừa vặn với cái khuôn tiêu chuẩn của người khác. Giá trị của bà nằm ở bản sắc riêng biệt không ai sao chép được 📖🕯️",
+      "🎴 <b>VI. The Lovers (Lựa Chọn Tỉnh Thức):</b> Đừng đưa ra quyết định chỉ vì sợ cô đơn nhất thời. Hãy chọn nơi nào giúp hệ thần kinh của bà được thở phào bình yên nhất 💞⚖️",
+      "🎴 <b>VII. The Chariot (Bứt Phá Vòng Lặp):</b> Cầm chắc dây cương lý trí và cảm xúc! Khi bà quyết tâm tiến về phía trước, không một bóng ma quá khứ nào kéo lùi được bà đâu 🐎🌟",
+      "🎴 <b>VIII. Strength (Nội Lực Dịu Dàng):</b> Bản lĩnh thật sự không phải là gồng mình tỏ ra bất cần, mà là dám ôm lấy những yếu đuối đang run rẩy bên trong mình 🦁💖",
+      "🎴 <b>IX. The Hermit (Khoảng Lặng Chiêm Nghiệm):</b> Tắt bớt tiếng ồn ngoài xã hội đi bà. Lùi lại một nhịp để đối thoại cùng Now chính là chiếc đèn lồng soi thấu nút thắt lúc này 🏮🌌",
+      "🎴 <b>X. Wheel of Fortune (Bánh Xe Chuyển Hóa):</b> Chu kỳ bế tắc cũ đang khép lại rồi! Đổi một thói quen nhỏ hôm nay để kích hoạt thuật toán may mắn mới của vũ trụ nha 🎡✨",
+      "🎴 <b>XI. Justice (Sự Công Bằng Nội Tâm):</b> Ngừng tự kết án bản thân vì lỗi lầm của người khác! Hãy trả lại trách nhiệm cho đúng người và giải phóng tâm trí cho chính bà ⚖️🕊️",
+      "🎴 <b>XII. The Hanged Man (Đảo Ngược Góc Nhìn):</b> Thứ bà đang nghĩ là sự mất mát hay trì hoãn thực chất là chiếc phanh bảo vệ của vũ trụ. Nhìn ngược lại bà sẽ thấy một lối thoát cực sáng 🙃💡",
+      "🎴 <b>XIII. Death (Tái Sinh Từ Tro Tàn):</b> Phải dũng cảm khép lại cánh cửa đã mục nát thì nắng ấm mới tràn vào phòng được. Đừng tiếc một kịch bản đã hết vai diễn nha 🦋🌅",
+      "🎴 <b>XIV. Temperance (Cân Bằng Hoá Giải):</b> Đừng ép bản thân phải lành lặn ngay trong một đêm. Cứ kiên nhẫn dung hòa từng chút một giữa lý trí và vết thương lòng 🧪🌈",
+      "🎴 <b>XV. The Devil (Tháo Xích Thao Túng):</b> Nhận diện ngay sợi dây 'Trauma Bonding' (Gắn kết đau thương) đang trói buộc bà! Bà hoàn toàn có chìa khóa để tự mở lồng bước ra ⛓️🔓",
+      "🎴 <b>XVI. The Tower (Sự Thật Giải Phóng):</b> Những ảo tưởng sụp đổ tuy đau nhưng lại giúp bà khỏi sống trên một nền móng giả dối. Sau cơn địa chấn này là bầu trời trong vắt ⚡🏰",
+      "🎴 <b>XVII. The Star (Ngôi Sao Chữa Lành):</b> Tín hiệu bình yên đang đổ xuống tâm hồn bà rồi! Hãy tin rằng sau tất cả những giông bão vừa qua, bà xứng đáng với những điều dịu dàng nhất 🌟🕊️",
+      "🎴 <b>XVIII. The Moon (Soi Chiếu Vùng Tối):</b> Những nỗi sợ vô hình lúc nửa đêm chỉ là cái bóng phóng đại của não bộ khi mệt mỏi thôi. Đưa nó ra ánh sáng cùng Now là nó tự tan biến à 🌕🐺",
+      "🎴 <b>XIX. The Sun (Nắng Ấm Rực Rỡ):</b> Sương mù tâm trí sắp tan sạch! Một giai đoạn tràn ngập sự thông suốt, tự tin và niềm vui thuần khiết đang chờ đón bà phía trước ☀️🌻",
+      "🎴 <b>XX. Judgement (Tiếng Gọi Thức Tỉnh):</b> Tha thứ cho phiên bản từng khờ dại của chính mình trong quá khứ đi bà. Hồi đó bà đã làm tốt nhất trong khả năng của mình rồi 🎺💖",
+      "🎴 <b>XXI. The World (Trọn Vẹn Hành Trình):</b> Một bài học tâm thức lớn đã hoàn tất! Bà bước ra khỏi câu chuyện này với một phiên bản trưởng thành, sâu sắc và đắt giá hơn gấp bội 🌍👑"
+    ];
+
+    // Mảng tương thích với hàm đổi mùa tự động 15s (setSeasonalTheme) ở cuối file
+    let catPassiveDialogues = [
+      "Meo~ Xem 1 lần là được làm bạn tâm sự 0đ trọn đời với sốp NowNow đó bà ơi! 💝",
+      "Mew~ 0đ đặt cọc, trò chuyện tới khi lòng thực sự thông suốt mới dừng đồng hồ tính phí nè! ✨",
+      "Meo~ Sốp đọc vị tâm lý bằng CBT & Carl Jung sâu lắm, không phán bừa hay hù dọa đâu 🧠",
+      "Miaow~ Lò vi sóng 3 tháng còn quay lại được, bấm Hộp Thư xem tin nhắn thật đi bà! 📱",
+      "Meo~ Đêm khuya trằn trọc thì chọn khung Cú Đêm (0h - 4h) để Now thức cùng bà nghen! 🌙",
+      "Mew~ Có tâm sự riêng khó nói cứ gõ vào ô chữ mờ ở Mục 2 nha, Now đọc hết á! ✍️",
+      "Miaow~ Đừng để vòng lặp lo âu làm bà nghẹt thở, gỡ từng nút một cùng Now nha! 🌷",
+      "Meo~ Mũ lễ hội xinh xẻo chờ lắng nghe tâm sự của bà nè! 🎩🐾",
+      "Mew~ 90% hormone hạnh phúc Serotonin nằm ở ruột đó, buồn quá thì đi ăn miếng bánh ngọt rồi về đây tâm sự nha! 🍰🐾",
+      "Miaow~ Duyên phận vận hành y như thuật toán Tóp Tóp vậy, đổi hành vi là vũ trụ tự khắc trả kết quả mới liền! ✨",
+      "Meo~ Đừng tự trách mình yếu đuối nữa, dám nhìn thẳng vào nỗi đau của mình đã là người dũng cảm nhất rồi! 🦁💖",
+      "Mew~ Bấm vào tui đi bà! Tui có cả kho bí mật muốn thủ thỉ với riêng bà nè! 🐾💌"
     ];
 
     // -------------------------------------------------------------------------
-    // TẦNG 2: BỘ NHỚ KÝ ỨC (MEMORY ENGINE QUA LOCALSTORAGE)
+    // B. ĐẠI TỪ ĐIỂN PHÂN TẦNG TÂM LÝ HỌC & TƯƠNG TÁC (200+ CÂU ĐỘC BẢN)
+    // -------------------------------------------------------------------------
+
+    // 1. TẦNG TÂM LÝ HỌC CBT & CARL JUNG (35 CÂU)
+    const CAT_POOL_CBT_JUNG = [
+      "Đừng gồng kiểu 'tui ổn, sao cũng được' nữa bà ơiii. Cái vỏ bọc mạnh mẽ đó lừa được thiên hạ chứ sao qua mắt được mèo đen! 🐾🧠",
+      "Cái tính overthinking của bà thực ra là bộ não đang bật khiên bảo vệ bà khỏi vết thương cũ thôi. Nhma gồng hoài kiệt sức lắm, để Now gỡ cùng bà nha 🕯️",
+      "Bà hay sợ làm người khác buồn nên toàn tự nuốt ấm ức vào lòng đúng hơm? Hội chứng 'People Pleaser' đó, tập thương mình trước tiên nha! 🌱💖",
+      "Không phải bà vô cảm đâu, mà vì tâm hồn bà nhạy cảm quá nên hệ thần kinh tự ngắt cầu dao cảm xúc để không bị quá tải đó 🧠⚡",
+      "Đôi khi vũ trụ phanh gấp một mối quan hệ lại không phải vì bà xui, mà vì bình chứa 110V chưa tải nổi dòng điện 220V thôi nè 🔮",
+      "Thứ làm bà mệt nhoài không phải là chuyện đã xảy ra, mà là việc bà cứ tua đi tua lại nó 1.000 lần trong đầu mỗi đêm á 🌙🌪️",
+      "Carl Jung bảo rồi: Chừng nào bà chưa gọi tên được nỗi sợ trong vô thức ra ánh sáng, nó sẽ âm thầm lái cuộc đời bà và bà gọi đó là số phận! 🕯️🐾",
+      "Bà đang phóng chiếu (Projection) sự tử tế của mình lên người ta rồi tự thất vọng đúng hơm? Hãy nhìn hành động thực tế của họ kìa 🪞",
+      "Cảm giác tội lỗi khi từ chối người khác là dấu hiệu ranh giới cá nhân đang bị thủng. Tập nói 'KHÔNG' để bảo vệ bình yên của mình nha! 🛡️✨",
+      "Có những nút thắt bà nghĩ là do duyên số trêu ngươi, thực ra là 'Đứa trẻ bên trong' (Inner Child) đang tìm lại một tổn thương cũ để cố sửa chữa thôi 🧩",
+      "Đừng sợ cảm xúc tiêu cực. Nỗi buồn hay sự tức giận chỉ là người đưa thư báo cho bà biết giá trị nào của bà vừa bị xâm phạm đó 💌🦁",
+      "Bà biết hiệu ứng 'Chi phí chìm' (Sunk Cost Fallacy) hơm? Đừng vì tiếc 1-2 năm thanh xuân đã lỡ đầu tư mà cược thêm cả tương lai vào một chỗ sai lầm! ⏳✂️",
+      "Bộ não con người nghiện sự quen thuộc hơn là sự hạnh phúc. Nên đôi khi bà nhớ một người không phải vì yêu, mà vì não đang thiếu cơn sóng dopamine quen thuộc thôi 🌊🧠",
+      "Khi bà khao khát được yêu thương nhưng lại cảnh giác cao độ (Hyper-vigilance), bà sẽ vừa đẩy người ta ra xa vừa mong người ta đừng bỏ đi 🥺🛡️",
+      "Đừng lấy thước đo của những ngày mình đang cạn kiệt năng lượng để đánh giá toàn bộ giá trị cuộc đời mình nha bà ơi 🔋🌷",
+      "Nhận thức có 3 tầng: Biết mình buồn -> Hiểu tại sao mình buồn -> Và dừng việc tự phán xét mình vì nỗi buồn đó. Bà đang ở tầng mấy rồi? 🪜✨",
+      "Sự cầu toàn (Perfectionism) nhiều khi không phải là muốn tốt hơn, mà là nỗi sợ bị chỉ trích đang đội lốt sự chăm chỉ đó bà! 🎭🐾",
+      "Nếu một kịch bản cứ lặp đi lặp lại với những gương mặt khác nhau, nghĩa là bài học tâm thức ở vòng đó bà vẫn chưa chịu tốt nghiệp đó 🔄🎓",
+      "90% hormone Serotonin tạo cảm giác an yên được sản xuất ở đường ruột á! Nên hôm nào tâm trạng chạm đáy, nhớ ăn món gì ấm nóng trước khi suy nghĩ nha 🍲🐾",
+      "Đừng cố dùng lý trí để đàn áp cảm xúc. Cảm xúc giống như quả bóng dưới nước vậy, bà càng ấn mạnh xuống thì lúc buông tay nó bật lên càng đau 🎈🌊",
+      "Có những ngày chỉ cần bà thức dậy, đánh răng, ăn đúng bữa và không tự trách bản thân đã là một chiến thắng vĩ đại lắm rồi! 🏆💖",
+      "Trực giác (Intuition) luôn nói thì thầm rất êm và rõ ràng, còn nỗi sợ (Anxiety) thì lúc nào cũng gào thét bắt bà phải cuống cuồng ngay lập tức 🧘‍♀️🔮",
+      "Khi bà thay đổi cách diễn giải một sự kiện trong đầu (Cognitive Reframing), toàn bộ năng lượng và cục diện bên ngoài sẽ tự động xoay trục theo 🔄✨",
+      "Bà không có nghĩa vụ phải làm nhân vật phụ hoàn hảo trong câu chuyện của bất kỳ ai. Hãy về làm nữ chính trong bộ phim của đời mình đi! 🎬👑",
+      "Sự im lặng của vũ trụ trong giai đoạn này không phải là sự bỏ rơi, mà là khoảng trống cần thiết để bà dọn dẹp lại căn phòng nội tâm của mình 🧹🌌"
+    ];
+
+    // 2. TẦNG GIẢI MÃ TÌNH CẢM, CRUSH, MẬP MỜ & NYC (35 CÂU)
+    const CAT_POOL_LOVE_DECODE = [
+      "Tui bắt quả tang bà vừa định vào soi trang cá nhân của người ta nữa đúng hơm?! Dừng cái tay lại ngay, rước độc vào tim bây giờ! 🛑😿",
+      "Người ta không trả lời tin nhắn chính là câu trả lời rõ ràng nhất rồi! Đừng tự bịa lý do 'chắc ảnh bận' để bào chữa giùm người làm mình buồn nữa 📱💔",
+      "Đứng giữa bãi đất trống mà huýt sáo thì chẳng có con bướm nào bay tới đâu! Cứ chăm cho cái cây của mình nở hoa rực rỡ đi đã 🌺🦋",
+      "Hợp nhau lúc đi ăn đi chơi thì dễ òm, hợp nhau ở cách giải quyết mâu thuẫn lúc cãi vã mới là thứ quyết định đi được đường dài đó bà! ⚖️🔥",
+      "Khi nào bà ngừng coi chuyện có bồ là cái KPI phải hoàn thành, lúc đó thần thái của bà tự khắc tỏa sáng thu hút đúng tần số xịn à! ✨👑",
+      "Người thật sự thương bà sẽ không bao giờ để bà phải đi hỏi bài Tarot xem 'họ có thương mình không' đâu. Sự chân thành luôn rất rõ ràng! 💡💖",
+      "Cái bẫy nguy hiểm nhất trong mối quan hệ mập mờ (Situationship) là người ta cho bà 10% hy vọng ở hiện tại, còn 90% còn lại là bà tự vẽ ra trong đầu! 🎨🌫️",
+      "Lúc người ta cần thì tìm tới dỗ ngọt, lúc bà cần thì biến mất tăm... Đó là hiệu ứng 'Bánh mì vụn' (Breadcrumbing) thao túng tâm lý đó, tỉnh táo lên nha bà! 🍞🚨",
+      "Một người chọn chiến tranh lạnh (Silent Treatment) bỏ mặc bà tự dằn vặt suốt mấy ngày liền không phải là người điềm tĩnh, mà là thiếu năng lực đối thoại cảm xúc 🧊🛑",
+      "Nếu ở cạnh một người mà bà lúc nào cũng phải đi nhón chân, lựa từng câu chữ vì sợ họ giận, thì đó là đi làm dâu cảm xúc chứ đâu phải yêu đương! 🥺🥀",
+      "Người yêu cũ quay lại sau 3 tháng im lặng giống như cái lò vi sóng hâm lại đồ ăn cũ vậy. Muốn biết có ăn tiếp được không thì phải soi xem nhân bên trong đã đổi chưa! 📻🔍",
+      "Đừng nhầm lẫn giữa 'Phản ứng hóa học mãnh liệt' (Chemistry) với 'Sự tương thích lâu dài' (Compatibility). Nhiều khi tim đập nhanh là do hệ thần kinh đang báo động đỏ đó! 💓⚠️",
+      "Bà thương người ta vì con người thật của họ ở hiện tại, hay bà đang yêu cái 'tiềm năng trong tương lai' mà bà tự kỳ vọng họ sẽ thay đổi vì bà? 💭🪞",
+      "Duyên ngẫu nhiên vận hành y hệt thuật toán Tóp Tóp vậy á! Ngày nào cũng đi đúng 1 cung đường cũ thì lấy đâu ra nhân tố mới nhảy vào đời bà? Đổi lộ trình đi nè! 🛵✨",
+      "Đừng dùng cơ thể hay sự hy sinh vô điều kiện để đổi lấy một danh phận. Thứ gì phải hạ mình xuống để xin xỏ thì cầm trên tay cũng chẳng bao giờ bền 💎🛡️",
+      "Kiểu gắn bó lo âu (Anxious) mà va phải kiểu gắn bó né tránh (Avoidant) là đúng bài 'Kẻ đuổi người chạy' làm khổ nhau tới sáng luôn á! Để Now chỉ cách phá vòng vây nha 🏃‍♀️🌀",
+      "Yêu một người có tam quan vững vàng sướng lắm bà: Họ chấp nhận sự khác biệt và không bao giờ dìm bà xuống để chứng minh họ thượng đẳng 🌿🤝",
+      "Nếu người ta thật sự muốn bước vào cuộc đời bà, họ sẽ tự khắc dẹp đường mà tới, chứ không bắt bà phải đứng chờ ở ngã tư trong mưa đâu ☔🚗",
+      "Đừng đem trái tim đang rỉ máu đi tìm một người chỉ muốn tìm chỗ giải khuây cuối tuần. Bảo vệ viên ngọc của mình kỹ vào nha bà! 💎🐾",
+      "Cắt đứt liên lạc (No Contact) không phải là chiêu trò để kéo người ta quay lại, mà là khoảng lặng bắt buộc để não bà cai nghiện cơn sóng cảm xúc độc hại đó ✂️🧘‍♀️"
+    ];
+
+    // 3. TẦNG SỰ NGHIỆP, ĐỊNH HƯỚNG & ĐỜI SỐNG (25 CÂU)
+    const CAT_POOL_CAREER_LIFE = [
+      "Mấy người thành công trong sách Outliers cũng đâu có tự dưng biết mình giỏi gì từ đầu đâu! Phải va đập đủ nhiều mới biết mình 'lì đòn' với thứ gì nhất á 💪🔥",
+      "Nếu công việc hiện tại vắt kiệt cả sức khỏe thể chất lẫn tinh thần của bà mỗi sáng thức dậy, thì lương cao mấy cũng là đang ứng trước tiền viện phí thôi 🏥💼",
+      "Đừng sợ cảm giác chênh vênh tuổi đôi mươi (Quarter-life Crisis). Phải có lúc sương mù che lối thì bà mới dừng lại để chỉnh đúng chiếc la bàn của đời mình 🧭🌫️",
+      "Bí quyết phát hiện thế mạnh không phải là ngồi trong phòng kín suy nghĩ, mà là thử chạm vào việc mới -> thấy mình chịu được sự nhàm chán của nó lâu hơn người khác -> cày tiếp! 🚀✨",
+      "Áp lực đồng trang lứa (Peer Pressure) xuất hiện khi bà lấy hậu trường ngổn ngang của mình đi so sánh với sân khấu đã chỉnh màu lung linh của người khác đó 📱🎭",
+      "Sinh ra trong hoàn cảnh bình thường hay đang ở phòng trọ nhỏ chỉ là điểm xuất phát, chẳng có lý do gì cấm bà đối xử với bản thân như một nàng công chúa cả! 👑🌷",
+      "Khi bà đang đứng trước ngã ba đường: Chọn con đường hơi đáng sợ vì nó mới mẻ sẽ giúp bà lớn lên, còn chọn con đường chỉ vì sợ hãi sẽ giữ bà dậm chân tại chỗ 🛤️⚡",
+      "Tiền bạc cũng là một dạng năng lượng tâm thức. Khi bà còn mang tâm lý sợ thiếu thốn (Scarcity Mindset), bà sẽ vô thức đẩy các cơ hội lớn ra xa đó 💸🧲",
+      "Đừng đợi tới khi 'hoàn toàn sẵn sàng' mới dám bắt đầu dự án mới hay chuyển việc. Sự tự tin chỉ sinh ra SAU khi bà đã xắn tay áo lên làm thôi! 🛠️🌟",
+      "Nếu môi trường hiện tại toàn năng lượng độc hại chuyên nói xấu và dìm hàng nhau, hãy âm thầm nâng cấp kỹ năng rồi sải cánh bay đi thật đẹp nha bà! 🦅💼",
+      "Trì hoãn (Procrastination) không phải do bà lười biếng đâu, mà là do não bộ đang sợ hãi áp lực phải làm cho thật hoàn hảo nên chọn cách trốn chạy đó 🧠⏳",
+      "Đầu tư vào ngoại hình, kiến thức và sự bình yên trong tâm trí là khoản đầu tư duy nhất trên đời không bao giờ bị lỗ vốn hay phản bội bà! 📈💖"
+    ];
+
+    // 4. TẦNG HOÀNG THƯỢNG MÈO ĐEN CHẢNH CHỌE & ĐÁNG YÊU (35 CÂU)
+    const CAT_POOL_CUTE_SASSY = [
+      "Meo~ Gãi đúng chỗ ngứa dưới cằm tui rồi! Nhma xong việc nhớ dắt Now đi mua súp thưởng cá ngừ cho tui nghen! 🐾🐟",
+      "Chạm tui hoài dạ sen! Tui là linh vật tâm lý học hệ Carl Jung chứ bộ thú nhồi bông hả... nhma vuốt nữa đi, êm quá 😻",
+      "Rừ... rừ... Nghe tiếng mèo kêu tần số 432Hz chữa lành chưa bà? Bấm cái nữa tui bắn tim cho nè (｡･ω･｡)ﾉ♡",
+      "Nựng tui thì miễn phí, mà tâm sự với sốp Now sau khi xem bài xong cũng miễn phí 0đ trọn đời luôn á! Đỉnh hơm? 💝🐾",
+      "Á nha! Chọt trúng cái bụng mỡ của tui rồi! Tui không có mập, tui chỉ bị tràn năng lượng thấu cảm thôi nha! 😾✨",
+      "Bà thấy đôi mắt vàng của tui hơm? Ban đêm phát sáng soi thấu mọi tâm sự giấu kín trong lòng bà luôn đó 👀🌙",
+      "Meo~ Hôm nay ngoài kia có ai ăn hiếp hay làm bà buồn hơm? Chỉ mặt đi tui kêu Now rút bài bóc trần người đó liền! 🐾🔥",
+      "Ngồi canh cái web này từ sáng tới khuya mỏi nhừ 4 cái chân măng cụt luôn á, bà thưởng cho tui 1 cái vuốt đầu đi 🌷",
+      "Bí mật nha: Sốp Now nhìn lý trí sắc sảo vậy thôi chứ nói chuyện dịu dàng, ấm áp số 1 vũ trụ luôn á bà! 🥺💖",
+      "Meo~ Nắm cổ tui kéo đi đâu thì kéo, chứ đừng bỏ rơi tui một mình ở góc màn hình nha, tui sợ cô đơn lắm á 🐾😿",
+      "Chạm nhẹ thôi nha sen, rớt cái mũ lễ hội trên đầu tui bây giờ! Now mới đội cho tui hồi sáng đó 🎩✨",
+      "Tui vừa bấm quẻ bằng đệm thịt chân mèo: Quẻ báo hôm nay bà sẽ trút bỏ được một tảng đá siêu to trong lòng! 🎉🐾",
+      "Sen làm cái gì mà bấm tui miết dạ? Tính thử xem tui có biết nói tiếng người thật không hả? Biết đọc vị tâm lý luôn á nha! 😼🐾",
+      "Ghé nhà Now là coi như bước chân vào trạm sạc tâm hồn rồi, bỏ hết gánh nặng xuống thảm đi tui giữ giùm cho 🛋️✨",
+      "Người ta nuôi mèo tốn tiền mua cát mua hạt, còn Now nuôi tui chỉ tốn công nghe tui mách lẻo xem khách nào đang buồn thôi á 😹💌",
+      "Ê bà, bộ lông đen tuyền của tui là 'Hố đen vũ trụ' chuyên hút sạch năng lượng tiêu cực và xui xẻo của bà đó nha! Chạm vô xả xui liền 🌌🐈‍⬛",
+      "Bà cứ chạm vào tui thoải mái đi, tui được lập trình bằng tình yêu thương nên không bao giờ biết cắn hay quào khách đâu ( ˘ ³˘)♥",
+      "Meo~ Cứ mỗi 3-4 lần bà nựng tui là tui sẽ lén rút tặng bà 1 lá bài Tarot Ẩn Chính miễn phí đó, thử bấm tiếp coi! 🎴🐾",
+      "Tui để ý nãy giờ bà lướt web mà mặt hơi đăm chiêu nha! Giãn cơ mặt ra, cười mỉm một cái cho xinh gái coi nào 😊🌸",
+      "Ai bảo mèo đen là xui? Mèo đen nhà NowNow là thần hộ mệnh mang vía sáng suốt, tỉnh táo và nhẹ lòng tới cho bà đó nha! 🍀🐾",
+      "Nhìn tui nhỏ nhắn xinh xắn vầy thôi chứ trong bụng tui chứa hơn 240 câu thoại tâm lý học không câu nào đụng hàng câu nào luôn á! 🎓😼",
+      "Sen ơi, nếu bà đang nằm lướt điện thoại thì cẩn thận coi chừng mỏi cổ nha, đổi tư thế nằm cho êm đi rồi đọc tiếp 🛌📱"
+    ];
+
+    // 5. TẦNG DẪN ĐƯỜNG THÔNG MINH & BÍ KÍP ĐẶT LỊCH (25 CÂU)
+    const CAT_POOL_GUIDE_BOOKING = [
+      "Bà ngại nói chuyện trực tiếp hả? Chọn 'Voice Note 2 chiều' ở Mục 1 nha, vừa nằm đắp chăn vừa gửi voice tâm sự cực kỳ riêng tư luôn 🎙️🛌",
+      "Còn nếu muốn đối thoại mặt đối mặt gỡ rối trực tiếp và có video Record nghe lại thì chọn 'Gọi Google Meet' nha bà! 💻✨",
+      "Ở nhà NowNow làm gì có chuyện bắt đặt cọc trước! Bà cứ trò chuyện tới khi nào lòng nhẹ tênh mới dừng đồng hồ tính phí nha ⏳💝",
+      "Bấm vào cổng 'Feedback từ Khách Hàng' xem chiếc iPhone 14 Pro đi bà, 21 bức ảnh chụp tin nhắn thật 100% không che đậy luôn á 📱🔥",
+      "Mấy bài viết trên Threads của Now toàn 50K đến 200K view thôi, bà mở cổng 'Tạp Chí Tâm Thức' đọc thử mà xem, thấm từng chữ! 🧵📖",
+      "Bà chưa biết chọn bao nhiêu phút hả? Cứ kéo thử thanh trượt ở Mục 3 đi, kéo tới đâu tui phân tích xem giải quyết được gì tới đó liền! 🎚️🐾",
+      "Nhớ chạm chọn mấy cái nút chủ đề ở Mục 2 nha (Tình cảm, Công việc, Vòng lặp...), lúc bấm Đặt lịch tui tự động Copy sẵn cho bà luôn! 📋✨",
+      "Góc trên bên trái có nút 'Menuuu' 3 gạch kìa bà, bấm vào đó nhảy cái vèo tới bất kỳ mục nào trên trang luôn, tiện cực kỳ! 🧭",
+      "Góc trên bên phải có lá cờ Việt Nam 🇻🇳 và Vương Quốc Anh 🇬🇧 kìa, bấm phát là cả trang web lẫn tui đều bắn Tiếng Anh mượt như gió luôn! 🌍",
+      "Xem bài xong Now gửi tặng bà trọn bộ ảnh chụp trải bài kèm file ghi âm riêng tư, vài tháng sau mở nghe lại vẫn thấy thấm! 💌🎧",
+      "Đừng sợ câu chuyện của mình dài dòng hay rối rắm nha! Now đã lắng nghe hơn 7.500+ giờ đối thoại 1:1 rồi, cỡ nào Now cũng gỡ cùng bà được hết! 🤝💖",
+      "Ở NowNow là đối thoại 1:1 người thật việc thật bằng trực giác thấu cảm nha, nói KHÔNG với văn mẫu trí tuệ nhân tạo phán sáo rỗng! 🚫🤖",
+      "Bà không cần phải cung cấp tên thật, ngày tháng năm sinh hay ảnh chụp khuôn mặt gì hết trơn á! Bảo mật danh tính tuyệt đối 100% 🔒✨",
+      "Trong cửa sổ Feedback có tận 2 tab lận nha: Tab 1 là 'Feedback từ ảnh' trên iPhone, còn Tab 2 là 'Feedback trên web' kéo trực tiếp từ Google Sheets về đó! ⭐📊",
+      "Nhiều bà sợ chưa chuẩn bị sẵn câu hỏi thì không xem được. Yên tâm nha, bà chỉ cần kể sơ bối cảnh, Now sẽ tự dẫn dắt và khơi mở từng nút thắt cùng bà! 🕯️🌷",
+      "Khi bà bấm nút 'Nhắn Đặt Lịch Qua Messenger' hoặc 'Instagram', hệ thống tự chép sẵn nội dung rồi mở thẳng ứng dụng cho bà chỉ việc Dán (Paste) thôi! ⚡📲",
+      "Dải chữ đang chạy ngang trong thẻ Feedback là nhật ký hồi âm thật của các bạn vừa xem bài xong gửi về từ Google Sheets đó bà, rê chuột vào là nó dừng lại cho đọc nha! 🕊️💌"
+    ];
+
+    // 6. TẦNG NHỊP SINH HỌC THEO GIỜ TRONG NGÀY (35 CÂU CHIA 7 CA)
+    const CAT_HOURLY_DIAGNOSTICS = {
+      dawn: [
+        "Bình minh rồi nè bà ơi! Thức sớm hít một hơi thật sâu, ngày mới năng lượng mới, chuyện cũ hôm qua bỏ lại sau lưng nha ☀️🌱",
+        "Chào buổi sáng người đẹp! Nhớ uống một ly nước ấm đánh thức cơ thể rồi hẵng bắt đầu ngày mới nghen ☕🐾",
+        "Dậy sớm vầy là chuẩn bị đi học/đi làm hay là trằn trọc cả đêm chưa ngủ được dạ bà? Thương cái thân mình một xíu nha 🥺🌅",
+        "Nắng sớm mang tần số chữa lành mạnh lắm á, mở cửa sổ đón chút gió trời cho tâm trí thông thoáng nha bà 🌤️🍃"
+      ],
+      morning: [
+        "Đang ngồi công ty hay trường học mà lòng cứ trôi lửng lơ đúng hơm? Hít thở đều, tập trung xử lý từng việc một nha 💻🌤️",
+        "Buổi sáng mà deadline réo quá thì nhớ giải lao 5 phút ngắm tui nè, đừng để cortisol căng thẳng tăng cao nha sen 🐱✨",
+        "Giữa giờ sáng rồi, thẳng cái lưng lên, thả lỏng hai bờ vai đang gồng cứng ra nào bà ơi! 🧘‍♀️💛",
+        "Nếu sáng nay tự dưng thấy lòng nặng trĩu vì một tin nhắn chưa hồi âm, cứ cất điện thoại đi làm việc của mình trước đã nha 📵💪"
+      ],
+      noon: [
+        "Tới giờ cơm trưa rồi bà ơii! Dù buồn tình hay lo việc thì cũng phải ăn no cái bụng trước đã, bụng đói não dễ tiêu cực lắm á 🍱🥢",
+        "Chợp mắt nghỉ trưa 15-20 phút đi bà, sạc lại cục pin sinh học một xíu chiều nay mới tỉnh táo được nè 🔋💤",
+        "Trưa nay bà ăn món gì ngon hơm? Đừng có uống mỗi ly trà sữa trừ cơm đó nha, mèo đen nhìn thấu hết á! 🧋😾",
+        "Giờ nghỉ trưa yên tĩnh vầy mà lướt đọc Tạp Chí Tâm Thức của Now là hợp cảnh số 1 luôn á bà 🧵✨"
+      ],
+      afternoon: [
+        "Tầm 2-4h chiều đường huyết dễ tụt nè, 90% serotonin nằm ở ruột á, thèm ngọt thì ăn miếng bánh rồi cày tiếp nha 🍰🐾",
+        "Sắp hết giờ làm/giờ học rồi, cố lên xíu nữa thôi! Tối nay về trút bỏ hết áo giáp để tâm sự cùng Now nha 🌇✨",
+        "Buổi chiều nắng bắt đầu dịu lại rồi, nếu trong lòng có nút thắt nào cứ âm ỉ từ sáng tới giờ thì đặt lịch tối nay gỡ luôn cho nhẹ nợ nha ⏳💌",
+        "Uống thêm ngụm nước lọc đi bà ơi, ngồi nhìn màn hình suốt từ trưa tới giờ khô hết cả mắt rồi kìa 💧👀"
+      ],
+      evening: [
+        "Tan ca về tới nhà rồi thì cởi bỏ hết những gồng gánh ngoài đường đi nha, ở đây bà được quyền yếu đuối và nói thật lòng mình 🛋️💖",
+        "Bữa tối ấm cúng chưa bà? Nếu lòng còn vướng bận chuyện tình cảm thì kéo xuống chọn số phút gửi tin nhắn cho Now nghen 🍲✨",
+        "Buổi tối là khoảng thời gian của riêng bà đó, đừng mang chuyện bực mình ở chỗ làm hay người không xứng đáng lên giường ngủ cùng nha 🛁🌙",
+        "Tầm tối vầy mà bật Voice Note 2 chiều vừa nằm lăn lóc trên nệm vừa thủ thỉ với Now là bao nhiêu mệt mỏi tan biến sạch sành sanh 🎙️🕯️"
+      ],
+      latenight: [
+        "Đêm xuống là lúc các chuyên gia overthinking bắt đầu hoạt động hết công suất nè! Tắt bớt đèn, cuộn chăn ấm đi tui canh chừng cho 🌙🕯️",
+        "Mười một mười hai giờ đêm mà vẫn lướt điện thoại thở dài... Đừng chịu đựng một mình, nhắn Now một tiếng cho nhẹ lòng nha bà 📱🥺",
+        "Ban ngày cười nói tỉnh bơ với cả thế giới, tới lúc tắt đèn nằm xuống nước mắt mới tự dưng trào ra đúng hơm? Lại đây tui ôm một cái nè 🫂🖤",
+        "Khuya rồi đó nha, não bộ sau 22h đêm rất hay phóng đại nỗi cô đơn lên gấp 3 lần. Đừng nhắn tin bốc đồng cho người cũ giờ này nghen! 🛑🌙"
+      ],
+      witching: [
+        "Lại mất ngủ nữa gòi! 1-3h sáng trằn trọc vì người ta không nhắn tin đúng hơm? Chọn khung '🌙 Cú Đêm (0h–4h)' Now thức canh cùng bà nè 🌙🦉",
+        "Đêm khuya thanh vắng là lúc vùng tối tiềm thức (Shadow) cựa mình mạnh nhất. Đừng sợ, có tui và Now ở đây gỡ cùng bà mà 🕯️🖤",
+        "Giờ này cả thành phố ngủ say hết rồi, chỉ còn những tâm hồn nhiều tâm sự nhất mới thức thôi... Tự vỗ về lồng ngực mình đi bà 🥺🫂",
+        "3h sáng mà mắt vẫn mở thao láo suy nghĩ chuyện tương lai... Đặt lịch Cú Đêm hoặc giữ lịch sáng mai để trút gánh nặng ra khỏi đầu rồi ngủ nha 🌌💤"
+      ]
+    };
+
+    // 7. PHẢN XẠ KHI BẤM LIÊN HOÀN (12 CẤP ĐỘ) & KÉO THẢ / QUAY LẠI TAB
+    const CAT_SPAM_CLICK_REACTIONS = [
+      "U là trời! Bấm gì mà liên thanh như gõ nhịp trống hội dạ bà! Tui chóng mặt muốn rớt hai con mắt vàng ra ngoài luôn rồi 😵‍💫🐾",
+      "Ê nha ê nha! Chọt hoài tui xòe móng vuốt mèo đen quào rách màn hình bây giờ đó nha sen! 😾⚡",
+      "Biết bà cưng tui rồi nhma bấm vừa vừa thôi, để dành ngón tay kéo xuống dưới chọn số phút đặt lịch xem bài ikkk! 😹💖",
+      "Á á nhột quá! Chọt trúng cọng râu thần giao cách cảm của tui rồi, nhiễu sóng tâm linh bây giờ! 📡🐱",
+      "Tui báo công an phường bây giờ nha! Tội danh: Hành hạ linh vật tâm lý học bằng cách nựng quá liều quy định! 🚨😹",
+      "Bấm nhanh cỡ này chắc ngoài đời lúc nhắn tin cãi nhau với bồ gõ phím tốc độ bàn thờ luôn đúng hơm?! ⌨️🔥",
+      "Thôi mà thôi mà~ Tui đầu hàng vô điều kiện! Tặng bà 100 điểm đáng yêu, giờ tha cho cái đầu tròn của tui đi 🏳️😻",
+      "Chọt thêm cái nữa là tui đòi thu phí 1 bịch hạt Royal Canin kèm 3 thanh súp thưởng Ciao đó nha, không nói nhiều! 🐟💰"
+    ];
+
+    const CAT_RETURN_TAB_REACTIONS = [
+      "Hí bà! Đi lướt Facebook/TikTok ngắm thiên hạ xong quay về đây với tui rồi hả? Bắt quả tang tại trận nha! 👀📱",
+      "Bà vừa đi đâu về đó? Tui ngồi canh cái màn hình này chờ bà sốt cả ruột, tưởng bà quên mất lối về nhà Now luôn gòi chứ 🐾😿",
+      "Vừa qua tab Messenger ngó xem người ta có sáng đèn xanh không rồi mới quay lại đây đúng hơm? Khai thật đi! 🔍😼",
+      "Đi một vòng ngoài kia ồn ào mệt mỏi rồi thì quay về góc nhỏ này ngồi xuống uống miếng nước, gỡ rối cùng Now nha 🍵✨",
+      "Ấy chà, người đẹp đã quay trở lại! Tui vẫn giữ nguyên vị trí và câu chuyện đang chờ bà ở ngay dưới kìa 🕯️💖"
+    ];
+
+    const CAT_DRAG_LAND_REACTIONS = [
+      "Hạ cánh an toàn! Đứng góc này phong thủy sáng sủa để canh nhà cho Now chuẩn bài luôn 🐾✨",
+      "Phù~ Bay một vòng muốn rớt cái mũ lễ hội luôn á sen! Góc này mát mẻ nè, duyệt! 😻🎩",
+      "Đặt tui ngồi đây rồi thì nhớ kéo xuống chọn số phút đặt lịch với Now nha bà! 🐾💖",
+      "Chỗ này view đẹp nè, nhìn rõ từng thao tác bà chọn chủ đề luôn. Cứ tự nhiên khám phá nha! 👀🌟",
+      "Cảm ơn sen đã bế tui sang chỗ mới nha, đứng mãi một góc hồi nãy tê hết cả 4 cái chân măng cụt 🐾🛋️",
+      "Rồi xong, đóng đô tại tọa độ mới! Bà cần tui tư vấn mục nào cứ chạm nhẹ vào đầu tui nghen 🧭🐱"
+    ];
+
+    // 8. KHO THOẠI TIẾNG ANH ĐA TẦNG (28 CÂU BẢN XỨ)
+    const CAT_POOL_EN_CLICK = [
+      "Meow~ Right under the chin! That feels so soothing! Don't forget to treat Now to some tuna later! 🐾🐟",
+      "Hey bestie! Stop acting like 'I am totally fine'. You can fool the world, but not this black cat! 🧠✨",
+      "Caught you red-handed trying to stalk their social profile again! Step away from the screen, protect your heart! 🛑😿",
+      "Silence IS an answer. Stop over-rationalizing excuses for someone who continuously hurts your peace... 🕯️",
+      "Overthinking is just your brain's defense mechanism shielding you from past wounds. Let Now help you unpack it! 🧠🛡️",
+      "When you stop treating a relationship like a life KPI, your authentic frequency naturally attracts the right soul ✨🌺",
+      "Zero upfront deposit here! We talk until your heart feels genuinely light before stopping the clock ⏳💖",
+      "One session unlocks free lifelong venting ($0 forever). A friend in your corner through every midnight storm 🤝🌙",
+      "Choose 'Two-Way Voice Notes' in Step 1 if you are an introvert—cozy up under your blanket and talk freely 🎙️🛌",
+      "Fun neuro fact: 90% of serotonin lives in your gut! When feeling low, grab a warm treat and breathe deeply 🍰🐾",
+      "Carl Jung said it best: Until you make the unconscious conscious, it will direct your life and you will call it fate 🔮🕯️",
+      "Don't let the Sunk Cost Fallacy keep you trapped in a draining situation just because you invested years into it ⏳✂️",
+      "The biggest trap in a situationship is getting 10% real effort while your imagination paints the other 90% 🎨🌫️",
+      "Someone who truly cherishes you will never leave you anxiously wondering where you stand in their life 💡💖",
+      "Check out the Client Feedback Hub! 21 unfiltered iPhone chat captures and real emotional shift journals 📱⭐",
+      "Prefer face-to-face clarity? Pick 'Live Call (Google Meet)' in Step 1—complete with a private recording to rewatch! 💻🎧",
+      "No real names, birth dates, or face photos required! 100% human empathy and cognitive psychology—zero AI scripts 🚫🤖",
+      "Your nervous system isn't broken; it's just exhausted from carrying unspoken boundaries for too long 🛡️🌱"
+    ];
+
+    // -------------------------------------------------------------------------
+    // C. CỖ MÁY PERSISTENT RING BUFFER + MULTI-DECK SHUFFLE (CHỐNG TRÙNG XUYÊN F5)
+    // -------------------------------------------------------------------------
+    const CAT_HISTORY_STORAGE_KEY = 'nownow_cat_seen_hashes_v2';
+    const MAX_GLOBAL_HISTORY = 75; // Nhớ 75 câu gần nhất kể cả khi khách F5 trang
+
+    function getGlobalSeenHistory() {
+      try {
+        const raw = localStorage.getItem(CAT_HISTORY_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function pushGlobalSeenHistory(quoteStr) {
+      try {
+        const key = quoteStr.slice(0, 42); // Lưu chữ ký gọn nhẹ
+        let hist = getGlobalSeenHistory();
+        hist = hist.filter(item => item !== key);
+        hist.push(key);
+        if (hist.length > MAX_GLOBAL_HISTORY) {
+          hist = hist.slice(hist.length - MAX_GLOBAL_HISTORY);
+        }
+        localStorage.setItem(CAT_HISTORY_STORAGE_KEY, JSON.stringify(hist));
+      } catch (e) {}
+    }
+
+    class NonRepeatingShuffleBag {
+      constructor(items) {
+        this.rawItems = [...items];
+        this.currentDeck = [];
+        this.lastDrawnItem = null;
+        this.resetAndShuffle();
+      }
+
+      shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      resetAndShuffle() {
+        const globalSeen = getGlobalSeenHistory();
+        const shuffled = this.shuffleArray([...this.rawItems]);
+
+        // Ưu tiên đẩy toàn bộ những câu khách CHƯA TỪNG ĐỌC (kể cả ở lần vào web trước) lên đầu bộ bài
+        const unseen = [];
+        const seen = [];
+        shuffled.forEach(item => {
+          if (globalSeen.includes(item.slice(0, 42))) seen.push(item);
+          else unseen.push(item);
+        });
+
+        this.currentDeck = [...unseen, ...seen];
+
+        if (this.currentDeck.length > 1 && this.currentDeck[0] === this.lastDrawnItem) {
+          const swapIdx = Math.floor(Math.random() * (this.currentDeck.length - 1)) + 1;
+          [this.currentDeck[0], this.currentDeck[swapIdx]] = [this.currentDeck[swapIdx], this.currentDeck[0]];
+        }
+      }
+
+      next() {
+        if (this.currentDeck.length === 0) {
+          this.resetAndShuffle();
+        }
+        const chosen = this.currentDeck.shift();
+        this.lastDrawnItem = chosen;
+        pushGlobalSeenHistory(chosen);
+        return chosen;
+      }
+    }
+
+    // Khởi tạo 7 bộ bài độc lập chống trùng lặp
+    const deckCBT = new NonRepeatingShuffleBag(CAT_POOL_CBT_JUNG);
+    const deckLove = new NonRepeatingShuffleBag(CAT_POOL_LOVE_DECODE);
+    const deckCareer = new NonRepeatingShuffleBag(CAT_POOL_CAREER_LIFE);
+    const deckCute = new NonRepeatingShuffleBag(CAT_POOL_CUTE_SASSY);
+    const deckGuide = new NonRepeatingShuffleBag(CAT_POOL_GUIDE_BOOKING);
+    const deckTarot = new NonRepeatingShuffleBag(catTarotMiniCards);
+    const deckSpam = new NonRepeatingShuffleBag(CAT_SPAM_CLICK_REACTIONS);
+    const deckEN = new NonRepeatingShuffleBag(CAT_POOL_EN_CLICK);
+
+    // Bộ xoay vòng 5 nhóm chủ đề chính (Round-Robin Rotator) để mỗi lần bấm là 1 phong vị hoàn toàn mới!
+    let deckRotatorIndex = 0;
+    const mainViDecks = [deckCBT, deckLove, deckCute, deckGuide, deckCareer];
+
+    // -------------------------------------------------------------------------
+    // D. BỘ NHỚ KÝ ỨC KHÁCH HÀNG LOCALSTORAGE (MEMORY ENGINE)
     // -------------------------------------------------------------------------
     const CAT_STORAGE_KEY = 'nownow_cat_soul_memory_v1';
 
@@ -3062,6 +3417,7 @@
           visits: 0,
           firstSeen: Date.now(),
           nightVisits: 0,
+          totalPokes: 0,
           lastSeen: Date.now()
         };
         mem.visits = (mem.visits || 0) + 1;
@@ -3073,83 +3429,24 @@
         localStorage.setItem(CAT_STORAGE_KEY, JSON.stringify(mem));
         return mem;
       } catch (e) {
-        return { visits: 1, nightVisits: 0 };
+        return { visits: 1, nightVisits: 0, totalPokes: 0 };
       }
     }
 
     // -------------------------------------------------------------------------
-    // TẦNG 3: ĐẠI TỪ ĐIỂN THOẠI HOÀNG THƯỢNG (36 CÂU CLICK + 20 CÂU TỰ ĐỘNG)
+    // E. HẠ TẦNG VẬN HÀNH BÉ MÈO: VỊ TRÍ, BONG BÓNG, WIGGLE & TỌA ĐỘ
     // -------------------------------------------------------------------------
-    const catInteractiveClickQuotes = [
-      // 1. NHÓM CUTE LẦY LỘI & NỊNH SEN (12 câu)
-      "Meo~ Gãi đúng chỗ ngứa dưới cằm tui rồi! Nhma xong việc nhớ dắt Now đi mua súp thưởng cá ngừ cho tui nghen! 🐾🐟",
-      "Chạm tui hoài dạ sen! Tui là linh vật tâm lý học hệ Carl Jung chứ bộ thú nhồi bông hả... nhma vuốt nữa đi, êm quá 😻",
-      "Rừ... rừ... Nghe tiếng mèo kêu tần số 432Hz chữa lành chưa bà? Bấm cái nữa tui bắn tim cho nè (｡･ω･｡)ﾉ♡",
-      "Nựng tui thì miễn phí, mà tâm sự với sốp Now sau khi xem bài xong cũng miễn phí 0đ trọn đời luôn á! Đỉnh hơm? 💝🐾",
-      "Á nha! Chọt trúng cái bụng mỡ của tui rồi! Tui không có mập, tui chỉ bị tràn năng lượng thấu cảm thôi nha! 😾✨",
-      "Bà thấy đôi mắt vàng của tui hơm? Ban đêm phát sáng soi thấu mọi tâm sự giấu kín trong lòng bà luôn đó 👀🌙",
-      "Meo~ Hôm nay ngoài kia có ai ăn hiếp hay làm bà buồn hơm? Chỉ mặt đi tui kêu Now rút bài bóc trần người đó liền! 🐾🔥",
-      "Ngồi canh cái web này từ sáng tới khuya mỏi nhừ 4 cái chân măng cụt luôn á, bà thưởng cho tui 1 cái vuốt đầu đi 🌷",
-      "Bí mật nha: Sốp Now nhìn lý trí sắc sảo vậy thôi chứ nói chuyện dịu dàng, ấm áp số 1 vũ trụ luôn á bà! 🥺💖",
-      "Meo~ Nắm cổ tui kéo đi đâu thì kéo, chứ đừng bỏ rơi tui một mình ở góc màn hình nha, tui sợ cô đơn lắm á 🐾😿",
-      "Chạm nhẹ thôi nha sen, rớt cái mũ lễ hội trên đầu tui bây giờ! Now mới đội cho tui hồi sáng đó 🎩✨",
-      "Tui vừa bấm quẻ bằng đệm thịt chân mèo: Quẻ báo hôm nay bà sẽ trút bỏ được một tảng đá siêu to trong lòng! 🎉🐾",
-
-      // 2. NHÓM BÓC TRẦN VÔ THỨC CBT & CARL JUNG (12 câu)
-      "Đừng gồng kiểu 'tui ổn, sao cũng được' nữa bà ơiii. Cái vỏ bọc mạnh mẽ đó lừa được thiên hạ chứ sao qua mắt được mèo đen! 🐾🧠",
-      "Tui bắt quả tang bà vừa định vào xem trang cá nhân của người ta nữa đúng hơm?! Dừng lại ngay, đau tim bây giờ! 🛑😿",
-      "Người ta im lặng chính là câu trả lời rõ ràng nhất rồi. Đừng tự dằn vặt tìm lý do bào chữa giùm người làm mình tổn thương nữa nghen...",
-      "Cái tính overthinking của bà thực ra là bộ não đang bật khiên bảo vệ bà khỏi vết thương cũ thôi. Nhma gồng hoài kiệt sức lắm, để Now gỡ cùng bà nha 🕯️",
-      "Bà hay sợ làm người khác buồn nên toàn tự nuốt ấm ức vào lòng đúng hơm? Từ nay tập thương bản thân mình trước tiên nha! 🌱💖",
-      "Không phải bà vô cảm đâu, mà vì tâm hồn bà nhạy cảm quá nên não tự ngắt cầu dao cảm xúc để bà không bị sập nguồn đó 🧠⚡",
-      "Đôi khi vũ trụ phanh gấp một mối quan hệ lại không phải vì bà xui, mà vì bình chứa 110V chưa tải nổi dòng điện 220V thôi nè 🔮",
-      "Đứng giữa bãi đất trống mà huýt sáo thì chẳng có con bướm nào bay tới đâu bà ơi! Cứ chăm cho cái cây của mình nở hoa rực rỡ đi đã 🌺🦋",
-      "Hợp nhau lúc đi ăn đi chơi thì dễ òm, hợp nhau ở cách giải quyết mâu thuẫn lúc cãi vã mới là thứ quyết định đi đường dài đó bà! ⚖️",
-      "Thứ làm bà mệt nhoài không phải là chuyện đã xảy ra, mà là việc bà cứ tua đi tua lại nó 1.000 lần trong đầu mỗi đêm á 🌙🌪️",
-      "Khi nào bà ngừng coi chuyện có người yêu là KPI phải hoàn thành, lúc đó năng lượng tự khắc tỏa sáng thu hút đúng người à! ✨",
-      "Carl Jung bảo rồi: Chừng nào bà chưa gọi tên được nỗi sợ trong vô thức ra ánh sáng, nó sẽ âm thầm lái cuộc đời bà đó! 🕯️🐾",
-
-      // 3. NHÓM CHỈ ĐƯỜNG & HƯỚNG DẪN TÂM SỰ (12 câu)
-      "Bà ngại nói chuyện trực tiếp hả? Chọn 'Voice Note 2 chiều' ở Mục 1 nha, vừa nằm đắp chăn vừa gửi voice tâm sự cực kỳ riêng tư luôn 🎙️🛌",
-      "Còn nếu muốn đối thoại mặt đối mặt gỡ rối trực tiếp và có video Record nghe lại thì chọn 'Gọi Google Meet' nha bà! 💻✨",
-      "Ở nhà NowNow làm gì có chuyện bắt đặt cọc trước! Bà cứ trò chuyện tới khi nào lòng nhẹ tênh mới dừng đồng hồ tính phí nha ⏳💝",
-      "Bấm vào cổng 'Feedback từ Khách Hàng' xem chiếc iPhone 14 Pro đi bà, 21 bức ảnh chụp tin nhắn thật 100% không che đậy luôn á 📱🔥",
-      "Mấy bài viết trên Threads của Now toàn 50K đến 200K view thôi, bà mở cổng 'Tạp Chí Tâm Thức' đọc thử mà xem, thấm từng chữ! 🧵📖",
-      "Bà chưa biết chọn bao nhiêu phút hả? Cứ kéo thử thanh trượt ở Mục 3 đi, kéo tới đâu tui phân tích xem giải quyết được gì tới đó liền! 🎚️🐾",
-      "Nhớ chạm chọn mấy cái nút chủ đề ở Mục 2 nha (Tình cảm, Công việc, Vòng lặp...), lúc bấm Đặt lịch tui tự động Copy sẵn cho bà luôn! 📋✨",
-      "Góc trên bên trái có nút 'Menuuu' 3 gạch đó bà, bấm vào đó nhảy cái vèo tới bất kỳ mục nào trên trang luôn, tiện cực kỳ! 🧭",
-      "Góc trên bên phải có lá cờ Việt Nam 🇻🇳 và Vương Quốc Anh 🇬🇧 kìa, bấm phát là cả trang web lẫn tui đều bắn Tiếng Anh mượt như gió luôn! 🌍",
-      "Xem bài xong Now gửi tặng bà trọn bộ ảnh chụp trải bài kèm file ghi âm riêng tư, vài tháng sau mở nghe lại vẫn thấy thấm! 💌🎧",
-      "Đêm hôm 1-2h sáng mà lòng trĩu nặng không ngủ được thì bấm sang nút '🌙 Cú Đêm (0h - 4h sáng)' nha, Now thức canh cùng bà đó!",
-      "Đừng sợ câu chuyện của mình dài dòng hay rối rắm nha! Now đã lắng nghe hơn 7.500+ giờ đối thoại 1:1 rồi, cỡ nào Now cũng gỡ cùng bà được hết! 🤝💖"
-    ];
-
-    const catPassiveDialogues = [
-      "Meo~ Xem 1 lần là được làm bạn tâm sự 0đ trọn đời với sốp NowNow đó bà ơi! 💝",
-      "Mew~ 0đ đặt cọc, trò chuyện tới khi lòng thực sự thông suốt mới dừng đồng hồ tính phí nè! ✨",
-      "Meo~ Sốp đọc vị tâm lý bằng CBT & Carl Jung sâu lắm, không phán bừa hay hù dọa đâu 🧠",
-      "Miaow~ Lò vi sóng 3 tháng còn quay lại được, bấm Hộp Thư xem tin nhắn thật đi bà! 📱",
-      "Meo~ Đêm khuya trằn trọc thì chọn khung Cú Đêm (0h - 4h) để Now thức cùng bà nghen! 🌙",
-      "Mew~ Có tâm sự riêng khó nói cứ gõ vào ô chữ mờ ở Mục 2 nha, Now đọc hết á! ✍️",
-      "Miaow~ Đừng để vòng lặp lo âu làm bà nghẹt thở, gỡ từng nút một cùng Now nha! 🌷",
-      "Meo~ Nắm cổ tui kéo đi dạo một vòng quanh màn hình cho đỡ căng thẳng nè sen! 🐾",
-      "Mew~ 90% hormone hạnh phúc Serotonin nằm ở ruột đó, buồn quá thì đi ăn miếng bánh ngọt rồi về đây tâm sự nha! 🍰🐾",
-      "Miaow~ Duyên phận vận hành y như thuật toán Tóp Tóp vậy, đổi hành vi là vũ trụ tự khắc trả kết quả mới liền! ✨",
-      "Meo~ Đừng tự trách mình yếu đuối nữa, dám nhìn thẳng vào nỗi đau của mình đã là người dũng cảm nhất rồi! 🦁💖",
-      "Mew~ Bấm vào tui đi bà! Tui có tới hơn 50 câu chuyện bí mật muốn thủ thỉ với riêng bà nè! 🐾💌"
-    ];
-
-    let tipTimer = null;
+    let clickCounter = 0;
+    let totalSessionClicks = 0;
+    let lastClickTimestamp = 0;
+    let lastInteractionTimestamp = Date.now();
     let passiveLoopTimer = null;
     let roamLoopTimer = null;
-    let passiveIdx = 0;
-    let clickDialogueIdx = 0;
-    let lastUserInteractionTime = 0;
-
-    let catPosX = 0;
-    let catPosY = 0;
     let isDraggingCat = false;
     let hasDraggedDistance = false;
+    let catPosX = 0;
+    let catPosY = 0;
+    let tipTimer = null;
 
     function getCatDimensions() {
       const isMob = window.innerWidth <= 640;
@@ -3170,7 +3467,7 @@
       container.classList.toggle('cat-on-left', catPosX < window.innerWidth * 0.45);
     }
 
-    function showCatTip(text, duration = 5000) {
+    function showCatTip(text, duration = 5400) {
       if (document.body.classList.contains('portal-open')) return;
       const tip = document.getElementById('catBubbleTip');
       const txt = document.getElementById('catBubbleText');
@@ -3202,135 +3499,281 @@
       setTimeout(() => catBtn.classList.remove('cat-bouncing'), 580);
     }
 
-    // Khi bấm trực tiếp vào mèo: Phát tiếng kêu thật + xoay vòng 36 câu thoại
+    function getCircadianQuote() {
+      const hr = new Date().getHours();
+      let pool = CAT_HOURLY_DIAGNOSTICS.morning;
+
+      if (hr >= 5 && hr < 8.5) pool = CAT_HOURLY_DIAGNOSTICS.dawn;
+      else if (hr >= 8.5 && hr < 11.5) pool = CAT_HOURLY_DIAGNOSTICS.morning;
+      else if (hr >= 11.5 && hr < 13.5) pool = CAT_HOURLY_DIAGNOSTICS.noon;
+      else if (hr >= 13.5 && hr < 17.5) pool = CAT_HOURLY_DIAGNOSTICS.afternoon;
+      else if (hr >= 17.5 && hr < 22) pool = CAT_HOURLY_DIAGNOSTICS.evening;
+      else if (hr >= 22) pool = CAT_HOURLY_DIAGNOSTICS.latenight;
+      else pool = CAT_HOURLY_DIAGNOSTICS.witching;
+
+      const globalSeen = getGlobalSeenHistory();
+      const unseen = pool.filter(q => !globalSeen.includes(q.slice(0, 42)));
+      const pickPool = unseen.length > 0 ? unseen : pool;
+      const chosen = pickPool[Math.floor(Math.random() * pickPool.length)];
+      pushGlobalSeenHistory(chosen);
+      return chosen;
+    }
+
+    // Hỗ trợ hàm cũ initLiveAvailabilityStatus()
+    window.getHourBasedCatDialogue = getCircadianQuote;
+
+    // -------------------------------------------------------------------------
+    // F. SỰ KIỆN CLICK MÈO (XOAY TUA 5 TẦNG + RÚT BÀI TAROT ẨN CHÍNH MỖI 4 CLICK)
+    // -------------------------------------------------------------------------
     function pokeRealCatMeow() {
-      lastUserInteractionTime = Date.now();
+      const now = Date.now();
+      lastInteractionTimestamp = now;
+      totalSessionClicks++;
       playCuteMeowSound();
       triggerCatGentleWiggle();
 
-      const msg = catInteractiveClickQuotes[clickDialogueIdx % catInteractiveClickQuotes.length];
-      clickDialogueIdx++;
-      showCatTip(msg, 5600);
+      if (now - lastClickTimestamp < 1400) {
+        clickCounter++;
+      } else {
+        clickCounter = 1;
+      }
+      lastClickTimestamp = now;
+
+      // 1. Phản xạ khi khách spam click liên hoàn (>= 4 lần liên tiếp)
+      if (clickCounter >= 4) {
+        clickCounter = 0;
+        showCatTip(deckSpam.next(), 5400);
+        return;
+      }
+
+      // 2. Nếu đang bật chế độ Tiếng Anh
+      if (window.currentNowNowLang === 'en') {
+        showCatTip(deckEN.next(), 5400);
+        return;
+      }
+
+      // 3. Cứ mỗi lần chạm thứ 4 (4, 8, 12, 16...), Mèo Đen rút tặng 1 lá bài Tarot Ẩn Chính không trùng!
+      if (totalSessionClicks % 4 === 0) {
+        const tarotCard = deckTarot.next();
+        showCatTip(`✨ <b>Mèo Đen rút tặng bà 1 lá bài ngẫu nhiên nè:</b><br>${tarotCard}`, 6800);
+        return;
+      }
+
+      // 4. Xoay tua lần lượt qua 5 bộ bài (CBT -> Tình cảm -> Đáng yêu -> Dẫn đường -> Sự nghiệp) để 100% đổi vị liên tục
+      const activeDeck = mainViDecks[deckRotatorIndex % mainViDecks.length];
+      deckRotatorIndex++;
+      showCatTip(activeDeck.next(), 5800);
     }
 
     // -------------------------------------------------------------------------
-    // TẦNG 1: 6 GIÁC QUAN RÌNH RẬP HÀNH VI TOÀN TRANG (BEHAVIORAL HOOKS)
+    // G. PHẢN XẠ ĐA KỊCH BẢN CHO THANH TRƯỢT SỐ PHÚT (KHÔNG BAO GIỜ NHAI LẠI 1 CÂU)
     // -------------------------------------------------------------------------
-    
-    // Giác quan 1: Bắt bài khi kéo thanh trượt thời lượng
+    const SLIDER_DYNAMIC_REACTIONS = {
+      tier15: [
+        (m, p) => `Meo~ <b>${m} phút (~${p}K)</b> là phát súng gỡ nhanh đúng 1 câu hỏi đang làm bà phân vân tức thì! Gãy gọn, đi thẳng trọng tâm 🎯`,
+        (m, p) => `Chọn <b>${m} phút (~${p}K)</b> hả bà? Cực hợp để soi nhanh thái độ của một người hoặc chốt hạ 1 quyết định ngắn gọn nè ⚡🐾`,
+        (m, p) => `<b>${m} phút (~${p}K)</b> vừa đủ để Now điểm trúng huyệt tâm lý đang làm bà bồn chồn từ sáng tới giờ đó! 💡✨`
+      ],
+      tier30: [
+        (m, p) => `Mốc <b>${m} phút (~${p}K)</b> vừa vặn để giải mã một mối quan hệ mập mờ, chuyện crush hay người cũ vừa nhắn tin lại nè 💘`,
+        (m, p) => `<b>${m} phút (~${p}K)</b> là khoảng thời gian siêu lý tưởng để bóc tách 1-2 khía cạnh cụ thể cho lòng nhẹ tênh mà ví vẫn êm ru 🌷✨`,
+        (m, p) => `Với <b>${m} phút (~${p}K)</b>, tụi mình sẽ đi thẳng vào câu chuyện chính và vạch ra hướng xử lý thực tế ngay trong tuần này nha 🧭🐾`
+      ],
+      tier60: [
+        (m, p) => `<b>${m} phút (~${p}K)</b> là chân ái được chọn nhiều nhất nhà Now nè! Đủ thong thả lôi cả gốc rễ vô thức ra ánh sáng 🕯️✨`,
+        (m, p) => `Chuẩn bài luôn! <b>${m} phút (~${p}K)</b> giúp bà thoải mái trải lòng cả chuyện tình cảm lẫn công việc mà không lo bị ngắt mạch cảm xúc 💖`,
+        (m, p) => `Ở mốc <b>${m} phút (~${p}K)</b>, Now sẽ kết hợp cả trải bài Tarot lẫn phân tích CBT & Carl Jung để bà nhìn thấu toàn cảnh luôn 🧠🔮`
+      ],
+      tier90: [
+        (m, p) => `Chuyện có nhiều tầng chồng chéo đúng hơm bà? <b>${m} phút (~${p}K)</b> đủ để tụi mình bóc từng lớp vỏ hành tâm lý cho triệt để 🧅✨`,
+        (m, p) => `<b>${m} phút (~${p}K)</b> cực hợp khi bà đang kẹt trong một vòng lặp lâu năm và cần một cuộc đại phẫu nhận thức thật sâu sắc 🦋🕯️`,
+        (m, p) => `Chọn <b>${m} phút (~${p}K)</b> là tha hồ vừa xem bài, vừa phân tích tâm lý đối phương, vừa thiết kế lại ranh giới bản thân luôn nè 🛡️💞`
+      ],
+      tier120: [
+        (m, p) => `Mốc <b>${m} phút (~${p}K)</b> dành cho những hôm lòng ngổn ngang trăm mối tơ vò, cần đối thoại chuyên sâu từ A tới Z cùng Now 🌌💖`,
+        (m, p) => `<b>${m} phút (~${p}K)</b> (2 tiếng đồng hành) sẽ giúp bà tháo gỡ sạch sành sanh cả chuyện tình duyên, gia đình lẫn ngã rẽ sự nghiệp 🚀✨`
+      ],
+      tierMax: [
+        (m, p) => `U là trời chọn hẳn <b>${m} phút (~${p}K)</b>! Tính tâm sự xuyên màn đêm trút cạn tâm can với Now hay sao dạ? Now luôn sẵn sàng nghe bà tới cùng nè 🌙🫂`,
+        (m, p) => `Combo đại giải phẫu tâm thức <b>${m} phút (~${p}K)</b>! Xứng đáng là buổi trò chuyện đổi đời để vẽ lại toàn bộ bản đồ tương lai của bà 👑🌟`
+      ]
+    };
+    let sliderReactionCounter = 0;
+
     function triggerCatSliderReaction(minutes, priceK) {
-      lastUserInteractionTime = Date.now();
+      lastInteractionTimestamp = Date.now();
       triggerCatGentleWiggle();
 
-      if (minutes <= 15) {
-        showCatTip(`Meo~ <b>15 phút (~${priceK}K)</b> là phát súng gỡ nhanh đúng một nút thắt đang chẹn ngang họng bà nè! Gãy gọn, đi thẳng trọng tâm 🎯`, 4600);
-      } else if (minutes <= 30) {
-        showCatTip(`Mốc <b>30 phút (~${priceK}K)</b> vừa vặn nhất để soi chiếu chuyện crush mập mờ, người cũ hay một quyết định đang phân vân nè 💘`, 4600);
-      } else if (minutes <= 60) {
-        showCatTip(`<b>60 phút (~${priceK}K)</b> là chân ái nhà Now nè! Đủ thong thả lôi cả cái gốc rễ vô thức ra ánh sáng mà không lo bị đếm ngược 🕯️✨`, 4800);
-      } else if (minutes <= 120) {
-        showCatTip(`Chuyện nhiều tầng chồng chéo lắm đúng hơm bà? <b>${minutes} phút (~${priceK}K)</b> đối thoại sâu, bóc từng lớp vỏ hành cho nhẹ bẫng lồng ngực luôn 🧅`, 5000);
-      } else {
-        showCatTip(`U là trời chọn hẳn <b>${minutes} phút</b>! Tính tâm sự xuyên màn đêm trút cạn tâm can với Now hay sao dạ? Now luôn sẵn sàng ngồi nghe bà tới cùng nè 💖`, 5500);
+      if (window.currentNowNowLang === 'en') {
+        showCatTip(`Meow~! You chose <b>${minutes} mins (~${priceK}K VND)</b>. Ready to untangle your heart whenever you are! 🐾✨`, 4400);
+        return;
       }
+
+      let tierKey = 'tier60';
+      if (minutes <= 20) tierKey = 'tier15';
+      else if (minutes <= 40) tierKey = 'tier30';
+      else if (minutes <= 70) tierKey = 'tier60';
+      else if (minutes <= 105) tierKey = 'tier90';
+      else if (minutes <= 140) tierKey = 'tier120';
+      else tierKey = 'tierMax';
+
+      const variants = SLIDER_DYNAMIC_REACTIONS[tierKey];
+      const fn = variants[sliderReactionCounter % variants.length];
+      sliderReactionCounter++;
+      showCatTip(fn(minutes, priceK), 4800);
     }
 
-    // Giác quan 2 & 3 & 4 & 5: Tự động gắn tai mắt vào các nút bấm trên trang (Không cần sửa HTML)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && !document.body.classList.contains('portal-open')) {
+        if (Date.now() - lastInteractionTimestamp > 10000) {
+          setTimeout(() => {
+            triggerCatGentleWiggle();
+            const retMsg = CAT_RETURN_TAB_REACTIONS[Math.floor(Math.random() * CAT_RETURN_TAB_REACTIONS.length)];
+            showCatTip(retMsg, 5200);
+          }, 550);
+        }
+      }
+    });
+
+    // -------------------------------------------------------------------------
+    // H. MẮT THẦN BẮT BÀI HÀNH VI, COMBO CHỦ ĐỀ & ĐỌC TỪ KHÓA KHI GÕ PHÍM
+    // -------------------------------------------------------------------------
     function initBehavioralScrollObserver() {
-      // A. Quan sát khi dừng lại đọc kỹ 3 Lời hứa hoặc Cổng lưu trữ
       if ('IntersectionObserver' in window) {
         const sectionTimeouts = {};
+        const secTips = {
+          'sec-promises': [
+            "Tâm sự 0đ trọn đời là lời hứa danh dự của Now đó bà! Xem 1 lần là làm bạn mãi mãi, đêm hôm buồn tủi cứ nhắn nha 🥺💝",
+            "0đ đặt cọc trước — Ở đây tụi mình đặt sự nhẹ lòng và tin tưởng của bà lên trên hết, trò chuyện thông suốt rồi mới tính phí ⏳✨",
+            "7.500+ giờ đối thoại 1:1 bằng trực giác con người và tâm lý học CBT, không bao giờ dùng văn mẫu AI phán chung chung đâu bà 🧠💖"
+          ],
+          'sec-portals': [
+            "Feedback thật 100% người thật việc thật á bà, bấm mở khung iPhone đọc 21 tin nhắn các bạn tâm sự với Now mà ấm lòng xỉu 📸✨",
+            "Bà thử bấm vào cổng 'Tạp Chí Tâm Thức' đọc mấy bài viết 200K view trên Threads của Now đi, góc nhìn tâm lý cực kỳ sắc sảo luôn 🧵🔥"
+          ],
+          'sec-social': [
+            "Hôm nay chưa vội xem bài thì cứ bấm ghé thăm Threads, Instagram hay TikTok của Now để đọc tản văn chữa lành mỗi ngày nha 🌷🐾",
+            "Follow kênh của Now đi bà, biết đâu một bài đăng ngẫu nhiên trên Threads lại trả lời đúng câu hỏi bà đang trăn trở bấy lâu ✨💌"
+          ]
+        };
+
         const observer = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             const id = entry.target.id;
             if (entry.isIntersecting) {
               sectionTimeouts[id] = setTimeout(() => {
-                if (Date.now() - lastUserInteractionTime < 4500) return;
-                if (id === 'sec-promises') {
+                if (Date.now() - lastInteractionTimestamp < 4800) return;
+                const list = secTips[id];
+                if (list && list.length) {
                   triggerCatGentleWiggle();
-                  showCatTip("Tâm sự 0đ trọn đời là lời hứa danh dự của Now đó bà! Xem 1 lần là làm bạn mãi mãi, đêm hôm buồn tủi cứ nhắn nha 🥺💝", 5200);
-                } else if (id === 'sec-portals') {
-                  triggerCatGentleWiggle();
-                  showCatTip("Feedback thật 100% người thật việc thật á bà, bấm mở khung iPhone đọc tin nhắn các bạn tâm sự với Now mà ấm lòng xỉu 📸✨", 5200);
+                  const msg = list[Math.floor(Math.random() * list.length)];
+                  showCatTip(msg, 5200);
                 }
-              }, 5200);
+              }, 4800);
             } else {
               if (sectionTimeouts[id]) clearTimeout(sectionTimeouts[id]);
             }
           });
         }, { threshold: 0.55 });
 
-        ['sec-promises', 'sec-portals'].forEach(secId => {
+        ['sec-promises', 'sec-portals', 'sec-social'].forEach(secId => {
           const el = document.getElementById(secId);
           if (el) observer.observe(el);
         });
       }
 
-      // B. Bắt bài khi khách bấm chọn Tag chủ đề ở Mục 2
+      // Bắt bài khi khách chọn 1 hoặc COMBO nhiều nút chủ đề ở Mục 2
       const topicBtns = document.querySelectorAll('#topicTagGroup .soft-tag');
       topicBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          lastUserInteractionTime = Date.now();
-          if (!btn.classList.contains('active')) return; // Chỉ nói khi bật chọn
+          lastInteractionTimestamp = Date.now();
+          if (!btn.classList.contains('active')) return;
           triggerCatGentleWiggle();
+
+          const activeTexts = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active'))
+            .map(b => b.textContent).join(' + ');
+
+          // Nếu khách chọn Combo từ 2 nút trở lên -> Đọc vị tổ hợp tâm lý!
+          if (activeTexts.includes('Tình cảm') && activeTexts.includes('vòng lặp')) {
+            showCatTip("Á à! Combo <b>Tình cảm + Thoát vòng lặp cũ</b>! Cứ dây dưa mãi với một kiểu người làm mình tổn thương đúng hơm? Hôm nay cắt đứt gốc rễ cùng Now nha 💘✂️", 5400);
+            return;
+          }
+          if (activeTexts.includes('Công việc') && activeTexts.includes('bản thân')) {
+            showCatTip("Combo <b>Sự nghiệp + Hiểu rõ bản thân</b>! Đang muốn tìm ra sứ mệnh thật sự và điểm mạnh cốt lõi để bứt phá đúng hơm bà? Quá chuẩn luôn 💼🌱", 5400);
+            return;
+          }
+
           const txt = btn.textContent;
           if (txt.includes('Tình cảm')) {
-            showCatTip("Chuyện tình cảm đang làm tim bà nhói đúng hơm? Để Now dùng Tarot x CBT soi xem người ta thật lòng hay đang thao túng tâm lý bà nha 💘🔍", 5000);
+            showCatTip("Chuyện tình cảm đang làm tim bà nhói đúng hơm? Để Now dùng Tarot x CBT soi xem người ta thật lòng hay đang thao túng tâm lý bà nha 💘🔍", 5200);
           } else if (txt.includes('Công việc')) {
-            showCatTip("Đứng giữa ngã ba đường sự nghiệp dễ hoang mang lắm nè. Tụi mình cùng vạch lại tấm bản đồ định hướng thực tế, tỉnh táo nha 💼🌱", 5000);
+            showCatTip("Đứng giữa ngã ba đường sự nghiệp dễ hoang mang lắm nè. Tụi mình cùng vạch lại tấm bản đồ định hướng thực tế, tỉnh táo nha 💼🌱", 5200);
           } else if (txt.includes('vòng lặp')) {
-            showCatTip("Cứ lặp đi lặp lại một kịch bản cũ là dấu hiệu tiềm thức đang mắc kẹt đó. Tới lúc cắt đứt cái vòng luẩn quẩn này rồi bà ơi! 🔄✂️", 5000);
+            showCatTip("Cứ lặp đi lặp lại một kịch bản cũ là dấu hiệu tiềm thức đang mắc kẹt đó. Tới lúc cắt đứt cái vòng luẩn quẩn này rồi bà ơi! 🔄✂️", 5200);
           } else if (txt.includes('bản thân')) {
-            showCatTip("Quay về thấu hiểu chính mình (Shadow Work) là bước đi đỉnh nhất luôn! Hiểu mình rồi thì chẳng ai làm bà tổn thương được nữa 🌱✨", 5000);
+            showCatTip("Quay về thấu hiểu chính mình (Shadow Work) là bước đi đỉnh nhất luôn! Hiểu mình rồi thì chẳng ai làm bà tổn thương được nữa 🌱✨", 5200);
           }
         });
       });
 
-      // C. Bắt bài khi khách đặt tay gõ vào ô nhập tâm sự riêng
+      // Cảm biến Đọc Vị Từ Khóa Thông Minh khi khách gõ vào ô #bookingTopicInput
       const inputEl = document.getElementById('bookingTopicInput');
       if (inputEl) {
-        let hasReactedToTyping = false;
+        let lastKeywordTriggered = '';
         inputEl.addEventListener('focus', () => {
-          lastUserInteractionTime = Date.now();
+          lastInteractionTimestamp = Date.now();
           triggerCatGentleWiggle();
           showCatTip("Cứ gõ hết những điều đang đè nặng trong lòng hoặc khung giờ bà rảnh vào đây nha, tui với Now giữ bí mật tuyệt đối 100%! ✍️🤫", 5000);
         });
+
         inputEl.addEventListener('input', () => {
-          if (!hasReactedToTyping && inputEl.value.length > 12) {
-            hasReactedToTyping = true;
-            lastUserInteractionTime = Date.now();
-            triggerCatGentleWiggle();
-            showCatTip("Tui thấy bà viết tâm huyết quá trời nè 🥺 Lát bấm nút Đặt lịch là câu này tự động Copy vào bộ nhớ cho bà luôn nha!", 4800);
+          const val = inputEl.value.toLowerCase();
+          lastInteractionTimestamp = Date.now();
+
+          const keywordRules = [
+            { keys: ['nyc', 'người yêu cũ', 'quay lại', 'cũ'], id: 'ex', msg: "Bà đang nhắc tới <b>người yêu cũ</b> hả? 📻 Để Now trải bài kết hợp tâm lý học xem cái 'lò vi sóng' này đã thực sự thay đổi hay chỉ đang tìm chỗ lấp trống nha!" },
+            { keys: ['mập mờ', 'crush', 'thích', 'im lặng', 'ghost', 'lạnh nhạt'], id: 'crush', msg: "Tui thấy từ khóa <b>mập mờ / im lặng</b> rồi nha! 🔍 Đừng tự đoán già đoán non nữa, để Now bóc trần tâm lý và động cơ thật của người đó cho bà sáng tỏ!" },
+            { keys: ['công việc', 'nghỉ việc', 'nhảy việc', 'sếp', 'tiền', 'kinh doanh'], id: 'job', msg: "Chuyện <b>công việc & tài chính</b> đang làm bà đau đầu đúng hơm? 💼 Tụi mình sẽ phân tích thiệt - hơn thật tỉnh táo để bà chọn đúng bước đi tiếp theo nha!" },
+            { keys: ['mệt', 'khóc', 'buồn', 'bế tắc', 'mất ngủ', 'áp lực', 'stress'], id: 'sad', msg: "Đọc mấy chữ bà vừa gõ mà tui thương đứt ruột luôn á 🥺🫂 Cứ thở chậm lại một nhịp nha, lát vào phiên xem cứ khóc hoặc trút hết ra với Now, đừng gồng nữa..." }
+          ];
+
+          for (const rule of keywordRules) {
+            if (lastKeywordTriggered !== rule.id && rule.keys.some(k => val.includes(k))) {
+              lastKeywordTriggered = rule.id;
+              triggerCatGentleWiggle();
+              showCatTip(rule.msg, 5600);
+              return;
+            }
           }
         });
       }
 
-      // D. Bắt bài khi khách chọn Kênh tương tác (Voice Note / Google Meet)
       document.getElementById('chanVoiceBtn')?.addEventListener('click', () => {
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
         triggerCatGentleWiggle();
-        showCatTip("Chuẩn bài! Voice Note 2 chiều cực hợp cho mấy bà hướng nội, vừa nằm cuộn chăn vừa nghe giọng ấm áp của Now 🎙️💖", 4500);
+        showCatTip("Chuẩn bài! Voice Note 2 chiều cực hợp cho mấy bà hướng nội, vừa nằm cuộn chăn vừa nghe giọng ấm áp của Now 🎙️💖", 4600);
       });
       document.getElementById('chanMeetBtn')?.addEventListener('click', () => {
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
         triggerCatGentleWiggle();
-        showCatTip("Gọi Google Meet đối thoại trực tiếp siêu nhanh thông suốt, lại còn có file Record riêng tư để bà mở nghe lại nữa nè 💻✨", 4500);
+        showCatTip("Gọi Google Meet đối thoại trực tiếp siêu nhanh thông suốt, lại còn có file Record riêng tư để bà mở nghe lại nữa nè 💻✨", 4600);
       });
 
-      // E. Bắt bài khi khách chọn Khung giờ (Ban Ngày / Cú Đêm)
       document.getElementById('tfBtnDay')?.addEventListener('click', () => {
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
         triggerCatGentleWiggle();
-        showCatTip("Khung Ban Ngày (9h – 0h) năng lượng tỉnh táo, giá lại siêu hạt dẻ chỉ từ 59K (30p) và 99K (60p) thôi nè ☀️✨", 4500);
+        showCatTip("Khung Ban Ngày (9h – 0h) năng lượng tỉnh táo, giá lại siêu hạt dẻ chỉ từ 59K (30p) và 99K (60p) thôi nè ☀️✨", 4600);
       });
       document.getElementById('tfBtnNight')?.addEventListener('click', () => {
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
         triggerCatGentleWiggle();
         showCatTip("Team Cú Đêm (0h – 4h sáng) đây rồi! Đêm khuya tĩnh lặng là lúc vô thức dễ mở lòng nhất, Now thức trọn đêm cùng bà nha 🌙🕯️", 4800);
       });
     }
 
-    // Giác quan 6: Rình rập hành vi Kéo / Quăng quật mèo
+    // -------------------------------------------------------------------------
+    // I. KHỞI CHẠY ĐI DẠO, KÉO THẢ & VÒNG LẶP THOẠI TỰ ĐỘNG ĐA TẦNG
+    // -------------------------------------------------------------------------
     function initCatRoamingAndDragging() {
       const container = document.getElementById('floatingCatContainer');
       const catBtn = document.getElementById('catBtnEl');
@@ -3347,7 +3790,7 @@
       catBtn.addEventListener('pointerdown', (e) => {
         isDraggingCat = true;
         hasDraggedDistance = false;
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
         startClientX = e.clientX;
         startClientY = e.clientY;
         initialCatX = catPosX;
@@ -3365,7 +3808,7 @@
         if (Math.hypot(dx, dy) > 8) {
           if (!hasDraggedDistance) {
             hasDraggedDistance = true;
-            showCatTip('Á á~ Sen xách cổ tui bay lượn vầy tui chóng mặt quào rách màn hình bây giờ! 🐾😹', 3200);
+            showCatTip('Á á~ Sen xách cổ tui bay lượn vầy tui chóng mặt rớt cái mũ lễ hội bây giờ! 🐾😹', 3200);
           }
           setCatScreenPosition(initialCatX + dx, initialCatY + dy);
         }
@@ -3375,29 +3818,24 @@
         if (!isDraggingCat) return;
         isDraggingCat = false;
         container.classList.remove('dragging');
-        lastUserInteractionTime = Date.now();
+        lastInteractionTimestamp = Date.now();
 
         if (!hasDraggedDistance) {
           pokeRealCatMeow();
         } else {
           playCuteMeowSound();
-          const landMsgs = [
-            'Hạ cánh an toàn! Đứng góc này phong thủy sáng sủa để canh nhà cho Now chuẩn bài luôn 🐾✨',
-            'Phù~ Bay một vòng muốn rớt cái mũ luôn á sen! Góc này mát mẻ nè, duyệt! 😻🎩',
-            'Đặt tui ngồi đây rồi thì nhớ kéo xuống chọn số phút đặt lịch với Now nha bà! 🐾💖'
-          ];
-          showCatTip(landMsgs[Math.floor(Math.random() * landMsgs.length)], 4200);
+          const msg = CAT_DRAG_LAND_REACTIONS[Math.floor(Math.random() * CAT_DRAG_LAND_REACTIONS.length)];
+          showCatTip(msg, 4400);
         }
       };
 
       catBtn.addEventListener('pointerup', finishCatDrag);
       catBtn.addEventListener('pointercancel', finishCatDrag);
 
-      // Mèo tự động đi dạo thong thả dọc mép màn hình
       if (roamLoopTimer) clearInterval(roamLoopTimer);
       roamLoopTimer = setInterval(() => {
         if (isDraggingCat || document.body.classList.contains('portal-open')) return;
-        if (Date.now() - lastUserInteractionTime < 4500) return;
+        if (Date.now() - lastInteractionTimestamp < 4800) return;
 
         const { w, h, margin } = getCatDimensions();
         const chooseRightSide = Math.random() > 0.35;
@@ -3407,43 +3845,66 @@
         const targetY = minY + Math.random() * (maxY - minY);
 
         setCatScreenPosition(targetX, targetY);
-      }, 12000);
+      }, 12500);
 
       window.addEventListener('resize', () => {
         setCatScreenPosition(catPosX, catPosY);
       });
     }
 
-    // -------------------------------------------------------------------------
-    // VÒNG LẶP THOẠI & LỜI CHÀO KÝ ỨC ĐẦU TRANG
-    // -------------------------------------------------------------------------
     function startPassiveCatDialogueLoop() {
       const memory = recordCatMemoryVisit();
-      
-      // Chào đón cá nhân hóa theo ký ức sau khi mở trang 1.2 giây
-      setTimeout(() => {
-        if (memory.nightVisits >= 2 && new Date().getHours() < 4) {
-          showCatTip("Lại mất ngủ nữa gòi! Mấy đêm liền thấy bà thức tầm này, bộ đầu óc cứ tua lại chuyện cũ hả? Đừng tự dằn vặt mình nữa nha... 🥺🌙", 5800);
-        } else if (memory.visits === 1) {
-          showCatTip("Chào bà mới ghé nhà NowNow lần đầu nha! Tui là Mèo Đen canh giữ trạm dừng chân này nè 🐾✨ Bấm vào người tui để nghe tui kể chuyện nghen!", 5500);
-        } else if (memory.visits <= 3) {
-          showCatTip("Ủa bà quay lại nè! Lòng còn ngổn ngang chuyện hôm trước hay ghé tìm Now đọc tản văn chữa lành dạ? (｡･ω･｡)ﾉ♡", 5500);
-        } else {
-          showCatTip(`Khách quen cứng cựa ghé thăm lần thứ ${memory.visits} rồi nè! Có chuyện gì mới làm bà bận lòng đúng hơm, chạm vào tui tâm sự liền đi 🐾💖`, 5500);
-        }
-      }, 1200);
 
-      // Vòng lặp thoại tự động mỗi 7 giây
+      setTimeout(() => {
+        if (window.currentNowNowLang === 'en') {
+          showCatTip(deckEN.next(), 5500);
+          return;
+        }
+        if (memory.nightVisits >= 2 && new Date().getHours() < 4) {
+          showCatTip("Lại mất ngủ nữa gòi! Mấy đêm liền thấy bà thức tầm này, bộ đầu óc cứ tua lại chuyện cũ hả? Đừng tự dằn vặt mình nữa nha... 🥺🌙", 6000);
+        } else if (memory.visits === 1) {
+          showCatTip("Chào bà mới ghé nhà NowNow lần đầu nha! Tui là Mèo Đen canh giữ trạm dừng chân này nè 🐾✨ Chạm vào người tui để nghe tui đọc vị tâm lý và rút bài Tarot nghen!", 5800);
+        } else if (memory.visits === 2) {
+          showCatTip("Ủa bà quay lại nè! Lòng còn ngổn ngang chuyện hôm trước hay ghé tìm Now đọc tản văn chữa lành dạ? (｡･ω･｡)ﾉ♡", 5600);
+        } else if (memory.visits === 3) {
+          showCatTip("Lần thứ 3 tụi mình chạm mặt nhau rồi đó! Người xưa bảo 'Quá tam ba bận' là duyên lành đã chín muồi, có tâm sự gì tháo gỡ luôn hôm nay nha bà 🌷✨", 5600);
+        } else {
+          const welcomePool = [
+            `Khách quen cứng cựa ghé thăm lần thứ <b>${memory.visits}</b> rồi nè! Có chuyện gì mới làm bà bận lòng đúng hơm, chạm vào tui tâm sự liền đi 🐾💖`,
+            `Mừng người đẹp quay lại ngôi nhà nhỏ của Now lần thứ <b>${memory.visits}</b>! Tui pha sẵn trà ấm với chuẩn bị bộ bài mới tinh chờ bà rồi nè 🍵🎴`,
+            `Ghé thăm lần thứ <b>${memory.visits}</b>! Tui nhớ hơi bà luôn rồi đó sen ơi, hôm nay tâm trạng của bà đang nắng ấm hay có mây mù dạ? 🌤️🐾`
+          ];
+          showCatTip(welcomePool[memory.visits % welcomePool.length], 5600);
+        }
+      }, 1100);
+
       if (passiveLoopTimer) clearInterval(passiveLoopTimer);
       passiveLoopTimer = setInterval(() => {
         if (isDraggingCat || document.body.classList.contains('portal-open')) return;
-        if (Date.now() - lastUserInteractionTime < 4200) return;
+        if (Date.now() - lastInteractionTimestamp < 5200) return;
 
-        const msg = catPassiveDialogues[passiveIdx % catPassiveDialogues.length];
-        passiveIdx++;
+        if (window.currentNowNowLang === 'en') {
+          triggerCatGentleWiggle();
+          showCatTip(deckEN.next(), 5000);
+          return;
+        }
+
+        // Tự động xoay tua giữa 5 bộ bài chính + Cảm biến nhịp sinh học theo giờ + Quẻ Tarot ngẫu nhiên
+        const roll = Math.random();
+        let autoMsg = "";
+        if (roll < 0.72) {
+          const deck = mainViDecks[deckRotatorIndex % mainViDecks.length];
+          deckRotatorIndex++;
+          autoMsg = deck.next();
+        } else if (roll < 0.90) {
+          autoMsg = getCircadianQuote();
+        } else {
+          autoMsg = deckTarot.next();
+        }
+
         triggerCatGentleWiggle();
-        showCatTip(msg, 4800);
-      }, 7000);
+        showCatTip(autoMsg, 5200);
+      }, 9800);
     }
 
     /* =========================================================================
@@ -5834,8 +6295,8 @@ window.onload = function() {
     '#sec-booking .interactive-step-card:nth-of-type(3) > p': 'Receive full spread photos + private audio/YouTube recordings to revisit anytime. <b>Only settle payment once your heart feels lighter</b> & unlock lifetime free check-ins!',
 
     // Slider & Buttons
-    '#tfBtnDay': '<span>☀️ Daytime</span> <span class="timeframe-subtext">(9 AM – 12 AM)</span>',
-    '#tfBtnNight': '<span>🌙 Night Owl</span> <span class="timeframe-subtext">(12 AM – 4 AM)</span>',
+    '#tfBtnDay': '☀️ Daytime (9 AM – 12 AM)',
+    '#tfBtnNight': '🌙 Night Owl (12 AM – 4 AM)',
     '#sec-booking .pt-2 > div:nth-child(2) > div:first-child > span:first-child': 'Estimated duration:',
     '#sec-booking .pt-2 > div:nth-child(2) > div:last-child > span:first-child': 'Estimated fee (VND):',
     '.milestone-tick-btn[data-min="15"]': '15m (Min)',

@@ -2881,6 +2881,21 @@
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
       }
+
+      // 🐾 Mèo đen bắt bài ngay khi khách vừa đóng cửa sổ Đọc Tạp Chí hoặc Hộp Thư Feedback
+      if (targetType === 'viral') {
+        setTimeout(() => {
+          if (typeof showCatTip === 'function') {
+            showCatTip('Đọc tản văn tâm lý trên Threads của Now thấm từng chữ đúng hơm bà? Cần gỡ rối vụ nào cứ nhắn Now liền nha! 🧵✨', 4800);
+          }
+        }, 350);
+      } else {
+        setTimeout(() => {
+          if (typeof showCatTip === 'function') {
+            showCatTip('Đó bà thấy hơm, ai tâm sự với Now xong cũng trút được tảng đá trong lòng hết trơn á! Đến lượt bà rồi đó nha 📱💖', 4800);
+          }
+        }, 350);
+      }
     }
 
     function switchSubWeb(fromType, toType) {
@@ -2933,32 +2948,14 @@
     });
 
     /* =========================================================================
-       5. BÉ MÈO ĐEN: CHU KỲ 6 GIÂY + ẨN KHI CUỘN + ĐI DẠO & CẦM KÉO (DRAGGABLE)
+       /* =========================================================================
+       /* =========================================================================
+       5. BÉ MÈO ĐEN: HOÀNG THƯỢNG BÓC TRẦN VÔ THỨC (SUPER CAT SOUL V2 - MAX LEVEL)
+       - 55+ Kịch bản thoại: Cute lầy lội x Tâm lý học CBT/Jung x Dẫn đường tinh tế
+       - 6 Giác quan bắt bài: Bắt thóp chọn Tag, Gõ phím, Đổi kênh, Đổi giờ, Kéo Slider, Đóng Modal
        ========================================================================= */
-    const catPassiveDialogues = [
-      "Meo~ meo! Bấm vào tui nghe tiếng mèo kêu, hoặc nắm cổ tui kéo đi chơi nha! 🐾",
-      "Miaow~ Xem 1 lần là tâm sự 0đ trọn đời với sốp đó! 💝",
-      "Mew~ Ở đây 0đ đặt cọc, nhẹ lòng mới tính phí nè! ✨",
-      "Meo~ meo! Sốp đọc vị tâm lý bằng CBT & Carl Jung đỉnh lắm, ko cần tên tuổi luôn! 🧠",
-      "Miaow~ Lò vi sóng 3 tháng còn quay lại đc, mở Hộp Thư xem tin nhắn thật đi bà! 📱",
-      "Mew~ Đọc bài thuật toán Tóp Tóp 52K view ở cổng Threads chưa bà ơi? 🧵",
-      "Meo~ meo! Đêm khuya trằn trọc thì chọn giờ Cú Đêm với sốp nghen! 🌙",
-      "Miaow~ Bà thích gửi Voice Note 2 chiều hay gọi Google Meet có ghi hình nè? 🎙️",
-      "Mew~ Có chuyện riêng khó nói cứ gõ vào ô chữ mờ ở mục 2 nha! ✍️",
-      "Meo~ meo! Mốc 15p hay 60p sốp cũng gỡ sạch mọi nút thắt cho bà! ⏳",
-      "Miaow~ Chạm nhẹ vào tui 3 lần liên tiếp đi, tui tặng bà 1 lá bài Tarot ngẫu nhiên liền! 🎴✨",
-      "Mew~ Xem xong có đủ ảnh bài + file ghi âm riêng tư để bà nghe lại bất cứ lúc nào! 💌",
-      "Meo~ meo! Nâng cấp bình chứa lên 220V để đón phước phần lớn cùng sốp nha! ⚡",
-      "Miaow~ Bà độc thân ko phải vì ế, mà vì tiềm thức đang bật khiên bảo vệ bà đó! 🛡️",
-      "Mew~ Đừng để vòng lặp overthinking làm bà mệt nhoài nữa, để NowNow gỡ cùng bà! 🕯️",
-      "Meo~ meo! Bấm vào cái mũ trên Avatar của sốp ở đầu trang thử xem, nhúc nhích vui lắm! 🎩",
-      "Miaow~ Bấm nút đặt lịch là tự Copy sẵn kịch bản, qua chat chỉ cần Dán cái rụp! 🎉",
-      "Mew~ Giữa hàng vạn người mà bà lướt tới góc nhỏ này, đích thị là tín hiệu vũ trụ rồi! 🌌",
-      "Meo~ meo! Tui biết tự đi dạo quanh màn hình đó, bà kéo tui thả góc nào tui ngồi góc đó! 🐾",
-      "Miaow~ Nhớ nha: Chừng nào chưa đưa vô thức ra ánh sáng, bà sẽ gọi nó là số phận! 🔮",
-      "Mew~ Cần người lắng nghe không phán xét, không văn mẫu AI thì cứ tìm sốp NowNow! 🌷"
-    ];
 
+    // Khôi phục ngầm kho bài quà tặng riêng cho Hộp Hồi Âm (Không hiện khi click mèo)
     const catTarotMiniCards = [
       "🎴 <b>Lá The Star (Ngôi Sao):</b> Tín hiệu chữa lành đang tới! Sau cơn bão lòng này, bà sẽ tìm lại được bình yên và hy vọng sáng rõ nhất ✨",
       "🎴 <b>Lá Wheel of Fortune (Bánh Xe Số Phận):</b> Vòng lặp cũ sắp khép lại rồi! Một ngã rẽ bất ngờ mang theo nhân tố mới đang chuẩn bị gõ cửa nhà bà 🎡",
@@ -2969,32 +2966,106 @@
       "🎴 <b>Lá The Hermit (Người Ẩn Sĩ):</b> Lùi lại một bước để nhìn thấu gốc rễ tâm lý. Câu trả lời bà tìm kiếm đang nằm ngay trong cuộc trò chuyện sắp tới 🏮"
     ];
 
-    const catActiveClickDialogues = [
-      "Meo~ meo~! Tiếng mèo con kêu trong veo vang lên rồi nè sen ơi! 🐾✨",
-      "Miaow~ Gãi đúng chỗ ngứa dưới cằm tui rồi! Thương bà nhất luôn! 😻",
-      "Mew~ Bấm thêm cái nữa là tui rút tặng bà 1 lá bài Tarot thông điệp ngay tại chỗ đó nha! 🎴"
-    ];
+    // -------------------------------------------------------------------------
+    // TẦNG 2: BỘ NHỚ KÝ ỨC (MEMORY ENGINE QUA LOCALSTORAGE)
+    // -------------------------------------------------------------------------
+    const CAT_STORAGE_KEY = 'nownow_cat_soul_memory_v1';
 
-    function getHourBasedCatDialogue() {
-      const hr = new Date().getHours();
-      if (hr >= 0 && hr < 4) {
-        return "🌙 Đêm khuya 0h-4h rồi mà bà vẫn chưa ngủ được hả? Sốp vẫn đang thức khung Cú Đêm chờ lắng nghe bà nè!";
-      } else if (hr >= 4 && hr < 9) {
-        return "🌅 Sáng sớm tinh mơ rồi! Bà cứ chọn số phút rồi nhắn giữ lịch trước nha, 9h sốp dậy rep bà liền!";
-      } else if (hr >= 9 && hr < 12) {
-        return "☀️ Chào buổi sáng năng lượng nha bà! Gỡ sạch tơ vò đầu ngày để cả tuần nhẹ tênh nào!";
-      } else if (hr >= 12 && hr < 18) {
-        return "🌤️ Buổi chiều êm ả vầy mà lòng đang ngổn ngang chuyện tình cảm hay công việc thì nhắn sốp liền nha!";
-      } else {
-        return "✨ Tối muộn rồi, gác lại mọi mệt mỏi ngoài kia đi bà, ở góc nhỏ này có tui với sốp NowNow nghe bà kể chuyện nè!";
+    function getCatMemory() {
+      try {
+        const raw = localStorage.getItem(CAT_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) { return null; }
+    }
+
+    function recordCatMemoryVisit() {
+      try {
+        let mem = getCatMemory() || {
+          visits: 0,
+          firstSeen: Date.now(),
+          nightVisits: 0,
+          lastSeen: Date.now()
+        };
+        mem.visits = (mem.visits || 0) + 1;
+        const hr = new Date().getHours();
+        if (hr >= 0 && hr < 4) {
+          mem.nightVisits = (mem.nightVisits || 0) + 1;
+        }
+        mem.lastSeen = Date.now();
+        localStorage.setItem(CAT_STORAGE_KEY, JSON.stringify(mem));
+        return mem;
+      } catch (e) {
+        return { visits: 1, nightVisits: 0 };
       }
     }
+
+    // -------------------------------------------------------------------------
+    // TẦNG 3: ĐẠI TỪ ĐIỂN THOẠI HOÀNG THƯỢNG (36 CÂU CLICK + 20 CÂU TỰ ĐỘNG)
+    // -------------------------------------------------------------------------
+    const catInteractiveClickQuotes = [
+      // 1. NHÓM CUTE LẦY LỘI & NỊNH SEN (12 câu)
+      "Meo~ Gãi đúng chỗ ngứa dưới cằm tui rồi! Nhma xong việc nhớ dắt Now đi mua súp thưởng cá ngừ cho tui nghen! 🐾🐟",
+      "Chạm tui hoài dạ sen! Tui là linh vật tâm lý học hệ Carl Jung chứ bộ thú nhồi bông hả... nhma vuốt nữa đi, êm quá 😻",
+      "Rừ... rừ... Nghe tiếng mèo kêu tần số 432Hz chữa lành chưa bà? Bấm cái nữa tui bắn tim cho nè (｡･ω･｡)ﾉ♡",
+      "Nựng tui thì miễn phí, mà tâm sự với sốp Now sau khi xem bài xong cũng miễn phí 0đ trọn đời luôn á! Đỉnh hơm? 💝🐾",
+      "Á nha! Chọt trúng cái bụng mỡ của tui rồi! Tui không có mập, tui chỉ bị tràn năng lượng thấu cảm thôi nha! 😾✨",
+      "Bà thấy đôi mắt vàng của tui hơm? Ban đêm phát sáng soi thấu mọi tâm sự giấu kín trong lòng bà luôn đó 👀🌙",
+      "Meo~ Hôm nay ngoài kia có ai ăn hiếp hay làm bà buồn hơm? Chỉ mặt đi tui kêu Now rút bài bóc trần người đó liền! 🐾🔥",
+      "Ngồi canh cái web này từ sáng tới khuya mỏi nhừ 4 cái chân măng cụt luôn á, bà thưởng cho tui 1 cái vuốt đầu đi 🌷",
+      "Bí mật nha: Sốp Now nhìn lý trí sắc sảo vậy thôi chứ nói chuyện dịu dàng, ấm áp số 1 vũ trụ luôn á bà! 🥺💖",
+      "Meo~ Nắm cổ tui kéo đi đâu thì kéo, chứ đừng bỏ rơi tui một mình ở góc màn hình nha, tui sợ cô đơn lắm á 🐾😿",
+      "Chạm nhẹ thôi nha sen, rớt cái mũ lễ hội trên đầu tui bây giờ! Now mới đội cho tui hồi sáng đó 🎩✨",
+      "Tui vừa bấm quẻ bằng đệm thịt chân mèo: Quẻ báo hôm nay bà sẽ trút bỏ được một tảng đá siêu to trong lòng! 🎉🐾",
+
+      // 2. NHÓM BÓC TRẦN VÔ THỨC CBT & CARL JUNG (12 câu)
+      "Đừng gồng kiểu 'tui ổn, sao cũng được' nữa bà ơiii. Cái vỏ bọc mạnh mẽ đó lừa được thiên hạ chứ sao qua mắt được mèo đen! 🐾🧠",
+      "Tui bắt quả tang bà vừa định vào xem trang cá nhân của người ta nữa đúng hơm?! Dừng lại ngay, đau tim bây giờ! 🛑😿",
+      "Người ta im lặng chính là câu trả lời rõ ràng nhất rồi. Đừng tự dằn vặt tìm lý do bào chữa giùm người làm mình tổn thương nữa nghen...",
+      "Cái tính overthinking của bà thực ra là bộ não đang bật khiên bảo vệ bà khỏi vết thương cũ thôi. Nhma gồng hoài kiệt sức lắm, để Now gỡ cùng bà nha 🕯️",
+      "Bà hay sợ làm người khác buồn nên toàn tự nuốt ấm ức vào lòng đúng hơm? Từ nay tập thương bản thân mình trước tiên nha! 🌱💖",
+      "Không phải bà vô cảm đâu, mà vì tâm hồn bà nhạy cảm quá nên não tự ngắt cầu dao cảm xúc để bà không bị sập nguồn đó 🧠⚡",
+      "Đôi khi vũ trụ phanh gấp một mối quan hệ lại không phải vì bà xui, mà vì bình chứa 110V chưa tải nổi dòng điện 220V thôi nè 🔮",
+      "Đứng giữa bãi đất trống mà huýt sáo thì chẳng có con bướm nào bay tới đâu bà ơi! Cứ chăm cho cái cây của mình nở hoa rực rỡ đi đã 🌺🦋",
+      "Hợp nhau lúc đi ăn đi chơi thì dễ òm, hợp nhau ở cách giải quyết mâu thuẫn lúc cãi vã mới là thứ quyết định đi đường dài đó bà! ⚖️",
+      "Thứ làm bà mệt nhoài không phải là chuyện đã xảy ra, mà là việc bà cứ tua đi tua lại nó 1.000 lần trong đầu mỗi đêm á 🌙🌪️",
+      "Khi nào bà ngừng coi chuyện có người yêu là KPI phải hoàn thành, lúc đó năng lượng tự khắc tỏa sáng thu hút đúng người à! ✨",
+      "Carl Jung bảo rồi: Chừng nào bà chưa gọi tên được nỗi sợ trong vô thức ra ánh sáng, nó sẽ âm thầm lái cuộc đời bà đó! 🕯️🐾",
+
+      // 3. NHÓM CHỈ ĐƯỜNG & HƯỚNG DẪN TÂM SỰ (12 câu)
+      "Bà ngại nói chuyện trực tiếp hả? Chọn 'Voice Note 2 chiều' ở Mục 1 nha, vừa nằm đắp chăn vừa gửi voice tâm sự cực kỳ riêng tư luôn 🎙️🛌",
+      "Còn nếu muốn đối thoại mặt đối mặt gỡ rối trực tiếp và có video Record nghe lại thì chọn 'Gọi Google Meet' nha bà! 💻✨",
+      "Ở nhà NowNow làm gì có chuyện bắt đặt cọc trước! Bà cứ trò chuyện tới khi nào lòng nhẹ tênh mới dừng đồng hồ tính phí nha ⏳💝",
+      "Bấm vào cổng 'Feedback từ Khách Hàng' xem chiếc iPhone 14 Pro đi bà, 21 bức ảnh chụp tin nhắn thật 100% không che đậy luôn á 📱🔥",
+      "Mấy bài viết trên Threads của Now toàn 50K đến 200K view thôi, bà mở cổng 'Tạp Chí Tâm Thức' đọc thử mà xem, thấm từng chữ! 🧵📖",
+      "Bà chưa biết chọn bao nhiêu phút hả? Cứ kéo thử thanh trượt ở Mục 3 đi, kéo tới đâu tui phân tích xem giải quyết được gì tới đó liền! 🎚️🐾",
+      "Nhớ chạm chọn mấy cái nút chủ đề ở Mục 2 nha (Tình cảm, Công việc, Vòng lặp...), lúc bấm Đặt lịch tui tự động Copy sẵn cho bà luôn! 📋✨",
+      "Góc trên bên trái có nút 'Menuuu' 3 gạch đó bà, bấm vào đó nhảy cái vèo tới bất kỳ mục nào trên trang luôn, tiện cực kỳ! 🧭",
+      "Góc trên bên phải có lá cờ Việt Nam 🇻🇳 và Vương Quốc Anh 🇬🇧 kìa, bấm phát là cả trang web lẫn tui đều bắn Tiếng Anh mượt như gió luôn! 🌍",
+      "Xem bài xong Now gửi tặng bà trọn bộ ảnh chụp trải bài kèm file ghi âm riêng tư, vài tháng sau mở nghe lại vẫn thấy thấm! 💌🎧",
+      "Đêm hôm 1-2h sáng mà lòng trĩu nặng không ngủ được thì bấm sang nút '🌙 Cú Đêm (0h - 4h sáng)' nha, Now thức canh cùng bà đó!",
+      "Đừng sợ câu chuyện của mình dài dòng hay rối rắm nha! Now đã lắng nghe hơn 7.500+ giờ đối thoại 1:1 rồi, cỡ nào Now cũng gỡ cùng bà được hết! 🤝💖"
+    ];
+
+    const catPassiveDialogues = [
+      "Meo~ Xem 1 lần là được làm bạn tâm sự 0đ trọn đời với sốp NowNow đó bà ơi! 💝",
+      "Mew~ 0đ đặt cọc, trò chuyện tới khi lòng thực sự thông suốt mới dừng đồng hồ tính phí nè! ✨",
+      "Meo~ Sốp đọc vị tâm lý bằng CBT & Carl Jung sâu lắm, không phán bừa hay hù dọa đâu 🧠",
+      "Miaow~ Lò vi sóng 3 tháng còn quay lại được, bấm Hộp Thư xem tin nhắn thật đi bà! 📱",
+      "Meo~ Đêm khuya trằn trọc thì chọn khung Cú Đêm (0h - 4h) để Now thức cùng bà nghen! 🌙",
+      "Mew~ Có tâm sự riêng khó nói cứ gõ vào ô chữ mờ ở Mục 2 nha, Now đọc hết á! ✍️",
+      "Miaow~ Đừng để vòng lặp lo âu làm bà nghẹt thở, gỡ từng nút một cùng Now nha! 🌷",
+      "Meo~ Nắm cổ tui kéo đi dạo một vòng quanh màn hình cho đỡ căng thẳng nè sen! 🐾",
+      "Mew~ 90% hormone hạnh phúc Serotonin nằm ở ruột đó, buồn quá thì đi ăn miếng bánh ngọt rồi về đây tâm sự nha! 🍰🐾",
+      "Miaow~ Duyên phận vận hành y như thuật toán Tóp Tóp vậy, đổi hành vi là vũ trụ tự khắc trả kết quả mới liền! ✨",
+      "Meo~ Đừng tự trách mình yếu đuối nữa, dám nhìn thẳng vào nỗi đau của mình đã là người dũng cảm nhất rồi! 🦁💖",
+      "Mew~ Bấm vào tui đi bà! Tui có tới hơn 50 câu chuyện bí mật muốn thủ thỉ với riêng bà nè! 🐾💌"
+    ];
 
     let tipTimer = null;
     let passiveLoopTimer = null;
     let roamLoopTimer = null;
     let passiveIdx = 0;
-    let currentMeowClickIdx = 0;
+    let clickDialogueIdx = 0;
     let lastUserInteractionTime = 0;
 
     let catPosX = 0;
@@ -3021,6 +3092,167 @@
       container.classList.toggle('cat-on-left', catPosX < window.innerWidth * 0.45);
     }
 
+    function showCatTip(text, duration = 5000) {
+      if (document.body.classList.contains('portal-open')) return;
+      const tip = document.getElementById('catBubbleTip');
+      const txt = document.getElementById('catBubbleText');
+      if (!tip || !txt) return;
+
+      txt.innerHTML = text;
+      tip.classList.remove('hidden-tip');
+
+      if (tipTimer) clearTimeout(tipTimer);
+      tipTimer = setTimeout(() => {
+        tip.classList.add('hidden-tip');
+      }, duration);
+    }
+
+    function hideCatTipImmediately() {
+      const tip = document.getElementById('catBubbleTip');
+      if (tip && !tip.classList.contains('hidden-tip')) {
+        tip.classList.add('hidden-tip');
+      }
+      if (tipTimer) clearTimeout(tipTimer);
+    }
+
+    function triggerCatGentleWiggle() {
+      const catBtn = document.getElementById('catBtnEl');
+      if (!catBtn || isDraggingCat) return;
+      catBtn.classList.remove('cat-bouncing');
+      void catBtn.offsetWidth;
+      catBtn.classList.add('cat-bouncing');
+      setTimeout(() => catBtn.classList.remove('cat-bouncing'), 580);
+    }
+
+    // Khi bấm trực tiếp vào mèo: Phát tiếng kêu thật + xoay vòng 36 câu thoại
+    function pokeRealCatMeow() {
+      lastUserInteractionTime = Date.now();
+      playCuteMeowSound();
+      triggerCatGentleWiggle();
+
+      const msg = catInteractiveClickQuotes[clickDialogueIdx % catInteractiveClickQuotes.length];
+      clickDialogueIdx++;
+      showCatTip(msg, 5600);
+    }
+
+    // -------------------------------------------------------------------------
+    // TẦNG 1: 6 GIÁC QUAN RÌNH RẬP HÀNH VI TOÀN TRANG (BEHAVIORAL HOOKS)
+    // -------------------------------------------------------------------------
+    
+    // Giác quan 1: Bắt bài khi kéo thanh trượt thời lượng
+    function triggerCatSliderReaction(minutes, priceK) {
+      lastUserInteractionTime = Date.now();
+      triggerCatGentleWiggle();
+
+      if (minutes <= 15) {
+        showCatTip(`Meo~ <b>15 phút (~${priceK}K)</b> là phát súng gỡ nhanh đúng một nút thắt đang chẹn ngang họng bà nè! Gãy gọn, đi thẳng trọng tâm 🎯`, 4600);
+      } else if (minutes <= 30) {
+        showCatTip(`Mốc <b>30 phút (~${priceK}K)</b> vừa vặn nhất để soi chiếu chuyện crush mập mờ, người cũ hay một quyết định đang phân vân nè 💘`, 4600);
+      } else if (minutes <= 60) {
+        showCatTip(`<b>60 phút (~${priceK}K)</b> là chân ái nhà Now nè! Đủ thong thả lôi cả cái gốc rễ vô thức ra ánh sáng mà không lo bị đếm ngược 🕯️✨`, 4800);
+      } else if (minutes <= 120) {
+        showCatTip(`Chuyện nhiều tầng chồng chéo lắm đúng hơm bà? <b>${minutes} phút (~${priceK}K)</b> đối thoại sâu, bóc từng lớp vỏ hành cho nhẹ bẫng lồng ngực luôn 🧅`, 5000);
+      } else {
+        showCatTip(`U là trời chọn hẳn <b>${minutes} phút</b>! Tính tâm sự xuyên màn đêm trút cạn tâm can với Now hay sao dạ? Now luôn sẵn sàng ngồi nghe bà tới cùng nè 💖`, 5500);
+      }
+    }
+
+    // Giác quan 2 & 3 & 4 & 5: Tự động gắn tai mắt vào các nút bấm trên trang (Không cần sửa HTML)
+    function initBehavioralScrollObserver() {
+      // A. Quan sát khi dừng lại đọc kỹ 3 Lời hứa hoặc Cổng lưu trữ
+      if ('IntersectionObserver' in window) {
+        const sectionTimeouts = {};
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            const id = entry.target.id;
+            if (entry.isIntersecting) {
+              sectionTimeouts[id] = setTimeout(() => {
+                if (Date.now() - lastUserInteractionTime < 4500) return;
+                if (id === 'sec-promises') {
+                  triggerCatGentleWiggle();
+                  showCatTip("Tâm sự 0đ trọn đời là lời hứa danh dự của Now đó bà! Xem 1 lần là làm bạn mãi mãi, đêm hôm buồn tủi cứ nhắn nha 🥺💝", 5200);
+                } else if (id === 'sec-portals') {
+                  triggerCatGentleWiggle();
+                  showCatTip("Feedback thật 100% người thật việc thật á bà, bấm mở khung iPhone đọc tin nhắn các bạn tâm sự với Now mà ấm lòng xỉu 📸✨", 5200);
+                }
+              }, 5200);
+            } else {
+              if (sectionTimeouts[id]) clearTimeout(sectionTimeouts[id]);
+            }
+          });
+        }, { threshold: 0.55 });
+
+        ['sec-promises', 'sec-portals'].forEach(secId => {
+          const el = document.getElementById(secId);
+          if (el) observer.observe(el);
+        });
+      }
+
+      // B. Bắt bài khi khách bấm chọn Tag chủ đề ở Mục 2
+      const topicBtns = document.querySelectorAll('#topicTagGroup .soft-tag');
+      topicBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          lastUserInteractionTime = Date.now();
+          if (!btn.classList.contains('active')) return; // Chỉ nói khi bật chọn
+          triggerCatGentleWiggle();
+          const txt = btn.textContent;
+          if (txt.includes('Tình cảm')) {
+            showCatTip("Chuyện tình cảm đang làm tim bà nhói đúng hơm? Để Now dùng Tarot x CBT soi xem người ta thật lòng hay đang thao túng tâm lý bà nha 💘🔍", 5000);
+          } else if (txt.includes('Công việc')) {
+            showCatTip("Đứng giữa ngã ba đường sự nghiệp dễ hoang mang lắm nè. Tụi mình cùng vạch lại tấm bản đồ định hướng thực tế, tỉnh táo nha 💼🌱", 5000);
+          } else if (txt.includes('vòng lặp')) {
+            showCatTip("Cứ lặp đi lặp lại một kịch bản cũ là dấu hiệu tiềm thức đang mắc kẹt đó. Tới lúc cắt đứt cái vòng luẩn quẩn này rồi bà ơi! 🔄✂️", 5000);
+          } else if (txt.includes('bản thân')) {
+            showCatTip("Quay về thấu hiểu chính mình (Shadow Work) là bước đi đỉnh nhất luôn! Hiểu mình rồi thì chẳng ai làm bà tổn thương được nữa 🌱✨", 5000);
+          }
+        });
+      });
+
+      // C. Bắt bài khi khách đặt tay gõ vào ô nhập tâm sự riêng
+      const inputEl = document.getElementById('bookingTopicInput');
+      if (inputEl) {
+        let hasReactedToTyping = false;
+        inputEl.addEventListener('focus', () => {
+          lastUserInteractionTime = Date.now();
+          triggerCatGentleWiggle();
+          showCatTip("Cứ gõ hết những điều đang đè nặng trong lòng hoặc khung giờ bà rảnh vào đây nha, tui với Now giữ bí mật tuyệt đối 100%! ✍️🤫", 5000);
+        });
+        inputEl.addEventListener('input', () => {
+          if (!hasReactedToTyping && inputEl.value.length > 12) {
+            hasReactedToTyping = true;
+            lastUserInteractionTime = Date.now();
+            triggerCatGentleWiggle();
+            showCatTip("Tui thấy bà viết tâm huyết quá trời nè 🥺 Lát bấm nút Đặt lịch là câu này tự động Copy vào bộ nhớ cho bà luôn nha!", 4800);
+          }
+        });
+      }
+
+      // D. Bắt bài khi khách chọn Kênh tương tác (Voice Note / Google Meet)
+      document.getElementById('chanVoiceBtn')?.addEventListener('click', () => {
+        lastUserInteractionTime = Date.now();
+        triggerCatGentleWiggle();
+        showCatTip("Chuẩn bài! Voice Note 2 chiều cực hợp cho mấy bà hướng nội, vừa nằm cuộn chăn vừa nghe giọng ấm áp của Now 🎙️💖", 4500);
+      });
+      document.getElementById('chanMeetBtn')?.addEventListener('click', () => {
+        lastUserInteractionTime = Date.now();
+        triggerCatGentleWiggle();
+        showCatTip("Gọi Google Meet đối thoại trực tiếp siêu nhanh thông suốt, lại còn có file Record riêng tư để bà mở nghe lại nữa nè 💻✨", 4500);
+      });
+
+      // E. Bắt bài khi khách chọn Khung giờ (Ban Ngày / Cú Đêm)
+      document.getElementById('tfBtnDay')?.addEventListener('click', () => {
+        lastUserInteractionTime = Date.now();
+        triggerCatGentleWiggle();
+        showCatTip("Khung Ban Ngày (9h – 0h) năng lượng tỉnh táo, giá lại siêu hạt dẻ chỉ từ 59K (30p) và 99K (60p) thôi nè ☀️✨", 4500);
+      });
+      document.getElementById('tfBtnNight')?.addEventListener('click', () => {
+        lastUserInteractionTime = Date.now();
+        triggerCatGentleWiggle();
+        showCatTip("Team Cú Đêm (0h – 4h sáng) đây rồi! Đêm khuya tĩnh lặng là lúc vô thức dễ mở lòng nhất, Now thức trọn đêm cùng bà nha 🌙🕯️", 4800);
+      });
+    }
+
+    // Giác quan 6: Rình rập hành vi Kéo / Quăng quật mèo
     function initCatRoamingAndDragging() {
       const container = document.getElementById('floatingCatContainer');
       const catBtn = document.getElementById('catBtnEl');
@@ -3055,13 +3287,13 @@
         if (Math.hypot(dx, dy) > 8) {
           if (!hasDraggedDistance) {
             hasDraggedDistance = true;
-            showCatTip('Á á~ Sen xách cổ tui bay đi đâu đó?! 🐾😹', 2500);
+            showCatTip('Á á~ Sen xách cổ tui bay lượn vầy tui chóng mặt quào rách màn hình bây giờ! 🐾😹', 3200);
           }
           setCatScreenPosition(initialCatX + dx, initialCatY + dy);
         }
       });
 
-      const finishCatDrag = (e) => {
+      const finishCatDrag = () => {
         if (!isDraggingCat) return;
         isDraggingCat = false;
         container.classList.remove('dragging');
@@ -3071,105 +3303,69 @@
           pokeRealCatMeow();
         } else {
           playCuteMeowSound();
-          showCatTip('Hạ cánh an toàn! Góc này phong thủy đẹp nè sen ơi! 🐾✨', 3600);
+          const landMsgs = [
+            'Hạ cánh an toàn! Đứng góc này phong thủy sáng sủa để canh nhà cho Now chuẩn bài luôn 🐾✨',
+            'Phù~ Bay một vòng muốn rớt cái mũ luôn á sen! Góc này mát mẻ nè, duyệt! 😻🎩',
+            'Đặt tui ngồi đây rồi thì nhớ kéo xuống chọn số phút đặt lịch với Now nha bà! 🐾💖'
+          ];
+          showCatTip(landMsgs[Math.floor(Math.random() * landMsgs.length)], 4200);
         }
       };
 
       catBtn.addEventListener('pointerup', finishCatDrag);
       catBtn.addEventListener('pointercancel', finishCatDrag);
 
-      // Mèo tự động đi dạo nhẹ nhàng dọc hai bên mép màn hình
+      // Mèo tự động đi dạo thong thả dọc mép màn hình
       if (roamLoopTimer) clearInterval(roamLoopTimer);
       roamLoopTimer = setInterval(() => {
         if (isDraggingCat || document.body.classList.contains('portal-open')) return;
-        if (Date.now() - lastUserInteractionTime < 4000) return;
+        if (Date.now() - lastUserInteractionTime < 4500) return;
 
         const { w, h, margin } = getCatDimensions();
-        const chooseRightSide = Math.random() > 0.32;
+        const chooseRightSide = Math.random() > 0.35;
         const targetX = chooseRightSide ? (window.innerWidth - w - margin) : margin;
         const minY = Math.max(90, window.innerHeight * 0.28);
         const maxY = window.innerHeight - h - margin;
         const targetY = minY + Math.random() * (maxY - minY);
 
         setCatScreenPosition(targetX, targetY);
-      }, 10500);
+      }, 12000);
 
       window.addEventListener('resize', () => {
         setCatScreenPosition(catPosX, catPosY);
       });
     }
 
-    function triggerCatGentleWiggle() {
-      const catBtn = document.getElementById('catBtnEl');
-      if (!catBtn || isDraggingCat) return;
-      catBtn.classList.remove('cat-bouncing');
-      void catBtn.offsetWidth;
-      catBtn.classList.add('cat-bouncing');
-      setTimeout(() => catBtn.classList.remove('cat-bouncing'), 580);
-    }
-
-    function hideCatTipImmediately() {
-      const tip = document.getElementById('catBubbleTip');
-      if (tip && !tip.classList.contains('hidden-tip')) {
-        tip.classList.add('hidden-tip');
-      }
-      if (tipTimer) clearTimeout(tipTimer);
-    }
-
-    function showCatTip(text, duration = 4200) {
-      if (document.body.classList.contains('portal-open')) return;
-      const tip = document.getElementById('catBubbleTip');
-      const txt = document.getElementById('catBubbleText');
-      if (!tip || !txt) return;
-      txt.innerHTML = text;
-      tip.classList.remove('hidden-tip');
-      if (tipTimer) clearTimeout(tipTimer);
-      tipTimer = setTimeout(() => {
-        tip.classList.add('hidden-tip');
-      }, duration);
-    }
-
-    // Tự động ẩn bong bóng thoại ngay lập tức khi người dùng cuộn trang
-    window.addEventListener('scroll', () => {
-      hideCatTipImmediately();
-    }, { passive: true });
-
-    // Chu kỳ 6 giây (6000ms) đúng theo yêu cầu của Sếp
+    // -------------------------------------------------------------------------
+    // VÒNG LẶP THOẠI & LỜI CHÀO KÝ ỨC ĐẦU TRANG
+    // -------------------------------------------------------------------------
     function startPassiveCatDialogueLoop() {
+      const memory = recordCatMemoryVisit();
+      
+      // Chào đón cá nhân hóa theo ký ức sau khi mở trang 1.2 giây
+      setTimeout(() => {
+        if (memory.nightVisits >= 2 && new Date().getHours() < 4) {
+          showCatTip("Lại mất ngủ nữa gòi! Mấy đêm liền thấy bà thức tầm này, bộ đầu óc cứ tua lại chuyện cũ hả? Đừng tự dằn vặt mình nữa nha... 🥺🌙", 5800);
+        } else if (memory.visits === 1) {
+          showCatTip("Chào bà mới ghé nhà NowNow lần đầu nha! Tui là Mèo Đen canh giữ trạm dừng chân này nè 🐾✨ Bấm vào người tui để nghe tui kể chuyện nghen!", 5500);
+        } else if (memory.visits <= 3) {
+          showCatTip("Ủa bà quay lại nè! Lòng còn ngổn ngang chuyện hôm trước hay ghé tìm Now đọc tản văn chữa lành dạ? (｡･ω･｡)ﾉ♡", 5500);
+        } else {
+          showCatTip(`Khách quen cứng cựa ghé thăm lần thứ ${memory.visits} rồi nè! Có chuyện gì mới làm bà bận lòng đúng hơm, chạm vào tui tâm sự liền đi 🐾💖`, 5500);
+        }
+      }, 1200);
+
+      // Vòng lặp thoại tự động mỗi 7 giây
       if (passiveLoopTimer) clearInterval(passiveLoopTimer);
       passiveLoopTimer = setInterval(() => {
         if (isDraggingCat || document.body.classList.contains('portal-open')) return;
-        if (Date.now() - lastUserInteractionTime < 3500) return;
+        if (Date.now() - lastUserInteractionTime < 4200) return;
+
         const msg = catPassiveDialogues[passiveIdx % catPassiveDialogues.length];
         passiveIdx++;
         triggerCatGentleWiggle();
-        showCatTip(msg, 4200);
-      }, 6000);
-    }
-
-    let catComboClickCount = 0;
-    let catComboResetTimer = null;
-
-    function pokeRealCatMeow() {
-      lastUserInteractionTime = Date.now();
-      playCuteMeowSound();
-      triggerCatGentleWiggle();
-
-      catComboClickCount++;
-      if (catComboResetTimer) clearTimeout(catComboResetTimer);
-      catComboResetTimer = setTimeout(() => { catComboClickCount = 0; }, 5000);
-
-      // Cứ mỗi lần bấm thứ 3 liên tiếp: Mèo rút tặng 1 lá bài Tarot ngẫu nhiên!
-      if (catComboClickCount >= 3) {
-        catComboClickCount = 0;
-        const randomCard = catTarotMiniCards[Math.floor(Math.random() * catTarotMiniCards.length)];
-        showCatTip(randomCard, 6200);
-        return;
-      }
-
-      const activeMsg = catActiveClickDialogues[currentMeowClickIdx % catActiveClickDialogues.length];
-      showCatTip(activeMsg, 4500);
-      currentMeowClickIdx++;
+        showCatTip(msg, 4800);
+      }, 7000);
     }
 
     /* =========================================================================
@@ -3326,8 +3522,7 @@
       document.getElementById('storyStageSolve').innerHTML = details.solve;
 
       if (notifyCat) {
-        lastUserInteractionTime = Date.now();
-        showCatTip(`Meo~ meo! Bà đang chọn <b>${currentMinutes} phút (~${priceK}K)</b>. Bấm nút đặt lịch là tui tự động chép sẵn nha! 🐾`, 3400);
+        triggerCatSliderReaction(currentMinutes, priceK);
       }
     }
 
@@ -3391,13 +3586,17 @@ Mình muốn đặt lịch xem bài:
     let copyRedirectTimer = null;
 
     function closeCopyModal() {
-      const modal = document.getElementById('copyConfirmModal');
-      if (modal) modal.classList.remove('open');
-      if (copyRedirectTimer) {
-        clearTimeout(copyRedirectTimer);
-        copyRedirectTimer = null;
-      }
-    }
+  const modal = document.getElementById('copyConfirmModal');
+  const wasOpen = modal && modal.classList.contains('open');
+  if (modal) modal.classList.remove('open');
+  if (copyRedirectTimer) {
+    clearTimeout(copyRedirectTimer);
+    copyRedirectTimer = null;
+  }
+  if (wasOpen && typeof showCatTip === 'function') {
+    showCatTip('Sao dạ bà, còn ngại chưa dám nhắn hả? Now hiền khô và ấm áp lắm, không phán xét gì đâu nè ( ˘ ³˘)♥', 5000);
+  }
+}
 
     function handleBookingRedirect(platform) {
   const msg = buildBookingMessage();
@@ -3826,7 +4025,7 @@ Mình muốn đặt lịch xem bài:
       // 3. Đổi icon Divider và câu thoại số 11 của mèo
       const divEl = document.getElementById('seasonalDivider');
       if (divEl) divEl.innerHTML = `⊹₊˚‧︵‿₊୨ ${theme.dividerIcon} ୧₊‿︵‧˚₊⊹`;
-      catPassiveDialogues[10] = theme.catGreeting;
+      catPassiveDialogues[7] = theme.catGreeting;
 
       // 4. Lưu lại lựa chọn của khách hoặc báo mèo kêu khi bấm nút
       if (!silent) {
@@ -3982,22 +4181,24 @@ function forceExternalLinksNewTab() {
 
 window.onload = function() {
   forceExternalLinksNewTab();
+  if (typeof initBehavioralScrollObserver === 'function') initBehavioralScrollObserver();
   if (typeof initGlobalIOSButtonSounds === 'function') initGlobalIOSButtonSounds();
   if (typeof initCosmicCanvas === 'function') initCosmicCanvas();
   if (typeof initScrollReveal === 'function') initScrollReveal();
   if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
-  if (typeof setSliderMilestone === 'function') setSliderMilestone(60);
+
+  // Khởi tạo mốc 60p âm thầm (false) để không cướp lời chào đầu trang của mèo
+  const slider = document.getElementById('storyTimeSlider');
+  if (slider && typeof minutesToSliderPos === 'function') slider.value = minutesToSliderPos(60);
+  if (typeof renderMinutesState === 'function') renderMinutesState(60, false);
+
   if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
-  
+
   initLiveAvailabilityStatus();
   startAutoSeasonCycle15s();
   initMicrosoftClarity();
-  
+
   if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
-  setTimeout(() => {
-    const tip = document.getElementById('catBubbleTip');
-    if (tip) tip.classList.add('hidden-tip');
-  }, 4500);
 };
 
 

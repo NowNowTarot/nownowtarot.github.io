@@ -4546,6 +4546,9 @@ window.onload = function() {
     }
 
     function submitFeedbackToSheets() {
+      const submitBtn = document.getElementById('fbSubmitBtn');
+      if (submitBtn) submitBtn.disabled = true; // Khóa nút ngay lập tức chống bấm đúp
+
       const msgText = document.getElementById('fbMessageText').value.trim();
       const allowShare = document.getElementById('fbAllowShareCheck').checked;
 
@@ -4565,10 +4568,12 @@ window.onload = function() {
         allowShare: allowShare
       };
 
-      // HIỆU ỨNG NIÊM PHONG THƯ 0.85 GIÂY CỰC THÚ VỊ (GỬI NGẦM KHÔNG BẮT ĐỢI SERVER)
+      // Bật màn hình niêm phong thư
       document.getElementById('fbFormState').classList.add('hidden');
       document.getElementById('fbNoticeState').classList.add('hidden');
       const loadingBox = document.getElementById('fbLoadingState');
+      document.getElementById('fbLoadingTitle').textContent = "Đang niêm phong lá thư bằng sáp vàng...";
+      document.getElementById('fbLoadingSub').textContent = "Bé Mèo Đen đang chạy đi cất hồi âm của bà vào chiếc hộp kỷ niệm nhà NowNow 🐾";
       loadingBox.classList.remove('hidden');
 
       const fillBar = document.getElementById('fbSealProgressFill');
@@ -4578,20 +4583,26 @@ window.onload = function() {
         fillBar.classList.add('filling');
       }
 
-      // Gửi dữ liệu ngầm về Google Sheets
+      // Gửi dữ liệu về Google Sheets và chờ phản hồi thực tế từ server
       fetch(NOWNOW_FEEDBACK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       })
-      .then(() => {
-        setTimeout(() => syncApprovedReviewsFromSheets(), 1500);
-      })
-      .catch(() => {});
-
-      // Bật màn hình thành công + Tặng lá bài Tarot sau đúng 0.85 giây!
-      setTimeout(() => {
+      .then(res => res.json())
+      .then(data => {
         loadingBox.classList.add('hidden');
+
+        // NẾU SERVER TỪ CHỐI (DO ĐÃ CÓ HỒI ÂM TRƯỚC ĐÓ)
+        if (data.status === 'denied') {
+          document.getElementById('fbNoticeIcon').textContent = '🔒';
+          document.getElementById('fbNoticeTitle').textContent = 'Phiên này đã có hồi âm!';
+          document.getElementById('fbNoticeDesc').textContent = data.message || 'Phiên trải bài này đã có hồi âm, hệ thống đã khóa để bảo vệ dữ liệu!';
+          document.getElementById('fbNoticeState').classList.remove('hidden');
+          return;
+        }
+
+        // NẾU GỬI THÀNH CÔNG HỢP LỆ
         document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
         document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
         document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${activeClientName}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
@@ -4606,7 +4617,16 @@ window.onload = function() {
 
         document.getElementById('fbNoticeState').classList.remove('hidden');
         if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
-      }, 850);
+        setTimeout(() => syncApprovedReviewsFromSheets(), 1500);
+      })
+      .catch(() => {
+        loadingBox.classList.add('hidden');
+        document.getElementById('fbNoticeIcon').textContent = '⚠️';
+        document.getElementById('fbNoticeTitle').textContent = 'Có chút gián đoạn!';
+        document.getElementById('fbNoticeDesc').textContent = 'Mạng bị chập chờn, bà kiểm tra kết nối rồi thử lại giúp Now nha.';
+        document.getElementById('fbNoticeState').classList.remove('hidden');
+        if (submitBtn) submitBtn.disabled = false;
+      });
     }
 
     /* 2. CHUYỂN TAB ẢNH / WEB */
@@ -4823,19 +4843,29 @@ window.onload = function() {
       document.body.classList.add('portal-open');
       modal.classList.add('open');
 
-      document.getElementById('fbLoadingState').classList.add('hidden');
+      // 🛡️ BẢO MẬT: GIẤU FORM, HIỆN MÀN HÌNH CHỜ TRONG KHI KIỂM TRA MÃ
+      document.getElementById('fbFormState').classList.add('hidden');
       document.getElementById('fbNoticeState').classList.add('hidden');
-      document.getElementById('fbFormState').classList.remove('hidden');
+      
+      const loadingBox = document.getElementById('fbLoadingState');
+      document.getElementById('fbLoadingTitle').textContent = "Đang mở khóa chiếc hộp hồi âm...";
+      document.getElementById('fbLoadingSub').textContent = "Chờ Mèo Đen kiểm tra mã phiên trải bài một xíu nha 🐾";
+      loadingBox.classList.remove('hidden');
 
       fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
         .then(res => res.json())
         .then(data => {
+          loadingBox.classList.add('hidden');
+
           if (data.status === 'valid') {
+            // MÃ HỢP LỆ VÀ CHƯA GỬI: MỚI ĐƯỢC PHÉP HIỆN FORM
+            document.getElementById('fbFormState').classList.remove('hidden');
             if (data.clientName && data.clientName !== 'bà') {
               activeClientName = data.clientName;
               if (nameSpan) nameSpan.textContent = activeClientName;
             }
           } else if (data.status === 'completed') {
+            // ĐÃ GỬI RỒI: HIỆN THÔNG BÁO KHÓA, FORM TUYỆT ĐỐI KHÔNG XUẤT HIỆN
             document.getElementById('fbFormState').classList.add('hidden');
             document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
             document.getElementById('fbNoticeIcon').textContent = '✨💖';
@@ -4843,6 +4873,7 @@ window.onload = function() {
             document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
             document.getElementById('fbNoticeState').classList.remove('hidden');
           } else if (data.status === 'invalid') {
+            // MÃ KHÔNG TỒN TẠI HOẶC SAI
             document.getElementById('fbFormState').classList.add('hidden');
             document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
             document.getElementById('fbNoticeIcon').textContent = '🕯️';
@@ -4851,7 +4882,13 @@ window.onload = function() {
             document.getElementById('fbNoticeState').classList.remove('hidden');
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          loadingBox.classList.add('hidden');
+          document.getElementById('fbNoticeIcon').textContent = '⚠️';
+          document.getElementById('fbNoticeTitle').textContent = 'Kết nối gián đoạn';
+          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên, bà vui lòng thử tải lại trang nha!';
+          document.getElementById('fbNoticeState').classList.remove('hidden');
+        });
     }
 
     window.addEventListener('DOMContentLoaded', () => {

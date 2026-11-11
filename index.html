@@ -2703,7 +2703,8 @@
       'fb17', // 17
       'fb18', // 18 🌟 (MỚI)
       'fb19', // 19 🌟 (MỚI)
-      'fb20'  // 20 🌟 (MỚI)
+      'fb20',  // 20 🌟 (MỚI)
+      'fb21'  // 21 🌟 (MỚI)
     ];
 
     const TOTAL_FEEDBACK_SLIDES = FEEDBACK_LIST.length;
@@ -4525,13 +4526,24 @@ window.onload = function() {
     </div>
   </div>
 
-  <!-- SCRIPT ĐIỀU KHIỂN TOÀN DIỆN (ĐÃ KHÔI PHỤC ĐỦ CÁC HÀM NÚT BẤM & OPTIMISTIC SUBMIT) -->
+  <!-- SCRIPT ĐIỀU KHIỂN TOÀN DIỆN (BẢO MẬT XSS + CHỐNG GHI ĐÈ + KHÔNG NÚT HỮU ÍCH) -->
   <script>
     const NOWNOW_FEEDBACK_API = "https://script.google.com/macros/s/AKfycbwHsjoBYSxz5u26cTxSZ6idEPat02sUZJ8RprQkEX3ccCNuQPMmwjiS9aMiXl1F0zpIwA/exec";
     let activeClientSessionId = null;
     let activeClientName = "bà";
 
-    /* 1. CÁC HÀM TƯƠNG TÁC TRONG CHIẾC HỘP HỒI ÂM (CHỌN TAG, ĐÓNG, GỬI SIÊU TỐC) */
+    // 🛡️ BẢO MẬT: HÀM MÃ HÓA KÝ TỰ ĐẶC BIỆT CHỐNG STORED XSS
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /* 1. CÁC HÀM TƯƠNG TÁC TRONG CHIẾC HỘP HỒI ÂM (CHỌN TAG, ĐÓNG, GỬI) */
     function toggleFbTag(el) {
       if (!el) return;
       el.classList.toggle('active');
@@ -4605,7 +4617,7 @@ window.onload = function() {
         // NẾU GỬI THÀNH CÔNG HỢP LỆ
         document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
         document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
-        document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${activeClientName}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
+        document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${escapeHtml(activeClientName)}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
 
         const tarotBox = document.getElementById('fbBonusTarotBox');
         const tarotText = document.getElementById('fbBonusTarotText');
@@ -4667,12 +4679,8 @@ window.onload = function() {
       return str[0] + '***' + str[str.length - 1];
     }
 
-    /* 4. DỮ LIỆU THỰC 100% TỪ GOOGLE SHEETS */
+    /* 4. DỮ LIỆU THỰC 100% TỪ GOOGLE SHEETS (ĐÃ BẢO VỆ XSS VÀ XÓA NÚT HỮU ÍCH) */
     let currentReviewDataset = [];
-
-    function getRandomHelpfulCount() {
-      return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
-    }
 
     function renderShopeeReviews() {
       const container = document.getElementById('shopeeReviewContainer');
@@ -4688,70 +4696,66 @@ window.onload = function() {
 
       let html = '';
       currentReviewDataset.forEach((r) => {
-        const likes = r.likes || getRandomHelpfulCount();
-        const realReply = (r.shopReply || '').trim();
+        const rawReply = (r.shopReply || '').trim();
         const maskedName = maskCustomerName(r.name);
         const avatarLetter = (r.name || 'K').trim().charAt(0).toUpperCase();
+
+        // 🛡️ LÀM SẠCH KÝ TỰ ĐẶC BIỆT CHỐNG XSS
+        const safeName = escapeHtml(maskedName);
+        const safeAvatar = escapeHtml(avatarLetter);
+        const safeTime = escapeHtml(r.time || 'Gần đây');
+        const safeService = escapeHtml(r.service || 'Phiên trải bài thấu cảm 1:1');
+        const safeStateBefore = escapeHtml(r.stateBefore || '');
+        const safeStateAfter = escapeHtml(r.stateAfter || '');
+        const safeTouchpoints = escapeHtml(r.touchpoints || '');
+        const safeMessage = escapeHtml(r.message || '');
+        const safeReply = escapeHtml(rawReply);
 
         html += `
           <div class="shopee-review-card">
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-2.5">
-                <div class="shopee-user-avatar">${avatarLetter}</div>
+                <div class="shopee-user-avatar">${safeAvatar}</div>
                 <div>
                   <div class="flex items-center gap-1.5">
-                    <span class="text-[13.5px] font-bold text-white">${maskedName}</span>
+                    <span class="text-[13.5px] font-bold text-white">${safeName}</span>
                   </div>
                 </div>
               </div>
-              <span class="text-[10px] text-[#c4b5be]/50">${r.time || 'Gần đây'}</span>
+              <span class="text-[10px] text-[#c4b5be]/50">${safeTime}</span>
             </div>
 
             <div style="opacity: 0.42;" class="mt-2 mb-2.5 space-y-1 transition-opacity hover:opacity-80">
               <div class="text-[9.5px] text-[#c4b5be] font-normal">
-                <i class="fa-solid fa-sparkles text-[8px] mr-1"></i> ${r.service || 'Phiên trải bài thấu cảm 1:1'}
+                <i class="fa-solid fa-sparkles text-[8px] mr-1"></i> ${safeService}
               </div>
               <div class="flex flex-wrap gap-1">
-                ${r.stateBefore ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${r.stateBefore}</span>` : ''}
-                ${r.stateAfter ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Sau: ${r.stateAfter}</span>` : ''}
-                ${r.touchpoints ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">${r.touchpoints}</span>` : ''}
+                ${safeStateBefore ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${safeStateBefore}</span>` : ''}
+                ${safeStateAfter ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Sau: ${safeStateAfter}</span>` : ''}
+                ${safeTouchpoints ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">${safeTouchpoints}</span>` : ''}
               </div>
             </div>
 
             <div class="my-3 pl-3 py-1 border-l-2 border-[#ffdf85]">
               <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
-                "${r.message || ''}"
+                "${safeMessage}"
               </p>
             </div>
 
-            ${realReply ? `
+            ${safeReply ? `
             <div class="shopee-shop-reply">
               <div class="text-[10.5px] font-bold text-[#ffdf85] mb-0.5">
                 <i class="fa-solid fa-reply fa-rotate-180 mr-1"></i> Phản hồi của NowNow Tarot:
               </div>
               <p class="text-[12px] text-[#f2dec4]/95 italic leading-relaxed">
-                ${realReply}
+                ${safeReply}
               </p>
             </div>` : ''}
-
-            <div class="flex items-center justify-end pt-2 mt-2 border-t border-white/5">
-              <button type="button" onclick="likeShopeeReview(this, ${likes})" class="shopee-helpful-btn">
-                <i class="fa-regular fa-thumbs-up"></i>
-                <span>Hữu ích (${likes})</span>
-              </button>
-            </div>
           </div>
         `;
       });
 
       container.innerHTML = html;
-    }
-
-    function likeShopeeReview(btn, initialCount) {
-      if (btn.classList.contains('liked')) return;
-      btn.classList.add('liked');
-      btn.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <span>Hữu ích (${initialCount + 1})</span>`;
-      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
     /* 5. KÉO 100% FEEDBACK THẬT ĐÃ DUYỆT TỪ GOOGLE SHEETS */
@@ -4781,8 +4785,7 @@ window.onload = function() {
               stateAfter: item.stateAfter || '',
               touchpoints: item.touchpoints || '',
               message: item.message || '',
-              shopReply: item.shopReply || item.reply || item.nowReply || '',
-              likes: getRandomHelpfulCount()
+              shopReply: item.shopReply || item.reply || item.nowReply || ''
             }));
 
             try {
@@ -4796,9 +4799,10 @@ window.onload = function() {
               let htmlContent = '';
               const list = [...resData.data, ...resData.data];
               list.forEach(item => {
-                const icon = item.stateAfter ? (item.stateAfter.split(' ')[0] || '💌') : '💌';
-                const cleanMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
-                const masked = maskCustomerName(item.name);
+                const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
+                const rawMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
+                const cleanMsg = escapeHtml(rawMsg);
+                const masked = escapeHtml(maskCustomerName(item.name));
                 htmlContent += `
                   <div class="love-wall-item">
                     <span class="love-wall-name">${icon} ${masked}:</span>
@@ -4813,7 +4817,7 @@ window.onload = function() {
         .catch(() => {});
     }
 
-    /* 6. MỞ CĂN PHÒNG HỒI ÂM KHI CÓ ?session= */
+    /* 6. MỞ CĂN PHÒNG HỒI ÂM KHI CÓ ?session= (ĐÃ KHÓA AN TOÀN) */
     function checkUrlForSessionParam() {
       let session = null;
       const params = new URLSearchParams(window.location.search);

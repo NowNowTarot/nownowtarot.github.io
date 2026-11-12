@@ -6766,5 +6766,643 @@ I'd love to book a 1:1 Tarot & CBT session:
     });
   })();
 </script>
+<!-- =========================================================================
+     TINH CHỈNH GIAO DIỆN MOBILE + GẮN LINK BÀI GỐC + MÈO NỔI TRÊN MENU
+     ========================================================================= -->
+<style>
+  /* 1. Đưa Bé Mèo Đen nổi lên trên cả lớp phủ mờ (145) và thanh Menu (150) */
+  body.toc-open #floatingCatContainer {
+    z-index: 160 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* 2. Thu gọn header thẻ cổng & thanh topbar trên điện thoại cho mảnh mai */
+  @media (max-width: 640px) {
+    .portal-launch-card {
+      padding: 14px 15px !important;
+      border-radius: 18px !important;
+    }
+    .portal-launch-card > div:first-child {
+      gap: 8px !important;
+      margin-bottom: 8px !important;
+    }
+    .portal-launch-card .portal-tag-header {
+      font-size: 9.5px !important;
+      padding: 3px 8px !important;
+      margin-bottom: 0 !important;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .portal-launch-card > div:first-child > span:last-child {
+      font-size: 10px !important;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Sửa lỗi cắt chữ trên thanh tiêu đề popup */
+    .subweb-topbar {
+      padding: 8px 10px !important;
+      gap: 6px !important;
+    }
+    .subweb-back-btn {
+      padding: 5px 9px !important;
+      font-size: 10.5px !important;
+      gap: 4px !important;
+      flex-shrink: 0;
+    }
+    .subweb-title-pill {
+      min-width: 0;
+      flex: 1;
+      justify-content: flex-start !important;
+      font-size: 10.5px !important;
+    }
+    .subweb-title-pill span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .subweb-close-icon {
+      width: 28px !important;
+      height: 28px !important;
+      font-size: 12px !important;
+    }
+
+    /* Thu gọn thẻ bài viết trong Tạp Chí Tâm Thức trên mobile */
+    .threads-post-card {
+      padding: 13px 14px !important;
+      border-radius: 15px !important;
+      margin-bottom: 11px !important;
+    }
+    .threads-post-card > div:first-child {
+      font-size: 10.5px !important;
+      gap: 6px;
+    }
+    .threads-post-card > div:first-child > span:last-child {
+      font-size: 9.8px !important;
+      padding: 2px 7px !important;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  /* 3. Chữ ký dẫn link bài gốc siêu mảnh ở góc dưới bên phải mỗi bài */
+  .threads-verify-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+  .threads-verify-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(255, 223, 133, 0.55);
+    padding: 2px 2px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .threads-post-card:hover .threads-verify-link,
+  .threads-verify-link:active {
+    color: #ffdf85;
+    border-bottom-color: rgba(255, 223, 133, 0.45);
+  }
+</style>
+
+<script>
+  (function enhanceMenuCatAndThreadsLinks() {
+    // 1. Giữ linh vật Mèo Đen nổi trên Menu & phát thoại dẫn đường khi mở Menu
+    const origToggleToc = window.toggleNowNowTocDrawer;
+    if (typeof origToggleToc === 'function') {
+      window.toggleNowNowTocDrawer = function() {
+        origToggleToc();
+        const drawer = document.getElementById('tocDrawer');
+        const isNowOpen = drawer && drawer.classList.contains('open');
+        document.body.classList.toggle('toc-open', isNowOpen);
+
+        if (isNowOpen) {
+          // Nếu mèo đang đứng bên trái (dễ bị thanh Menu che trên điện thoại) -> tự lướt sang góc phải
+          if (typeof catPosX !== 'undefined' && catPosX < window.innerWidth * 0.5 &&
+              typeof setCatScreenPosition === 'function' && typeof getCatDimensions === 'function') {
+            const { w, h, margin } = getCatDimensions();
+            setCatScreenPosition(window.innerWidth - w - margin, window.innerHeight - h - margin);
+          }
+
+          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+          if (typeof showCatTip === 'function') {
+            const isEn = window.currentNowNowLang === 'en';
+            const tocQuotesVi = [
+              "Mở la bàn mục lục rồi nè! Bà muốn nhảy thẳng tới 'Bảng giá & Đặt lịch' hay mở 'Hộp thư Feedback' tui dẫn đường cho 🧭🐾",
+              "Meo~ Đứng đây canh menu phụ bà nè! Chạm mục nào là trang tự trượt mượt tới đúng chỗ đó liền nha ✨🐱",
+              "Bấm 'Mở Tạp Chí Tâm Thức' hoặc 'Hộp Thư Feedback' ở dưới cùng menu là mở cửa sổ đọc ngay không lo trôi trang đâu bà! 🚪💖"
+            ];
+            const tocQuotesEn = [
+              "Navigation compass unlocked! Tap any section to glide straight there, or open the Feedback & Journal archives 🧭🐾",
+              "Meow~ Right beside the menu to guide you! Tap 'Pricing & Booking Flow' to test the duration slider ✨🐱"
+            ];
+            const pool = isEn ? tocQuotesEn : tocQuotesVi;
+            showCatTip(pool[Math.floor(Math.random() * pool.length)], 5200);
+          }
+        }
+      };
+    }
+
+    const origCloseToc = window.closeNowNowTocDrawer;
+    if (typeof origCloseToc === 'function') {
+      window.closeNowNowTocDrawer = function() {
+        origCloseToc();
+        document.body.classList.remove('toc-open');
+      };
+    }
+
+    // 2. Danh sách 12 link bài viết Threads gốc ông đã gắn
+    const THREADS_POST_LINKS = [
+      "https://www.threads.com/share/HmqJ7b9Aw",  // 1. 121,3K View - Tam quan vững vàng & chấp nhận khác biệt
+      "https://www.threads.com/share/Fy5eZd5xj",  // 2. 203,6K View - Hợp nhau cách giải quyết mâu thuẫn
+      "https://www.threads.com/share/HnhWeoIBI",  // 3. 73,9K View  - Cây nở hoa bướm tự bay tới
+      "https://www.threads.com/share/Dj1Guqivc",  // 4. 54,7K View  - 90% serotonin tạo ra ở ruột
+      "https://www.threads.com/share/F8zay0SN_",  // 5. 52,8K View  - Duyên vận hành y chang thuật toán Tóp Tóp
+      "https://www.threads.com/share/EGEoCAq8j",  // 6. 40,7K View  - Dòng điện 220V cắm vào bóng 110V
+      "https://www.threads.com/share/EDYNzavnB",  // 7. 45,8K View  - Hyper-vigilance & romantic starvation
+      "https://www.threads.com/share/GsbumBuQV",  // 8. 41,2K View  - Outliers của Gladwell (10.000 giờ)
+      "https://www.threads.com/share/INyFAhG3D",  // 9. 1,2K Tim   - Phân biệt đua đòi vs ở trọ
+      "https://www.threads.com/share/GcwVlKvWg",  // 10. 27,6K View - Thời điểm chín muồi
+      "https://www.threads.com/share/D3-m0nQFQ",  // 11. 11,6K View - Không vô cảm mà quá nhạy cảm
+      "https://www.threads.com/share/EATPUr8o0"   // 12. 12,1K View - 3 tầng nhận thức & over-analysis
+    ];
+
+    function renderVerifyLinks() {
+      const cards = document.querySelectorAll('#subwebViral .threads-post-card');
+      const isEn = window.currentNowNowLang === 'en';
+
+      cards.forEach((card, idx) => {
+        const url = (THREADS_POST_LINKS[idx] || '').trim();
+        if (!url.startsWith('http')) return;
+
+        let row = card.querySelector('.threads-verify-row');
+        if (!row) {
+          row = document.createElement('div');
+          row.className = 'threads-verify-row';
+          row.innerHTML = `
+            <a href="${url}" target="_blank" rel="noopener noreferrer" data-sound="tap" class="threads-verify-link">
+              <span class="verify-label"></span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[8.5px]"></i>
+            </a>
+          `;
+          card.appendChild(row);
+        }
+        const label = row.querySelector('.verify-label');
+        if (label) {
+          label.textContent = isEn ? 'Original thread' : 'Xem bài gốc';
+        }
+      });
+    }
+
+    renderVerifyLinks();
+    window.addEventListener('DOMContentLoaded', renderVerifyLinks);
+
+    const prevSetLang = window.setNowNowLanguage;
+    if (typeof prevSetLang === 'function') {
+      window.setNowNowLanguage = function(lang) {
+        prevSetLang(lang);
+        renderVerifyLinks();
+      };
+    }
+  })();
+</script>
+<!-- =========================================================================
+     BẢN VÁ MAX PING 10/10 CHO MÈO ĐEN (UNMUTE, SMART BUBBLE, MỞ RỘNG TỪ KHÓA, EN)
+     ========================================================================= -->
+<script>
+  (function applyMaxPingCatPatch() {
+    // 1. MỞ KHÓA MÕM TRONG FEEDBACK VÀ CHO PHÉP CHẠM ĐỂ TẮT BONG BÓNG
+    const origShowCatTip = showCatTip;
+    showCatTip = function(text, duration = 5400) {
+      // Bỏ chặn feedbackUnified, chỉ chặn các modal lạ (nếu có)
+      if (document.body.classList.contains('portal-open') &&
+          activeSubWebType !== 'viral' &&
+          activeSubWebType !== 'feedbackUnified') return;
+
+      const tip = document.getElementById('catBubbleTip');
+      const txt = document.getElementById('catBubbleText');
+      if (!tip || !txt) return;
+
+      txt.innerHTML = text;
+      tip.classList.remove('hidden-tip');
+
+      if (tipTimer) clearTimeout(tipTimer);
+      tipTimer = setTimeout(() => {
+        tip.classList.add('hidden-tip');
+      }, duration);
+    };
+
+    // Chạm vào bong bóng để tắt ngay
+    const catTipEl = document.getElementById('catBubbleTip');
+    if (catTipEl) {
+      catTipEl.style.cursor = 'pointer';
+      catTipEl.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        hideCatTipImmediately();
+      });
+    }
+
+    // 2. GIÃN NHỊP TỰ ĐỘNG NÓI TỪ 9.8S LÊN 15S ĐỂ ĐỠ RỐI MẮT TRÊN MOBILE
+    if (passiveLoopTimer) clearInterval(passiveLoopTimer);
+    passiveLoopTimer = setInterval(() => {
+      if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+      if (Date.now() - lastInteractionTimestamp < 6000) return; // Đợi 6s sau tương tác cuối
+
+      if (window.currentNowNowLang === 'en') {
+        triggerCatGentleWiggle();
+        showCatTip(deckEN.next(), 5000);
+        return;
+      }
+
+      const roll = Math.random();
+      let autoMsg = "";
+      if (roll < 0.72) {
+        const deck = mainViDecks[deckRotatorIndex % mainViDecks.length];
+        deckRotatorIndex++;
+        autoMsg = deck.next();
+      } else if (roll < 0.90) {
+        autoMsg = getCircadianQuote();
+      } else {
+        autoMsg = deckTarot.next();
+      }
+      triggerCatGentleWiggle();
+      showCatTip(autoMsg, 5200);
+    }, 15000);
+
+    // 3. THAY THẾ MẮT THẦN TỪ KHÓA BẰNG BẢN NÂNG CẤP (Bao phủ thêm Gia đình, Bạn bè, Học tập, Tarot)
+    const oldInput = document.getElementById('bookingTopicInput');
+    if (oldInput) {
+      const newInput = oldInput.cloneNode(true);
+      oldInput.parentNode.replaceChild(newInput, oldInput);
+      let lastKeywordTriggered = '';
+
+      newInput.addEventListener('focus', () => {
+        lastInteractionTimestamp = Date.now();
+        triggerCatGentleWiggle();
+        showCatTip(window.currentNowNowLang === 'en'
+          ? "Type whatever is heavy on your heart here, it's 100% confidential! ✍️🤫"
+          : "Cứ gõ hết những điều đang đè nặng trong lòng vào đây nha, tui với Now giữ bí mật tuyệt đối 100%! ✍️🤫", 5000);
+      });
+
+      newInput.addEventListener('input', () => {
+        const val = newInput.value.toLowerCase();
+        lastInteractionTimestamp = Date.now();
+
+        const isEn = window.currentNowNowLang === 'en';
+        const extendedRules = [
+          { keys: ['nyc', 'người yêu cũ', 'quay lại', 'cũ', 'ex'], id: 'ex', msg: isEn ? "Talking about your <b>ex</b>? 📻 Let's see if they've really changed or just feeling lonely!" : "Bà đang nhắc tới <b>người yêu cũ</b> hả? 📻 Để Now soi xem cái 'lò vi sóng' này đã thực sự thay đổi hay chỉ đang tìm chỗ lấp trống nha!" },
+          { keys: ['mập mờ', 'crush', 'thích', 'im lặng', 'ghost', 'lạnh nhạt', 'situationship'], id: 'crush', msg: isEn ? "Ah, the <b>silent/situationship</b> trap! 🔍 Don't guess, let Now unpack their real motives for you." : "Tui thấy từ khóa <b>mập mờ / im lặng</b> rồi nha! 🔍 Đừng tự đoán già đoán non, để Now bóc trần động cơ thật của người đó cho bà sáng tỏ!" },
+          { keys: ['công việc', 'nghỉ việc', 'nhảy việc', 'sếp', 'tiền', 'kinh doanh', 'career', 'job', 'money'], id: 'job', msg: isEn ? "<b>Career & finances</b> giving you a headache? 💼 We'll map out a grounded action plan for your next move!" : "Chuyện <b>công việc & tài chính</b> đang làm đau đầu đúng hơm? 💼 Tụi mình sẽ phân tích thiệt - hơn thật tỉnh táo để bà chọn đúng bước đi tiếp theo nha!" },
+          { keys: ['gia đình', 'bố mẹ', 'mẹ', 'ba', 'anh chị', 'family', 'parents'], id: 'fam', msg: isEn ? "<b>Family dynamics</b> can be the heaviest... 🏡 We're here to hold a safe space for your inner child." : "Những tổn thương từ <b>gia đình</b> luôn hằn sâu nhất... 🏡 Đừng gồng nữa, để Now ôm lấy Đứa Trẻ Bên Trong của bà nha!" },
+          { keys: ['bạn bè', 'bạn thân', 'đồng nghiệp', 'chơi xấu', 'friends', 'colleague'], id: 'friend', msg: isEn ? "<b>Friendship or toxic colleagues?</b> 🐍 Let's redraw your boundaries and protect your energy!" : "Gặp rắc rối với <b>bạn bè / đồng nghiệp</b> hả? 🐍 Chút nữa mổ xẻ xem ai đáng giữ, ai cần vạch ranh giới liền nha!" },
+          { keys: ['học tập', 'thi cử', 'điểm', 'trường', 'đại học', 'study', 'exam', 'university'], id: 'study', msg: isEn ? "<b>Studies and exams</b> stressing you out? 📚 Let's check your upcoming energy and clear the brain fog!" : "Áp lực <b>học tập & thi cử</b> làm bà stress hả? 📚 Yên tâm, để coi vận hạn sắp tới và xả bớt áp lực trong đầu nha!" },
+          { keys: ['tổng quan', 'vận hạn', 'tương lai', 'tarot', 'năm nay', 'future', 'general'], id: 'tarot', msg: isEn ? "Just want a <b>general Tarot forecast</b>? 🔮 We'll scan your overall energy across love, work, and inner peace!" : "Tò mò <b>vận hạn tổng quan</b> sắp tới? 🔮 Now sẽ trải một trải bài toàn cảnh Tình - Tiền - Sự nghiệp để bà đón đầu vũ trụ nha!" },
+          { keys: ['mệt', 'khóc', 'buồn', 'bế tắc', 'mất ngủ', 'áp lực', 'stress', 'tired', 'cry', 'sad'], id: 'sad', msg: isEn ? "Reading those words breaks my heart 🥺🫂 Take a slow breath, you can let it all out here safely..." : "Đọc mấy chữ bà vừa gõ mà tui thương đứt ruột 🥺🫂 Thở chậm lại một nhịp nha, lát vào phiên cứ khóc hoặc trút hết ra với Now..." }
+        ];
+
+        for (const rule of extendedRules) {
+          if (lastKeywordTriggered !== rule.id && rule.keys.some(k => val.includes(k))) {
+            lastKeywordTriggered = rule.id;
+            triggerCatGentleWiggle();
+            showCatTip(rule.msg, 6000);
+            return;
+          }
+        }
+      });
+    }
+
+    // 4. FIX MÈO TRONG FEEDBACK SUB-WEB (REACTIONS CHO ẢNH & WEB TABS)
+    const origSwitchFeedbackTab = switchFeedbackTab;
+    switchFeedbackTab = function(tabKey) {
+      origSwitchFeedbackTab(tabKey);
+      triggerCatGentleWiggle();
+      const isEn = window.currentNowNowLang === 'en';
+      if (tabKey === 'web') {
+        showCatTip(isEn 
+          ? "Here is the synced review board! Real shifts, real voices ✨" 
+          : "Bảng này đồng bộ trực tiếp từ Google Sheets của Now đó, khách khen quá trời khen luôn! ⭐📊", 5000);
+      } else {
+        showCatTip(isEn 
+          ? "Swipe through 21 unfiltered chat screenshots. Pure relief 📸💖" 
+          : "21 tấm ảnh chụp màn hình tin nhắn chân thật không xạo một chữ nào, bà cứ bấm tới lui đọc nha 📸💖", 5000);
+      }
+    };
+
+    const origChangeFeedbackSlide = changeFeedbackSlide;
+    let slidePokes = 0;
+    changeFeedbackSlide = function(step) {
+      origChangeFeedbackSlide(step);
+      slidePokes++;
+      if (slidePokes % 5 === 0) { 
+        const isEn = window.currentNowNowLang === 'en';
+        showCatTip(isEn 
+          ? "So many heavy hearts felt completely weightless after just one session 🦋✨" 
+          : "Đó bà thấy hơm, ai mang tâm trạng nặng nề tới đây xong lúc về cũng nhẹ bẫng như mây á 🦋✨", 4000);
+      }
+    };
+
+    // 5. NÂNG CẤP CHẾ ĐỘ TIẾNG ANH ĐỂ KHÔNG BỊ CỤT TÍNH NĂNG
+    const EN_TAROT_MINI = [
+      "🎴 <b>The Fool:</b> Don't let past fears bound you. Take that leap of faith out of your comfort zone! 🌱✨",
+      "🎴 <b>The Magician:</b> You already have all the resources you need. Silence that imposter syndrome and act! 🪄🔥",
+      "🎴 <b>The High Priestess:</b> The answer you're frantically looking for? Your intuition already knows it. Listen to it 🌙🔮",
+      "🎴 <b>The Empress:</b> Reclaim your energy and nurture yourself. When the garden blooms, butterflies arrive naturally 👑🌷",
+      "🎴 <b>The Emperor:</b> Being gentle doesn't mean having no boundaries. Re-establish the rules to protect your peace 🛡️⚡",
+      "🎴 <b>The Lovers:</b> Don't make permanent choices out of temporary fear. Follow the path that makes your nervous system feel safe 💞⚖️",
+      "🎴 <b>The Chariot:</b> Hold the reins of your mind! Once you decide to move forward, no ghost of the past can pull you back 🐎🌟",
+      "🎴 <b>Strength:</b> True courage isn't acting tough, it's daring to embrace the vulnerable, trembling parts within you 🦁💖",
+      "🎴 <b>The Hermit:</b> Turn down the noise. Stepping back for a deep dialogue with Now is the lantern you need right now 🏮🌌",
+      "🎴 <b>Wheel of Fortune:</b> The old cycle of stagnation is closing! Change one tiny habit today to trigger the universe's algorithm of luck 🎡✨",
+      "🎴 <b>The Tower:</b> Illusions shattering hurts, but it frees you from building your life on a false foundation. Clear skies are coming ⚡🏰"
+    ];
+    const EN_GOSSIP = [
+      "🤫 <b>Exclusive Gossip:</b> NowNow looks calm and sharp online, but talks to me in a super cheesy baby voice IRL! 😹🍼",
+      "🤫 <b>Exclusive Gossip:</b> A client felt so relieved after a late-night session they sent me 2 boxes of premium salmon treats! 🐟✨",
+      "🤫 <b>Exclusive Gossip:</b> They say whoever taps my paws 7 times gets a text back from their crush today! 🐾🔮",
+      "🤫 <b>Exclusive Gossip:</b> The universe responds to your actions. Changing your route to work tomorrow might bring a new connection! 🧭✨"
+    ];
+    
+    // Tái tạo Shuffle Bags cho mode EN
+    const deckEnTarot = new NonRepeatingShuffleBag(EN_TAROT_MINI);
+    const deckEnGossip = new NonRepeatingShuffleBag(EN_GOSSIP);
+
+    const origPoke = pokeRealCatMeow;
+    pokeRealCatMeow = function() {
+      if (window.currentNowNowLang !== 'en') {
+        origPoke();
+        return;
+      }
+      
+      const now = Date.now();
+      lastInteractionTimestamp = now;
+      totalSessionClicks++;
+      playCuteMeowSound();
+      triggerCatGentleWiggle();
+
+      if (now - lastClickTimestamp < 1400) {
+        clickCounter++;
+      } else {
+        clickCounter = 1;
+      }
+      lastClickTimestamp = now;
+
+      if (clickCounter >= 4) {
+        clickCounter = 0;
+        showCatTip("Whoa! Tapping me like a drum! Stop, you're making me dizzy! 😵‍💫🐾", 5400);
+        return;
+      }
+
+      if (totalSessionClicks % 4 === 0) {
+        showCatTip(`✨ <b>Cat's Tarot Gift for you:</b><br>${deckEnTarot.next()}`, 6800);
+        return;
+      }
+      if (totalSessionClicks % 7 === 0) {
+        showCatTip(deckEnGossip.next(), 6500);
+        return;
+      }
+
+      showCatTip(deckEN.next(), 5800);
+    };
+
+    // 6. THAY THẾ RANDOM THÔ CỦA BÌNH LUẬN THREADS BẰNG SHUFFLE BAG CHỐNG LẶP
+    const threadsDecks = {};
+    const origInitObserver = initThreadsPostObserver;
+    initThreadsPostObserver = function() {
+      origInitObserver();
+      const scrollContainer = document.querySelector('#subwebViral .subweb-body-scroll');
+      const postCards = document.querySelectorAll('#subwebViral .threads-post-card');
+      if (!scrollContainer || !postCards.length) return;
+
+      if (threadsObserverInstance) threadsObserverInstance.disconnect();
+
+      let postTimer = null;
+      let lastObservedIndex = -1;
+
+      Object.keys(THREADS_POST_COMMENTARY).forEach(key => {
+        if (!threadsDecks[key]) {
+          threadsDecks[key] = new NonRepeatingShuffleBag(THREADS_POST_COMMENTARY[key]);
+        }
+      });
+
+      threadsObserverInstance = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+            const index = Array.from(postCards).indexOf(entry.target);
+            if (index !== -1 && index !== lastObservedIndex) {
+              if (postTimer) clearTimeout(postTimer);
+              postTimer = setTimeout(() => {
+                lastObservedIndex = index;
+                if (threadsDecks[index]) {
+                  triggerCatGentleWiggle();
+                  playCuteMeowSound();
+                  showCatTip(threadsDecks[index].next(), 5500);
+                }
+              }, 2200);
+            }
+          }
+        });
+      }, { root: scrollContainer, threshold: [0.3, 0.45, 0.6] });
+
+      postCards.forEach(card => threadsObserverInstance.observe(card));
+    };
+
+  })();
+</script>
+<style>
+  /* Ẩn trượt lên (Scroll-Hide) cho Menu và Language Switcher */
+  .nownow-toc-trigger, .nownow-lang-switcher {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, background 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+  }
+  
+  /* Class khi khách đang lướt xuống (cuộn xuống) -> Đẩy ngược lên trên để giấu đi */
+  body.scroll-down .nownow-toc-trigger {
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.scroll-down .nownow-lang-switcher {
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Khắc phục: Không ẩn khi Menu/Popup đang mở */
+  body.toc-open .nownow-toc-trigger,
+  body.portal-open .nownow-toc-trigger,
+  body.portal-open .nownow-lang-switcher {
+    /* Rules đã có sẵn trong web của ông sẽ tự override cái này, không sợ lỗi */
+  }
+</style>
+<script>
+  (function initSmartScrollNav() {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    // Khoảng đệm: Khách phải cuộn xuống ít nhất 50px từ đỉnh mới bắt đầu giấu
+    // Và phải cuộn một khoảng > 10px mới ghi nhận để tránh bị giật nhấp nháy
+    const SCROLL_TOLERANCE = 10; 
+    const TOP_OFFSET = 50;
+
+    function updateNavVisibility() {
+      const currentScrollY = window.scrollY;
+      const body = document.body;
+
+      // Không can thiệp nếu khách đang mở popup hoặc menu
+      if (body.classList.contains('portal-open') || body.classList.contains('toc-open')) {
+        ticking = false;
+        return;
+      }
+
+      // Đang ở sát đỉnh trang -> Luôn hiện
+      if (currentScrollY <= TOP_OFFSET) {
+        body.classList.remove('scroll-down');
+      } else {
+        // Chỉ xử lý nếu cuộn đủ xa (tránh ngón tay run làm giật menu)
+        if (Math.abs(currentScrollY - lastScrollY) > SCROLL_TOLERANCE) {
+          if (currentScrollY > lastScrollY) {
+            // Cuộn xuống -> Ẩn
+            body.classList.add('scroll-down');
+          } else {
+            // Cuộn lên -> Hiện lại
+            body.classList.remove('scroll-down');
+          }
+        }
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateNavVisibility);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+</script>
+<script>
+  // =========================================================================
+  // HỆ THỐNG TRƯỢT BĂNG ĐỒNG BỘ TỐC ĐỘ CUỘN (SMOOTH COUPLED GLIDE)
+  // =========================================================================
+  (function initCatGlidePhysics() {
+    let lastScrollY = window.scrollY;
+    let scrollOffset = 0;       // Độ lệch mục tiêu tỷ lệ thuận 100% với tay cuộn
+    let smoothOffset = 0;       // Độ lệch thực tế của mèo (đã làm mượt chống giật)
+    let isGliding = false;
+    let settleTimer = null;
+
+    const container = document.getElementById('floatingCatContainer');
+    const catSvg = document.querySelector('#catBtnEl svg');
+    if (!container) return;
+
+    // Hệ số đồng bộ (ông muốn mèo trượt ngắn hay dài hơn thì chỉnh số 0.28 này):
+    const SCROLL_SYNC_RATIO = 0.28; // Khách cuộn 100px -> Mèo trôi 28px (chậm rãi, vừa mắt)
+    const FOLLOW_SMOOTHNESS = 0.08;  // Độ đầm khi mèo trượt theo tay (càng nhỏ càng êm)
+    const RETURN_FRICTION = 0.94;   // Độ trôi nhẹ về chỗ cũ khi ngừng tay cuộn
+
+    function glideLoop() {
+      if (!isGliding) return;
+
+      // Nhả quyền ngay nếu khách lấy chuột nắm kéo mèo
+      if (typeof isDraggingCat !== 'undefined' && isDraggingCat) {
+        isGliding = false;
+        scrollOffset = 0;
+        smoothOffset = 0;
+        if (catSvg) catSvg.style.transform = '';
+        return;
+      }
+
+      const { w, h, margin } = getCatDimensions();
+      const minY = 74;
+      const baseMaxY = window.innerHeight - h - margin;
+
+      if (!catPosX) catPosX = window.innerWidth - w - margin;
+
+      // 1. Khi khách ngừng lăn chuột, mục tiêu từ từ trôi êm về vị trí 0 (góc dưới)
+      scrollOffset *= RETURN_FRICTION;
+
+      // 2. Nội suy mượt (Lerp): Mèo lướt đầm theo mục tiêu, lăn chậm trôi chậm, lăn nhanh trôi nhanh
+      const prevSmooth = smoothOffset;
+      smoothOffset += (scrollOffset - smoothOffset) * FOLLOW_SMOOTHNESS;
+      const currentSpeed = smoothOffset - prevSmooth;
+
+      // 3. Tính vị trí Y thực tế trên màn hình và khóa biên an toàn
+      let nextY = baseMaxY + smoothOffset;
+      if (nextY < minY) {
+        nextY = minY;
+        scrollOffset = (minY - baseMaxY) * 0.85; // Chạm nóc thì chững lại êm ái, không nảy loạn xạ
+      } else if (nextY > baseMaxY) {
+        nextY = baseMaxY;
+      }
+
+      catPosY = nextY;
+
+      // 4. Nghiêng người cực nhẹ (tối đa 7 độ) cho có hồn mà không bị chóng mặt
+      if (catSvg) {
+        const gentleTilt = Math.max(-7, Math.min(7, currentSpeed * 1.1));
+        catSvg.style.transition = 'none';
+        catSvg.style.transform = `rotate(${gentleTilt.toFixed(1)}deg)`;
+      }
+
+      // 5. Cập nhật tọa độ 60fps
+      container.style.transition = 'opacity 0.25s ease';
+      container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
+
+      // Tiếp tục chạy cho tới khi mèo trôi hẳn về góc nghỉ
+      if (Math.abs(scrollOffset) > 0.4 || Math.abs(smoothOffset) > 0.4) {
+        requestAnimationFrame(glideLoop);
+      } else {
+        scrollOffset = 0;
+        smoothOffset = 0;
+        catPosY = baseMaxY;
+        container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
+        if (catSvg) {
+          catSvg.style.transition = 'transform 0.45s ease';
+          catSvg.style.transform = 'rotate(0deg)';
+        }
+        isGliding = false;
+        settleTimer = setTimeout(() => {
+          if (!isGliding) container.style.transition = '';
+        }, 150);
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if ((typeof isDraggingCat !== 'undefined' && isDraggingCat) ||
+          document.body.classList.contains('portal-open')) return;
+
+      const currentY = window.scrollY;
+      const deltaY = currentY - lastScrollY;
+      lastScrollY = currentY;
+
+      // Bắt trực tiếp quãng đường cuộn trang nhân với tỷ lệ 0.28
+      if (Math.abs(deltaY) > 0) {
+        const maxTravel = window.innerHeight - 160;
+        scrollOffset -= deltaY * SCROLL_SYNC_RATIO;
+        // Giới hạn quãng trượt vừa vặn trong khung nhìn
+        scrollOffset = Math.max(-maxTravel, Math.min(20, scrollOffset));
+
+        if (settleTimer) clearTimeout(settleTimer);
+        if (typeof lastInteractionTimestamp !== 'undefined') {
+          lastInteractionTimestamp = Date.now();
+        }
+
+        if (!isGliding) {
+          isGliding = true;
+          requestAnimationFrame(glideLoop);
+        }
+      }
+    }, { passive: true });
+  })();
+</script>
 </body>
 </html>

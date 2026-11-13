@@ -7421,6 +7421,8 @@ I'd love to book a 1:1 Tarot & CBT session:
 (function initNowNowDigitalFootprintTracker() {
   // 1. CHẾ ĐỘ ẨN DANH CHỦ SHOP (?admin=1 để tắt theo dõi máy Hùng & Now | ?admin=0 để bật lại)
   const urlParams = new URLSearchParams(window.location.search);
+  // Tự động tắt đếm dấu chân nếu khách đang mở link điền Feedback sau phiên
+  if (urlParams.has('session') || urlParams.has('id')) return;
   if (urlParams.get('admin') === '1') {
     try { localStorage.setItem('nownow_admin_ignore', '1'); } catch (e) {}
     window.addEventListener('DOMContentLoaded', () => {

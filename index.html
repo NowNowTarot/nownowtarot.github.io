@@ -76,7 +76,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 
   <style>
     :root {
@@ -91,45 +92,6 @@
 /* =========================================================================
        GIAO DIỆN FEEDBACK CHUẨN SHOPEE REVIEW TRÊN MOBILE & DESKTOP
        ========================================================================= */
-    .shopee-review-header {
-      background: linear-gradient(135deg, rgba(255, 223, 133, 0.08) 0%, rgba(158, 42, 59, 0.16) 100%);
-      border: 1px solid rgba(255, 223, 133, 0.35);
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-    .shopee-star-rating {
-      color: #ffc107;
-      letter-spacing: 2px;
-      font-size: 14px;
-    }
-    .shopee-filter-track {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 6px 0;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-    .shopee-filter-track::-webkit-scrollbar { display: none; }
-    .shopee-filter-btn {
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      white-space: nowrap;
-      border: 1px solid rgba(255, 223, 133, 0.25);
-      background: rgba(0, 0, 0, 0.35);
-      color: var(--champagne);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .shopee-filter-btn.active {
-      background: linear-gradient(135deg, rgba(185, 42, 64, 0.85), rgba(110, 18, 34, 0.95));
-      border-color: var(--gold-warm);
-      color: #ffffff;
-      box-shadow: 0 2px 10px rgba(212, 50, 72, 0.35);
-    }
     .shopee-review-card {
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(255, 223, 133, 0.22);
@@ -162,22 +124,6 @@
       border-radius: 12px;
       padding: 10px 12px;
       margin-top: 10px;
-    }
-    .shopee-helpful-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      color: var(--muted-text);
-      cursor: pointer;
-      transition: color 0.2s ease;
-      background: transparent;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-    .shopee-helpful-btn.liked {
-      color: var(--rose-warm);
-      font-weight: 700;
     }
      /* =========================================================================
        DẢI CHẠY CHỮ LOVE WALL TICKER (TỰ ĐỘNG KÉO TỪ GOOGLE SHEETS)
@@ -575,186 +521,7 @@
         0 0 60px rgba(232, 93, 117, 0.75),
         0 0 28px rgba(255, 223, 133, 0.55);
     }
-    /* HUY HIỆU TRẠNG THÁI ONLINE THỰC TẾ & THANH ĐỔI MÙA TINH TẾ */
-    /* NÚT NGHE THỬ GIỌNG NOWNOW (VOICE WARMTH TRUST) */
-/* VIÊN NANG NGHE GIỌNG NÓI SIÊU MẢNH (APPLE DYNAMIC CAPSULE) */
-.voice-capsule-sleek {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  padding: 5px 14px 5px 6px;
-  border-radius: 999px;
-  background: rgba(28, 12, 20, 0.65);
-  border: 1px solid rgba(255, 223, 133, 0.28);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.voice-capsule-sleek:hover {
-  transform: translateY(-1.5px);
-  background: rgba(42, 16, 28, 0.8);
-  border-color: rgba(255, 223, 133, 0.6);
-  box-shadow: 0 6px 24px rgba(212, 50, 72, 0.28);
-}
-.voice-capsule-sleek:active {
-  transform: scale(0.97);
-}
-.voice-capsule-sleek.playing {
-  border-color: var(--gold-warm);
-  background: linear-gradient(90deg, rgba(140, 25, 45, 0.45), rgba(28, 12, 20, 0.85));
-  box-shadow: 0 0 20px rgba(255, 223, 133, 0.25);
-}
-.voice-orb-mini {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-warm), #e88d72);
-  color: #1e0a14;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  flex-shrink: 0;
-  box-shadow: 0 0 10px rgba(255, 223, 133, 0.45);
-  transition: transform 0.25s ease;
-}
-.voice-capsule-label {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: rgba(255, 245, 235, 0.92);
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-.voice-capsule-duration {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--gold-warm);
-  opacity: 0.85;
-  margin-left: 2px;
-}
-.voice-soundwave-bars {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  height: 12px;
-  margin-left: 2px;
-}
-.soundwave-bar {
-  width: 2px;
-  height: 4px;
-  background: rgba(255, 223, 133, 0.5);
-  border-radius: 999px;
-  transition: height 0.2s ease;
-}
-.voice-capsule-sleek.playing .soundwave-bar {
-  animation: soundwaveBounce 0.65s ease-in-out infinite alternate;
-}
-.voice-capsule-sleek.playing .soundwave-bar:nth-child(2) { animation-delay: 0.12s; }
-.voice-capsule-sleek.playing .soundwave-bar:nth-child(3) { animation-delay: 0.24s; }
-.voice-capsule-sleek.playing .soundwave-bar:nth-child(4) { animation-delay: 0.36s; }
-.voice-capsule-sleek.playing .soundwave-bar:nth-child(5) { animation-delay: 0.18s; }
-@keyframes soundwaveBounce {
-  0% { height: 3px; opacity: 0.5; }
-  100% { height: 12px; background: var(--gold-warm); opacity: 1; }
-}
-
-/* ẨN HOÀN TOÀN THANH CHỌN 4 MÙA THỦ CÔNG */
-.celestial-season-dock {
-  display: none !important;
-}
-
-
-    /* TRẠNG THÁI ONLINE TỐI GIẢN SANG TRỌNG (FRAMELESS WHISPER + AVATAR RING) */
-.live-status-minimal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 6px;
-  margin-bottom: 2px;
-  padding: 2px 10px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: rgba(242, 222, 196, 0.85);
-}
-.status-beacon-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 8px;
-  height: 8px;
-}
-.status-dot-core {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 8px #34d399;
-  z-index: 2;
-}
-.status-dot-halo {
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: rgba(52, 211, 153, 0.45);
-  animation: auraRipple 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
-  z-index: 1;
-}
-@keyframes auraRipple {
-  0% { transform: scale(0.8); opacity: 0.9; }
-  75%, 100% { transform: scale(2.4); opacity: 0; }
-}
-.status-time-badge {
-  color: var(--gold-warm);
-  font-weight: 700;
-  text-shadow: 0 0 12px rgba(255, 223, 133, 0.35);
-}
-
-
-    .celestial-season-dock {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 3.5px 5px;
-      margin-top: 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 223, 133, 0.2);
-      backdrop-filter: blur(10px);
-    }
-    .season-orb-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 600;
-      color: rgba(242, 222, 196, 0.65);
-      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-      cursor: pointer;
-    }
-    .season-orb-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.06);
-    }
-    .season-orb-btn .season-label {
-      display: none;
-    }
-    .season-orb-btn.active {
-      background: linear-gradient(135deg, rgba(185, 42, 64, 0.85), rgba(110, 18, 34, 0.95));
-      color: var(--gold-warm);
-      border: 1px solid rgba(255, 223, 133, 0.6);
-      box-shadow: 0 2px 10px rgba(212, 50, 72, 0.35);
-    }
-    .season-orb-btn.active .season-label {
-      display: inline;
-    } 
+     
     .santa-hat-svg {
       position: absolute;
       top: -32px;
@@ -838,12 +605,11 @@
        ========================================================================= */
     .key-anchor-card {
       position: relative;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(158, 42, 59, 0.18) 100%);
+      background: linear-gradient(135deg, rgba(28, 12, 22, 0.94) 0%, rgba(92, 24, 38, 0.42) 100%);
       border: 1px solid rgba(255, 223, 133, 0.35);
       border-radius: 18px;
       padding: 17px 19px;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
       overflow: hidden;
     }
 
@@ -1300,15 +1066,11 @@
       position: relative;
       background:
         radial-gradient(circle at 50% 0%, rgba(212, 50, 72, 0.22) 0%, transparent 60%),
-        linear-gradient(180deg, rgba(32, 13, 23, 0.88) 0%, rgba(18, 8, 15, 0.94) 100%);
+        linear-gradient(180deg, rgba(28, 11, 20, 0.96) 0%, rgba(16, 7, 13, 0.98) 100%);
       border: 1.5px solid rgba(255, 223, 133, 0.45);
       border-radius: 26px;
       padding: 28px 20px;
-      box-shadow:
-        0 20px 55px rgba(0, 0, 0, 0.7),
-        0 0 35px rgba(168, 38, 58, 0.22),
-        inset 0 1px 0 rgba(255, 223, 133, 0.3);
-      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 223, 133, 0.3);
     }
 
     .highlight-motto-banner {
@@ -1933,7 +1695,7 @@ body.portal-open .cat-cloud-tip {
         </svg>
 
         <div class="avatar-circle">
-          <img src="image_403e9a.png" alt="NowNow Tarot" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <img src="image_403e9a.png" alt="NowNow Tarot" width="112" height="112" fetchpriority="high" decoding="async" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div style="display:none;" class="flex-col items-center justify-center text-center select-none">
             <span class="font-extrabold text-[14px] tracking-widest text-[#ffdf85]">NOWNOW</span>
             <span class="text-[10px] text-[#f2dec4] tracking-[0.22em] mt-0.5">TAROT</span>
@@ -1950,30 +1712,6 @@ body.portal-open .cat-cloud-tip {
       <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
       <!-- HUY HIỆU TRẠNG THÁI ONLINE THEO KHUNG GIỜ THỰC TẾ -->
 <!-- DÒNG TRẠNG THÁI HIỆN DIỆN TINH TẾ (KHÔNG VIỀN HỘP) -->
-
-
-
-
-      <!-- DOCK CHUYỂN ĐỔI MÙA LỄ HỘI DẠNG VIÊN NGỌC KÍNH MỜ (CHỈ BUNG CHỮ KHI CHỌN) -->
-      <div>
-        <div class="celestial-season-dock" title="Đổi không khí lễ hội trên trang">
-          <button type="button" onclick="setSeasonalTheme('auto')" id="themeBtn-auto" class="season-orb-btn active">
-            <span>✨</span><span class="season-label">Tự động</span>
-          </button>
-          <button type="button" onclick="setSeasonalTheme('noel')" id="themeBtn-noel" class="season-orb-btn">
-            <span>🎄</span><span class="season-label">Giáng Sinh</span>
-          </button>
-          <button type="button" onclick="setSeasonalTheme('tet')" id="themeBtn-tet" class="season-orb-btn">
-            <span>🧧</span><span class="season-label">Tết Xuân</span>
-          </button>
-          <button type="button" onclick="setSeasonalTheme('summer')" id="themeBtn-summer" class="season-orb-btn">
-            <span>🏖️</span><span class="season-label">Gió Hè</span>
-          </button>
-          <button type="button" onclick="setSeasonalTheme('halloween')" id="themeBtn-halloween" class="season-orb-btn">
-            <span>🎃</span><span class="season-label">Halloween</span>
-          </button>
-        </div>
-      </div>
       <div class="carrd-divider">⊹₊˚‧︵‿₊୨ ᰔ ୧₊‿︵‧˚₊⊹</div>
 
       <div class="text-left space-y-3 text-[13.8px] text-[#faf6f0]/95">
@@ -2704,8 +2442,9 @@ body.portal-open .cat-cloud-tip {
     ];
 
     const preloadedMeows = realCatMeowUrls.map(url => {
-      const audio = new Audio(url);
-      audio.preload = 'auto';
+      const audio = new Audio();
+      audio.dataset.src = url;
+      audio.preload = 'none';
       audio.volume = 0.85;
       return audio;
     });
@@ -2775,12 +2514,11 @@ body.portal-open .cat-cloud-tip {
       const sound = preloadedMeows[meowSoundIndex % preloadedMeows.length];
       meowSoundIndex++;
       try {
+        if (!sound.src && sound.dataset.src) sound.src = sound.dataset.src;
         sound.currentTime = 0;
         const playPromise = sound.play();
         if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            playRealisticMeowFallback();
-          });
+          playPromise.catch(() => playRealisticMeowFallback());
         }
       } catch (e) {
         playRealisticMeowFallback();
@@ -4476,6 +4214,10 @@ Mình muốn đặt lịch xem bài:
       }
 
       function animate() {
+        if (document.hidden || document.body.classList.contains('portal-open')) {
+       setTimeout(() => requestAnimationFrame(animate), 300);
+       return;
+     }
         ctx.clearRect(0, 0, width, height);
         globalOrbitAngle += 0.0008;
 
@@ -4717,171 +4459,57 @@ Mình muốn đặt lịch xem bài:
     }
 
     /* =========================================================================
-   9. TRẠNG THÁI HIỆN DIỆN THỰC TẾ, TRÌNH PHÁT VOICE (15S) & CLARITY
-   ========================================================================= */
-let nowNowVoiceAudio = null;
-let isVoicePlaying = false;
+    9. KHỞI CHẠY HỆ THỐNG TỨC THÌ & TỰ ĐỘNG CHUYỂN MÙA / KHUNG GIỜ ĐÊM
+    ========================================================================= */
+ function initLiveAvailabilityStatus() {
+   const hr = new Date().getHours();
+   if (hr >= 0 && hr < 4 && typeof selectTimeframe === 'function') {
+     selectTimeframe('night');
+   }
+   if (typeof getHourBasedCatDialogue === 'function' && typeof catPassiveDialogues !== 'undefined') {
+     catPassiveDialogues.splice(1, 0, getHourBasedCatDialogue());
+   }
+ }
 
-function toggleNowNowVoiceGreeting() {
-  const bannerBtn = document.getElementById('voiceGreetingBtn');
-  const orbIcon = document.getElementById('voicePlayOrbIcon');
-  if (!bannerBtn || !orbIcon) return;
+ let autoSeasonTimer = null;
+ const seasonCycleList = ['noel', 'tet', 'summer', 'halloween'];
+ let currentSeasonIdx = 0;
 
-  if (!nowNowVoiceAudio) {
-    // Sếp có thể đổi link file .mp3 giọng thật của Now vào trong cặp nháy đơn bên dưới:
-    nowNowVoiceAudio = new Audio('voice.mp3'); 
-    nowNowVoiceAudio.volume = 0.95;
-    nowNowVoiceAudio.onended = () => {
-      isVoicePlaying = false;
-      bannerBtn.classList.remove('playing');
-      orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
-    };
-  }
+ function startAutoSeasonCycle15s() {
+   if (typeof setSeasonalTheme !== 'function') return;
+   setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
+   if (autoSeasonTimer) clearInterval(autoSeasonTimer);
+   autoSeasonTimer = setInterval(() => {
+     currentSeasonIdx = (currentSeasonIdx + 1) % seasonCycleList.length;
+     setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
+   }, 15000);
+ }
 
-  if (isVoicePlaying) {
-    nowNowVoiceAudio.pause();
-    isVoicePlaying = false;
-    bannerBtn.classList.remove('playing');
-    orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
-    if (typeof playIOSButtonSound === 'function') playIOSButtonSound('close');
-  } else {
-    if (typeof playIOSButtonSound === 'function') playIOSButtonSound('open');
-    nowNowVoiceAudio.play().then(() => {
-      isVoicePlaying = true;
-      bannerBtn.classList.add('playing');
-      orbIcon.innerHTML = '<i class="fa-solid fa-pause"></i>';
-      if (typeof showCatTip === 'function') {
-        showCatTip('Meo~ meo! Lắng nghe giọng nói ấm áp của sốp để lòng nhẹ tênh nha bà ơi! 🎧💖', 5000);
-      }
-    }).catch(err => {
-      playVoiceToneFallback();
-      isVoicePlaying = true;
-      bannerBtn.classList.add('playing');
-      orbIcon.innerHTML = '<i class="fa-solid fa-pause"></i>';
-      if (typeof showCatTip === 'function') {
-        showCatTip('Meo~ meo! Lắng nghe giai điệu chữa lành từ NowNow nha! 🎧✨', 5000);
-      }
-      setTimeout(() => {
-        isVoicePlaying = false;
-        bannerBtn.classList.remove('playing');
-        orbIcon.innerHTML = '<i class="fa-solid fa-play ml-0.5"></i>';
-      }, 4000);
-    });
-  }
-}
+ function forceExternalLinksNewTab() {
+   const allLinks = document.querySelectorAll('a[href^="http"], a[href^="https"], a[href^="fb-messenger"], a[href^="instagram"]');
+   allLinks.forEach(link => {
+     link.setAttribute('target', '_blank');
+     link.setAttribute('rel', 'noopener noreferrer');
+   });
+ }
 
-// Hàm phát giai điệu êm dịu dự phòng (Phần bị cắt cụt lúc nãy đã được nối đầy đủ)
-function playVoiceToneFallback() {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    const ctx = (typeof getAudioEngine === 'function') ? getAudioEngine() : new AudioCtx();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-    const notes = [329.63, 392.00, 440.00, 523.25, 440.00]; // Giai điệu chữa lành E-G-A-C-A
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.65);
-      gain.gain.setValueAtTime(0.001, now + idx * 0.65);
-      gain.gain.exponentialRampToValueAtTime(0.12, now + idx * 0.65 + 0.15);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.65 + 0.6);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now + idx * 0.65);
-      osc.stop(now + idx * 0.65 + 0.62);
-    });
-  } catch (e) {}
-}
+ window.addEventListener('DOMContentLoaded', function() {
+   forceExternalLinksNewTab();
+   if (typeof initBehavioralScrollObserver === 'function') initBehavioralScrollObserver();
+   if (typeof initGlobalIOSButtonSounds === 'function') initGlobalIOSButtonSounds();
+   if (typeof initCosmicCanvas === 'function') initCosmicCanvas();
+   if (typeof initScrollReveal === 'function') initScrollReveal();
+   if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
 
-function initLiveAvailabilityStatus() {
-  const dotEl = document.getElementById('liveStatusDot');
-  const haloEl = document.getElementById('liveStatusHalo');
-  const txtEl = document.getElementById('liveStatusText');
-  if (!dotEl || !txtEl) return;
+   const slider = document.getElementById('storyTimeSlider');
+   if (slider && typeof minutesToSliderPos === 'function') slider.value = minutesToSliderPos(60);
+   if (typeof renderMinutesState === 'function') renderMinutesState(60, false);
 
-  const hr = new Date().getHours();
-  if (hr >= 9 && hr <= 23) {
-    dotEl.style.background = '#34d399';
-    dotEl.style.boxShadow = '0 0 8px #34d399';
-    if (haloEl) haloEl.style.background = 'rgba(52, 211, 153, 0.45)';
-    txtEl.innerHTML = 'Đang hiện diện <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">Khung Ban Ngày</span>';
-  } else if (hr >= 0 && hr < 4) {
-    dotEl.style.background = '#ffdf85';
-    dotEl.style.boxShadow = '0 0 10px #ffdf85';
-    if (haloEl) haloEl.style.background = 'rgba(255, 223, 133, 0.45)';
-    txtEl.innerHTML = 'Đang thức cùng bà <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">🌙 Cú Đêm (0h–4h)</span>';
-    if (typeof selectTimeframe === 'function') selectTimeframe('night');
-  } else {
-    dotEl.style.background = '#f43f5e';
-    dotEl.style.boxShadow = '0 0 8px #f43f5e';
-    if (haloEl) haloEl.style.background = 'rgba(244, 63, 94, 0.35)';
-    txtEl.innerHTML = 'Đang nạp năng lượng (4h–9h) <span class="mx-1 opacity-40">•</span> <span class="status-time-badge">Nhận giữ lịch sớm</span>';
-  }
-
-  if (typeof getHourBasedCatDialogue === 'function' && typeof catPassiveDialogues !== 'undefined') {
-    catPassiveDialogues.splice(1, 0, getHourBasedCatDialogue());
-  }
-}
-
-
-// Tích hợp Microsoft Clarity (Thay "YOUR_CLARITY_PROJECT_ID" bằng mã ID thật khi sếp đăng ký trên ://microsoft.com)
-function initMicrosoftClarity() {
-  const clarityId = "YOUR_CLARITY_PROJECT_ID";
-  if (clarityId === "YOUR_CLARITY_PROJECT_ID") return; // Tự động bỏ qua nếu chưa điền ID thật
-  (function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://clarity.ms"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", clarityId);
-}
-
-let autoSeasonTimer = null;
-const seasonCycleList = ['noel', 'tet', 'summer', 'halloween'];
-let currentSeasonIdx = 0;
-
-function startAutoSeasonCycle15s() {
-  if (typeof setSeasonalTheme !== 'function') return;
-  // Khởi chạy mùa đầu tiên một cách êm ái (silent = true để mèo không nhảy popup liên tục)
-  setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
-  
-  if (autoSeasonTimer) clearInterval(autoSeasonTimer);
-  autoSeasonTimer = setInterval(() => {
-    currentSeasonIdx = (currentSeasonIdx + 1) % seasonCycleList.length;
-    setSeasonalTheme(seasonCycleList[currentSeasonIdx], true);
-  }, 15000); // Tự động chuyển mùa sau mỗi 15.000ms (15 giây)
-}
-// TỰ ĐỘNG BẬT TAB MỚI CHO TẤT CẢ CÁC LINK RA NGOÀI (KHÔNG LÀM MẤT TRANG WEB CŨ)
-function forceExternalLinksNewTab() {
-  // 1. Tự động gắn target="_blank" cho mọi thẻ <a> dẫn ra trang ngoài
-  const allLinks = document.querySelectorAll('a[href^="http"], a[href^="https"], a[href^="fb-messenger"], a[href^="instagram"]');
-  allLinks.forEach(link => {
-    link.setAttribute('target', '_blank');
-    link.setAttribute('rel', 'noopener noreferrer');
-  });
-}
-
-window.onload = function() {
-  forceExternalLinksNewTab();
-  if (typeof initBehavioralScrollObserver === 'function') initBehavioralScrollObserver();
-  if (typeof initGlobalIOSButtonSounds === 'function') initGlobalIOSButtonSounds();
-  if (typeof initCosmicCanvas === 'function') initCosmicCanvas();
-  if (typeof initScrollReveal === 'function') initScrollReveal();
-  if (typeof initFeedbackCarousel === 'function') initFeedbackCarousel();
-
-  // Khởi tạo mốc 60p âm thầm (false) để không cướp lời chào đầu trang của mèo
-  const slider = document.getElementById('storyTimeSlider');
-  if (slider && typeof minutesToSliderPos === 'function') slider.value = minutesToSliderPos(60);
-  if (typeof renderMinutesState === 'function') renderMinutesState(60, false);
-
-  if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
-
-  initLiveAvailabilityStatus();
-  startAutoSeasonCycle15s();
-  initMicrosoftClarity();
-
-  if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
-};
+   if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
+   initLiveAvailabilityStatus();
+   startAutoSeasonCycle15s();
+   if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
+ });
 
 
   </script>
@@ -5388,7 +5016,7 @@ window.onload = function() {
               </div>
 
               <div class="iphone-viewport-body">
-                <img id="iphoneFeedbackImg" src="fb13.webp" alt="Feedback thực tế NowNow Tarot" class="iphone-fb-img">
+               <img id="iphoneFeedbackImg" src="fb13.webp" alt="Feedback thực tế NowNow Tarot" loading="lazy" decoding="async" class="iphone-fb-img">
               </div>
 
               <div class="iphone-home-indicator">
@@ -6097,7 +5725,7 @@ window.onload = function() {
   <div class="toc-drawer-header">
     <div class="toc-brand-mini">
       <div class="toc-brand-dot">
-  <img src="image_403e9a.png" alt="NowNow Tarot" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+  <img src="image_403e9a.png" alt="NowNow Tarot" width="36" height="36" style="width: 100%; height: 100%; object-fit: cover; display: block;">
 </div>
       <div>
         <div class="text-[13px] font-extrabold text-white tracking-wide">NowNow Tarot</div>
@@ -7235,11 +6863,6 @@ I'd love to book a 1:1 Tarot & CBT session:
   }
 
   /* Khắc phục: Không ẩn khi Menu/Popup đang mở */
-  body.toc-open .nownow-toc-trigger,
-  body.portal-open .nownow-toc-trigger,
-  body.portal-open .nownow-lang-switcher {
-    /* Rules đã có sẵn trong web của ông sẽ tự override cái này, không sợ lỗi */
-  }
 </style>
 <script>
   (function initSmartScrollNav() {

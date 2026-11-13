@@ -7291,80 +7291,88 @@ I'd love to book a 1:1 Tarot & CBT session:
 </script>
 <script>
   // =========================================================================
-  // HỆ THỐNG TRƯỢT BĂNG ĐỒNG BỘ TỐC ĐỘ CUỘN (SMOOTH COUPLED GLIDE)
+  // HỆ THỐNG TRƯỢT BĂNG TẠI ĐIỂM KHÁCH ĐẶT (LOCAL ICE-GLIDE PHYSICS)
   // =========================================================================
   (function initCatGlidePhysics() {
     let lastScrollY = window.scrollY;
-    let scrollOffset = 0;       // Độ lệch mục tiêu tỷ lệ thuận 100% với tay cuộn
-    let smoothOffset = 0;       // Độ lệch thực tế của mèo (đã làm mượt chống giật)
+    let glideVy = 0;            // Vận tốc trượt băng hiện tại
     let isGliding = false;
     let settleTimer = null;
+    let placedAnchorY = null;   // Lưu đúng tọa độ Y nơi khách đặt mèo
 
     const container = document.getElementById('floatingCatContainer');
     const catSvg = document.querySelector('#catBtnEl svg');
     if (!container) return;
 
-    // Hệ số đồng bộ (ông muốn mèo trượt ngắn hay dài hơn thì chỉnh số 0.28 này):
-    const SCROLL_SYNC_RATIO = 0.28; // Khách cuộn 100px -> Mèo trôi 28px (chậm rãi, vừa mắt)
-    const FOLLOW_SMOOTHNESS = 0.08;  // Độ đầm khi mèo trượt theo tay (càng nhỏ càng êm)
-    const RETURN_FRICTION = 0.94;   // Độ trôi nhẹ về chỗ cũ khi ngừng tay cuộn
+    // ⚙️ CẤU HÌNH ĐỘ MƯỢT (Sếp Hùng có thể chỉnh 3 số này tùy gu):
+    const SPEED_SYNC = 0.14;           // Tỷ lệ đồng bộ tốc độ cuộn (nhỏ = trôi chậm, lớn = trôi nhanh)
+    const MAX_GLIDE_SPEED = 6.5;       // Trần tốc độ tối đa (chống phóng nhanh gây chóng mặt)
+    const ICE_FRICTION = 0.94;         // Ma sát mặt băng (0.94 = lướt êm rồi tự dừng tại chỗ mới)
+    const RETURN_TO_PLACED_SPOT = false; // false = trượt tới đâu dừng tại đó | true = trượt xong trôi về lại đúng điểm khách đặt
+
+    // Ghi nhận lại tọa độ mỗi khi khách nắm kéo và thả con mèo ra
+    window.addEventListener('pointerup', () => {
+      if (typeof catPosY === 'number' && catPosY > 0) {
+        placedAnchorY = catPosY;
+      }
+    }, { passive: true });
 
     function glideLoop() {
       if (!isGliding) return;
 
-      // Nhả quyền ngay nếu khách lấy chuột nắm kéo mèo
+      // Nếu khách đang lấy tay nắm kéo mèo thì nhường quyền ngay lập tức
       if (typeof isDraggingCat !== 'undefined' && isDraggingCat) {
         isGliding = false;
-        scrollOffset = 0;
-        smoothOffset = 0;
+        glideVy = 0;
         if (catSvg) catSvg.style.transform = '';
         return;
       }
 
       const { w, h, margin } = getCatDimensions();
-      const minY = 74;
-      const baseMaxY = window.innerHeight - h - margin;
+      const minY = 68;
+      const maxY = window.innerHeight - h - margin;
 
       if (!catPosX) catPosX = window.innerWidth - w - margin;
+      if (!catPosY) catPosY = maxY;
+      if (placedAnchorY === null) placedAnchorY = catPosY;
 
-      // 1. Khi khách ngừng lăn chuột, mục tiêu từ từ trôi êm về vị trí 0 (góc dưới)
-      scrollOffset *= RETURN_FRICTION;
+      // 1. Trượt trực tiếp từ vị trí hiện tại của mèo (TUYỆT ĐỐI KHÔNG GIẬT VỀ ĐÁY)
+      catPosY += glideVy;
+      glideVy *= ICE_FRICTION;
 
-      // 2. Nội suy mượt (Lerp): Mèo lướt đầm theo mục tiêu, lăn chậm trôi chậm, lăn nhanh trôi nhanh
-      const prevSmooth = smoothOffset;
-      smoothOffset += (scrollOffset - smoothOffset) * FOLLOW_SMOOTHNESS;
-      const currentSpeed = smoothOffset - prevSmooth;
-
-      // 3. Tính vị trí Y thực tế trên màn hình và khóa biên an toàn
-      let nextY = baseMaxY + smoothOffset;
-      if (nextY < minY) {
-        nextY = minY;
-        scrollOffset = (minY - baseMaxY) * 0.85; // Chạm nóc thì chững lại êm ái, không nảy loạn xạ
-      } else if (nextY > baseMaxY) {
-        nextY = baseMaxY;
+      // 2. Nếu bật chế độ quay về điểm khách đặt (RETURN_TO_PLACED_SPOT = true)
+      if (RETURN_TO_PLACED_SPOT && Math.abs(glideVy) < 0.8) {
+        catPosY += (placedAnchorY - catPosY) * 0.05;
       }
 
-      catPosY = nextY;
+      // 3. Chạm mép trên hoặc mép dưới màn hình thì giảm tốc êm ái, không nảy loạn
+      if (catPosY < minY) {
+        catPosY = minY;
+        glideVy *= -0.3;
+      } else if (catPosY > maxY) {
+        catPosY = maxY;
+        glideVy *= -0.3;
+      }
 
-      // 4. Nghiêng người cực nhẹ (tối đa 7 độ) cho có hồn mà không bị chóng mặt
+      // 4. Nghiêng người mèo nhẹ nhàng theo đà lướt (tối đa 6 độ)
       if (catSvg) {
-        const gentleTilt = Math.max(-7, Math.min(7, currentSpeed * 1.1));
+        const tilt = Math.max(-6, Math.min(6, glideVy * 0.9));
         catSvg.style.transition = 'none';
-        catSvg.style.transform = `rotate(${gentleTilt.toFixed(1)}deg)`;
+        catSvg.style.transform = `rotate(${tilt.toFixed(1)}deg)`;
       }
 
-      // 5. Cập nhật tọa độ 60fps
+      // 5. Cập nhật vị trí 60fps mượt mà
       container.style.transition = 'opacity 0.25s ease';
       container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
 
-      // Tiếp tục chạy cho tới khi mèo trôi hẳn về góc nghỉ
-      if (Math.abs(scrollOffset) > 0.4 || Math.abs(smoothOffset) > 0.4) {
+      const needReturn = RETURN_TO_PLACED_SPOT && Math.abs(placedAnchorY - catPosY) > 1.2;
+      if (Math.abs(glideVy) > 0.15 || needReturn) {
         requestAnimationFrame(glideLoop);
       } else {
-        scrollOffset = 0;
-        smoothOffset = 0;
-        catPosY = baseMaxY;
-        container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
+        glideVy = 0;
+        if (!RETURN_TO_PLACED_SPOT) {
+          placedAnchorY = catPosY; // Cập nhật điểm đỗ mới sau khi trượt xong
+        }
         if (catSvg) {
           catSvg.style.transition = 'transform 0.45s ease';
           catSvg.style.transform = 'rotate(0deg)';
@@ -7384,12 +7392,14 @@ I'd love to book a 1:1 Tarot & CBT session:
       const deltaY = currentY - lastScrollY;
       lastScrollY = currentY;
 
-      // Bắt trực tiếp quãng đường cuộn trang nhân với tỷ lệ 0.28
-      if (Math.abs(deltaY) > 0) {
-        const maxTravel = window.innerHeight - 160;
-        scrollOffset -= deltaY * SCROLL_SYNC_RATIO;
-        // Giới hạn quãng trượt vừa vặn trong khung nhìn
-        scrollOffset = Math.max(-maxTravel, Math.min(20, scrollOffset));
+      if (Math.abs(deltaY) > 0.5) {
+        if (placedAnchorY === null && typeof catPosY === 'number') {
+          placedAnchorY = catPosY;
+        }
+
+        // Bộ lọc đồng bộ tốc độ cuộn: lăn chậm trôi chậm, lăn nhanh trôi vừa phải (khóa trần 6.5px/frame)
+        const targetImpulse = Math.max(-MAX_GLIDE_SPEED, Math.min(MAX_GLIDE_SPEED, -deltaY * SPEED_SYNC));
+        glideVy = glideVy * 0.6 + targetImpulse * 0.4;
 
         if (settleTimer) clearTimeout(settleTimer);
         if (typeof lastInteractionTimestamp !== 'undefined') {

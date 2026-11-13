@@ -7038,14 +7038,14 @@ I'd love to book a 1:1 Tarot & CBT session:
   })();
 </script>
 <!-- =========================================================================
-     BỘ CẢM BIẾN DẤU CHÂN SỐ THÔNG MINH (NOWNOW DIGITAL FOOTPRINT TRACKER V1.0)
+     BỘ CẢM BIẾN DẤU CHÂN SỐ & TÂM LÝ NGƯỢC (NOWNOW TRACKER V2.0 - MIND READER)
      ========================================================================= -->
 <script>
 (function initNowNowDigitalFootprintTracker() {
-  // 1. CHẾ ĐỘ ẨN DANH CHỦ SHOP (?admin=1 để tắt theo dõi máy Hùng & Now | ?admin=0 để bật lại)
+  // 1. CHẾ ĐỘ ẨN DANH CHỦ SHOP (?admin=1 để khóa máy Hùng & Now | ?admin=0 để mở lại)
   const urlParams = new URLSearchParams(window.location.search);
-  // Tự động tắt đếm dấu chân nếu khách đang mở link điền Feedback sau phiên
   if (urlParams.has('session') || urlParams.has('id')) return;
+
   if (urlParams.get('admin') === '1') {
     try { localStorage.setItem('nownow_admin_ignore', '1'); } catch (e) {}
     window.addEventListener('DOMContentLoaded', () => {
@@ -7063,7 +7063,44 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (localStorage.getItem('nownow_admin_ignore') === '1') return;
   } catch (e) {}
 
-  // 2. KHỞI TẠO MÃ ĐỊNH DANH DẤU CHÂN CỐ ĐỊNH (#NNT-WXXXX)
+  // 2. TẠO MÃ VÂN TAY PHẦN CỨNG NHẸ ([HW-XXXXXX]) ĐỂ XUYÊN THẤU IN-APP BROWSER & TAB ẨN DANH
+  function computeHardwareSignature() {
+    try {
+      let gpuInfo = '';
+      try {
+        const c = document.createElement('canvas');
+        const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+        if (gl) {
+          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+          if (dbg) gpuInfo = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '';
+        }
+      } catch (e) {}
+
+      const rawSig = [
+        screen.width + 'x' + screen.height,
+        window.devicePixelRatio || 1,
+        navigator.hardwareConcurrency || 0,
+        navigator.maxTouchPoints || 0,
+        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+        navigator.platform || '',
+        gpuInfo
+      ].join('|');
+
+      let hash = 2166136261;
+      for (let i = 0; i < rawSig.length; i++) {
+        hash ^= rawSig.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      const code = (hash >>> 0).toString(36).toUpperCase().padStart(6, '0').slice(0, 6);
+      return 'HW-' + code;
+    } catch (e) {
+      return 'HW-000000';
+    }
+  }
+
+  const HW_SIGNATURE = computeHardwareSignature();
+
+  // 3. MÃ ĐỊNH DANH DẤU CHÂN PHIÊN TRÌNH DUYỆT (#NNT-WXXXX)
   const FP_ID_KEY = 'nownow_visitor_fp_id_v1';
   function getOrCreateVisitorId() {
     try {
@@ -7086,7 +7123,39 @@ I'd love to book a 1:1 Tarot & CBT session:
   const SESSION_ID = 'S' + Date.now().toString(36).toUpperCase();
   const sessionStartTime = Date.now();
 
-  // 3. NHẬN DIỆN NGUỒN DẪN (UTM / REFERRER) & THIẾT BỊ
+  // 4. BỘ NHỚ TÂM LÝ XUYÊN LẦN TRUY CẬP (ADAPTIVE MIND-READING MEMORY)
+  const PSYCH_MEM_KEY = 'nownow_psych_profile_v1';
+  const THREAD_TOPICS_MAP = [
+    'chuyện tam quan & chấp nhận sự khác biệt',
+    'vụ chiến tranh lạnh & cách giải quyết mâu thuẫn',
+    'chuyện yêu bản thân thay vì chạy theo tình yêu',
+    'trạng thái chạm đáy & kiệt sức tinh thần',
+    'thuật toán duyên phận & thoát lối mòn cũ',
+    'chuyện vũ trụ trì hoãn để nâng cấp bản thân',
+    'nỗi sợ tổn thương & phòng vệ trong tình cảm',
+    'chuyện tìm điểm mạnh & định hướng sự nghiệp',
+    'áp lực hoàn cảnh & giá trị bản thân',
+    'thời điểm chín muồi trong duyên phận',
+    'sự nhạy cảm & cảm giác trôi lửng lơ',
+    'vòng lặp overthinking phân tích quá mức'
+  ];
+
+  function loadPsychProfile() {
+    try {
+      const raw = localStorage.getItem(PSYCH_MEM_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+
+  function savePsychProfile(patch) {
+    try {
+      const current = loadPsychProfile();
+      const updated = Object.assign({}, current, patch, { updatedAt: Date.now() });
+      localStorage.setItem(PSYCH_MEM_KEY, JSON.stringify(updated));
+    } catch (e) {}
+  }
+
+  // 5. NHẬN DIỆN NGUỒN DẪN & THIẾT BỊ
   function detectTrafficSource() {
     try {
       const saved = sessionStorage.getItem('nownow_first_source');
@@ -7116,7 +7185,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     return 'Desktop';
   }
 
-  // 4. BỘ NHỚ TRẠNG THÁI HÀNH VI TRONG PHIÊN
+  // 6. TRẠNG THÁI HÀNH VI & VI LƯỠNG LỰ TRONG PHIÊN
   const state = {
     hasMeaningfulInteraction: false,
     maxScrollY: 0,
@@ -7130,6 +7199,13 @@ I'd love to book a 1:1 Tarot & CBT session:
     touchedBookingConfig: false,
     draftNoteHistory: '',
     finalAction: 'Chỉ xem rồi thoát',
+    // Micro-Hesitation Telemetry
+    peakMinutes: 60,
+    priceHesitation: '',
+    priceReassuredShown: false,
+    highlightedText: '',
+    tabHopCount: 0,
+    tabHopReassuredShown: false,
     lastSentHash: '',
     lastSentTimestamp: 0
   };
@@ -7138,7 +7214,54 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (window.scrollY > state.maxScrollY) state.maxScrollY = window.scrollY;
   }, { passive: true });
 
-  // 5. GẮN CẢM BIẾN VÀO CÁC HÀM CÓ SẴN TRÊN TRANG (KHÔNG SỬA CODE CŨ)
+  // Bắt hành vi bôi đen chữ trên web hoặc trong Tạp Chí Threads
+  function captureSelectedText() {
+    setTimeout(() => {
+      try {
+        const sel = window.getSelection ? window.getSelection().toString().trim() : '';
+        if (sel.length >= 10 && sel.length <= 160) {
+          state.hasMeaningfulInteraction = true;
+          state.highlightedText = sel.replace(/\s+/g, ' ');
+          savePsychProfile({ lastHighlight: state.highlightedText.slice(0, 70) });
+        }
+      } catch (e) {}
+    }, 220);
+  }
+  document.addEventListener('mouseup', captureSelectedText, { passive: true });
+  document.addEventListener('touchend', captureSelectedText, { passive: true });
+
+  // Bắt hành vi "nhấp nhổm" đổi tab/app (mở Messenger/IG rồi lại quay về web)
+  document.addEventListener('visibilitychange', () => {
+    const elapsedSec = (Date.now() - sessionStartTime) / 1000;
+    if (document.visibilityState === 'hidden') {
+      if (elapsedSec >= 3) state.tabHopCount++;
+      flushFootprintToSheets(false);
+    } else if (document.visibilityState === 'visible') {
+      if (
+        state.tabHopCount >= 2 &&
+        !state.tabHopReassuredShown &&
+        !state.finalAction.includes('Messenger') &&
+        !state.finalAction.includes('Instagram') &&
+        !document.body.classList.contains('portal-open')
+      ) {
+        state.tabHopReassuredShown = true;
+        setTimeout(() => {
+          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+          if (typeof showCatTip === 'function') {
+            const isEn = window.currentNowNowLang === 'en';
+            showCatTip(
+              isEn
+                ? 'Noticed you hopping back and forth! Still hesitant on how to start? Just send 2 quick lines of context—Now will gently guide the rest 🐾🕯️'
+                : 'Thấy bà nhảy qua lại nãy giờ, còn phân vân câu hỏi hay ngại mở lời đúng hơm? Cứ nhắn sơ 2 dòng bối cảnh thôi, Now tự dẫn dắt cho nha 🐾🕯️',
+              6200
+            );
+          }
+        }, 650);
+      }
+    }
+  });
+
+  // 7. GẮN CẢM BIẾN VÀO CÁC HÀM CÓ SẴN TRÊN TRANG
   const origOpenSubWeb = window.openSubWeb;
   if (typeof origOpenSubWeb === 'function') {
     window.openSubWeb = function(type, pushToHistory) {
@@ -7191,12 +7314,54 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
+  // Bắt dao động giá (kéo từ mốc cao xuống mốc thấp) & trấn an tức thì
+  let sliderHesitationDebounce = null;
+  const origRenderMinutes = window.renderMinutesState;
+  if (typeof origRenderMinutes === 'function') {
+    window.renderMinutesState = function(mins, notifyCat, exactPct) {
+      const m = parseInt(mins, 10) || 60;
+      if (notifyCat) {
+        state.hasMeaningfulInteraction = true;
+        state.touchedBookingConfig = true;
+        if (m > state.peakMinutes) state.peakMinutes = m;
+
+        if (state.peakMinutes >= 60 && m <= 30 && (state.peakMinutes - m) >= 30) {
+          state.priceHesitation = `${state.peakMinutes}p ➔ ${m}p (Đắn đo giá)`;
+          savePsychProfile({ hadPriceHesitation: true });
+
+          if (!state.priceReassuredShown) {
+            if (sliderHesitationDebounce) clearTimeout(sliderHesitationDebounce);
+            sliderHesitationDebounce = setTimeout(() => {
+              state.priceReassuredShown = true;
+              const priceK = typeof calculatePriceK === 'function' ? calculatePriceK(m, currentTimeframe) : 59;
+              if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+              if (typeof showCatTip === 'function') {
+                const isEn = window.currentNowNowLang === 'en';
+                showCatTip(
+                  isEn
+                    ? `No need to stress over minutes! Zero upfront deposit here—start with <b>${m} mins (~${priceK}K VND)</b> and only pay if your heart feels lighter! ⏳💖`
+                    : `Đừng lăn tăn chuyện số phút nha bà, ở đây <b>0đ đặt cọc</b> — cứ chọn <b>${m}p (${priceK}K)</b> trải nghiệm trước, hợp tần số rồi tính tiếp! ⏳💖`,
+                  6200
+                );
+              }
+            }, 1100);
+          }
+        }
+      }
+      return origRenderMinutes.apply(this, arguments);
+    };
+  }
+
   ['selectChannel', 'selectTimeframe', 'setSliderMilestone', 'onSliderTrackInput', 'addTopicTag'].forEach(fnName => {
     const origFn = window[fnName];
     if (typeof origFn === 'function') {
       window[fnName] = function() {
         state.hasMeaningfulInteraction = true;
         state.touchedBookingConfig = true;
+        if (fnName === 'addTopicTag' && arguments[0]) {
+          const tagTxt = arguments[0].textContent.trim();
+          savePsychProfile({ lastTopicTag: tagTxt });
+        }
         return origFn.apply(this, arguments);
       };
     }
@@ -7225,7 +7390,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
-  // Bắt tâm sự nháp khách gõ vào ô #bookingTopicInput (kể cả khi khách gõ rồi xóa!)
+  // 8. ĐÒN "TÂM LINH TƯƠNG THÔNG" KHI KHÁCH QUAY LẠI LẦN SAU & THEO DÕI GÕ PHÍM
   window.addEventListener('DOMContentLoaded', () => {
     const inputEl = document.getElementById('bookingTopicInput');
     if (inputEl) {
@@ -7236,25 +7401,71 @@ I'd love to book a 1:1 Tarot & CBT session:
         if (val.length > state.draftNoteHistory.length) {
           state.draftNoteHistory = val;
         }
+        const lower = val.toLowerCase();
+        if (lower.includes('nyc') || lower.includes('người yêu cũ')) savePsychProfile({ lastDraftKeyword: 'nyc' });
+        else if (lower.includes('mập mờ') || lower.includes('crush') || lower.includes('im lặng')) savePsychProfile({ lastDraftKeyword: 'crush' });
+        else if (lower.includes('công việc') || lower.includes('nghỉ việc') || lower.includes('tiền')) savePsychProfile({ lastDraftKeyword: 'job' });
+        else if (lower.includes('gia đình') || lower.includes('bố mẹ')) savePsychProfile({ lastDraftKeyword: 'family' });
       });
     }
 
-    // Theo dõi bài viết Threads khách dừng lại đọc
+    // Theo dõi bài viết Threads khách dừng lại đọc và ghi nhớ chủ đề
     const threadCards = document.querySelectorAll('#subwebViral .threads-post-card');
     if (threadCards.length && 'IntersectionObserver' in window) {
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const idx = Array.from(threadCards).indexOf(entry.target);
-            if (idx !== -1) state.readThreadPosts.add(`Bài #${idx + 1}`);
+            if (idx !== -1) {
+              state.readThreadPosts.add(`Bài #${idx + 1}`);
+              if (THREAD_TOPICS_MAP[idx]) {
+                savePsychProfile({ lastThreadTopic: THREAD_TOPICS_MAP[idx] });
+              }
+            }
           }
         });
       }, { threshold: 0.5 });
       threadCards.forEach(c => obs.observe(c));
     }
+
+    // Kích hoạt "Tâm linh tương thông" cho khách quay lại (trong vòng 14 ngày)
+    const profile = loadPsychProfile();
+    const isFreshProfile = profile.updatedAt && (Date.now() - profile.updatedAt < 14 * 24 * 3600 * 1000);
+    if (isFreshProfile && window.currentNowNowLang !== 'en') {
+      let mindReadGreeting = '';
+      let customPlaceholder = '';
+
+      if (profile.lastDraftKeyword === 'nyc') {
+        mindReadGreeting = 'Ủa bà quay lại nè! Chuyện <b>người yêu cũ</b> bữa trước vẫn còn cấn trong lòng đúng hơm? Hôm nay gỡ dứt điểm với Now nha 🕯️🐾';
+        customPlaceholder = '✍️ Chuyện người cũ vẫn còn vướng bận hả bà? Cứ nhắn sơ bối cảnh, Now giữ bí mật 100% nha...';
+      } else if (profile.lastDraftKeyword === 'crush') {
+        mindReadGreeting = 'Tui nhớ hơi bà liền nè! Vụ <b>mập mờ / im lặng</b> bữa trước đã sáng tỏ chưa hay vẫn làm bà trằn trọc dạ? 🔍💖';
+        customPlaceholder = '✍️ Vẫn đang lấn cấn chuyện người ấy đúng hơm? Nhắn sơ bối cảnh vào đây Now soi cùng bà nha...';
+      } else if (profile.lastDraftKeyword === 'job') {
+        mindReadGreeting = 'Mừng người đẹp quay lại! Ngã rẽ <b>công việc & định hướng</b> bữa trước bà đã chốt được bước đi tiếp theo chưa nè? 💼✨';
+        customPlaceholder = '✍️ Đang phân vân chuyện công việc / tài chính hả bà? Nhập sơ tình huống vào đây nha...';
+      } else if (profile.lastThreadTopic) {
+        mindReadGreeting = `Ủa bà quay lại nè! Vụ <b>${profile.lastThreadTopic}</b> bữa trước vẫn còn chạm đúng tâm trạng bà đúng hơm? Hôm nay tâm sự cùng Now nha 🧵🕯️`;
+      } else if (profile.lastTopicTag) {
+        mindReadGreeting = `Mừng bà quay lại góc nhỏ của Now! Chủ đề <b>${profile.lastTopicTag}</b> bữa trước vẫn còn làm bà bận tâm đúng hơm? 🌷🐾`;
+      } else if (profile.hadPriceHesitation) {
+        mindReadGreeting = 'Ủa bà quay lại nè! Nhớ là nhà Now <b>0đ đặt cọc, nhẹ lòng mới dừng đồng hồ</b> nha — cứ chọn 30p trải nghiệm cho thoải mái nè ⏳💖';
+      }
+
+      if (customPlaceholder && inputEl) {
+        inputEl.setAttribute('placeholder', customPlaceholder);
+      }
+
+      if (mindReadGreeting) {
+        setTimeout(() => {
+          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+          if (typeof showCatTip === 'function') showCatTip(mindReadGreeting, 6800);
+        }, 1450);
+      }
+    }
   });
 
-  // 6. CHẤM ĐIỂM ĐỘ NÓNG (0 - 100) & ĐÓNG GÓI DỮ LIỆU
+  // 9. CHẤM ĐIỂM ĐỘ NÓNG (0 - 100) & ĐÓNG GÓI DỮ LIỆU
   function computeHeatScore(durationSec, visits) {
     let score = 10;
     if (visits >= 3) score += 25;
@@ -7269,6 +7480,9 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (state.catPokes >= 2) score += 10;
     if (state.touchedBookingConfig) score += 15;
     if (state.draftNoteHistory.length > 0) score += 20;
+    if (state.priceHesitation) score += 15;
+    if (state.highlightedText) score += 15;
+    if (state.tabHopCount >= 2) score += 15;
     if (state.finalAction.includes('Messenger') || state.finalAction.includes('Instagram')) score += 30;
 
     return Math.min(100, score);
@@ -7283,7 +7497,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     } catch (e) {}
 
     const lang = (window.currentNowNowLang || 'vi').toUpperCase();
-    const deviceLang = `${detectDeviceType()} • ${lang}`;
+    const deviceLang = `${detectDeviceType()} • ${lang} • [${HW_SIGNATURE}]`;
 
     const exploredParts = [];
     if (state.openedFeedback) {
@@ -7293,16 +7507,23 @@ I'd love to book a 1:1 Tarot & CBT session:
       const posts = Array.from(state.readThreadPosts).slice(0, 5).join(', ');
       exploredParts.push(posts ? `Threads (${posts})` : 'Mở Tạp Chí Threads');
     }
+    if (state.highlightedText) {
+      exploredParts.push(`Bôi đen: "${state.highlightedText}"`);
+    }
 
-    const catStats = state.catPokes > 0
+    const catParts = [];
+    catParts.push(state.catPokes > 0
       ? `${state.catPokes} lần${state.lastTarotCard ? ` (Rút lá ${state.lastTarotCard})` : ''}`
-      : '0 lần';
+      : '0 lần');
+    if (state.tabHopCount >= 2) {
+      catParts.push(`Đổi tab: ${state.tabHopCount} lần`);
+    }
 
     const chanShort = (typeof currentChannel !== 'undefined' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
     const tfShort = (typeof currentTimeframe !== 'undefined' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
     const mins = typeof currentMinutes !== 'undefined' ? currentMinutes : 60;
     const priceK = (typeof calculatePriceK === 'function') ? calculatePriceK(mins, typeof currentTimeframe !== 'undefined' ? currentTimeframe : 'day') : 99;
-    const bookingConfig = `${chanShort} • ${tfShort} • ${mins}p (${priceK}K)`;
+    const bookingConfig = `${chanShort} • ${tfShort} • ${mins}p (${priceK}K)${state.priceHesitation ? ` [⚠️ ${state.priceHesitation}]` : ''}`;
 
     const activeTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active'))
       .map(b => b.textContent.trim()).join(', ');
@@ -7316,13 +7537,14 @@ I'd love to book a 1:1 Tarot & CBT session:
     return {
       type: 'footprint',
       visitorId: VISITOR_ID,
+      hwSignature: HW_SIGNATURE,
       sessionId: SESSION_ID,
       visits: visits,
       source: detectTrafficSource(),
       deviceLang: deviceLang,
       durationSec: durationSec,
       explored: exploredParts.join(' • ') || 'Trang chính',
-      catStats: catStats,
+      catStats: catParts.join(' • '),
       bookingConfig: bookingConfig,
       topicAndDraft: topicAndDraft,
       finalAction: state.finalAction,
@@ -7334,7 +7556,6 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (typeof NOWNOW_FEEDBACK_API === 'undefined') return;
     const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
 
-    // Lọc bỏ khách bấm nhầm link rồi thoát ngay (< 5 giây và không chạm gì)
     if (!forceSend && durationSec < 5 && !state.hasMeaningfulInteraction) return;
 
     const now = Date.now();
@@ -7357,10 +7578,6 @@ I'd love to book a 1:1 Tarot & CBT session:
     } catch (e) {}
   }
 
-  // Bắn gói tin tổng kết khi khách chuyển sang app khác, tắt tab, hoặc đọc sâu đủ 45 giây
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') flushFootprintToSheets(false);
-  });
   window.addEventListener('pagehide', () => flushFootprintToSheets(false));
   setTimeout(() => flushFootprintToSheets(false), 45000);
 })();

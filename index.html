@@ -7414,5 +7414,332 @@ I'd love to book a 1:1 Tarot & CBT session:
     }, { passive: true });
   })();
 </script>
+<!-- =========================================================================
+     BỘ CẢM BIẾN DẤU CHÂN SỐ THÔNG MINH (NOWNOW DIGITAL FOOTPRINT TRACKER V1.0)
+     ========================================================================= -->
+<script>
+(function initNowNowDigitalFootprintTracker() {
+  // 1. CHẾ ĐỘ ẨN DANH CHỦ SHOP (?admin=1 để tắt theo dõi máy Hùng & Now | ?admin=0 để bật lại)
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === '1') {
+    try { localStorage.setItem('nownow_admin_ignore', '1'); } catch (e) {}
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        if (typeof showCatTip === 'function') {
+          showCatTip('🛡️ Đã bật chế độ Ẩn danh Chủ Shop! Thiết bị này sẽ không bao giờ ghi dấu chân vào Google Sheets nha sếp 🐾', 5500);
+        }
+      }, 1500);
+    });
+  } else if (urlParams.get('admin') === '0') {
+    try { localStorage.removeItem('nownow_admin_ignore'); } catch (e) {}
+  }
+
+  try {
+    if (localStorage.getItem('nownow_admin_ignore') === '1') return;
+  } catch (e) {}
+
+  // 2. KHỞI TẠO MÃ ĐỊNH DANH DẤU CHÂN CỐ ĐỊNH (#NNT-WXXXX)
+  const FP_ID_KEY = 'nownow_visitor_fp_id_v1';
+  function getOrCreateVisitorId() {
+    try {
+      let id = localStorage.getItem(FP_ID_KEY);
+      if (id && /^#NNT-W[A-Z0-9]{4,8}$/.test(id)) return id;
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 4; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      id = '#NNT-W' + code;
+      localStorage.setItem(FP_ID_KEY, id);
+      return id;
+    } catch (e) {
+      return '#NNT-W' + Math.floor(1000 + Math.random() * 8999);
+    }
+  }
+
+  const VISITOR_ID = getOrCreateVisitorId();
+  const SESSION_ID = 'S' + Date.now().toString(36).toUpperCase();
+  const sessionStartTime = Date.now();
+
+  // 3. NHẬN DIỆN NGUỒN DẪN (UTM / REFERRER) & THIẾT BỊ
+  function detectTrafficSource() {
+    try {
+      const saved = sessionStorage.getItem('nownow_first_source');
+      if (saved) return saved;
+    } catch (e) {}
+
+    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
+    const ref = (document.referrer || '').toLowerCase();
+    let src = 'Direct';
+
+    if (utm.includes('thread') || ref.includes('threads.')) src = 'Threads';
+    else if (utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) src = 'Instagram';
+    else if (utm.includes('fb') || utm.includes('face') || urlParams.has('fbclid') || ref.includes('facebook.')) src = 'Facebook';
+    else if (utm.includes('tiktok') || urlParams.has('ttclid') || ref.includes('tiktok.')) src = 'TikTok';
+    else if (ref.includes('google.')) src = 'Google Search';
+    else if (utm) src = utm;
+
+    try { sessionStorage.setItem('nownow_first_source', src); } catch (e) {}
+    return src;
+  }
+
+  function detectDeviceType() {
+    const ua = navigator.userAgent || '';
+    if (/iPhone/i.test(ua)) return 'iPhone';
+    if (/iPad/i.test(ua)) return 'iPad';
+    if (/Android/i.test(ua)) return 'Android';
+    return 'Desktop';
+  }
+
+  // 4. BỘ NHỚ TRẠNG THÁI HÀNH VI TRONG PHIÊN
+  const state = {
+    hasMeaningfulInteraction: false,
+    maxScrollY: 0,
+    openedFeedback: false,
+    maxFbSlideSeen: 1,
+    viewedWebReviews: false,
+    openedThreads: false,
+    readThreadPosts: new Set(),
+    catPokes: 0,
+    lastTarotCard: '',
+    touchedBookingConfig: false,
+    draftNoteHistory: '',
+    finalAction: 'Chỉ xem rồi thoát',
+    lastSentHash: '',
+    lastSentTimestamp: 0
+  };
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > state.maxScrollY) state.maxScrollY = window.scrollY;
+    if (window.scrollY > 140) state.hasMeaningfulInteraction = true;
+  }, { passive: true });
+
+  // 5. GẮN CẢM BIẾN VÀO CÁC HÀM CÓ SẴN TRÊN TRANG (KHÔNG SỬA CODE CŨ)
+  const origOpenSubWeb = window.openSubWeb;
+  if (typeof origOpenSubWeb === 'function') {
+    window.openSubWeb = function(type, pushToHistory) {
+      state.hasMeaningfulInteraction = true;
+      if (type === 'viral') {
+        state.openedThreads = true;
+        if (state.finalAction === 'Chỉ xem rồi thoát') state.finalAction = 'Đọc Tạp Chí Threads';
+      } else {
+        state.openedFeedback = true;
+        if (state.finalAction === 'Chỉ xem rồi thoát') state.finalAction = 'Xem Feedback Khách';
+      }
+      return origOpenSubWeb.apply(this, arguments);
+    };
+  }
+
+  const origGoToSlide = window.goToFeedbackSlide;
+  if (typeof origGoToSlide === 'function') {
+    window.goToFeedbackSlide = function(idx, dir) {
+      state.hasMeaningfulInteraction = true;
+      state.openedFeedback = true;
+      const slideNum = ((idx % 21) + 21) % 21 + 1;
+      if (slideNum > state.maxFbSlideSeen) state.maxFbSlideSeen = slideNum;
+      return origGoToSlide.apply(this, arguments);
+    };
+  }
+
+  const origSwitchFbTab = window.switchFeedbackTab;
+  if (typeof origSwitchFbTab === 'function') {
+    window.switchFeedbackTab = function(tabKey) {
+      state.hasMeaningfulInteraction = true;
+      if (tabKey === 'web') state.viewedWebReviews = true;
+      return origSwitchFbTab.apply(this, arguments);
+    };
+  }
+
+  const origPokeCat = window.pokeRealCatMeow;
+  if (typeof origPokeCat === 'function') {
+    window.pokeRealCatMeow = function() {
+      state.hasMeaningfulInteraction = true;
+      state.catPokes++;
+      const res = origPokeCat.apply(this, arguments);
+      setTimeout(() => {
+        const bubbleText = document.getElementById('catBubbleText')?.textContent || '';
+        const tarotMatch = bubbleText.match(/🎴\s*([^:]+):/);
+        if (tarotMatch && tarotMatch[1]) {
+          state.lastTarotCard = tarotMatch[1].trim();
+        }
+      }, 60);
+      return res;
+    };
+  }
+
+  ['selectChannel', 'selectTimeframe', 'setSliderMilestone', 'onSliderTrackInput', 'addTopicTag'].forEach(fnName => {
+    const origFn = window[fnName];
+    if (typeof origFn === 'function') {
+      window[fnName] = function() {
+        state.hasMeaningfulInteraction = true;
+        state.touchedBookingConfig = true;
+        return origFn.apply(this, arguments);
+      };
+    }
+  });
+
+  // Đính kèm Mã Dấu Chân vào cuối tin nhắn tự động Copy khi bấm Messenger / Instagram
+  const origBuildBookingMsg = window.buildBookingMessage;
+  if (typeof origBuildBookingMsg === 'function') {
+    window.buildBookingMessage = function() {
+      const baseMsg = origBuildBookingMsg.apply(this, arguments);
+      if (baseMsg.includes(VISITOR_ID)) return baseMsg;
+      const isEn = window.currentNowNowLang === 'en';
+      return baseMsg + (isEn ? `\n• Visitor Ref: ${VISITOR_ID}` : `\n• Mã hồ sơ web: ${VISITOR_ID}`);
+    };
+  }
+
+  // Bắt sự kiện bấm nút Đặt Lịch (Messenger / Instagram) -> Đẩy ngay dữ liệu nóng về Sheets
+  const origHandleRedirect = window.handleBookingRedirect;
+  if (typeof origHandleRedirect === 'function') {
+    window.handleBookingRedirect = function(platform) {
+      state.hasMeaningfulInteraction = true;
+      state.touchedBookingConfig = true;
+      state.finalAction = platform === 'Messenger' ? 'Bấm Messenger' : 'Bấm Instagram';
+      flushFootprintToSheets(true);
+      return origHandleRedirect.apply(this, arguments);
+    };
+  }
+
+  // Bắt tâm sự nháp khách gõ vào ô #bookingTopicInput (kể cả khi khách gõ rồi xóa!)
+  window.addEventListener('DOMContentLoaded', () => {
+    const inputEl = document.getElementById('bookingTopicInput');
+    if (inputEl) {
+      inputEl.addEventListener('input', () => {
+        state.hasMeaningfulInteraction = true;
+        state.touchedBookingConfig = true;
+        const val = inputEl.value.trim();
+        if (val.length > state.draftNoteHistory.length) {
+          state.draftNoteHistory = val;
+        }
+      });
+    }
+
+    // Theo dõi bài viết Threads khách dừng lại đọc
+    const threadCards = document.querySelectorAll('#subwebViral .threads-post-card');
+    if (threadCards.length && 'IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const idx = Array.from(threadCards).indexOf(entry.target);
+            if (idx !== -1) state.readThreadPosts.add(`Bài #${idx + 1}`);
+          }
+        });
+      }, { threshold: 0.5 });
+      threadCards.forEach(c => obs.observe(c));
+    }
+  });
+
+  // 6. CHẤM ĐIỂM ĐỘ NÓNG (0 - 100) & ĐÓNG GÓI DỮ LIỆU
+  function computeHeatScore(durationSec, visits) {
+    let score = 10;
+    if (visits >= 3) score += 25;
+    else if (visits === 2) score += 15;
+
+    if (durationSec >= 180) score += 25;
+    else if (durationSec >= 90) score += 20;
+    else if (durationSec >= 30) score += 10;
+
+    if (state.openedFeedback) score += 10;
+    if (state.openedThreads) score += 10;
+    if (state.catPokes >= 2) score += 10;
+    if (state.touchedBookingConfig) score += 15;
+    if (state.draftNoteHistory.length > 0) score += 20;
+    if (state.finalAction.includes('Messenger') || state.finalAction.includes('Instagram')) score += 30;
+
+    return Math.min(100, score);
+  }
+
+  function buildFootprintPayload() {
+    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
+    let visits = 1;
+    try {
+      const mem = JSON.parse(localStorage.getItem('nownow_cat_soul_memory_v1') || '{}');
+      if (mem.visits) visits = Number(mem.visits) || 1;
+    } catch (e) {}
+
+    const lang = (window.currentNowNowLang || 'vi').toUpperCase();
+    const deviceLang = `${detectDeviceType()} • ${lang}`;
+
+    const exploredParts = [];
+    if (state.openedFeedback) {
+      exploredParts.push(`Feedback (${state.maxFbSlideSeen}/21 ảnh${state.viewedWebReviews ? ' + Web' : ''})`);
+    }
+    if (state.openedThreads) {
+      const posts = Array.from(state.readThreadPosts).slice(0, 5).join(', ');
+      exploredParts.push(posts ? `Threads (${posts})` : 'Mở Tạp Chí Threads');
+    }
+
+    const catStats = state.catPokes > 0
+      ? `${state.catPokes} lần${state.lastTarotCard ? ` (Rút lá ${state.lastTarotCard})` : ''}`
+      : '0 lần';
+
+    const chanShort = (typeof currentChannel !== 'undefined' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
+    const tfShort = (typeof currentTimeframe !== 'undefined' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
+    const mins = typeof currentMinutes !== 'undefined' ? currentMinutes : 60;
+    const priceK = (typeof calculatePriceK === 'function') ? calculatePriceK(mins, typeof currentTimeframe !== 'undefined' ? currentTimeframe : 'day') : 99;
+    const bookingConfig = `${chanShort} • ${tfShort} • ${mins}p (${priceK}K)`;
+
+    const activeTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active'))
+      .map(b => b.textContent.trim()).join(', ');
+    const currentInput = (document.getElementById('bookingTopicInput')?.value || '').trim();
+    const finalDraft = currentInput || state.draftNoteHistory;
+    const draftLabel = finalDraft
+      ? (currentInput ? `Nháp: "${finalDraft}"` : `[Đã xóa nháp]: "${finalDraft}"`)
+      : '';
+    const topicAndDraft = [activeTags, draftLabel].filter(Boolean).join(' | ') || 'Chưa chọn chủ đề';
+
+    return {
+      type: 'footprint',
+      visitorId: VISITOR_ID,
+      sessionId: SESSION_ID,
+      visits: visits,
+      source: detectTrafficSource(),
+      deviceLang: deviceLang,
+      durationSec: durationSec,
+      explored: exploredParts.join(' • ') || 'Trang chính',
+      catStats: catStats,
+      bookingConfig: bookingConfig,
+      topicAndDraft: topicAndDraft,
+      finalAction: state.finalAction,
+      heatScore: computeHeatScore(durationSec, visits)
+    };
+  }
+
+  function flushFootprintToSheets(forceSend = false) {
+    if (typeof NOWNOW_FEEDBACK_API === 'undefined') return;
+    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
+
+    // Lọc bỏ khách bấm nhầm link rồi thoát ngay (< 5 giây và không chạm gì)
+    if (!forceSend && durationSec < 5 && !state.hasMeaningfulInteraction) return;
+
+    const now = Date.now();
+    if (!forceSend && (now - state.lastSentTimestamp < 12000)) return;
+
+    const payload = buildFootprintPayload();
+    const hash = JSON.stringify([payload.explored, payload.catStats, payload.bookingConfig, payload.topicAndDraft, payload.finalAction, payload.heatScore]);
+    if (!forceSend && hash === state.lastSentHash && durationSec < 20) return;
+
+    state.lastSentHash = hash;
+    state.lastSentTimestamp = now;
+
+    try {
+      fetch(NOWNOW_FEEDBACK_API, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  // Bắn gói tin tổng kết khi khách chuyển sang app khác, tắt tab, hoặc đọc sâu đủ 45 giây
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') flushFootprintToSheets(false);
+  });
+  window.addEventListener('pagehide', () => flushFootprintToSheets(false));
+  setTimeout(() => flushFootprintToSheets(false), 45000);
+})();
+</script>
 </body>
 </html>

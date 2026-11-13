@@ -7159,19 +7159,32 @@ I'd love to book a 1:1 Tarot & CBT session:
   function detectTrafficSource() {
     try {
       const saved = sessionStorage.getItem('nownow_first_source');
-      if (saved) return saved;
+      if (saved && saved !== 'Direct') return saved;
     } catch (e) {}
 
-    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
+    const ua = (navigator.userAgent || '').toLowerCase();
     const ref = (document.referrer || '').toLowerCase();
+    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
+    
     let src = 'Direct';
 
-    if (utm.includes('thread') || ref.includes('threads.')) src = 'Threads';
-    else if (utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) src = 'Instagram';
-    else if (utm.includes('fb') || utm.includes('face') || urlParams.has('fbclid') || ref.includes('facebook.')) src = 'Facebook';
-    else if (utm.includes('tiktok') || urlParams.has('ttclid') || ref.includes('tiktok.')) src = 'TikTok';
-    else if (ref.includes('google.')) src = 'Google Search';
-    else if (utm) src = utm;
+    if (ua.includes('barcelona') || utm.includes('threads') || ref.includes('threads.')) {
+      src = 'App Threads';
+    } else if (ua.includes('instagram') || utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) {
+      src = 'App Instagram';
+    } else if (ua.includes('fbav') || ua.includes('fban') || utm.includes('fb') || ref.includes('facebook.') || ref.includes('fbclid')) {
+      src = 'App Facebook';
+    } else if (ua.includes('aweme') || utm.includes('tiktok') || ref.includes('tiktok.') || urlParams.has('ttclid')) {
+      src = 'App TikTok';
+    } else if (ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios')) {
+      src = 'Safari (Ngoài App)';
+    } else if (ua.includes('chrome') || ua.includes('crios') || ua.includes('fxios')) {
+      src = 'Chrome / Trình duyệt khác';
+    } else if (ref.includes('google.')) {
+      src = 'Google Search';
+    } else if (utm) {
+      src = utm;
+    }
 
     try { sessionStorage.setItem('nownow_first_source', src); } catch (e) {}
     return src;

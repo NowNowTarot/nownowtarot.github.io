@@ -1877,6 +1877,7 @@ body.portal-open .cat-cloud-tip {
 
     <div id="seasonalDivider" class="carrd-divider reveal-item">⊹₊˚‧︵‿₊୨ 🎄 ୧₊‿︵‧˚₊⊹</div>
     <!-- 4. KHUNG TRUNG TÂM -->
+
     <section id="sec-booking" class="reveal-item booking-sanctuary-card space-y-6">
       <div class="text-center space-y-2.5">
         <span class="text-[10.5px] uppercase tracking-[0.22em] text-[#ffdf85] font-extrabold block">
@@ -2038,6 +2039,589 @@ body.portal-open .cat-cloud-tip {
         <p class="text-xs text-[#c4b5be] max-w-md mx-auto leading-relaxed">
           Nếu hôm nay bà chưa vội xem bài ngay, cứ ghé vào các kênh cá nhân của sốp để đọc thêm bài viết tâm lý học, xem trải bài chung và thủ thỉ cùng tụi mình mỗi ngày nghen (｡･ω･｡)ﾉ♡
         </p>
+      </div>
+      <!-- NGÔI NHÀ NHỎ CỦA MÈO ĐEN (KIẾN TRÚC GỖ ẤM ÁP • BÓNG LƯNG CÔ GÁI NGẮM TRĂNG • MÈO VIỀN SÁNG RÕ NÉT) -->
+      <style>
+        @keyframes chimneyHeartRise1 {
+          0% { transform: translate(0px, 0px) scale(0.5) rotate(-8deg); opacity: 0; }
+          22% { opacity: 0.92; }
+          65% { opacity: 0.8; }
+          100% { transform: translate(-7px, -30px) scale(1.08) rotate(12deg); opacity: 0; }
+        }
+        @keyframes chimneyHeartRise2 {
+          0% { transform: translate(0px, 0px) scale(0.45) rotate(6deg); opacity: 0; }
+          25% { opacity: 0.9; }
+          70% { opacity: 0.75; }
+          100% { transform: translate(9px, -34px) scale(1.04) rotate(-10deg); opacity: 0; }
+        }
+        @keyframes chimneyHeartRise3 {
+          0% { transform: translate(0px, 0px) scale(0.52) rotate(0deg); opacity: 0; }
+          20% { opacity: 0.88; }
+          100% { transform: translate(2px, -26px) scale(0.98) rotate(8deg); opacity: 0; }
+        }
+        @keyframes lanternSway {
+          0%, 100% { transform: rotate(-2.5deg); }
+          50% { transform: rotate(2.5deg); }
+        }
+        @keyframes hearthFlameOuter {
+          0%, 100% { transform: scaleY(1) scaleX(1) skewX(-2deg); }
+          33% { transform: scaleY(1.13) scaleX(0.94) skewX(3deg); }
+          66% { transform: scaleY(0.93) scaleX(1.04) skewX(-2deg); }
+        }
+        @keyframes hearthFlameInner {
+          0%, 100% { transform: scaleY(1) scaleX(1); opacity: 0.95; }
+          50% { transform: scaleY(1.16) scaleX(0.9); opacity: 1; }
+        }
+        @keyframes hearthWarmAmbient {
+          0%, 100% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 0.82; transform: scale(1.05); }
+        }
+        @keyframes girlHeadGentleSway {
+          0%, 100% { transform: rotate(0deg) translateY(0px); }
+          50% { transform: rotate(-2.2deg) translateY(-0.8px); }
+        }
+        @keyframes windowStarTwinkle {
+          0%, 100% { opacity: 0.35; transform: scale(0.85); }
+          50% { opacity: 1; transform: scale(1.15); }
+        }
+        @keyframes catHouseJumpIn {
+          0% { opacity: 0; transform: translateY(-32px) scale(0.42); }
+          55% { opacity: 1; transform: translateY(4px) scale(1.06); }
+          80% { transform: translateY(-2px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0px) scale(1); }
+        }
+        @keyframes catHouseJumpOut {
+          0% { opacity: 1; transform: translateY(0px) scale(1); }
+          35% { opacity: 1; transform: translateY(5px) scale(1.05, 0.92); }
+          100% { opacity: 0; transform: translateY(-30px) scale(0.42); }
+        }
+        @keyframes cushionGlowPulse {
+          0% { transform: scale(0.85); opacity: 0.85; }
+          100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        /* RÕ NÉT MÈO ĐEN CẢ NGOÀI VƯỜN LẪN TRONG NHÀ (KHÔNG BAO GIỜ HÒA TAN VÀO NỀN ĐEN) */
+        #catGardenLottie svg,
+        #catGardenFallbackSvg {
+          filter: drop-shadow(0 0 5px rgba(255, 223, 133, 0.42)) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.9));
+        }
+        #catNestLottie svg {
+          filter: drop-shadow(0 0 8px rgba(255, 210, 125, 0.38)) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.85));
+        }
+
+        .cat-house-wrapper {
+          width: 100%;
+          max-width: 386px;
+          margin: 12px auto 20px auto;
+          user-select: none;
+          position: relative;
+        }
+        .cat-house-roof-box {
+          position: relative;
+          width: 100%;
+          height: 84px;
+          margin-bottom: -8px;
+          z-index: 6;
+          pointer-events: none;
+          filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.65));
+        }
+        .cat-heart-1 {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: chimneyHeartRise1 3.1s ease-out infinite;
+        }
+        .cat-heart-2 {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: chimneyHeartRise2 3.5s ease-out 1.1s infinite;
+        }
+        .cat-heart-3 {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: chimneyHeartRise3 2.9s ease-out 2.1s infinite;
+        }
+        .cat-lantern-swing {
+          transform-origin: 190px 44px;
+          animation: lanternSway 4.2s ease-in-out infinite;
+        }
+
+        /* KIẾN TRÚC THÂN NHÀ GỖ CHÂU ÂU CỔ ĐIỂN (THụt VÀO SO VỚI MÁI HIÊN, CÓ CỘT GỖ & BẬC THỀM) */
+        .cat-house-room {
+          position: relative;
+          width: 84%;
+          height: 224px;
+          min-height: 224px;
+          max-height: 224px;
+          margin: 0 auto;
+          background:
+            radial-gradient(circle at 80% 78%, rgba(255, 148, 62, 0.25) 0%, rgba(212, 50, 72, 0.14) 38%, transparent 68%),
+            radial-gradient(circle at 22% 48%, rgba(255, 223, 133, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 50% 45%, rgba(128, 32, 48, 0.26) 0%, rgba(20, 9, 16, 0.97) 100%),
+            repeating-linear-gradient(90deg, rgba(255, 223, 133, 0.018) 0px, rgba(255, 223, 133, 0.018) 1px, transparent 1px, transparent 22px);
+          border-left: 1px solid rgba(255, 223, 133, 0.38);
+          border-right: 1px solid rgba(255, 223, 133, 0.38);
+          border-bottom: 1px solid rgba(255, 223, 133, 0.45);
+          border-radius: 0 0 10px 10px;
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), inset 0 10px 22px rgba(0, 0, 0, 0.55);
+          overflow: hidden;
+          z-index: 3;
+        }
+        /* Hai cột gỗ sẫm hai bên vách nhà tạo dáng kiến trúc ấm áp */
+        .cat-house-pillar-left,
+        .cat-house-pillar-right {
+          position: absolute;
+          top: 0;
+          bottom: 34px;
+          width: 7px;
+          background: linear-gradient(90deg, #3d1522 0%, #5e2234 50%, #2a0d16 100%);
+          border-right: 0.8px solid rgba(255, 223, 133, 0.28);
+          z-index: 2;
+          pointer-events: none;
+        }
+        .cat-house-pillar-right {
+          right: 0;
+          border-right: none;
+          border-left: 0.8px solid rgba(255, 223, 133, 0.28);
+        }
+        .cat-house-pillar-left {
+          left: 0;
+        }
+        /* Dầm gỗ ngang dưới mái hiên */
+        .cat-house-top-beam {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 6px;
+          background: linear-gradient(180deg, #240a12 0%, #4a1826 100%);
+          border-bottom: 0.8px solid rgba(255, 223, 133, 0.28);
+          z-index: 3;
+          pointer-events: none;
+        }
+        /* Lam gỗ ốp chân tường (Wainscoting) */
+        .cat-house-wainscot {
+          position: absolute;
+          left: 7px;
+          right: 7px;
+          bottom: 34px;
+          height: 22px;
+          background:
+            repeating-linear-gradient(90deg, rgba(255, 223, 133, 0.04) 0px, rgba(255, 223, 133, 0.04) 1px, transparent 1px, transparent 14px),
+            linear-gradient(180deg, rgba(44, 15, 25, 0.72) 0%, rgba(28, 9, 16, 0.88) 100%);
+          border-top: 0.8px solid rgba(255, 223, 133, 0.22);
+          z-index: 1;
+          pointer-events: none;
+        }
+        /* Sàn gỗ ấm áp */
+        .cat-house-floorboards {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 34px;
+          background:
+            radial-gradient(ellipse at 78% 25%, rgba(255, 165, 78, 0.26) 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 45%, rgba(255, 223, 133, 0.1) 0%, transparent 55%),
+            repeating-linear-gradient(90deg, transparent 0px, transparent 34px, rgba(0, 0, 0, 0.28) 34px, rgba(0, 0, 0, 0.28) 35px),
+            linear-gradient(180deg, rgba(64, 24, 37, 0.78) 0%, rgba(24, 8, 15, 0.98) 100%);
+          border-top: 1px solid rgba(255, 223, 133, 0.32);
+          pointer-events: none;
+          z-index: 2;
+        }
+        /* Bậc thềm gỗ nhô ra dưới chân nhà (Porch Step) xóa cảm giác cái hộp */
+        .cat-house-porch-base {
+          position: relative;
+          width: 90%;
+          height: 9px;
+          margin: -1px auto 0 auto;
+          background: linear-gradient(180deg, #541d2e 0%, #2b0c16 100%);
+          border: 1px solid rgba(255, 223, 133, 0.48);
+          border-radius: 3px 3px 8px 8px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.85);
+          z-index: 4;
+        }
+        .cat-house-porch-substep {
+          width: 64%;
+          height: 5px;
+          margin: 0 auto;
+          background: linear-gradient(180deg, #3d1421 0%, #1d070e 100%);
+          border: 0.8px solid rgba(255, 223, 133, 0.35);
+          border-top: none;
+          border-radius: 0 0 6px 6px;
+        }
+
+        /* CHỮ NOWNOW TAROT IN MỜ TINH TẾ TRÊN TƯỜNG NHÀ */
+        .cat-house-wall-watermark {
+          position: absolute;
+          top: 52px;
+          left: 53%;
+          transform: translateX(-50%);
+          text-align: center;
+          pointer-events: none;
+          z-index: 1;
+          white-space: nowrap;
+        }
+        .cat-house-wall-watermark .wm-main {
+          font-family: 'Playfair Display', serif;
+          font-size: 21px;
+          font-weight: 600;
+          font-style: italic;
+          letter-spacing: 2px;
+          color: rgba(255, 223, 133, 0.085);
+          line-height: 1.1;
+        }
+        .cat-house-wall-watermark .wm-sub {
+          font-size: 6.5px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: rgba(255, 223, 133, 0.065);
+          margin-top: 2px;
+        }
+
+        /* BONG BÓNG HỘI THOẠI NỔI RỘNG RÃI TRONG PHÒNG (ĐÃ XOÁ DÒNG TRẠNG THÁI THỪA) */
+        .cat-house-bubble {
+          position: absolute;
+          top: 10px;
+          left: 50%;
+          transform: translateX(-50%) translateY(0) scale(1);
+          z-index: 25;
+          width: calc(100% - 22px);
+          max-width: 304px;
+          max-height: 90px;
+          overflow-y: auto;
+          background: rgba(18, 8, 15, 0.93);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 0.9px solid rgba(255, 223, 133, 0.52);
+          border-radius: 13px;
+          padding: 6px 11px;
+          font-size: 10.4px;
+          line-height: 1.4;
+          color: var(--ivory);
+          text-align: center;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.78), 0 0 10px rgba(255, 223, 133, 0.12);
+          cursor: pointer;
+          transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+          opacity: 1;
+          scrollbar-width: none;
+        }
+        .cat-house-bubble::-webkit-scrollbar {
+          display: none;
+        }
+        .cat-house-bubble.hidden-tip {
+          opacity: 0;
+          transform: translateX(-50%) translateY(5px) scale(0.94);
+          pointer-events: none;
+        }
+
+        /* ACTOR MÈO ĐEN THU NHỎ VỪA VẶN VỚI CĂN PHÒNG (116x108px) */
+        #catNestActor {
+          width: 116px;
+          height: 108px;
+          position: relative;
+          z-index: 5;
+          opacity: 0;
+          transform: translateY(-28px) scale(0.45);
+          pointer-events: none;
+        }
+        #catNestActor.in-house {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          pointer-events: auto;
+        }
+        #catNestActor.anim-enter {
+          animation: catHouseJumpIn 0.56s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        #catNestActor.anim-leave {
+          animation: catHouseJumpOut 0.4s ease-in forwards;
+        }
+        .cushion-ripple-ring {
+          position: absolute;
+          bottom: 3px;
+          width: 108px;
+          height: 26px;
+          border-radius: 50%;
+          border: 1.4px solid #ffdf85;
+          pointer-events: none;
+          opacity: 0;
+        }
+        .cushion-ripple-ring.pulse {
+          animation: cushionGlowPulse 0.62s ease-out forwards;
+        }
+        .flame-outer-anim {
+          transform-box: fill-box;
+          transform-origin: bottom center;
+          animation: hearthFlameOuter 1.35s ease-in-out infinite;
+        }
+        .flame-inner-anim {
+          transform-box: fill-box;
+          transform-origin: bottom center;
+          animation: hearthFlameInner 0.95s ease-in-out infinite;
+        }
+        .hearth-glow-anim {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: hearthWarmAmbient 2.1s ease-in-out infinite;
+        }
+        .girl-head-sway {
+          transform-box: fill-box;
+          transform-origin: bottom center;
+          animation: girlHeadGentleSway 4.5s ease-in-out infinite;
+        }
+        .win-star-1 { animation: windowStarTwinkle 2.8s ease-in-out infinite; }
+        .win-star-2 { animation: windowStarTwinkle 3.4s ease-in-out 1.2s infinite; }
+      </style>
+
+      <div id="catNestSanctuary" class="cat-house-wrapper">
+        <!-- MÁI NHÀ GỖ CHÂU ÂU NHÔ RỘNG + ỐNG KHÓI NHẢ TRÁI TIM + ĐÈN LỒNG -->
+        <div class="cat-house-roof-box">
+          <svg viewBox="0 0 380 88" class="w-full h-full overflow-visible">
+            <defs>
+              <linearGradient id="roofShingleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#6e192e"/>
+                <stop offset="55%" stop-color="#3c0d19"/>
+                <stop offset="100%" stop-color="#1c060c"/>
+              </linearGradient>
+              <linearGradient id="plaqueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#260b14"/>
+                <stop offset="50%" stop-color="#471525"/>
+                <stop offset="100%" stop-color="#260b14"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Ống khói gạch thanh mảnh bên phải mái -->
+            <rect x="268" y="16" width="20" height="32" rx="2.5" fill="#4a1524" stroke="rgba(255,223,133,0.75)" stroke-width="1"/>
+            <rect x="265" y="13" width="26" height="5" rx="2" fill="#681c30" stroke="rgba(255,223,133,0.8)" stroke-width="1"/>
+            <!-- Ống khói nhả trái tim bay lên -->
+            <text x="278" y="10" text-anchor="middle" fill="#ff758f" font-size="10.5" class="cat-heart-1">♥</text>
+            <text x="284" y="7" text-anchor="middle" fill="#ffdf85" font-size="9" class="cat-heart-2">♥</text>
+            <text x="272" y="8" text-anchor="middle" fill="#f48fb1" font-size="9.5" class="cat-heart-3">♥</text>
+
+            <!-- Mái hiên uốn cong nhẹ thanh thoát (Overhanging Cottage Roof) -->
+            <path d="M 190 7 L 8 74 Q 190 71 372 74 Z" fill="url(#roofShingleGrad)" stroke="rgba(255,223,133,0.82)" stroke-width="1.3" stroke-linejoin="round"/>
+            <!-- Đường viền rui mái mảnh bên trong -->
+            <path d="M 190 13 L 24 70 Q 190 68 356 70 Z" fill="none" stroke="rgba(255,223,133,0.28)" stroke-width="0.9" stroke-dasharray="4 3"/>
+
+            <!-- Hai công-xôn gỗ (Corbels) đỡ mái hiên hai bên -->
+            <path d="M 32 73 L 32 84 L 44 73 Z" fill="#3b121e" stroke="rgba(255,223,133,0.45)" stroke-width="0.9"/>
+            <path d="M 348 73 L 348 84 L 336 73 Z" fill="#3b121e" stroke="rgba(255,223,133,0.45)" stroke-width="0.9"/>
+
+            <!-- Đỉnh chóp mái vàng -->
+            <circle cx="190" cy="7" r="3.5" fill="#ffdf85"/>
+
+            <!-- Biển gỗ treo giữa mái nhà -->
+            <rect x="116" y="41" width="148" height="21" rx="10.5" fill="url(#plaqueGrad)" stroke="rgba(255,223,133,0.78)" stroke-width="1.1"/>
+            <text x="190" y="54.5" text-anchor="middle" fill="#ffdf85" font-size="9.5" font-weight="800" letter-spacing="1">🏠 NHÀ CỦA MÈO ĐEN</text>
+
+            <!-- Đèn lồng nhỏ treo dưới mái -->
+            <g class="cat-lantern-swing">
+              <line x1="190" y1="62" x2="190" y2="73" stroke="#ffdf85" stroke-width="1"/>
+              <circle cx="190" cy="76" r="3.6" fill="#ffdf85" opacity="0.92"/>
+              <circle cx="190" cy="76" r="7.5" fill="#ffdf85" opacity="0.2"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- THÂN NGÔI NHÀ (FRAME CỐ ĐỊNH 224PX • NÉT MẢNH TINH TẾ) -->
+        <div class="cat-house-room">
+          <div class="cat-house-top-beam"></div>
+          <div class="cat-house-pillar-left"></div>
+          <div class="cat-house-pillar-right"></div>
+          <div class="cat-house-wainscot"></div>
+          <div class="cat-house-floorboards"></div>
+
+          <!-- Đã xoá chữ mô tả trạng thái mèo để nhường trọn không gian cho hội thoại -->
+
+          <!-- Chữ NowNow Tarot in mờ trên tường nhà -->
+          <div class="cat-house-wall-watermark" aria-hidden="true">
+            <div class="wm-main">NowNow Tarot</div>
+            <div class="wm-sub">✦ Thấu Cảm Lý Trí ✦</div>
+          </div>
+
+          <!-- Bong bóng hội thoại nổi cố định trong phòng -->
+          <div id="catHouseBubble" class="cat-house-bubble hidden-tip">
+            <span id="catHouseBubbleText">Meo~ Vào nhà sưởi ấm bên bếp lửa cùng tui và sen Now nè! 🔥🐾</span>
+          </div>
+
+          <!-- KHÔNG GIAN NỘI THẤT THU NHỎ HÀI HÒA -->
+          <div style="position: absolute; left: 7px; right: 7px; bottom: 5px; height: 146px; z-index: 4;">
+
+            <!-- 1. GÓC TRÁI: CỬA SỔ THIÊN VĂN + CÔ GÁI NHỎ (SEN NOW) NGỒI BÀN BÓI TAROT & QUẢ CẦU PHA LÊ -->
+            <div aria-hidden="true" style="position: absolute; left: 4px; bottom: 0px; width: 108px; height: 142px; pointer-events: none; z-index: 3;">
+              <svg viewBox="0 0 116 146" class="w-full h-full overflow-visible">
+                <defs>
+                  <radialGradient id="astroWindowSky" cx="55%" cy="35%" r="68%">
+                    <stop offset="0%" stop-color="#2e1846"/>
+                    <stop offset="55%" stop-color="#140924"/>
+                    <stop offset="100%" stop-color="#07030d"/>
+                  </radialGradient>
+                  <linearGradient id="moonlightBeamGrad" x1="25%" y1="0%" x2="65%" y2="100%">
+                    <stop offset="0%" stop-color="#ffdf85" stop-opacity="0.18"/>
+                    <stop offset="60%" stop-color="#ffdf85" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="#ffdf85" stop-opacity="0"/>
+                  </linearGradient>
+                  <radialGradient id="crystalBallGlow" cx="40%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#d4f5ff"/>
+                    <stop offset="45%" stop-color="#64dfdf"/>
+                    <stop offset="85%" stop-color="#5e60ce"/>
+                    <stop offset="100%" stop-color="#3a0ca3"/>
+                  </radialGradient>
+                </defs>
+
+                <!-- Luồng ánh trăng dịu nhẹ chiếu từ cửa sổ thiên văn xuống bàn Tarot (ID chuẩn không dấu cách!) -->
+                <polygon points="10,24 58,24 98,136 4,136" fill="url(#moonlightBeamGrad)"/>
+
+                <!-- KHUNG CỬA SỔ THIÊN VĂN (ASTRONOMICAL WINDOW) -->
+                <path d="M 10 60 L 10 26 A 24 22 0 0 1 58 26 L 58 60 Z" fill="url(#astroWindowSky)" stroke="#ffdf85" stroke-width="1.2"/>
+                <!-- Vòng viền đôi bên trong cửa sổ -->
+                <path d="M 12.5 58 L 12.5 26.5 A 21.5 19.5 0 0 1 55.5 26.5 L 55.5 58 Z" fill="none" stroke="rgba(255,223,133,0.32)" stroke-width="0.7"/>
+
+                <!-- Vòng quỹ đạo Astrolabe & Xích đạo thiên cầu trong cửa sổ -->
+                <circle cx="34" cy="34" r="16.5" fill="none" stroke="rgba(255,223,133,0.42)" stroke-width="0.65" stroke-dasharray="2.5 2"/>
+                <circle cx="34" cy="34" r="10.5" fill="none" stroke="rgba(255,223,133,0.3)" stroke-width="0.6"/>
+                <ellipse cx="34" cy="34" rx="18" ry="6.5" fill="none" stroke="rgba(255,223,133,0.28)" stroke-width="0.6" transform="rotate(-22 34 34)"/>
+
+                <!-- Chòm sao Bắc Đẩu / Cassiopeia nối dây lấp lánh trên bầu trời đêm -->
+                <polyline points="17,31 24,24 31,28 39,20 46,25" fill="none" stroke="rgba(255,223,133,0.68)" stroke-width="0.75"/>
+                <circle cx="17" cy="31" r="1.1" fill="#ffffff" class="win-star-1"/>
+                <circle cx="24" cy="24" r="1.2" fill="#ffdf85" class="win-star-2"/>
+                <circle cx="31" cy="28" r="1.0" fill="#ffffff" class="win-star-1"/>
+                <circle cx="39" cy="20" r="1.3" fill="#ffdf85" class="win-star-2"/>
+                <circle cx="46" cy="25" r="1.0" fill="#ffffff" class="win-star-1"/>
+                <circle cx="21" cy="44" r="0.9" fill="#ffdf85" class="win-star-2"/>
+                <circle cx="48" cy="42" r="1.1" fill="#ffffff" class="win-star-1"/>
+
+                <!-- Trăng khuyết vàng rực góc trên cửa sổ -->
+                <path d="M 43 14 A 6 6 0 1 0 49 23 A 4.6 4.6 0 1 1 43 14 Z" fill="#ffdf85"/>
+
+                <!-- Kính thiên văn nhỏ bằng đồng đặt trên bệ cửa sổ ngắm sao -->
+                <line x1="48" y1="53" x2="45" y2="59" stroke="#d9a74a" stroke-width="1"/>
+                <line x1="48" y1="53" x2="51" y2="59" stroke="#d9a74a" stroke-width="1"/>
+                <line x1="43" y1="55" x2="54" y2="48" stroke="#ffdf85" stroke-width="2" stroke-linecap="round"/>
+
+                <!-- Bệ cửa sổ gỗ -->
+                <rect x="6" y="59" width="56" height="3.2" rx="1.5" fill="#4a1826" stroke="rgba(255,223,133,0.68)" stroke-width="0.95"/>
+
+                <!-- BÀN TRẢI BÀI TAROT & ĐỒ NGHỀ BÓI TAROT (x: 42..106, y: 88..136) -->
+                <!-- Hai chân bàn gỗ -->
+                <line x1="50" y1="103" x2="47" y2="136" stroke="#5c241d" stroke-width="2.2" stroke-linecap="round"/>
+                <line x1="96" y1="103" x2="99" y2="136" stroke="#5c241d" stroke-width="2.2" stroke-linecap="round"/>
+                <!-- Mặt bàn gỗ ấm -->
+                <rect x="43" y="99" width="59" height="4.5" rx="2" fill="#6e2b23" stroke="#ffdf85" stroke-width="1"/>
+                <!-- Khăn trải bàn Tarot nhung đỏ rủ xuống viền tua rua vàng + biểu tượng mặt trăng -->
+                <polygon points="55,99 91,99 85,114 73,119 61,114" fill="#8f192e" stroke="#ffdf85" stroke-width="0.95"/>
+                <circle cx="73" cy="108" r="2.3" fill="none" stroke="#ffdf85" stroke-width="0.8" opacity="0.85"/>
+                <path d="M 71.5 118.5 L 71.5 121.5 M 73 119 L 73 122 M 74.5 118.5 L 74.5 121.5" stroke="#ffdf85" stroke-width="0.8"/>
+
+                <!-- Đồ nghề 1: Nến thơm dẫn lễ trên bàn (trái bàn) -->
+                <rect x="48" y="91.5" width="3.8" height="7.5" rx="0.8" fill="#faf6f0" stroke="#d9b37c" stroke-width="0.6"/>
+                <path d="M 49.9 86.5 C 51.4 88.5, 51.4 90.5, 49.9 91.5 C 48.4 90.5, 48.4 88.5, 49.9 86.5 Z" fill="#ffdf85" class="flame-inner-anim"/>
+
+                <!-- Đồ nghề 2: 3 Lá bài Tarot Ẩn Chính bằng vàng đang mở trên bàn -->
+                <rect x="56" y="95" width="4.8" height="3.8" rx="0.6" fill="#ffdf85" stroke="#3a0d19" stroke-width="0.6" transform="rotate(-6 58 97)"/>
+                <rect x="63" y="94.8" width="4.8" height="3.8" rx="0.6" fill="#ffdf85" stroke="#3a0d19" stroke-width="0.6"/>
+                <rect x="70" y="95" width="4.8" height="3.8" rx="0.6" fill="#ffdf85" stroke="#3a0d19" stroke-width="0.6" transform="rotate(6 72 97)"/>
+
+                <!-- Đồ nghề 3: Quả cầu pha lê (Crystal Ball) phát sáng huyền ảo trên đế đồng -->
+                <polygon points="80,99 89,99 87,95.5 82,95.5" fill="#d9a74a" stroke="#ffdf85" stroke-width="0.6"/>
+                <circle cx="84.5" cy="90.5" r="5.5" fill="url(#crystalBallGlow)" stroke="rgba(255,255,255,0.85)" stroke-width="0.85"/>
+                <circle cx="82.7" cy="88.7" r="1.4" fill="#ffffff" opacity="0.92"/>
+                <circle cx="86" cy="92" r="0.7" fill="#ffdf85" class="win-star-1"/>
+
+                <!-- CÔ GÁI NHỎ (SEN NOW) NGỒI GHẾ GỖ BÊN BÀN TAROT, NGƯỚC NHÌN CỬA SỔ THIÊN VĂN -->
+                <!-- Ghế gỗ có tựa lưng -->
+                <line x1="18" y1="112" x2="15" y2="136" stroke="#6b2d26" stroke-width="2" stroke-linecap="round"/>
+                <line x1="35" y1="112" x2="37" y2="136" stroke="#6b2d26" stroke-width="2" stroke-linecap="round"/>
+                <line x1="16" y1="88" x2="18" y2="112" stroke="#6b2d26" stroke-width="2.2" stroke-linecap="round"/>
+                <rect x="15" y="109.5" width="24" height="3.5" rx="1.6" fill="#7d352c" stroke="#ffdf85" stroke-width="0.85"/>
+
+                <!-- Đôi chân nhỏ nhắn & giày búp bê đỏ dưới gầm bàn -->
+                <line x1="29" y1="112" x2="37" y2="131" stroke="#ffe0c8" stroke-width="3" stroke-linecap="round"/>
+                <line x1="33" y1="112" x2="42" y2="130" stroke="#ffe0c8" stroke-width="3" stroke-linecap="round"/>
+                <ellipse cx="38.5" cy="132" rx="4.5" ry="2.2" fill="#8f192e" stroke="#ffdf85" stroke-width="0.65"/>
+                <ellipse cx="43.5" cy="131" rx="4.5" ry="2.2" fill="#8f192e" stroke="#ffdf85" stroke-width="0.65"/>
+
+                <!-- Chân váy & Áo len đỏ rượu ấm áp (góc nghiêng 3/4 nhìn về bàn Tarot & cửa sổ) -->
+                <polygon points="19,102 35,101 40,111 18,111" fill="#3b1929" stroke="rgba(255,223,133,0.6)" stroke-width="0.8"/>
+                <path d="M 21 83 C 20 90, 19 97, 19 103 L 36 103 C 36 96, 35 89, 33 83 Z" fill="#a82842" stroke="#ffdf85" stroke-width="0.95"/>
+                <!-- Cổ áo choàng kem ấm áp -->
+                <rect x="20" y="81" width="14" height="4" rx="2" fill="#faeedc" stroke="#d9b37c" stroke-width="0.75"/>
+
+                <!-- Cánh tay cô gái vươn nhẹ đặt bàn tay lên lá bài Tarot trên bàn -->
+                <polyline points="31,87 42,95.5 55,96" fill="none" stroke="#a82842" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="56.5" cy="96" r="2.1" fill="#ffe0c8" stroke="#d9b37c" stroke-width="0.55"/>
+
+                <!-- Đầu & Gương mặt nghiêng thanh tú + Mái tóc dài cài kẹp sao vàng -->
+                <g class="girl-head-sway">
+                  <!-- Cổ & Khuôn mặt nghiêng sáng rõ -->
+                  <rect x="25.5" y="76" width="4.2" height="6" fill="#ffe0c8"/>
+                  <circle cx="29" cy="70.5" r="7.8" fill="#ffe0c8" stroke="#d9b37c" stroke-width="0.8"/>
+                  <!-- Đôi mắt nhắm nhẹ / hàng mi cong & má hồng dễ thương hướng về cửa sổ và bàn bài -->
+                  <path d="M 33.2 69.5 Q 34.8 70.4 36 69.3" fill="none" stroke="#2b121c" stroke-width="1.1" stroke-linecap="round"/>
+                  <circle cx="34.2" cy="72.2" r="1.3" fill="#ff758f" opacity="0.6"/>
+                  <!-- Mái tóc dài nâu trầm mềm mại buông xuống lưng (tách biệt hoàn toàn với khuôn mặt!) -->
+                  <path d="M 34.5 63.2 C 27 60.5, 19.5 64.5, 17.5 73 C 15.8 82, 16.5 91, 19 96 C 23.5 97, 27 92, 28 84 C 28.5 76, 29.5 69, 35 66 Z" fill="#2c1624" stroke="#d9b37c" stroke-width="0.95"/>
+                  <!-- Kẹp tóc ngôi sao vàng & nơ hồng trên mái tóc -->
+                  <line x1="22.5" y1="71" x2="27.5" y2="72" stroke="#ffdf85" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="25" cy="71.5" r="1.6" fill="#ff758f" stroke="#ffdf85" stroke-width="0.5"/>
+                </g>
+              </svg>
+            </div>
+
+            <!-- 2. GIỮA - PHẢI PHÒNG: THẢM NHUNG + BÉ MÈO ĐEN RÕ NÉT NẰM GIỮA BÀN TAROT & BẾP LỬA -->
+            <div id="catVelvetCushionWrap" onclick="handleHouseCatTap()" style="position: absolute; left: 58%; transform: translateX(-50%); bottom: 0px; width: 118px; height: 108px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; z-index: 5;">
+              <div id="cushionRippleRing" class="cushion-ripple-ring"></div>
+              <div style="position: absolute; bottom: 2px; width: 102px; height: 24px; border-radius: 50%; background: radial-gradient(ellipse at 50% 38%, #c9304a 0%, #781528 68%, #3d0813 100%); border: 1.2px solid rgba(255, 223, 133, 0.72); box-shadow: 0 4px 12px rgba(0,0,0,0.85), 0 -4px 16px rgba(255, 210, 125, 0.22), inset 0 1px 4px rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; pointer-events: none;">
+                <span id="emptyCushionPaw" style="font-size: 10px; opacity: 0.45; transition: opacity 0.3s ease;">🐾</span>
+              </div>
+              <div id="catNestActor">
+                <div id="catNestLottie" style="width: 112px; height: 104px;"></div>
+              </div>
+            </div>
+
+            <!-- 3. GÓC PHẢI: BẾP LỬA NHỎ XINH NÉT MẢNH -->
+            <div aria-hidden="true" style="position: absolute; right: 8px; bottom: 1px; width: 64px; height: 74px; pointer-events: none; z-index: 3;">
+              <svg viewBox="0 0 90 100" class="w-full h-full overflow-visible">
+                <defs>
+                  <radialGradient id="fireGlowGrad" cx="50%" cy="65%" r="55%">
+                    <stop offset="0%" stop-color="#ffae42" stop-opacity="0.5"/>
+                    <stop offset="55%" stop-color="#ff5722" stop-opacity="0.18"/>
+                    <stop offset="100%" stop-color="#ff5722" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="45" cy="64" r="42" fill="url(#fireGlowGrad)" class="hearth-glow-anim"/>
+
+                <!-- Thân lò sưởi nét mảnh 1.1px -->
+                <rect x="12" y="26" width="66" height="68" rx="5" fill="#32101b" stroke="rgba(255,223,133,0.72)" stroke-width="1.1"/>
+                <rect x="7" y="20" width="76" height="6.5" rx="2.5" fill="#52192a" stroke="rgba(255,223,133,0.78)" stroke-width="1.1"/>
+
+                <!-- Cây nến nhỏ & tách trà ấm trên bệ lò -->
+                <rect x="21" y="12" width="4" height="8" rx="1" fill="#faf6f0"/>
+                <circle cx="23" cy="9.5" r="1.8" fill="#ffdf85"/>
+                <path d="M 62 15 L 70 15 L 69 20 L 63 20 Z" fill="#ffdf85" opacity="0.88"/>
+
+                <!-- Vòm cửa bếp lửa -->
+                <path d="M 24 94 L 24 56 A 21 20 0 0 1 66 56 L 66 94 Z" fill="#100509" stroke="rgba(255,223,133,0.42)" stroke-width="1"/>
+
+                <!-- Thanh củi & Ngọn lửa ấm -->
+                <rect x="29" y="83" width="32" height="5" rx="2.5" fill="#4a1c14" transform="rotate(-9 45 86)"/>
+                <rect x="29" y="83" width="32" height="5" rx="2.5" fill="#63261b" transform="rotate(9 45 86)"/>
+                <ellipse cx="45" cy="86" rx="11" ry="3" fill="#ff6d00" opacity="0.85"/>
+
+                <path d="M 45 50 C 55 63, 58 76, 45 85 C 32 76, 35 63, 45 50 Z" fill="#ff6d00" class="flame-outer-anim"/>
+                <path d="M 45 58 C 51 67, 53 76, 45 84 C 37 76, 39 67, 45 58 Z" fill="#ffdf85" class="flame-inner-anim"/>
+
+                <rect x="8" y="92" width="74" height="5" rx="2" fill="#471524" stroke="rgba(255,223,133,0.72)" stroke-width="1"/>
+              </svg>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BẬC THỀM GỖ DƯỚI ĐÁY NHÀ (TẠO DÁNG NHÀ CỔ ĐIỂN, XÓA DÁNG HỘP) -->
+        <div class="cat-house-porch-base"></div>
+        <div class="cat-house-porch-substep"></div>
       </div>
 
       <div class="social-bento-grid">
@@ -2273,22 +2857,20 @@ body.portal-open .cat-cloud-tip {
        ========================================================================= -->
   <div id="floatingCatContainer" class="floating-cat-buddy">
     <div id="catBubbleTip" class="cat-cloud-tip">
-      <span id="catBubbleText">Meo~ meo! Bấm vào tui nghe tiếng mèo kêu, hoặc nắm cổ tui kéo đi chơi nha sen! 🐾🎄</span>
+      <span id="catBubbleText">Meo~ Chào đằng ấy mới ghé góc nhỏ nhà NowNow nha! 🐾✨</span>
     </div>
 
     <div data-sound="none" class="cat-sprite-btn" id="catBtnEl" title="Chạm nghe mèo kêu hoặc giữ chuột/ngón tay để kéo mèo đi chơi!">
-      <svg viewBox="0 0 120 130" class="w-full h-full overflow-visible">
+      <div id="catGardenLottie" class="w-full h-full pointer-events-none"></div>
+      <svg id="catGardenFallbackSvg" viewBox="0 0 120 130" class="w-full h-full overflow-visible pointer-events-none" style="position:absolute;inset:0;">
         <path class="cat-tail-svg" d="M80 100 C108 95, 114 66, 98 52 C92 46, 86 54, 92 60" fill="none" stroke="#0b0b12" stroke-width="8" stroke-linecap="round" />
-        <path d="M36 114 C33 86, 41 68, 58 68 C75 68, 83 86, 80 114 Z" fill="#0b0b12" />
+        <path d="M36 114 C33 86, 41 68, 58 68 C75 68, 83 86, 80 114 Z" fill="#161324" stroke="#d9b37c" stroke-width="1.5" />
         <path d="M40 70 Q58 79 76 70" fill="none" stroke="#d43248" stroke-width="6" stroke-linecap="round" />
         <circle cx="58" cy="76" r="4.5" fill="#ffdf85" />
-        <circle cx="58" cy="49" r="22" fill="#0b0b12" />
+        <circle cx="58" cy="49" r="22" fill="#161324" stroke="#d9b37c" stroke-width="1.5" />
         <polygon points="38,38 32,15 51,28" fill="#0b0b12" />
         <polygon points="40,35 36,20 48,29" fill="#8c1d2c" />
         <polygon points="78,38 84,15 65,28" fill="#0b0b12" />
-        <path d="M42 26 C48 4, 78 4, 92 28 Z" fill="#d43248" />
-        <rect x="39" y="23" width="40" height="6.5" rx="3" fill="#faf6f0" />
-        <circle cx="94" cy="29" r="5.5" fill="#faf6f0" />
         <ellipse cx="49" cy="49" rx="4.6" ry="5" fill="#ffdf85" />
         <ellipse cx="49" cy="49" rx="1.5" ry="3.8" fill="#05040a" />
         <ellipse cx="67" cy="49" rx="4.6" ry="5" fill="#ffdf85" />
@@ -3715,7 +4297,7 @@ body.portal-open .cat-cloud-tip {
 
       if (roamLoopTimer) clearInterval(roamLoopTimer);
       roamLoopTimer = setInterval(() => {
-        if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+        if (isDraggingCat || window.__catInHouse || window.__catHouseTransitioning || document.body.classList.contains('portal-open')) return;
         if (Date.now() - lastInteractionTimestamp < 4800) return;
 
         const { w, h, margin } = getCatDimensions();
@@ -3761,7 +4343,7 @@ body.portal-open .cat-cloud-tip {
 
       if (passiveLoopTimer) clearInterval(passiveLoopTimer);
       passiveLoopTimer = setInterval(() => {
-        if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+        if (isDraggingCat || window.__catInHouse || window.__catHouseTransitioning || document.body.classList.contains('portal-open')) return;
         if (Date.now() - lastInteractionTimestamp < 5200) return;
 
         if (window.currentNowNowLang === 'en') {
@@ -6641,7 +7223,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     // 2. GIÃN NHỊP TỰ ĐỘNG NÓI TỪ 9.8S LÊN 15S ĐỂ ĐỠ RỐI MẮT TRÊN MOBILE
     if (passiveLoopTimer) clearInterval(passiveLoopTimer);
     passiveLoopTimer = setInterval(() => {
-      if (isDraggingCat || document.body.classList.contains('portal-open')) return;
+      if (isDraggingCat || window.__catInHouse || window.__catHouseTransitioning || document.body.classList.contains('portal-open')) return;
       if (Date.now() - lastInteractionTimestamp < 6000) return; // Đợi 6s sau tương tác cuối
 
       if (window.currentNowNowLang === 'en') {
@@ -6912,131 +7494,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     }, { passive: true });
   })();
 </script>
-<script>
-  // =========================================================================
-  // HỆ THỐNG TRƯỢT BĂNG TẠI ĐIỂM KHÁCH ĐẶT (LOCAL ICE-GLIDE PHYSICS)
-  // =========================================================================
-  (function initCatGlidePhysics() {
-    let lastScrollY = window.scrollY;
-    let glideVy = 0;            // Vận tốc trượt băng hiện tại
-    let isGliding = false;
-    let settleTimer = null;
-    let placedAnchorY = null;   // Lưu đúng tọa độ Y nơi khách đặt mèo
 
-    const container = document.getElementById('floatingCatContainer');
-    const catSvg = document.querySelector('#catBtnEl svg');
-    if (!container) return;
-
-    // ⚙️ CẤU HÌNH ĐỘ MƯỢT (Sếp Hùng có thể chỉnh 3 số này tùy gu):
-    const SPEED_SYNC = 0.14;           // Tỷ lệ đồng bộ tốc độ cuộn (nhỏ = trôi chậm, lớn = trôi nhanh)
-    const MAX_GLIDE_SPEED = 6.5;       // Trần tốc độ tối đa (chống phóng nhanh gây chóng mặt)
-    const ICE_FRICTION = 0.94;         // Ma sát mặt băng (0.94 = lướt êm rồi tự dừng tại chỗ mới)
-    const RETURN_TO_PLACED_SPOT = false; // false = trượt tới đâu dừng tại đó | true = trượt xong trôi về lại đúng điểm khách đặt
-
-    // Ghi nhận lại tọa độ mỗi khi khách nắm kéo và thả con mèo ra
-    window.addEventListener('pointerup', () => {
-      if (typeof catPosY === 'number' && catPosY > 0) {
-        placedAnchorY = catPosY;
-      }
-    }, { passive: true });
-
-    function glideLoop() {
-      if (!isGliding) return;
-
-      // Nếu khách đang lấy tay nắm kéo mèo thì nhường quyền ngay lập tức
-      if (typeof isDraggingCat !== 'undefined' && isDraggingCat) {
-        isGliding = false;
-        glideVy = 0;
-        if (catSvg) catSvg.style.transform = '';
-        return;
-      }
-
-      const { w, h, margin } = getCatDimensions();
-      const minY = 68;
-      const maxY = window.innerHeight - h - margin;
-
-      if (!catPosX) catPosX = window.innerWidth - w - margin;
-      if (!catPosY) catPosY = maxY;
-      if (placedAnchorY === null) placedAnchorY = catPosY;
-
-      // 1. Trượt trực tiếp từ vị trí hiện tại của mèo (TUYỆT ĐỐI KHÔNG GIẬT VỀ ĐÁY)
-      catPosY += glideVy;
-      glideVy *= ICE_FRICTION;
-
-      // 2. Nếu bật chế độ quay về điểm khách đặt (RETURN_TO_PLACED_SPOT = true)
-      if (RETURN_TO_PLACED_SPOT && Math.abs(glideVy) < 0.8) {
-        catPosY += (placedAnchorY - catPosY) * 0.05;
-      }
-
-      // 3. Chạm mép trên hoặc mép dưới màn hình thì giảm tốc êm ái, không nảy loạn
-      if (catPosY < minY) {
-        catPosY = minY;
-        glideVy *= -0.3;
-      } else if (catPosY > maxY) {
-        catPosY = maxY;
-        glideVy *= -0.3;
-      }
-
-      // 4. Nghiêng người mèo nhẹ nhàng theo đà lướt (tối đa 6 độ)
-      if (catSvg) {
-        const tilt = Math.max(-6, Math.min(6, glideVy * 0.9));
-        catSvg.style.transition = 'none';
-        catSvg.style.transform = `rotate(${tilt.toFixed(1)}deg)`;
-      }
-
-      // 5. Cập nhật vị trí 60fps mượt mà
-      container.style.transition = 'opacity 0.25s ease';
-      container.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0)`;
-
-      const needReturn = RETURN_TO_PLACED_SPOT && Math.abs(placedAnchorY - catPosY) > 1.2;
-      if (Math.abs(glideVy) > 0.15 || needReturn) {
-        requestAnimationFrame(glideLoop);
-      } else {
-        glideVy = 0;
-        if (!RETURN_TO_PLACED_SPOT) {
-          placedAnchorY = catPosY; // Cập nhật điểm đỗ mới sau khi trượt xong
-        }
-        if (catSvg) {
-          catSvg.style.transition = 'transform 0.45s ease';
-          catSvg.style.transform = 'rotate(0deg)';
-        }
-        isGliding = false;
-        settleTimer = setTimeout(() => {
-          if (!isGliding) container.style.transition = '';
-        }, 150);
-      }
-    }
-
-    window.addEventListener('scroll', () => {
-      if ((typeof isDraggingCat !== 'undefined' && isDraggingCat) ||
-          document.body.classList.contains('portal-open')) return;
-
-      const currentY = window.scrollY;
-      const deltaY = currentY - lastScrollY;
-      lastScrollY = currentY;
-
-      if (Math.abs(deltaY) > 0.5) {
-        if (placedAnchorY === null && typeof catPosY === 'number') {
-          placedAnchorY = catPosY;
-        }
-
-        // Bộ lọc đồng bộ tốc độ cuộn: lăn chậm trôi chậm, lăn nhanh trôi vừa phải (khóa trần 6.5px/frame)
-        const targetImpulse = Math.max(-MAX_GLIDE_SPEED, Math.min(MAX_GLIDE_SPEED, -deltaY * SPEED_SYNC));
-        glideVy = glideVy * 0.6 + targetImpulse * 0.4;
-
-        if (settleTimer) clearTimeout(settleTimer);
-        if (typeof lastInteractionTimestamp !== 'undefined') {
-          lastInteractionTimestamp = Date.now();
-        }
-
-        if (!isGliding) {
-          isGliding = true;
-          requestAnimationFrame(glideLoop);
-        }
-      }
-    }, { passive: true });
-  })();
-</script>
 <!-- =========================================================================
      BỘ CẢM BIẾN DẤU CHÂN SỐ & TÂM LÝ NGƯỢC (NOWNOW TRACKER V2.0 - MIND READER)
      ========================================================================= -->
@@ -7594,6 +8052,568 @@ I'd love to book a 1:1 Tarot & CBT session:
   window.addEventListener('pagehide', () => flushFootprintToSheets(false));
   setTimeout(() => flushFootprintToSheets(false), 45000);
 })();
+</script>
+<script>
+window.NOWNOW_CAT_LOTTIE_DATA = {"v":"5.7.4","fr":60,"ip":0,"op":360,"w":160,"h":150,"nm":"NowNow_Black_Cat","ddd":0,"assets":[],"markers":[{"tm":0,"cm":"idle","dr":60},{"tm":60,"cm":"curious","dr":60},{"tm":120,"cm":"jump","dr":58},{"tm":182,"cm":"lying","dr":56},{"tm":242,"cm":"sleep","dr":56},{"tm":302,"cm":"belly","dr":56}],"layers":[{"ddd":0,"ind":17,"ty":4,"nm":"BellyUp_Sparkles","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":302,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":312,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":348,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":358,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[85,74,0]},"a":{"a":0,"k":[85,74,0]},"s":{"a":1,"k":[{"t":302,"s":[70,70,100],"e":[118,118,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":330,"s":[118,118,100],"e":[70,70,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":358,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"Sparkle_54_72","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"v":[[54,66],[55.92,70.08],[60,72],[55.92,73.92],[54,78],[52.08,73.92],[48,72],[52.08,70.08]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Sparkle_122_74","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"v":[[122,69],[123.6,72.4],[127,74],[123.6,75.6],[122,79],[120.4,75.6],[117,74],[120.4,72.4]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":15,"ty":4,"nm":"Sleep_zZz","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":242,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":254,"s":[100],"e":[85],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":284,"s":[85],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":298,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":0,"k":0},"p":{"a":1,"k":[{"t":242,"s":[110,70,0],"e":[114,58,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":270,"s":[114,58,0],"e":[118,46,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":298,"s":[118,46,0]}]},"a":{"a":0,"k":[110,65,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"Z_7","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[102.5,68.5],[109.5,68.5],[102.5,75.5],[109.5,75.5]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.3},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"Z_10","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[113.0,51.0],[123.0,51.0],[113.0,61.0],[123.0,61.0]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.3},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"hat_noel","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"e":[3.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":30,"s":[3.5],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":60,"s":[0],"e":[-7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":142,"s":[-7],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":178,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"p":{"a":0,"k":[78,43,0]},"a":{"a":0,"k":[78,43,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"SantaHatPom","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.038,0],[0,-3.038],[3.038,0],[0,3.038]],"o":[[3.038,0],[0,3.038],[-3.038,0],[0,-3.038]],"v":[[114,39.5],[119.5,45],[114,50.5],[108.5,45]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SantaHatBrim","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,-2],[-2,0],[0,2],[2,0]],"o":[[2,0],[0,2],[-2,0],[0,-2]],"v":[[59,40],[99,40],[99,46.5],[59,46.5]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SantaHatRed","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-14,-22]],"o":[[6,-22],[0,0]],"v":[[62,42],[112,44]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.878,0.22,0.314,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.561,0.094,0.157,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":1.0},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":4,"ty":4,"nm":"hat_tet","sr":1,"ks":{"o":{"a":0,"k":0},"r":{"a":0,"k":0},"p":{"a":0,"k":[0,0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"MaiCenter","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.381,0],[0,-1.381],[1.381,0],[0,1.381]],"o":[[1.381,0],[0,1.381],[-1.381,0],[0,-1.381]],"v":[[78,32.5],[80.5,35],[78,37.5],[75.5,35]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.878,0.22,0.314,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"MaiFlower","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.314,0],[0,-3.314],[3.314,0],[0,3.314]],"o":[[3.314,0],[0,3.314],[-3.314,0],[0,-3.314]],"v":[[78,29],[84,35],[78,41],[72,35]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"TetBand","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[58,38],[98,38],[98,46],[58,46]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.788,0.094,0.169,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":5,"ty":4,"nm":"hat_summer","sr":1,"ks":{"o":{"a":0,"k":0},"r":{"a":0,"k":0},"p":{"a":0,"k":[0,0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"Hibiscus","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.485,0],[0,-2.485],[2.485,0],[0,2.485]],"o":[[2.485,0],[0,2.485],[-2.485,0],[0,-2.485]],"v":[[91,33.5],[95.5,38],[91,42.5],[86.5,38]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.91,0.365,0.459,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"StrawCrown","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2,0],[-10,0],[2,0]],"o":[[2,-13],[10,0],[0,0]],"v":[[63,40],[78,27],[93,40]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.886,0.612,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"StrawBrim","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-14.36,0],[0,-3.038],[14.36,0],[0,3.038]],"o":[[14.36,0],[0,3.038],[-14.36,0],[0,-3.038]],"v":[[78,35.5],[104,41],[78,46.5],[52,41]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.953,0.816,0.471,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.722,0.525,0.176,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":1.0},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":6,"ty":4,"nm":"hat_halloween","sr":1,"ks":{"o":{"a":0,"k":0},"r":{"a":0,"k":0},"p":{"a":0,"k":[0,0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"WitchRibbon","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[65,37],[91,37],[91,40.5],[65,40.5]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.549,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WitchCone","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[64,40],[78,18],[92,40]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.227,0.106,0.302,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":1.0},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WitchBrim","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-13.808,0],[0,-2.761],[13.808,0],[0,2.761]],"o":[[13.808,0],[0,2.761],[-13.808,0],[0,-2.761]],"v":[[78,36],[103,41],[78,46],[53,41]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.169,0.078,0.22,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":1.0},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":8,"ty":4,"nm":"Sitting_Eyes","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[78,65,0]},"a":{"a":0,"k":[78,65,0]},"s":{"a":1,"k":[{"t":0,"s":[100,100,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":39,"s":[100,100,100],"e":[108,8,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":42,"s":[108,8,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":46,"s":[100,100,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":60,"s":[100,100,100],"e":[107,108,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":75,"s":[107,108,100],"e":[107,108,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":108,"s":[107,108,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":120,"s":[100,100,100],"e":[112,32,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":132,"s":[112,32,100],"e":[112,32,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":152,"s":[112,32,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":162,"s":[100,100,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[100,100,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"LeftEyeShine","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.608,0],[0,-0.608],[0.608,0],[0,0.608]],"o":[[0.608,0],[0,0.608],[-0.608,0],[0,-0.608]],"v":[[67.2,61.7],[68.3,62.8],[67.2,63.9],[66.1,62.8]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LeftPupil","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.828,0],[0,-2.099],[0.828,0],[0,2.099]],"o":[[0.828,0],[0,2.099],[-0.828,0],[0,-2.099]],"v":[[69,61.2],[70.5,65],[69,68.8],[67.5,65]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.02,0.016,0.039,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LeftEyeGold","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.651,0],[0,-2.872],[2.651,0],[0,2.872]],"o":[[2.651,0],[0,2.872],[-2.651,0],[0,-2.872]],"v":[[69,59.8],[73.8,65],[69,70.2],[64.2,65]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RightEyeShine","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.608,0],[0,-0.608],[0.608,0],[0,0.608]],"o":[[0.608,0],[0,0.608],[-0.608,0],[0,-0.608]],"v":[[85.2,61.7],[86.3,62.8],[85.2,63.9],[84.1,62.8]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RightPupil","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.828,0],[0,-2.099],[0.828,0],[0,2.099]],"o":[[0.828,0],[0,2.099],[-0.828,0],[0,-2.099]],"v":[[87,61.2],[88.5,65],[87,68.8],[85.5,65]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.02,0.016,0.039,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RightEyeGold","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.651,0],[0,-2.872],[2.651,0],[0,2.872]],"o":[[2.651,0],[0,2.872],[-2.651,0],[0,-2.872]],"v":[[87,59.8],[91.8,65],[87,70.2],[82.2,65]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":7,"ty":4,"nm":"Sitting_Head","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[0,0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"PinkNose","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[76,71],[80,71],[78,74]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WhiskerL1","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[58,69],[46,67]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WhiskerL2","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[58,73],[47,74]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WhiskerR1","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[98,69],[110,67]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WhiskerR2","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[98,73],[109,74]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"HeadCircle","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-12.151,0],[0,-12.151],[12.151,0],[0,12.151]],"o":[[12.151,0],[0,12.151],[-12.151,0],[0,-12.151]],"v":[[78,43],[100,65],[78,87],[56,65]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":85},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LeftEarInner","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[60,51],[56,36],[68,45]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RightEarInner","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[96,51],[100,36],[88,45]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LeftEarOuter","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[58,54],[52,31],[71,44]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":80},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RightEarOuter","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[98,54],[104,31],[85,44]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":80},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":2},{"ddd":0,"ind":9,"ty":4,"nm":"Sitting_Collar_Bell","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":0,"k":0},"p":{"a":1,"k":[{"t":0,"s":[78,90,0],"e":[76.5,90,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":75,"s":[76.5,90,0],"e":[79.5,90,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":95,"s":[79.5,90,0],"e":[78,90,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":120,"s":[78,90,0],"e":[78,86,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":142,"s":[78,86,0],"e":[78,92,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":155,"s":[78,92,0],"e":[78,90,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[78,90,0],"e":[78,90,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[78,90,0]}]},"a":{"a":0,"k":[78,90,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"GoldenBell","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.541,0],[0,-2.541],[2.541,0],[0,2.541]],"o":[[2.541,0],[0,2.541],[-2.541,0],[0,-2.541]],"v":[[78,87.4],[82.6,92],[78,96.6],[73.4,92]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"RedCollar","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-6,0],[0,0]],"o":[[0,0],[6,0],[0,0]],"v":[[60,86],[78,91],[96,86]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.878,0.22,0.314,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":1},{"ddd":0,"ind":10,"ty":4,"nm":"Sitting_Body","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[0,0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"SittingBody","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3,-28],[-17,0],[0,0],[0,0]],"o":[[0,0],[17,0],[3,-28],[0,0]],"v":[[56,130],[78,84],[100,130],[78,130]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":1},{"ddd":0,"ind":11,"ty":4,"nm":"Sitting_Tail","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[100]}]},"r":{"a":1,"k":[{"t":0,"s":[-10],"e":[14],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":15,"s":[14],"e":[-10],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":30,"s":[-10],"e":[14],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":45,"s":[14],"e":[-10],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":60,"s":[-10],"e":[18],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":75,"s":[18],"e":[-12],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":90,"s":[-12],"e":[16],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":105,"s":[16],"e":[-10],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":120,"s":[-10],"e":[-22],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":128,"s":[-22],"e":[26],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":142,"s":[26],"e":[-15],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":155,"s":[-15],"e":[-10],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":178,"s":[-10],"e":[-10],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[-10]}]},"p":{"a":0,"k":[98,116,0]},"a":{"a":0,"k":[98,116,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"WaggingTailCore","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[16,14],[-6,-6]],"o":[[28,-5],[-6,-6],[0,0]],"v":[[100,116],[118,68],[112,76]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":7.5},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"WaggingTailRim","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[16,14],[-6,-6]],"o":[[28,-5],[-6,-6],[0,0]],"v":[[100,116],[118,68],[112,76]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":9.8},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0,"parent":1},{"ddd":0,"ind":12,"ty":4,"nm":"Lying_Body","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":239,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":240,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[75,128,0]},"a":{"a":0,"k":[75,128,0]},"s":{"a":1,"k":[{"t":182,"s":[100,100,100],"e":[102.5,97.5,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":210,"s":[102.5,97.5,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":238,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"LyingNose","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[36.5,108],[40.5,108],[38.5,110.5]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingShineL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.552,0],[0,-0.552],[0.552,0],[0,0.552]],"o":[[0.552,0],[0,0.552],[-0.552,0],[0,-0.552]],"v":[[29.5,100.3],[30.5,101.3],[29.5,102.3],[28.5,101.3]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingPupilL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.773,0],[0,-1.546],[0.773,0],[0,1.546]],"o":[[0.773,0],[0,1.546],[-0.773,0],[0,-1.546]],"v":[[31,100.2],[32.4,103],[31,105.8],[29.6,103]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.02,0.016,0.039,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEyeL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.43,0],[0,-2.099],[2.43,0],[0,2.099]],"o":[[2.43,0],[0,2.099],[-2.43,0],[0,-2.099]],"v":[[31,99.2],[35.4,103],[31,106.8],[26.6,103]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingShineR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.552,0],[0,-0.552],[0.552,0],[0,0.552]],"o":[[0.552,0],[0,0.552],[-0.552,0],[0,-0.552]],"v":[[44.5,100.3],[45.5,101.3],[44.5,102.3],[43.5,101.3]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.98,0.965,0.941,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingPupilR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-0.773,0],[0,-1.546],[0.773,0],[0,1.546]],"o":[[0.773,0],[0,1.546],[-0.773,0],[0,-1.546]],"v":[[46,100.2],[47.4,103],[46,105.8],[44.6,103]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.02,0.016,0.039,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEyeR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.43,0],[0,-2.099],[2.43,0],[0,2.099]],"o":[[2.43,0],[0,2.099],[-2.43,0],[0,-2.099]],"v":[[46,99.2],[50.4,103],[46,106.8],[41.6,103]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingHead","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-10.494,0],[0,-10.494],[10.494,0],[0,10.494]],"o":[[10.494,0],[0,10.494],[-10.494,0],[0,-10.494]],"v":[[39,84],[58,103],[39,122],[20,103]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEarLIn","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[26,92],[22,78],[33,87]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEarRIn","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[52,92],[56,78],[45,87]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEarL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[24,94],[19,74],[35,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingEarR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[54,94],[59,74],[43,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingBell","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.32,0],[0,-2.32],[2.32,0],[0,2.32]],"o":[[2.32,0],[0,2.32],[-2.32,0],[0,-2.32]],"v":[[43,114.8],[47.2,119],[43,123.2],[38.8,119]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingCollar","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[44,106],[48,123]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.878,0.22,0.314,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":5},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawBean1","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.16,0],[0,-1.16],[1.16,0],[0,1.16]],"o":[[1.16,0],[0,1.16],[-1.16,0],[0,-1.16]],"v":[[16,123.9],[18.1,126],[16,128.1],[13.9,126]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawBean2","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.049,0],[0,-1.049],[1.049,0],[0,1.049]],"o":[[1.049,0],[0,1.049],[-1.049,0],[0,-1.049]],"v":[[21,123.1],[22.9,125],[21,126.9],[19.1,125]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"FrontPaws","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-4,-2],[0,0],[0,0],[-4,2]],"o":[[0,0],[0,0],[0,0],[0,0]],"v":[[14,125],[44,121],[44,130],[14,130]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":80},"w":{"a":0,"k":1.3},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingTorso","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-6,-12],[-18,0],[-14,-4],[6,-10]],"o":[[0,0],[22,0],[12,6],[0,0]],"v":[[34,128],[62,102],[114,104],[126,128]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":13,"ty":4,"nm":"Lying_Tail","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":179,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":180,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":239,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":240,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":1,"k":[{"t":182,"s":[-7],"e":[11],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":210,"s":[11],"e":[-7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":238,"s":[-7]}]},"p":{"a":0,"k":[122,120,0]},"a":{"a":0,"k":[122,120,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"LyingTailCore","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[10,12],[-4,-4]],"o":[[22,-4],[-4,-8],[0,0]],"v":[[122,120],[146,96],[136,82]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":7.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"LyingTailRim","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[10,12],[-4,-4]],"o":[[22,-4],[-4,-8],[0,0]],"v":[[122,120],[146,96],[136,82]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":65},"w":{"a":0,"k":9.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":14,"ty":4,"nm":"Sleep_Curled_Body","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":239,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":240,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":299,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":300,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[80,128,0]},"a":{"a":0,"k":[80,128,0]},"s":{"a":1,"k":[{"t":242,"s":[100,100,100],"e":[103,97,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":270,"s":[103,97,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":298,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"SleepNose","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[66,109],[70,109],[68,111.5]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEyeL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-2,0],[0,0]],"o":[[0,0],[2,0],[0,0]],"v":[[57,104],[61,107],[65,104]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEyeR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-2,0],[0,0]],"o":[[0,0],[2,0],[0,0]],"v":[[71,104],[75,107],[79,104]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepBell","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.32,0],[0,-2.32],[2.32,0],[0,2.32]],"o":[[2.32,0],[0,2.32],[-2.32,0],[0,-2.32]],"v":[[84,110.8],[88.2,115],[84,119.2],[79.8,115]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepHead","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-9.941,0],[0,-9.941],[9.941,0],[0,9.941]],"o":[[9.941,0],[0,9.941],[-9.941,0],[0,-9.941]],"v":[[68,86],[86,104],[68,122],[50,104]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEarLIn","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[56,94],[52,82],[62,89]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEarRIn","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[80,94],[84,82],[74,89]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEarL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[54,96],[49,78],[64,88]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"SleepEarR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[82,96],[87,78],[72,88]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"CurledTailWrap","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-18,2],[-10,8]],"o":[[14,8],[18,-2],[0,0]],"v":[[50,122],[82,128],[112,116]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":80},"w":{"a":0,"k":3.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"CurledFurball","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-18.778,0],[0,-12.151],[18.778,0],[0,12.151]],"o":[[18.778,0],[0,12.151],[-18.778,0],[0,-12.151]],"v":[[80,88],[114,110],[80,132],[46,110]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":16,"ty":4,"nm":"BellyUp_Roll_Body","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":299,"s":[0],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":300,"s":[100],"e":[100],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":359,"s":[100],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"r":{"a":1,"k":[{"t":302,"s":[-7],"e":[7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":316,"s":[7],"e":[-7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":330,"s":[-7],"e":[7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":344,"s":[7],"e":[-7],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":358,"s":[-7]}]},"p":{"a":0,"k":[80,112,0]},"a":{"a":0,"k":[80,112,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"BellyNose","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.16,0],[0,-1.16],[1.16,0],[0,1.16]],"o":[[1.16,0],[0,1.16],[-1.16,0],[0,-1.16]],"v":[[41,110.9],[43.1,113],[41,115.1],[38.9,113]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyEye1","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-2,0],[0,0]],"o":[[0,0],[2,0],[0,0]],"v":[[38,104],[42,100],[46,104]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyEye2","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[-2,0],[0,0]],"o":[[0,0],[2,0],[0,0]],"v":[[48,112],[52,108],[56,112]],"c":false}}},{"ty":"st","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":2.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyHead","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-10.494,0],[0,-10.494],[10.494,0],[0,10.494]],"o":[[10.494,0],[0,10.494],[-10.494,0],[0,-10.494]],"v":[[46,89],[65,108],[46,127],[27,108]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyEar2In","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[43,91],[36,80],[50,87]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.71,0.169,0.251,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyEar1","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[34,114],[24,128],[44,124]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyEar2","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"v":[[42,92],[32,76],[52,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":82},"w":{"a":0,"k":1.4},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyBell","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-2.375,0],[0,-2.375],[2.375,0],[0,2.375]],"o":[[2.375,0],[0,2.375],[-2.375,0],[0,-2.375]],"v":[[61,103.7],[65.3,108],[61,112.3],[56.7,108]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.894,0.561,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyCollar","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[62,102],[65,122]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.878,0.22,0.314,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":5},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PadFrontL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.491,0],[0,-1.491],[1.491,0],[0,1.491]],"o":[[1.491,0],[0,1.491],[-1.491,0],[0,-1.491]],"v":[[68,83.3],[70.7,86],[68,88.7],[65.3,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawFrontL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.038,0],[0,-4.142],[3.038,0],[0,4.142]],"o":[[3.038,0],[0,4.142],[-3.038,0],[0,-4.142]],"v":[[68,80.5],[73.5,88],[68,95.5],[62.5,88]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":75},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PadFrontR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.491,0],[0,-1.491],[1.491,0],[0,1.491]],"o":[[1.491,0],[0,1.491],[-1.491,0],[0,-1.491]],"v":[[82,81.3],[84.7,84],[82,86.7],[79.3,84]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawFrontR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.038,0],[0,-4.142],[3.038,0],[0,4.142]],"o":[[3.038,0],[0,4.142],[-3.038,0],[0,-4.142]],"v":[[82,78.5],[87.5,86],[82,93.5],[76.5,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":75},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PadBackL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.491,0],[0,-1.491],[1.491,0],[0,1.491]],"o":[[1.491,0],[0,1.491],[-1.491,0],[0,-1.491]],"v":[[98,83.3],[100.7,86],[98,88.7],[95.3,86]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawBackL","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.038,0],[0,-4.142],[3.038,0],[0,4.142]],"o":[[3.038,0],[0,4.142],[-3.038,0],[0,-4.142]],"v":[[98,80.5],[103.5,88],[98,95.5],[92.5,88]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":75},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PadBackR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-1.491,0],[0,-1.491],[1.491,0],[0,1.491]],"o":[[1.491,0],[0,1.491],[-1.491,0],[0,-1.491]],"v":[[111,86.3],[113.7,89],[111,91.7],[108.3,89]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.62,0.733,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"PawBackR","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-3.038,0],[0,-4.142],[3.038,0],[0,4.142]],"o":[[3.038,0],[0,4.142],[-3.038,0],[0,-4.142]],"v":[[111,83.5],[116.5,91],[111,98.5],[105.5,91]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":75},"w":{"a":0,"k":1.2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyTorso","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-17.674,0],[0,-10.494],[17.674,0],[0,10.494]],"o":[[17.674,0],[0,10.494],[-17.674,0],[0,-10.494]],"v":[[84,93],[116,112],[84,131],[52,112]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"r":1},{"ty":"st","c":{"a":0,"k":[0.851,0.702,0.486,1.0]},"o":{"a":0,"k":88},"w":{"a":0,"k":1.6},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","nm":"BellyTail","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[0,0],[8,8],[-4,-4]],"o":[[14,-2],[-4,-6],[0,0]],"v":[[114,116],[136,104],[128,92]],"c":false}}},{"ty":"st","c":{"a":0,"k":[0.086,0.075,0.141,1.0]},"o":{"a":0,"k":100},"w":{"a":0,"k":7},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":18,"ty":4,"nm":"Ground_Shadow","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":0,"k":0},"p":{"a":0,"k":[80,132,0]},"a":{"a":0,"k":[80,132,0]},"s":{"a":1,"k":[{"t":0,"s":[100,100,100],"e":[115,110,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":128,"s":[115,110,100],"e":[55,65,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":142,"s":[55,65,100],"e":[112,105,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":155,"s":[112,105,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[100,100,100],"e":[145,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":182,"s":[145,100,100],"e":[145,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":238,"s":[145,100,100],"e":[120,110,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":242,"s":[120,110,100],"e":[120,110,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":298,"s":[120,110,100],"e":[135,105,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":302,"s":[135,105,100],"e":[135,105,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":358,"s":[135,105,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"GroundShadow","it":[{"ty":"sh","ks":{"a":0,"k":{"i":[[-16.569,0],[0,-2.761],[16.569,0],[0,2.761]],"o":[[16.569,0],[0,2.761],[-16.569,0],[0,-2.761]],"v":[[80,127],[110,132],[80,137],[50,132]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.0,0.0,0.0,1.0]},"o":{"a":0,"k":45},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":360,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":3,"nm":"Head_Rig","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":0,"s":[0],"e":[2.2],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":30,"s":[2.2],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":60,"s":[0],"e":[-12],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":75,"s":[-12],"e":[8],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":95,"s":[8],"e":[-3.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":110,"s":[-3.5],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":120,"s":[0],"e":[-3.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":128,"s":[-3.5],"e":[5.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":142,"s":[5.5],"e":[-2.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":155,"s":[-2.5],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":178,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"p":{"a":1,"k":[{"t":0,"s":[78,72,0],"e":[78,73.2,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":30,"s":[78,73.2,0],"e":[78,72,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":60,"s":[78,72,0],"e":[76.2,72.5,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":75,"s":[76.2,72.5,0],"e":[79.8,72.5,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":105,"s":[79.8,72.5,0],"e":[78,72,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":120,"s":[78,72,0],"e":[78,74.5,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":128,"s":[78,74.5,0],"e":[78,69.5,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":142,"s":[78,69.5,0],"e":[78,73.5,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":155,"s":[78,73.5,0],"e":[78,72,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[78,72,0],"e":[78,72,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[78,72,0]}]},"a":{"a":0,"k":[78,72,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"ip":0,"op":360,"st":0,"bm":0,"parent":1},{"ddd":0,"ind":1,"ty":3,"nm":"Root_Rig","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":0,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":128,"s":[0],"e":[-4.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":138,"s":[-4.5],"e":[4.5],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":146,"s":[4.5],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":156,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":178,"s":[0],"e":[0],"i":{"x":[0.42],"y":[1.0]},"o":{"x":[0.58],"y":[0.0]}},{"t":360,"s":[0]}]},"p":{"a":1,"k":[{"t":0,"s":[80,130,0],"e":[80,130,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":60,"s":[80,130,0],"e":[80,130,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":120,"s":[80,130,0],"e":[80,134,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":128,"s":[80,134,0],"e":[80,95,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":142,"s":[80,95,0],"e":[80,132,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":155,"s":[80,132,0],"e":[80,129,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":166,"s":[80,129,0],"e":[80,130,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[80,130,0],"e":[80,130,0],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[80,130,0]}]},"a":{"a":0,"k":[80,130,0]},"s":{"a":1,"k":[{"t":0,"s":[100,100,100],"e":[101.5,98.5,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":30,"s":[101.5,98.5,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":60,"s":[100,100,100],"e":[101,99,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":90,"s":[101,99,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":120,"s":[100,100,100],"e":[114,84,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":128,"s":[114,84,100],"e":[90,113,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":142,"s":[90,113,100],"e":[110,89,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":155,"s":[110,89,100],"e":[97,103,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":166,"s":[97,103,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":178,"s":[100,100,100],"e":[100,100,100],"i":{"x":[0.42,0.42,0.42],"y":[1.0,1.0,1.0]},"o":{"x":[0.58,0.58,0.58],"y":[0.0,0.0,0.0]}},{"t":360,"s":[100,100,100]}]}},"ao":0,"ip":0,"op":360,"st":0,"bm":0}]};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js';document.head.appendChild(s);"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const catBtn = document.getElementById('catBtnEl');
+  const floatingBox = document.getElementById('floatingCatContainer');
+  const nestBox = document.getElementById('catNestSanctuary');
+  const nestActor = document.getElementById('catNestActor');
+  const emptyPaw = document.getElementById('emptyCushionPaw');
+  const rippleRing = document.getElementById('cushionRippleRing');
+  const houseBubble = document.getElementById('catHouseBubble');
+  const houseBubbleText = document.getElementById('catHouseBubbleText');
+  const gardenBubble = document.getElementById('catBubbleTip');
+
+  if (catBtn) {
+    const isMob = window.innerWidth <= 640;
+    catBtn.style.width = isMob ? '64px' : '78px';
+    catBtn.style.height = isMob ? '64px' : '78px';
+  }
+
+  // -------------------------------------------------------------------------
+  // A. KHO HỘI THOẠI PHONG PHÚ DÀNH RIÊNG CHO MÈO KHI Ở TRONG NHÀ
+  // -------------------------------------------------------------------------
+  const CAT_POOL_INDOOR_HOME = [
+    // --- BÓNG LƯNG CÔ GÁI NHỎ (SEN NOW) NGỒI GHẾ NGẮM TRĂNG DƯỚI CỬA SỔ ---
+    "Bà thấy cô gái nhỏ đang ngồi bên bàn Tarot dưới khung cửa sổ thiên văn kia hơm? Sen Now của tui đang chạm tay vào 3 lá bài và quả cầu pha lê để kết nối năng lượng cho khách đó 🔮🌙",
+    "Mỗi tối sen Now đều thắp nến bên bàn Tarot dưới cửa sổ thiên văn, vừa ngắm chòm sao Bắc Đẩu vừa trải bài tháo gỡ từng nút thắt cho mấy bà 🕯️🃏",
+    "Nhìn bóng lưng nhỏ nhắn của sen Now dưới ánh trăng thương ghê hơm? Ngoài đời nhìn mảnh mai vậy thôi chứ gánh cả bầu trời tâm sự cho hàng trăm khách đó nha 🌙🫂",
+    "Tui nằm sưởi ấm bên bếp lửa, còn sen Now thì ngồi ghế tựa ngắm trăng khuyết ngoài cửa sổ... Căn phòng nhỏ này lúc nào cũng bình yên như một thước phim Ghibli vậy á 🎬✨",
+    "Ê bà nhìn kỹ mái tóc dài cài nơ của sen Now dưới cửa sổ kìa! Nãy giờ ngồi ngắm sao suy tư chuyện nhân sinh cả buổi chưa chịu đi ngủ luôn á 🌌🎀",
+    "Nhiều đêm 2-3 giờ sáng, sen Now vẫn ngồi đúng chiếc ghế kia dưới cửa sổ nghe Voice Note của khách Cú Đêm, còn tui thì nằm cuộn tròn dưới chân giữ ấm cho sen 🦉🕯️",
+    "Bà có bao giờ giống cô gái nhỏ dưới khung cửa sổ kia hơm? Ngồi một mình trong đêm yên tĩnh, nhìn lên bầu trời trăng sao và tự hỏi lòng mình thực sự muốn gì... 🌙💭",
+    "Mỗi lần thấy bóng lưng sen Now ngồi im lặng bên cửa sổ lâu quá, tui lại lon ton chạy lại nhảy lên đùi sen kêu 'meo~' một tiếng để kéo sen về thực tại 🐾💝",
+    "Ánh trăng vàng xuyên qua ô cửa vòm chiếu lên vai áo sen Now đẹp như tranh vẽ luôn ha bà! Ở góc nhỏ này không có sự phán xét, chỉ có sự lắng nghe thôi 🪟✨",
+    "Sen Now bảo ngồi dưới cửa sổ ngắm trăng giúp trực giác trong trẻo hơn để kết nối với các lá bài Tarot. Còn tui thì thấy nằm cạnh bếp lửa ấm bụng hơn nhiều! 🔥😹",
+
+    // --- CHUYỆN VUI VẺ HÀI HƯỚC ĐỜI THƯỜNG GIỮA MÈO ĐEN & SEN NOW (50+ CÂU) ---
+    "Kể xấu sen Now xíu nha: Trên Threads nói chuyện Carl Jung ngầu lòi sắc bén vậy thôi, chứ tắt máy quay sang nựng tui toàn giọng em bé sến rện 'cục vàng của mẹ ơi' 😹🍼",
+    "Hôm qua tui lén nhảy lên bàn giẫm trúng lá bài The Tower lúc sen Now đang trải bài, làm sen hết hồn tưởng vũ trụ gửi cảnh báo khẩn cấp, ai dè là tui đi tìm pate! 🐾🃏",
+    "Sen Now có cái tật hễ khách nhắn tin kể chuyện buồn là ngồi thở dài theo, xong quay qua ôm tui siết chặt cứng ngắc như ôm gối ôm vậy á, nghẹt thở luôn sen ơi! 🫂😹",
+    "Bí mật động trời: Mỗi lần Now chốt được ca khách xem xong nhẹ lòng, tui lại được thưởng 1 thanh súp Ciao cá hồi. Nên bà mà book lịch là tui có ăn ngon liền á nha! 🐟✨",
+    "2 giờ sáng tui đang nằm cuộn tròn ngủ ngon lành bên bếp lửa thì sen Now bật đèn trải bài ca Cú Đêm, xong tui ngồi gật gù hóng chuyện khách còn chăm chú hơn cả sen! 🦉👀",
+    "Tui với sen Now vừa cãi nhau một trận nảy lửa: Tui đòi nằm đè lên cuốn sổ ghi chép, còn sen thì bảo 'tránh ra cho mẹ làm việc'. Kết quả? Tui thắng, nằm chễm chệ giữa bàn luôn! 😼👑",
+    "Mỗi lần sen Now ngồi viết bài Threads tâm lý học, tui toàn nằm bên bếp lửa ngáp một cái rõ to để nhắc: 'Viết nhanh lên sen ơi, tới giờ khui pate tối rồi!' ⏰🥫",
+    "Sen Now hay bảo tui là 'Trợ lý tâm linh cấp cao', nghe oai ghê chưa? Thực chất công việc chính của tui là sưởi ấm cái thảm nhung và kiểm tra chất lượng hạt mỗi ngày! 🎓🐾",
+    "Hồi sáng tui lén cắn thử góc bộ bài Tarot mới của sen Now xem có vị gì, bị sen phát hiện bắt úp mặt vào tường kiểm điểm 10 phút... quê xệ muốn độn thổ luôn á 😿📦",
+    "Bà đừng tin vẻ mặt điềm tĩnh của sen Now nha! Có bữa đọc feedback khách khen dễ thương quá, sen cười tủm tỉm một mình suốt cả buổi chiều làm tui tưởng sen trúng số! 🥰📱",
+    "Tui để ý cứ hễ trời trở gió se lạnh là sen Now lại nhóm cái bếp lửa này lên, pha ly trà ấm trên bệ lò rồi hai cô trò ngồi nghe nhạc lofi chill tới khuya luôn 🔥🍵",
+    "Sen Now dặn tui: 'Ở nhà tiếp khách phải giữ hình tượng mèo đen huyền bí nha con'. Dạ vâng, huyền bí được đúng 3 phút là tui lăn ngửa phơi bụng đòi gãi cằm liền! 🙃😻",
+    "Có hôm sen Now mải tư vấn cho khách quên luôn giờ cho tui ăn tối, tui bèn ngồi sát bếp lửa nhìn chằm chằm vào lưng sen bằng ánh mắt hình viên đạn... 5 phút sau có pate liền! 🔫😹",
+    "Tui với sen Now có quy ước ngầm: Sen lo gỡ rối nhận thức bằng CBT, còn tui lo phần tỏa năng lượng dễ thương và hút sạch xui xẻo cho khách ghé thăm! 🤝✨",
+    "Bữa trước sen Now bắt tui đội cái mũ Noel với mấn Tết chụp hình test giao diện web, tui vùng vằng giãy nảy mãi mới chịu ngồi yên 5 giây cho sen bấm máy đó! 📸🎩",
+    "Sen Now hay trêu tui dạo này nằm bên bếp lửa ăn no ngủ kỹ nên bụng hơi tròn... Tui đã đính chính 100 lần rồi: Đó là 'túi chứa năng lượng vũ trụ', không phải mỡ! 😾🔮",
+    "Mỗi lúc sen Now căng thẳng vì đọc nhiều câu chuyện buồn của khách, tui lại chạy tới dụi đầu vào tay sen kêu 'rừ rừ' tần số 432Hz để sạc lại pin cho sen liền 💖🔋",
+    "Tui phát hiện sen Now có siêu năng lực đọc vị tâm lý cực đỉnh, nhưng lại có điểm yếu chí mạng là cứ thấy mèo nằm phơi bụng là tự động bỏ hết công việc xuống nựng! 🐾💘",
+    "Hôm nào bà thử nhắn cho sen Now hỏi thăm 'Bé Mèo Đen hôm nay có ngoan không?' đi, đảm bảo sen Now cười tít mắt kể tội tui từ sáng tới tối cho bà nghe! 🗣️😹",
+    "Tui nghi ngờ sen Now nuôi tui không phải để bắt chuột đâu, mà để có đứa ngồi nghe sen tập dượt mấy câu phân tích tâm lý trước khi trả bài cho khách á! 🎤🐱",
+    "Có bữa nửa đêm tui mơ thấy đang rượt bắt con bướm vàng, chân đạp loạn xạ trên thảm nhung làm sen Now đang ngồi ghế bên cửa sổ giật mình tưởng có trộm! 🦋🤣",
+    "Hồi trưa sen Now vừa trải bộ bài ra bàn, tui đi ngang qua quơ cái đuôi một phát bay hết 3 lá xuống đất. Sen nhìn xuống thấy đúng 3 lá giải đáp trúng phóc câu hỏi của khách luôn! 🎯🔮",
+    "Bà biết ai là người duyệt mấy bài đăng 200K view trên Threads của sen Now hơm? Chính là tui đó! Bài nào viết xong mà tui gật đầu kêu 'meo' một tiếng là auto lên xu hướng! 📈😼",
+    "Sen Now có thói quen trước khi vào phiên Google Meet với khách là phải chỉnh lại tóc tai 5 lần trước gương, xong quay sang hỏi tui: 'Mẹ nhìn lịch sự chưa con?' 🪞😹",
+    "Hôm qua trời mưa rả rích, sen Now ngồi bên cửa sổ uống cacao nóng, còn tui nằm sát lò sưởi nghe tiếng củi nổ lách tách... Bình yên tới mức chẳng muốn đi đâu nữa 🌧️🔥",
+    "Có lần khách đang tâm sự chuyện người yêu cũ hãm quá, tui ngồi kế bên nghe bức xúc giùm mà kêu 'meo grừ' một tiếng rõ to vô mic Voice Note làm khách bật cười khanh khách luôn! 🎙️😾",
+    "Sen Now kỹ tính lắm nha, mỗi lần xem bài xong là lau từng lá bài bằng khăn mềm thơm phức, còn tui thì nằm canh chừng không cho con muỗi nào dám bay vô phòng! 🛡️🃏",
+    "Đố bà biết giữa tui với sen Now ai thức khuya giỏi hơn? Tất nhiên là sen Now rồi! Tui chỉ giỏi thức canh tới 1 giờ sáng là hai mắt díp lại ngủ khò khò bên bếp lửa à 😴🔥",
+    "Bữa nọ sen Now mua cho tui cái chuông vàng đeo cổ mới, tui khoái quá chạy vòng vòng quanh ghế cửa sổ suốt nửa tiếng làm sen chóng hết cả mặt 🔔🐾",
+    "Mỗi khi có khách nhắn tin bảo 'Nhờ Now mà mình ngủ ngon hơn rồi', sen Now vui tới mức thưởng liền cho tui 2 viên cỏ mèo catnip, phê chữ ê kéo dài luôn! 🌿😻",
+    "Tui hay lẻn trèo lên thành ghế gỗ sau lưng sen Now để ngó ké ra cửa sổ xem trên trăng có con cá nướng nào bay ngang qua hơm 🌙🐟",
+    "Sen Now bảo bộ lông đen viền ánh vàng của tui giống như bầu trời đêm có ánh trăng rọi vào vậy. Nghe văn thơ lai láng ghê hơm bà? 🌌✨",
+    "Hễ hôm nào sen Now bận học thêm tài liệu tâm lý học CBT mới là tui tự giác nằm im trên thảm nhung không quậy phá, lâu lâu chỉ thò chân khều nhẹ đòi gãi đầu thôi 📚🐾",
+    "Có bà khách quen cứ mỗi lần đặt lịch là dặn trước: 'Now nhớ cho mình nghe ké tiếng mèo kêu trong Voice Note nha!'. Thế là tui phải làm ca sĩ bất đắc dĩ luôn! 🎵🐱",
+    "Sen Now thương tui số 1, mùa đông sợ tui lạnh chân nên đặt riêng tấm thảm nhung đỏ viền vàng ngay cạnh lò sưởi này cho tui nằm độc quyền đó 🛋️❤️",
+
+    // --- KHÔNG GIAN CĂN NHÀ GỖ ẤM ÁP, TRĂNG SAO & CHỮA LÀNH ---
+    "Meo~ Lướt tới tận cuối trang rồi thì ghé vô căn nhà gỗ của tui và sen Now ngồi nghỉ chân xíu đi bà, ngoài kia gió sương lạnh lắm 🔥🏠",
+    "Ê bà thấy cái lò sưởi gạch góc phải cháy ấm hơm? Nằm duỗi 4 cái chân măng cụt bên ánh lửa hồng vầy bao nhiêu mệt mỏi tan biến hết trơn 🛋️🔥",
+    "Ống khói nhà tui đang nhả toàn trái tim hồng bay lên trời kìa! Gửi hết vía lành, bình an và sự sáng suốt tới cho bà nha ♥✨",
+    "Nhìn qua khung cửa sổ vòm bên trái kìa bà... Trăng khuyết treo lơ lửng giữa trời đêm, lòng bà hôm nay đã nhẹ đi được phần nào chưa? 🌙💖",
+    "Bà mà chưa muốn đặt lịch liền thì bấm mấy ô ngay bên dưới ghé Threads với IG của sen Now chơi nha, ngày nào sen cũng viết tản văn hay lắm 🌷📱",
+    "Trên tường gỗ phía sau có khắc chữ NowNow Tarot in mờ kìa bà, nơi này lúc nào cũng giữ sẵn một ngọn lửa ấm chờ mấy tâm hồn nhiều tâm sự ghé về 🏡🕯️",
+    "Ở trong nhà nghe tiếng lửa cháy tí tách vầy tự dưng tui lim dim buồn ngủ ngang luôn á... Mà bà chạm vào tui là tui tỉnh táo bật nhảy liền cho coi! 😻⚡",
+    "Ngoài vườn chạy nhảy cả buổi mỏi chân quá chừng, về tới thảm nhung cạnh bếp lửa và ngồi cạnh sen Now là sướng rơn cả người 🐈‍⬛✨",
+    "Bà thấy chiếc đèn lồng vàng đung đưa dưới mái hiên hơm? Sen Now thắp sáng suốt đêm để bà dễ tìm đường về góc nhỏ bình yên này đó 🏮💛",
+    "Nếu hôm nay lòng còn lấn cấn chưa muốn nói ra, cứ ngồi lại căn phòng này ngắm bóng lưng sen Now bên cửa sổ và nghe tiếng lửa ấm một lát cũng được mà 🌙🫂",
+    "Tui để ý bà đọc kỹ từ đầu trang tới tận đây luôn nha! Vũ trụ chắc chắn đã gửi đúng tín hiệu bà đang tìm kiếm rồi đó 🔮🌟",
+    "Đêm khuya mà ghé vào ngôi nhà nhỏ này là đúng bài luôn: có bếp lửa ấm, có sen Now trầm tư bên cửa sổ, có mèo đen bầu bạn, chẳng ai phán xét bà cả 🕯️🏡"
+  ];
+
+  const EN_CAT_INDOOR_HOME = [
+    "Meow~ See that petite girl sitting on the wooden chair under the arched window? That's my human NowNow, quietly gazing at the crescent moon after a deep reading 🌙🪑",
+    "Let me spill some tea on NowNow: online she's all sharp Carl Jung psychology, IRL she baby-talks me by the fireplace in the cheesiest voice ever! 😹🍼",
+    "Yesterday I stepped right onto The Tower card while Now was shuffling—she thought the universe was sending an urgent warning, turns out I just wanted salmon treats! 🐾🃏",
+    "Whenever a late-night reading ends and the client feels relieved, I get rewarded with a tuna puree tube. So booking a session directly feeds this black cat! 🐟✨",
+    "Now tells me to maintain a mysterious black-cat aura for guests... which lasts about 3 minutes before I flop belly-up on this velvet rug demanding chin scratches! 🙃😻",
+    "Sometimes at 2 AM, Now sits quietly by that moonlit window listening to Night Owl voice notes while I curl up by the hearth keeping her feet warm 🦉🕯️",
+    "Come warm your paws by our crackling fireplace! Look at the little hearts floating out of the chimney—sending pure calm straight to your soul ♥🔥",
+    "Look at the crescent moon shining through the window onto Now's shoulder... Has your heart started feeling a little lighter tonight? 🌙💖",
+    "One time I swished my tail and knocked 3 Tarot cards off the table—and they turned out to be the exact 3 cards answering the client's question! 🎯🔮",
+    "If you aren't ready to book a reading yet, tap the social cards right below to hang out on NowNow's Threads & IG 🌷📱"
+  ];
+
+  const deckIndoorVi = (typeof NonRepeatingShuffleBag === 'function')
+    ? new NonRepeatingShuffleBag(CAT_POOL_INDOOR_HOME)
+    : { next: () => CAT_POOL_INDOOR_HOME[Math.floor(Math.random() * CAT_POOL_INDOOR_HOME.length)] };
+
+  const deckIndoorEn = (typeof NonRepeatingShuffleBag === 'function')
+    ? new NonRepeatingShuffleBag(EN_CAT_INDOOR_HOME)
+    : { next: () => EN_CAT_INDOOR_HOME[Math.floor(Math.random() * EN_CAT_INDOOR_HOME.length)] };
+
+  // -------------------------------------------------------------------------
+  // B. CỖ MÁY LOTTIE ĐỒNG NHẤT 6 TƯ THẾ KHÔNG GIẬT HÌNH
+  // -------------------------------------------------------------------------
+  const SEGMENTS = {
+    idle:    [0, 60],
+    curious: [60, 120],
+    jump:    [120, 178],
+    lying:   [182, 238],
+    sleep:   [242, 298],
+    belly:   [302, 358]
+  };
+
+  let gardenAnim = null;
+  let nestAnim = null;
+  let currentCatPose = '';
+  let tapStreak = 0;
+  let tapResetTimer = null;
+  let houseBubbleTimer = null;
+  let activeHatKey = 'noel';
+
+  window.__catInHouse = false;
+  window.__catHouseTransitioning = false;
+  let gardenScale = 1;
+  let gardenOpacity = 1;
+
+  function cloneLottieWithHat(hatKey) {
+    const cloned = JSON.parse(JSON.stringify(window.NOWNOW_CAT_LOTTIE_DATA));
+    const hatMap = {
+      noel: 'hat_noel',
+      tet: 'hat_tet',
+      summer: 'hat_summer',
+      halloween: 'hat_halloween'
+    };
+    const targetHatName = hatMap[hatKey] || 'hat_noel';
+    cloned.layers.forEach(layer => {
+      if (layer.nm && layer.nm.startsWith('hat_')) {
+        if (layer.nm === targetHatName) {
+          layer.ks.o = {
+            a: 1,
+            k: [
+              { t: 0, s: [100], e: [100], i: { x: [0.42], y: [1] }, o: { x: [0.58], y: [0] } },
+              { t: 179, s: [100], e: [0], i: { x: [0.42], y: [1] }, o: { x: [0.58], y: [0] } },
+              { t: 180, s: [0], e: [0], i: { x: [0.42], y: [1] }, o: { x: [0.58], y: [0] } },
+              { t: 359, s: [0], e: [100], i: { x: [0.42], y: [1] }, o: { x: [0.58], y: [0] } },
+              { t: 360, s: [100] }
+            ]
+          };
+        } else {
+          layer.ks.o = { a: 0, k: 0 };
+        }
+      }
+    });
+    return cloned;
+  }
+
+  function setUnifiedCatPose(poseName, forceRestart = false) {
+    if (!forceRestart && currentCatPose === poseName) return;
+    const seg = SEGMENTS[poseName] || SEGMENTS.idle;
+    currentCatPose = poseName;
+
+    if (gardenAnim) {
+      try { gardenAnim.playSegments(seg, true); } catch (e) {}
+    }
+    if (nestAnim) {
+      try { nestAnim.playSegments(seg, true); } catch (e) {}
+    }
+
+    const badge = document.getElementById('catNestStatusBadge');
+    if (badge) {
+      if (!window.__catInHouse) {
+        badge.textContent = 'Đang dạo chơi ngoài vườn...';
+      } else {
+        const labels = {
+          idle: 'Đang ngồi vẫy đuôi...',
+          curious: 'Đang nghiêng đầu nghe bà...',
+          jump: 'Đang bật nhảy tung tăng!',
+          lying: 'Đang nằm dài sưởi ấm...',
+          sleep: 'Đang cuộn tròn ngủ zZz...',
+          belly: 'Đang lăn ngửa phơi bụng!'
+        };
+        badge.textContent = labels[poseName] || 'Đang nằm dài sưởi ấm...';
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // C. HỆ THỐNG BONG BÓNG THOẠI ĐỒNG NHẤT (TỰ ĐỘNG CHUYỂN GIỮA VƯỜN & TRONG NHÀ)
+  // -------------------------------------------------------------------------
+  function hideHouseBubble() {
+    if (houseBubble) houseBubble.classList.add('hidden-tip');
+    if (houseBubbleTimer) clearTimeout(houseBubbleTimer);
+  }
+
+  if (houseBubble) {
+    houseBubble.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      hideHouseBubble();
+    });
+  }
+
+  const origShowCatTipUnified = window.showCatTip;
+  window.showCatTip = function(text, duration = 5600) {
+    if (document.body.classList.contains('portal-open') &&
+        activeSubWebType !== 'viral' &&
+        activeSubWebType !== 'feedbackUnified') return;
+
+    if (window.__catInHouse && houseBubble && houseBubbleText) {
+      if (gardenBubble) gardenBubble.classList.add('hidden-tip');
+      houseBubbleText.innerHTML = text;
+      houseBubble.classList.remove('hidden-tip');
+      if (houseBubbleTimer) clearTimeout(houseBubbleTimer);
+      houseBubbleTimer = setTimeout(() => {
+        houseBubble.classList.add('hidden-tip');
+      }, duration);
+    } else if (typeof origShowCatTipUnified === 'function') {
+      hideHouseBubble();
+      origShowCatTipUnified(text, duration);
+    }
+  };
+
+  // -------------------------------------------------------------------------
+  // D. HIỆU ỨNG MÈO NHẢY VÀO NHÀ / NHẢY RA KHỎI NHÀ MƯỢT MÀ
+  // -------------------------------------------------------------------------
+  function triggerCushionRipple() {
+    if (!rippleRing) return;
+    rippleRing.classList.remove('pulse');
+    void rippleRing.offsetWidth;
+    rippleRing.classList.add('pulse');
+  }
+
+  function enterCatHouse() {
+    if (window.__catInHouse || window.__catHouseTransitioning) return;
+    window.__catInHouse = true;
+    window.__catHouseTransitioning = true;
+
+    if (gardenBubble) gardenBubble.classList.add('hidden-tip');
+    setUnifiedCatPose('jump', true);
+
+    // 1. Mèo ngoài vườn nhảy hướng thẳng vào tọa độ của ổ gối nhung trong nhà
+    if (floatingBox && nestBox) {
+      const houseRect = nestBox.getBoundingClientRect();
+      const targetX = houseRect.left + houseRect.width * 0.5 - 35;
+      const targetY = Math.max(80, Math.min(window.innerHeight - 90, houseRect.top + houseRect.height * 0.55));
+      floatingBox.style.transition = 'transform 0.55s cubic-bezier(0.34, 1.35, 0.64, 1), opacity 0.45s ease 0.12s';
+      floatingBox.style.transform = `translate3d(${Math.round(targetX)}px, ${Math.round(targetY)}px, 0) scale(0.35)`;
+      floatingBox.style.opacity = '0';
+      floatingBox.style.pointerEvents = 'none';
+    }
+
+    // 2. Sau 230ms, mèo 2x đáp xuống gối nhung trong nhà với hiệu ứng nảy êm ái
+    setTimeout(() => {
+      if (emptyPaw) emptyPaw.style.opacity = '0';
+      if (nestActor) {
+        nestActor.classList.remove('anim-leave');
+        nestActor.classList.add('in-house', 'anim-enter');
+      }
+      triggerCushionRipple();
+    }, 230);
+
+    // 3. Kết thúc chuyển cảnh -> Mèo nằm dài thư giãn & cất tiếng chào trong nhà
+    setTimeout(() => {
+      window.__catHouseTransitioning = false;
+      if (floatingBox) floatingBox.style.transition = '';
+      if (nestActor) nestActor.classList.remove('anim-enter');
+
+      const hr = new Date().getHours();
+      setUnifiedCatPose((hr >= 23 || hr < 4) ? 'sleep' : 'lying', true);
+
+      const isEn = window.currentNowNowLang === 'en';
+      const welcomeHomeLine = isEn ? deckIndoorEn.next() : deckIndoorVi.next();
+      window.showCatTip(welcomeHomeLine, 6200);
+    }, 640);
+  }
+
+  function leaveCatHouse() {
+    if (!window.__catInHouse || window.__catHouseTransitioning) return;
+    window.__catInHouse = false;
+    window.__catHouseTransitioning = true;
+
+    hideHouseBubble();
+    setUnifiedCatPose('jump', true);
+
+    // 1. Mèo 2x trong nhà bật nhảy ra khỏi gối nhung
+    if (nestActor) {
+      nestActor.classList.remove('anim-enter');
+      nestActor.classList.add('anim-leave');
+    }
+    setTimeout(() => {
+      if (nestActor) {
+        nestActor.classList.remove('in-house', 'anim-leave');
+      }
+      if (emptyPaw) emptyPaw.style.opacity = '0.45';
+    }, 380);
+
+    // 2. Mèo ngoài vườn xuất phát từ hướng ngôi nhà nhảy vọt về góc màn hình
+    if (floatingBox) {
+      const { w, h, margin } = (typeof getCatDimensions === 'function')
+        ? getCatDimensions()
+        : { w: 68, h: 68, margin: 16 };
+      const destX = (typeof catPosX === 'number' && catPosX > 0) ? catPosX : (window.innerWidth - w - margin);
+      const destY = (typeof catPosY === 'number' && catPosY > 0) ? catPosY : (window.innerHeight - h - margin);
+
+      floatingBox.style.transition = 'none';
+      floatingBox.style.transform = `translate3d(${Math.round(destX - 30)}px, ${Math.round(Math.min(window.innerHeight - 60, destY + 40))}px, 0) scale(0.4)`;
+      floatingBox.style.opacity = '0';
+      void floatingBox.offsetWidth;
+
+      floatingBox.style.transition = 'transform 0.58s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.38s ease';
+      floatingBox.style.transform = `translate3d(${Math.round(destX)}px, ${Math.round(destY)}px, 0) scale(${gardenScale})`;
+      floatingBox.style.opacity = String(gardenOpacity);
+      floatingBox.style.pointerEvents = 'auto';
+    }
+
+    setTimeout(() => {
+      window.__catHouseTransitioning = false;
+      if (floatingBox) floatingBox.style.transition = '';
+      setUnifiedCatPose('idle', true);
+
+      const isEn = window.currentNowNowLang === 'en';
+      window.showCatTip(
+        isEn
+          ? "Meow~ Heading back up? I'm right beside you again! 🐾✨"
+          : "Meo~ Bà lướt lên trên hả? Tui chạy vọt ra vườn hộ tống bà liền nè! 🐾✨",
+        4600
+      );
+    }, 600);
+  }
+
+  window.handleHouseCatTap = function() {
+    if (!window.__catInHouse) {
+      enterCatHouse();
+      if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+      return;
+    }
+    window.pokeRealCatMeow();
+  };
+
+  // -------------------------------------------------------------------------
+  // E. KHỞI TẠO LOTTIE & ĐỒNG BỘ MŨ 4 MÙA
+  // -------------------------------------------------------------------------
+  function mountLottieInstances(hatKey) {
+    if (!window.lottie || !window.NOWNOW_CAT_LOTTIE_DATA) return;
+    const gardenEl = document.getElementById('catGardenLottie');
+    const nestEl = document.getElementById('catNestLottie');
+
+    if (gardenAnim) { try { gardenAnim.destroy(); } catch (e) {} }
+    if (nestAnim) { try { nestAnim.destroy(); } catch (e) {} }
+
+    if (gardenEl) {
+      gardenEl.innerHTML = '';
+      gardenAnim = lottie.loadAnimation({
+        container: gardenEl,
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        animationData: cloneLottieWithHat(hatKey)
+      });
+      const fbSvg = document.getElementById('catGardenFallbackSvg');
+      if (fbSvg) fbSvg.style.display = 'none';
+    }
+
+    if (nestEl) {
+      nestEl.innerHTML = '';
+      nestAnim = lottie.loadAnimation({
+        container: nestEl,
+        renderer: 'svg',
+        loop: true,
+        autoplay: false,
+        animationData: cloneLottieWithHat(hatKey)
+      });
+    }
+
+    const savedPose = currentCatPose || (window.__catInHouse ? 'lying' : 'idle');
+    currentCatPose = '';
+    setUnifiedCatPose(savedPose, true);
+  }
+
+  function initNowNowLottie(retries = 0) {
+    if (!window.lottie) {
+      if (retries < 50) setTimeout(() => initNowNowLottie(retries + 1), 100);
+      return;
+    }
+    mountLottieInstances(activeHatKey);
+
+    setInterval(() => {
+      if ((typeof isDraggingCat !== 'undefined' && isDraggingCat) || window.__catHouseTransitioning) return;
+      const idleSec = (Date.now() - (typeof lastInteractionTimestamp !== 'undefined' ? lastInteractionTimestamp : Date.now())) / 1000;
+      const hr = new Date().getHours();
+
+      if (idleSec >= 20 || hr >= 23 || hr < 4) {
+        setUnifiedCatPose('sleep');
+      } else if (window.__catInHouse || idleSec >= 9) {
+        if (currentCatPose !== 'sleep') setUnifiedCatPose('lying');
+      } else {
+        setUnifiedCatPose(currentCatPose === 'idle' ? 'curious' : 'idle');
+      }
+    }, 6500);
+  }
+
+  const prevSetSeasonalTheme = window.setSeasonalTheme;
+  if (typeof prevSetSeasonalTheme === 'function') {
+    window.setSeasonalTheme = function(mode, silent) {
+      prevSetSeasonalTheme.apply(this, arguments);
+      const resolvedKey = (mode === 'auto' && typeof detectAutoSeasonKey === 'function')
+        ? detectAutoSeasonKey()
+        : mode;
+      if (resolvedKey && resolvedKey !== activeHatKey) {
+        activeHatKey = resolvedKey;
+        mountLottieInstances(activeHatKey);
+      }
+    };
+  }
+
+  // -------------------------------------------------------------------------
+  // F. TƯƠNG TÁC CHẠM ĐỒNG NHẤT (1 CHẠM = NHẢY, 2 CHẠM = LĂN NGỬA, TRONG NHÀ = THOẠI ẤM CÚNG)
+  // -------------------------------------------------------------------------
+  const prevPoke = window.pokeRealCatMeow;
+  if (typeof prevPoke === 'function') {
+    window.pokeRealCatMeow = function() {
+      tapStreak++;
+      clearTimeout(tapResetTimer);
+      tapResetTimer = setTimeout(() => { tapStreak = 0; }, 1500);
+
+      if (tapStreak >= 2) {
+        setUnifiedCatPose('belly', true);
+        setTimeout(() => setUnifiedCatPose(window.__catInHouse ? 'lying' : 'idle'), 3600);
+      } else {
+        setUnifiedCatPose('jump', true);
+        setTimeout(() => setUnifiedCatPose(window.__catInHouse ? 'lying' : 'curious'), 1050);
+      }
+
+      if (window.__catInHouse && tapStreak < 4) {
+        const now = Date.now();
+        if (typeof lastInteractionTimestamp !== 'undefined') lastInteractionTimestamp = now;
+        if (typeof totalSessionClicks !== 'undefined') totalSessionClicks++;
+        if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+        if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+
+        const isEn = window.currentNowNowLang === 'en';
+        if (typeof totalSessionClicks !== 'undefined' && totalSessionClicks % 4 === 0 && typeof deckTarot !== 'undefined') {
+          const card = isEn ? deckEN.next() : deckTarot.next();
+          window.showCatTip(isEn ? card : `✨ <b>Mèo Đen rút tặng bà 1 lá bài ngay trong ổ ấm nè:</b><br>${card}`, 6800);
+          return;
+        }
+        if (Math.random() < 0.85) {
+          window.showCatTip(isEn ? deckIndoorEn.next() : deckIndoorVi.next(), 5800);
+          return;
+        }
+      }
+
+      return prevPoke.apply(this, arguments);
+    };
+  }
+
+  setInterval(() => {
+    if (!window.__catInHouse || window.__catHouseTransitioning || document.body.classList.contains('portal-open')) return;
+    const idleSec = (Date.now() - (typeof lastInteractionTimestamp !== 'undefined' ? lastInteractionTimestamp : Date.now())) / 1000;
+    if (idleSec < 4.5) return;
+    const isEn = window.currentNowNowLang === 'en';
+    window.showCatTip(isEn ? deckIndoorEn.next() : deckIndoorVi.next(), 6200);
+  }, 7500);
+
+  // -------------------------------------------------------------------------
+  // G. BỘ ĐIỀU KHIỂN VỊ TRÍ & CUỘN TRANG HỢP NHẤT (1 VÒNG LẶP DUY NHẤT - 0% GIẬT)
+  // -------------------------------------------------------------------------
+  if (nestBox && floatingBox && 'IntersectionObserver' in window) {
+    const homeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          enterCatHouse();
+        } else {
+          leaveCatHouse();
+        }
+      });
+    }, { threshold: 0.22 });
+    homeObserver.observe(nestBox);
+  }
+
+  let lastScrollY = window.scrollY;
+  let glideVy = 0;
+  let glideRafActive = false;
+
+  function renderGardenCatFrame() {
+    if (!floatingBox || window.__catInHouse || window.__catHouseTransitioning) {
+      glideRafActive = false;
+      return;
+    }
+    if (typeof isDraggingCat !== 'undefined' && isDraggingCat) {
+      glideRafActive = false;
+      return;
+    }
+
+    const { w, h, margin } = (typeof getCatDimensions === 'function')
+      ? getCatDimensions()
+      : { w: 68, h: 68, margin: 16 };
+    const minY = 68;
+    const maxY = window.innerHeight - h - margin;
+
+    if (typeof catPosX !== 'number' || catPosX <= 0) catPosX = window.innerWidth - w - margin;
+    if (typeof catPosY !== 'number' || catPosY <= 0) catPosY = maxY;
+
+    catPosY += glideVy;
+    glideVy *= 0.92;
+
+    if (catPosY < minY) { catPosY = minY; glideVy = 0; }
+    if (catPosY > maxY) { catPosY = maxY; glideVy = 0; }
+
+    const bookingCta = document.querySelector('.booking-cta-messenger');
+    let targetScale = 1;
+    let targetOpacity = 1;
+    if (bookingCta) {
+      const rect = bookingCta.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 40 && rect.bottom > 80) {
+        targetScale = 0.76;
+        targetOpacity = 0.42;
+      }
+    }
+    gardenScale += (targetScale - gardenScale) * 0.18;
+    gardenOpacity += (targetOpacity - gardenOpacity) * 0.18;
+
+    floatingBox.style.transition = 'none';
+    floatingBox.style.opacity = gardenOpacity.toFixed(2);
+    floatingBox.style.transform = `translate3d(${Math.round(catPosX)}px, ${Math.round(catPosY)}px, 0) scale(${gardenScale.toFixed(3)})`;
+
+    if (Math.abs(glideVy) > 0.12 || Math.abs(targetScale - gardenScale) > 0.01) {
+      requestAnimationFrame(renderGardenCatFrame);
+    } else {
+      glideRafActive = false;
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    const currentY = window.scrollY;
+    const deltaY = currentY - lastScrollY;
+    lastScrollY = currentY;
+
+    if (window.__catInHouse || window.__catHouseTransitioning || document.body.classList.contains('portal-open')) return;
+    if (typeof isDraggingCat !== 'undefined' && isDraggingCat) return;
+
+    const impulse = Math.max(-5.5, Math.min(5.5, -deltaY * 0.12));
+    glideVy = glideVy * 0.55 + impulse * 0.45;
+
+    if (!glideRafActive) {
+      glideRafActive = true;
+      requestAnimationFrame(renderGardenCatFrame);
+    }
+  }, { passive: true });
+
+  initNowNowLottie();
+});
 </script>
 </body>
 </html>

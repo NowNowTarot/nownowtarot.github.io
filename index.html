@@ -7653,7 +7653,10 @@ I'd love to book a 1:1 Tarot & CBT session:
       if (key === '390x844@3') return isProMotion120 ? 'iPhone 13 Pro (120Hz)' : 'iPhone 13 / 14';
       if (key === '428x926@3') return isProMotion120 ? 'iPhone 13 Pro Max (120Hz)' : 'iPhone 12 Pro Max / 14 Plus';
       if (key === '414x896@3') {
-        if (topInset >= 50) return isProMotion120 ? 'iPhone 14 Pro (Thu phóng • 120Hz)' : 'iPhone 14 Pro / 15 (Thu phóng)';
+        // Nếu có Dynamic Island (topInset >= 48) HOẶC màn hình 120Hz -> Chắc chắn là iPhone 14 Pro / 15 Pro bật Thu phóng!
+        if (topInset >= 48 || isProMotion120) {
+          return isProMotion120 ? 'iPhone 14 Pro / 15 Pro (Thu phóng • 120Hz)' : 'iPhone 14 Pro / 15 (Thu phóng)';
+        }
         return 'iPhone 11 Pro Max / XS Max';
       }
       if (key === '414x896@2') return 'iPhone 11 / XR';
@@ -7673,37 +7676,27 @@ I'd love to book a 1:1 Tarot & CBT session:
   }
 
   // 3. VÂN TAY PHẦN CỨNG BẤT BIẾN XUYÊN TRÌNH DUYỆT (1 ĐIỆN THOẠI = 1 MÃ DUY NHẤT)
+  // 3. VÂN TAY PHẦN CỨNG BẤT BIẾN XUYÊN MỌI APP (KHÔNG BỊ SAFARI LÀM NHIỄU GPU)
   function computeCrossBrowserHardwareHash() {
     try {
-      let gpuRenderer = '';
-      let maxTex = '';
-      try {
-        const glCanvas = document.createElement('canvas');
-        const gl = glCanvas.getContext('webgl') || glCanvas.getContext('experimental-webgl');
-        if (gl) {
-          const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-          gpuRenderer = dbg ? (gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '') : '';
-          maxTex = String(gl.getParameter(gl.MAX_TEXTURE_SIZE) || '');
-        }
-      } catch (e) {}
-
       const sw = Math.min(screen.width, screen.height);
       const sh = Math.max(screen.width, screen.height);
       const dpr = Math.round(window.devicePixelRatio || 1);
       const hasP3 = window.matchMedia && window.matchMedia('(color-gamut: p3)').matches ? 'P3' : 'sRGB';
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
       const touchPts = navigator.maxTouchPoints || 0;
+      const cores = navigator.hardwareConcurrency || 0;
       const platform = navigator.platform || '';
 
+      // Chỉ dùng các thông số vật lý cố định 100% giữa Threads, IG, FB và Safari
       const invariantProps = [
         `${sw}x${sh}@${dpr}`,
         screen.colorDepth || 24,
         hasP3,
         tz,
         touchPts,
-        platform,
-        gpuRenderer,
-        maxTex
+        cores,
+        platform
       ].join('|');
 
       let hash = 2166136261;
@@ -7715,33 +7708,6 @@ I'd love to book a 1:1 Tarot & CBT session:
     } catch (e) {
       return '000000';
     }
-  }
-
-  const HW_CODE = computeCrossBrowserHardwareHash();
-  const HW_SIGNATURE = `HW-${HW_CODE}`;
-  const VISITOR_ID = `#NNT-${HW_CODE}`;
-  const SESSION_ID = 'S' + Date.now().toString(36).toUpperCase();
-
-  const FP_VISITS_KEY = `nownow_visits_${HW_CODE}`;
-  function incrementVisitCount() {
-    try {
-      const prev = parseInt(localStorage.getItem(FP_VISITS_KEY) || '0', 10) || 0;
-      const next = prev + 1;
-      localStorage.setItem(FP_VISITS_KEY, String(next));
-      return next;
-    } catch (e) {
-      return 1;
-    }
-  }
-  const VISITS_COUNT = incrementVisitCount();
-  const sessionStartTime = Date.now();
-  let isNewSessionFlag = true;
-
-  function formatTimeMinSec(totalSeconds) {
-    const sec = Math.max(1, Math.round(totalSeconds));
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m}p ${s < 10 ? '0' + s : s}s`;
   }
 
   // 4. ĐỊNH VỊ TỈNH/THÀNH PHỐ (BẤT ĐỒNG BỘ SIÊU NHANH)

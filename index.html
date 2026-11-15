@@ -7500,10 +7500,15 @@ I'd love to book a 1:1 Tarot & CBT session:
 </script>
 
 <!-- =========================================================================
-     BỘ CẢM BIẾN DẤU CHÂN SỐ & HÀNH VI CHUYÊN SÂU (NOWNOW TRACKER V5.1 PRO)
+     BỘ CẢM BIẾN DẤU CHÂN SỐ & HÀNH VI CHUYÊN SÂU (NOWNOW TRACKER V9.0 OMNI-PRO)
+     - Hook trực tiếp vào lõi hàm UI (Không bao giờ bị stopPropagation chặn).
+     - Bắt dính 100%: Vuốt ảnh iPhone, Đọc từng bài Threads, Chạm/Kéo Mèo, Nhà Mèo,
+       Kéo thanh trượt, Chọn Tag, Gõ tâm sự nháp (kể cả gõ rồi xóa), Bôi đen chữ.
+     - Chuẩn hóa Mã Phần Cứng Xuyên App (FB, IG, Threads, TikTok, Safari = 1 mã duy nhất).
+     - Đồng bộ Realtime: Instant Debounce (0.8s) + Heartbeat (5s) + Keepalive/Beacon.
      ========================================================================= -->
 <script>
-(function initNowNowDigitalFootprintTrackerV5() {
+(function initNowNowDigitalFootprintTrackerV9() {
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has('session') || urlParams.has('id')) return;
 
@@ -7517,6 +7522,7 @@ I'd love to book a 1:1 Tarot & CBT session:
         }
       }, 1200);
     });
+    return;
   } else if (urlParams.get('admin') === '0') {
     try { localStorage.removeItem('nownow_admin_ignore'); } catch (e) {}
   }
@@ -7524,6 +7530,10 @@ I'd love to book a 1:1 Tarot & CBT session:
   try {
     if (localStorage.getItem('nownow_admin_ignore') === '1') return;
   } catch (e) {}
+
+  const ENDPOINT_URL = (typeof NOWNOW_FEEDBACK_API !== 'undefined' && NOWNOW_FEEDBACK_API)
+    ? NOWNOW_FEEDBACK_API
+    : "https://script.google.com/macros/s/AKfycbwHsjoBYSxz5u26cTxSZ6idEPat02sUZJ8RprQkEX3ccCNuQPMmwjiS9aMiXl1F0zpIwA/exec";
 
   // 2. BẢNG MÃ PHẦN CỨNG APPLE & ANDROID CHÍNH XÁC
   const APPLE_MODEL_MAP = {
@@ -7568,9 +7578,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       document.body.removeChild(probe);
       if (val > 0) safeAreaTopPx = val;
       return safeAreaTopPx;
-    } catch (e) {
-      return 0;
-    }
+    } catch (e) { return 0; }
   }
 
   let measuredFps = 0;
@@ -7584,10 +7592,10 @@ I'd love to book a 1:1 Tarot & CBT session:
         prevTs = now;
         if (dt > 2 && dt < 55) deltas.push(dt);
         frames++;
-        if (frames < 22) {
+        if (frames < 18) {
           requestAnimationFrame(step);
         } else {
-          if (deltas.length >= 8) {
+          if (deltas.length >= 6) {
             deltas.sort((a, b) => a - b);
             const fastPercentile = deltas[Math.floor(deltas.length * 0.25)];
             measuredFps = Math.round(1000 / fastPercentile);
@@ -7601,7 +7609,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
   }
 
-  const EXACT_MODEL_CACHE_KEY = 'nownow_exact_apple_model_v5';
+  const EXACT_MODEL_CACHE_KEY = 'nownow_exact_apple_model_v9';
   function detectExactDeviceModel() {
     const ua = navigator.userAgent || '';
     const internalMatch = ua.match(/(iPhone\d+,\d+|iPad\d+,\d+)/);
@@ -7613,7 +7621,7 @@ I'd love to book a 1:1 Tarot & CBT session:
 
     try {
       const cachedExact = localStorage.getItem(EXACT_MODEL_CACHE_KEY);
-      if (cachedExact && cachedExact.indexOf('/') === -1) return cachedExact;
+      if (cachedExact && !cachedExact.includes('/')) return cachedExact;
     } catch (e) {}
 
     if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
@@ -7623,45 +7631,16 @@ I'd love to book a 1:1 Tarot & CBT session:
       const key = `${sw}x${sh}@${dpr}`;
       const topInset = safeAreaTopPx || measureSafeAreaTop();
       const isProMotion120 = measuredFps >= 95;
-      const isLowPower30 = measuredFps > 0 && measuredFps <= 36;
 
-      if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
-        const ipadMap = {
-          '768x1024@2': 'iPad Mini / Gen 9',
-          '810x1080@2': 'iPad Gen 10',
-          '820x1180@2': 'iPad Air 11"',
-          '834x1194@2': 'iPad Pro 11"',
-          '1024x1366@2': 'iPad Pro 12.9"'
-        };
-        return ipadMap[key] || `iPad (${sw}x${sh})`;
-      }
-
-      if (key === '393x852@3') {
-        if (isProMotion120) return 'iPhone 14 Pro / 15 Pro (120Hz)';
-        if (isLowPower30) return 'iPhone 14 Pro / 15 Pro (Tiết kiệm pin)';
-        return 'iPhone 15 / 16 (60Hz)';
-      }
-
-      if (key === '430x932@3') {
-        if (isProMotion120) return 'iPhone 14 Pro Max / 15 Pro Max (120Hz)';
-        if (isLowPower30) return 'iPhone 14 Pro Max / 15 Pro Max (Tiết kiệm pin)';
-        return 'iPhone 15 Plus / 16 Plus (60Hz)';
-      }
-
+      if (key === '393x852@3') return isProMotion120 ? 'iPhone 14 Pro / 15 Pro' : 'iPhone 14 Pro / 15 / 16';
+      if (key === '430x932@3') return isProMotion120 ? 'iPhone 14 Pro Max / 15 Pro Max' : 'iPhone 14 Pro Max / 15 Plus';
       if (key === '402x874@3') return 'iPhone 16 Pro';
       if (key === '440x956@3') return 'iPhone 16 Pro Max';
-      if (key === '390x844@3') return isProMotion120 ? 'iPhone 13 Pro (120Hz)' : 'iPhone 13 / 14';
-      if (key === '428x926@3') return isProMotion120 ? 'iPhone 13 Pro Max (120Hz)' : 'iPhone 12 Pro Max / 14 Plus';
-      if (key === '414x896@3') {
-        // Nếu có Dynamic Island (topInset >= 48) HOẶC màn hình 120Hz -> Chắc chắn là iPhone 14 Pro / 15 Pro bật Thu phóng!
-        if (topInset >= 48 || isProMotion120) {
-          return isProMotion120 ? 'iPhone 14 Pro / 15 Pro (Thu phóng • 120Hz)' : 'iPhone 14 Pro / 15 (Thu phóng)';
-        }
-        return 'iPhone 11 Pro Max / XS Max';
-      }
+      if (key === '390x844@3') return isProMotion120 ? 'iPhone 13 Pro' : 'iPhone 13 / 14';
+      if (key === '428x926@3') return isProMotion120 ? 'iPhone 13 Pro Max' : 'iPhone 12 Pro Max / 14 Plus';
+      if (key === '414x896@3') return (topInset >= 48 || isProMotion120) ? 'iPhone 14 Pro (Thu phóng)' : 'iPhone 11 Pro Max / XS Max';
       if (key === '414x896@2') return 'iPhone 11 / XR';
-      if (key === '375x812@3') return 'iPhone X / XS / 11 Pro / 13 mini';
-      if (key === '375x667@2') return 'iPhone SE 2 / SE 3';
+      if (key === '375x812@3') return 'iPhone X / XS / 11 Pro';
       return `iPhone (${sw}x${sh})`;
     }
 
@@ -7675,8 +7654,8 @@ I'd love to book a 1:1 Tarot & CBT session:
     return 'Desktop';
   }
 
-  // 3. VÂN TAY PHẦN CỨNG BẤT BIẾN XUYÊN TRÌNH DUYỆT (1 ĐIỆN THOẠI = 1 MÃ DUY NHẤT)
-  // 3. VÂN TAY PHẦN CỨNG BẤT BIẾN XUYÊN MỌI APP (KHÔNG BỊ SAFARI LÀM NHIỄU GPU)
+  // 3. MÃ VÂN TAY PHẦN CỨNG ĐỒNG NHẤT 100% GIỮA SAFARI & IN-APP BROWSER (FB, IG, THREADS)
+  // (Đã loại bỏ hardwareConcurrency vì Safari cố tình làm nhiễu thông số này khác với Instagram/Threads)
   function computeCrossBrowserHardwareHash() {
     try {
       const sw = Math.min(screen.width, screen.height);
@@ -7685,18 +7664,16 @@ I'd love to book a 1:1 Tarot & CBT session:
       const hasP3 = window.matchMedia && window.matchMedia('(color-gamut: p3)').matches ? 'P3' : 'sRGB';
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
       const touchPts = navigator.maxTouchPoints || 0;
-      const cores = navigator.hardwareConcurrency || 0;
-      const platform = navigator.platform || '';
+      const isAppleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent || '') || (/Macintosh/i.test(navigator.userAgent || '') && touchPts > 1);
+      const archFamily = isAppleMobile ? 'IOS_ARM64' : (navigator.platform || 'GENERIC');
 
-      // Chỉ dùng các thông số vật lý cố định 100% giữa Threads, IG, FB và Safari
       const invariantProps = [
         `${sw}x${sh}@${dpr}`,
         screen.colorDepth || 24,
         hasP3,
         tz,
         touchPts,
-        cores,
-        platform
+        archFamily
       ].join('|');
 
       let hash = 2166136261;
@@ -7710,76 +7687,130 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
   }
 
-  // 4. ĐỊNH VỊ TỈNH/THÀNH PHỐ (BẤT ĐỒNG BỘ SIÊU NHANH)
-  let geoLocationLabel = '';
-  (function fetchIpGeoNonBlocking() {
-    try {
-      const cached = sessionStorage.getItem('nownow_ip_geo_v5');
-      if (cached) {
-        geoLocationLabel = cached;
-        return;
-      }
-    } catch (e) {}
+  const HW_HASH = computeCrossBrowserHardwareHash();
+  const VISITOR_ID = `#NNT-${HW_HASH}`;
+  const HW_SIGNATURE = `HW-${HW_HASH}`;
+  const SESSION_ID = 'SES_' + Date.now().toString(36).toUpperCase() + '_' + Math.random().toString(36).substring(2, 6).toUpperCase();
 
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 2000);
-    fetch('https://ipwho.is/', { signal: controller.signal })
+  // Lưu và tăng bộ đếm lượt vào trên trình duyệt hiện tại
+  const VISIT_COUNT_KEY = 'nownow_fp_visits_v9';
+  let localVisits = 1;
+  let isNewSessionFlag = false;
+  try {
+    const activeSes = sessionStorage.getItem('nownow_fp_active_ses_v9');
+    localVisits = parseInt(localStorage.getItem(VISIT_COUNT_KEY) || '0', 10) || 0;
+    if (!activeSes) {
+      localVisits += 1;
+      isNewSessionFlag = true;
+      localStorage.setItem(VISIT_COUNT_KEY, String(localVisits));
+      sessionStorage.setItem('nownow_fp_active_ses_v9', SESSION_ID);
+    }
+  } catch (e) {
+    isNewSessionFlag = true;
+  }
+
+  // 4. ĐỊNH VỊ ĐỊA LÝ & NHÀ MẠNG (ĐA LUỒNG DỰ PHÒNG: ipwho.is + ipapi.co)
+  let geoLocationLabel = '';
+  try {
+    geoLocationLabel = localStorage.getItem('nownow_ip_geo_v9') || sessionStorage.getItem('nownow_ip_geo_v9') || '';
+  } catch (e) {}
+
+  (function fetchIpGeoWithFallback() {
+    if (geoLocationLabel) return;
+    const saveGeo = (label) => {
+      if (!label) return;
+      geoLocationLabel = label;
+      try {
+        localStorage.setItem('nownow_ip_geo_v9', label);
+        sessionStorage.setItem('nownow_ip_geo_v9', label);
+      } catch (e) {}
+      scheduleFastSync(false);
+    };
+
+    fetch('https://ipwho.is/')
       .then(r => r.json())
       .then(d => {
-        clearTimeout(timer);
-        if (!d || d.success === false) return;
-        const city = d.city || d.region || '';
-        const countryCode = d.country_code === 'VN' ? 'VN' : (d.country || '');
-        const rawIsp = (d.connection && (d.connection.isp || d.connection.org)) || '';
-        const cleanIsp = rawIsp.replace(/Corporation|Joint Stock Company|Telecommunications|Telecom|Company|Limited|Ltd\.?/gi, '').trim().slice(0, 18);
-        const place = [city, countryCode].filter(Boolean).join(', ');
-        geoLocationLabel = `📍 ${place}${cleanIsp ? ' (' + cleanIsp + ')' : ''}`;
-        try { sessionStorage.setItem('nownow_ip_geo_v5', geoLocationLabel); } catch (e) {}
+        if (d && d.success !== false && (d.city || d.region)) {
+          const city = d.city || d.region || '';
+          const countryCode = d.country_code === 'VN' ? 'VN' : (d.country || '');
+          const rawIsp = (d.connection && (d.connection.isp || d.connection.org)) || '';
+          const cleanIsp = rawIsp.replace(/Corporation|Joint Stock Company|Telecommunications|Telecom|Company|Limited|Ltd\.?/gi, '').trim().slice(0, 16);
+          const place = [city, countryCode].filter(Boolean).join(', ');
+          saveGeo(`📍 ${place}${cleanIsp ? ' (' + cleanIsp + ')' : ''}`);
+        } else {
+          throw new Error('Fallback to ipapi');
+        }
       })
-      .catch(() => clearTimeout(timer));
+      .catch(() => {
+        fetch('https://ipapi.co/json/')
+          .then(r => r.json())
+          .then(d => {
+            if (d && (d.city || d.region)) {
+              const city = d.city || d.region || '';
+              const country = d.country_code || 'VN';
+              const org = (d.org || '').replace(/AS\d+\s*/i, '').replace(/Corporation|Telecom|Company|Ltd/gi, '').trim().slice(0, 16);
+              saveGeo(`📍 ${city}, ${country}${org ? ' (' + org + ')' : ''}`);
+            }
+          })
+          .catch(() => {});
+      });
   })();
 
+  // 5. NHẬN DIỆN CHÍNH XÁC NGUỒN DẪN (FB, IG, THREADS, TIKTOK, ZALO, SAFARI, CHROME)
   function detectTrafficSource() {
-    const ua = (navigator.userAgent || '').toLowerCase();
+    const ua = (navigator.userAgent || '');
+    const uaLow = ua.toLowerCase();
     const ref = (document.referrer || '').toLowerCase();
-    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
-    if (ua.includes('barcelona') || utm.includes('threads') || ref.includes('threads.')) return 'App Threads';
-    if (ua.includes('instagram') || utm.includes('ig') || ref.includes('instagram.')) return 'App Instagram';
-    if (ua.includes('fbav') || ua.includes('fban') || utm.includes('fb') || ref.includes('facebook.') || urlParams.has('fbclid')) return 'App Facebook';
-    if (ua.includes('aweme') || utm.includes('tiktok') || ref.includes('tiktok.') || urlParams.has('ttclid')) return 'App TikTok';
-    if (ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios')) return 'Safari (Ngoài App)';
-    if (ua.includes('chrome') || ua.includes('crios')) return 'Chrome';
+    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || urlParams.get('source') || '').toLowerCase();
+
+    if (uaLow.includes('barcelona') || utm.includes('threads') || ref.includes('threads.')) return 'App Threads';
+    if (uaLow.includes('instagram') || utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) return 'App Instagram';
+    if (uaLow.includes('fbav') || uaLow.includes('fban') || uaLow.includes('fb_iab') || utm.includes('fb') || ref.includes('facebook.') || urlParams.has('fbclid')) return 'App Facebook';
+    if (uaLow.includes('musical_ly') || uaLow.includes('aweme') || uaLow.includes('bytedance') || utm.includes('tiktok') || ref.includes('tiktok.') || urlParams.has('ttclid')) return 'App TikTok';
+    if (uaLow.includes('zalo') || ref.includes('zalo')) return 'App Zalo';
+    if (uaLow.includes('safari') && !uaLow.includes('chrome') && !uaLow.includes('crios') && !uaLow.includes('fxios')) return 'Safari';
+    if (uaLow.includes('chrome') || uaLow.includes('crios')) return 'Chrome';
     return 'Direct';
   }
   const TRAFFIC_SOURCE = detectTrafficSource();
 
-  // 5. BỘ ĐẾM TƯƠNG TÁC MÈO ĐEN CHÍNH XÁC 100% & THỐNG KÊ HÀNH VI CHUYÊN SÂU
+  // 6. KHO LƯU TRỮ TRẠNG THÁI TƯƠNG TÁC TOÀN DIỆN (PERSISTED IN LOCALSTORAGE PER BROWSER)
+  const STATE_STORAGE_KEY = 'nownow_fp_state_v9_' + HW_HASH;
+  let persistedState = {};
+  try {
+    const raw = localStorage.getItem(STATE_STORAGE_KEY);
+    if (raw) persistedState = JSON.parse(raw) || {};
+  } catch (e) {}
+
   const catStats = {
-    pokes: 0,
-    drags: 0,
-    tarotDraws: 0,
-    gossips: 0,
-    houseTaps: 0,
-    bubbleCloses: 0
+    pokes: Number(persistedState.pokes) || 0,
+    drags: Number(persistedState.drags) || 0,
+    tarotDraws: Number(persistedState.tarotDraws) || 0,
+    gossips: Number(persistedState.gossips) || 0,
+    houseTaps: Number(persistedState.houseTaps) || 0,
+    bubbleCloses: Number(persistedState.bubbleCloses) || 0
   };
 
   const behaviorStats = {
-    maxScrollPct: 0,
-    sliderChanges: 0,
-    topicToggles: 0,
-    channelSwitches: 0,
-    timeframeSwitches: 0,
-    inputEdits: 0,
-    inputBackspaces: 0,
-    tocOpens: 0,
-    langSwitches: 0,
-    tabSwitches: 0,
-    fbPhotosViewed: 0,
-    fbWebTabOpened: false,
-    viralJournalOpened: false,
-    socialLinkClicks: [],
-    finalAction: 'Chỉ xem rồi thoát',
-    sectionDwellSec: {
+    maxScrollPct: Number(persistedState.maxScrollPct) || 0,
+    sliderChanges: Number(persistedState.sliderChanges) || 0,
+    topicToggles: Number(persistedState.topicToggles) || 0,
+    channelSwitches: Number(persistedState.channelSwitches) || 0,
+    timeframeSwitches: Number(persistedState.timeframeSwitches) || 0,
+    userModifiedBooking: Boolean(persistedState.userModifiedBooking),
+    tocOpens: Number(persistedState.tocOpens) || 0,
+    langSwitches: Number(persistedState.langSwitches) || 0,
+    tabSwitches: Number(persistedState.tabSwitches) || 0,
+    fbPhotosSet: new Set(Array.isArray(persistedState.fbPhotosArr) ? persistedState.fbPhotosArr : []),
+    fbWebTabOpened: Boolean(persistedState.fbWebTabOpened),
+    viralJournalOpened: Boolean(persistedState.viralJournalOpened),
+    threadsPostsSet: new Set(Array.isArray(persistedState.threadsPostsArr) ? persistedState.threadsPostsArr : []),
+    origThreadLinkClicks: Number(persistedState.origThreadLinkClicks) || 0,
+    socialLinkClicks: Array.isArray(persistedState.socialLinkClicks) ? persistedState.socialLinkClicks : [],
+    highlightedTexts: Array.isArray(persistedState.highlightedTexts) ? persistedState.highlightedTexts : [],
+    maxDraftText: String(persistedState.maxDraftText || ''),
+    finalAction: String(persistedState.finalAction || 'Đang xem trang'),
+    sectionDwellSec: persistedState.sectionDwellSec || {
       'Giới thiệu': 0,
       '3 Lời hứa': 0,
       'Cổng Feedback/Tạp chí': 0,
@@ -7788,43 +7819,463 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
   };
 
-  const catBtnEl = document.getElementById('catBtnEl');
-  if (catBtnEl) {
-    let downX = 0, downY = 0;
-    catBtnEl.addEventListener('pointerdown', (e) => {
-      downX = e.clientX;
-      downY = e.clientY;
-    }, { passive: true });
+  function saveStateToLocal() {
+    try {
+      localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify({
+        pokes: catStats.pokes,
+        drags: catStats.drags,
+        tarotDraws: catStats.tarotDraws,
+        gossips: catStats.gossips,
+        houseTaps: catStats.houseTaps,
+        bubbleCloses: catStats.bubbleCloses,
+        maxScrollPct: behaviorStats.maxScrollPct,
+        sliderChanges: behaviorStats.sliderChanges,
+        topicToggles: behaviorStats.topicToggles,
+        channelSwitches: behaviorStats.channelSwitches,
+        timeframeSwitches: behaviorStats.timeframeSwitches,
+        userModifiedBooking: behaviorStats.userModifiedBooking,
+        tocOpens: behaviorStats.tocOpens,
+        langSwitches: behaviorStats.langSwitches,
+        tabSwitches: behaviorStats.tabSwitches,
+        fbPhotosArr: Array.from(behaviorStats.fbPhotosSet),
+        fbWebTabOpened: behaviorStats.fbWebTabOpened,
+        viralJournalOpened: behaviorStats.viralJournalOpened,
+        threadsPostsArr: Array.from(behaviorStats.threadsPostsSet),
+        origThreadLinkClicks: behaviorStats.origThreadLinkClicks,
+        socialLinkClicks: behaviorStats.socialLinkClicks,
+        highlightedTexts: behaviorStats.highlightedTexts,
+        maxDraftText: behaviorStats.maxDraftText,
+        finalAction: behaviorStats.finalAction,
+        sectionDwellSec: behaviorStats.sectionDwellSec
+      }));
+    } catch (e) {}
+  }
 
-    catBtnEl.addEventListener('pointerup', (e) => {
-      const dist = Math.hypot(e.clientX - downX, e.clientY - downY);
-      if (dist > 10) {
-        catStats.drags++;
-      } else {
+  // 7. ĐẾM GIÂY THỰC TẾ TRÊN TRANG (ACTIVE DWELL TIMER)
+  let activeSessionSeconds = 1;
+  let lastSyncedSeconds = 0;
+  let currentVisibleSection = 'Giới thiệu';
+
+  setInterval(() => {
+    if (document.hidden) return;
+    activeSessionSeconds++;
+
+    if (typeof activeSubWebType !== 'undefined' && activeSubWebType === 'viral') {
+      behaviorStats.sectionDwellSec['Tạp chí Threads'] = (behaviorStats.sectionDwellSec['Tạp chí Threads'] || 0) + 1;
+    } else if (typeof activeSubWebType !== 'undefined' && activeSubWebType === 'feedbackUnified') {
+      behaviorStats.sectionDwellSec['Hộp thư Feedback'] = (behaviorStats.sectionDwellSec['Hộp thư Feedback'] || 0) + 1;
+    } else {
+      behaviorStats.sectionDwellSec[currentVisibleSection] = (behaviorStats.sectionDwellSec[currentVisibleSection] || 0) + 1;
+    }
+  }, 1000);
+
+  // 8. HOOK TRỰC TIẾP VÀO CÁC HÀM LÕI CỦA GIAO DIỆN (KHÔNG BỊ STOPPROPAGATION CHẶN)
+  function installCoreFunctionHooks() {
+    // A. Hook Mở Cổng Lưu Trữ (Feedback & Tạp Chí Threads)
+    if (typeof window.openSubWeb === 'function' && !window.openSubWeb.__v9Hooked) {
+      const origOpen = window.openSubWeb;
+      window.openSubWeb = function(type, pushToHistory) {
+        if (type === 'viral') {
+          behaviorStats.viralJournalOpened = true;
+          if (!behaviorStats.finalAction.includes('Đặt lịch')) {
+            behaviorStats.finalAction = '📖 Đọc Tạp Chí Tâm Thức';
+          }
+          setTimeout(attachThreadsCardsReaderTracker, 350);
+        } else {
+          behaviorStats.fbPhotosSet.add((typeof currentFbIndex === 'number' ? currentFbIndex : 0) + 1);
+          if (!behaviorStats.finalAction.includes('Đặt lịch')) {
+            behaviorStats.finalAction = '⭐ Xem Hộp Thư Feedback';
+          }
+        }
+        saveStateToLocal();
+        scheduleFastSync(true);
+        return origOpen.apply(this, arguments);
+      };
+      window.openSubWeb.__v9Hooked = true;
+    }
+
+    // B. Hook Chuyển Tab Ảnh / Web trong Cổng Feedback
+    if (typeof window.switchFeedbackTab === 'function' && !window.switchFeedbackTab.__v9Hooked) {
+      const origSwitchTab = window.switchFeedbackTab;
+      window.switchFeedbackTab = function(tabKey) {
+        if (tabKey === 'web') {
+          behaviorStats.fbWebTabOpened = true;
+        } else {
+          behaviorStats.fbPhotosSet.add((typeof currentFbIndex === 'number' ? currentFbIndex : 0) + 1);
+        }
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return origSwitchTab.apply(this, arguments);
+      };
+      window.switchFeedbackTab.__v9Hooked = true;
+    }
+
+    // C. Hook Chuyển Slide Ảnh Feedback (Bắt dính cả khi bấm nút lẫn khi VUỐT MÀN HÌNH iPhone!)
+    if (typeof window.goToFeedbackSlide === 'function' && !window.goToFeedbackSlide.__v9Hooked) {
+      const origGoSlide = window.goToFeedbackSlide;
+      window.goToFeedbackSlide = function(index, direction) {
+        const res = origGoSlide.apply(this, arguments);
+        const slideNum = (typeof currentFbIndex === 'number' ? currentFbIndex : 0) + 1;
+        behaviorStats.fbPhotosSet.add(slideNum);
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return res;
+      };
+      window.goToFeedbackSlide.__v9Hooked = true;
+    }
+
+    // D. Hook Tương Tác Mèo Đen & Nhà Mèo
+    if (typeof window.pokeRealCatMeow === 'function' && !window.pokeRealCatMeow.__v9Hooked) {
+      const origPoke = window.pokeRealCatMeow;
+      window.pokeRealCatMeow = function() {
         catStats.pokes++;
         if (catStats.pokes % 4 === 0) catStats.tarotDraws++;
         if (catStats.pokes % 7 === 0) catStats.gossips++;
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return origPoke.apply(this, arguments);
+      };
+      window.pokeRealCatMeow.__v9Hooked = true;
+    }
+
+    if (typeof window.handleHouseCatTap === 'function' && !window.handleHouseCatTap.__v9Hooked) {
+      const origHouseTap = window.handleHouseCatTap;
+      window.handleHouseCatTap = function() {
+        catStats.houseTaps++;
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return origHouseTap.apply(this, arguments);
+      };
+      window.handleHouseCatTap.__v9Hooked = true;
+    }
+
+    // E. Hook Cấu Hình Đặt Lịch (Kênh, Khung Giờ, Thanh Trượt, Tag Chủ Đề)
+    if (typeof window.selectChannel === 'function' && !window.selectChannel.__v9Hooked) {
+      const origChan = window.selectChannel;
+      window.selectChannel = function(chan) {
+        behaviorStats.channelSwitches++;
+        behaviorStats.userModifiedBooking = true;
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return origChan.apply(this, arguments);
+      };
+      window.selectChannel.__v9Hooked = true;
+    }
+
+    if (typeof window.selectTimeframe === 'function' && !window.selectTimeframe.__v9Hooked) {
+      const origTf = window.selectTimeframe;
+      window.selectTimeframe = function(tf) {
+        const res = origTf.apply(this, arguments);
+        if (activeSessionSeconds > 2) {
+          behaviorStats.timeframeSwitches++;
+          behaviorStats.userModifiedBooking = true;
+          saveStateToLocal();
+          scheduleFastSync(false);
+        }
+        return res;
+      };
+      window.selectTimeframe.__v9Hooked = true;
+    }
+
+    if (typeof window.setSliderMilestone === 'function' && !window.setSliderMilestone.__v9Hooked) {
+      const origMile = window.setSliderMilestone;
+      window.setSliderMilestone = function(targetMin) {
+        behaviorStats.sliderChanges++;
+        behaviorStats.userModifiedBooking = true;
+        const res = origMile.apply(this, arguments);
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return res;
+      };
+      window.setSliderMilestone.__v9Hooked = true;
+    }
+
+    if (typeof window.onSliderTrackInput === 'function' && !window.onSliderTrackInput.__v9Hooked) {
+      const origTrack = window.onSliderTrackInput;
+      window.onSliderTrackInput = function(posVal) {
+        behaviorStats.sliderChanges++;
+        behaviorStats.userModifiedBooking = true;
+        const res = origTrack.apply(this, arguments);
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return res;
+      };
+      window.onSliderTrackInput.__v9Hooked = true;
+    }
+
+    if (typeof window.addTopicTag === 'function' && !window.addTopicTag.__v9Hooked) {
+      const origTag = window.addTopicTag;
+      window.addTopicTag = function(btn) {
+        behaviorStats.topicToggles++;
+        behaviorStats.userModifiedBooking = true;
+        const res = origTag.apply(this, arguments);
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return res;
+      };
+      window.addTopicTag.__v9Hooked = true;
+    }
+
+    // F. Hook Nút Chốt Đặt Lịch Messenger / Instagram (Bắn tức thì trước khi nhảy App!)
+    if (typeof window.handleBookingRedirect === 'function' && !window.handleBookingRedirect.__v9Hooked) {
+      const origBook = window.handleBookingRedirect;
+      window.handleBookingRedirect = function(platform) {
+        behaviorStats.userModifiedBooking = true;
+        behaviorStats.finalAction = platform === 'Messenger'
+          ? '🔥 Bấm Đặt lịch Messenger'
+          : '🔥 Bấm Đặt lịch Instagram';
+        saveStateToLocal();
+        flushFootprintImmediately(true);
+        return origBook.apply(this, arguments);
+      };
+      window.handleBookingRedirect.__v9Hooked = true;
+    }
+
+    // G. Hook Menu Mục Lục & Chuyển Ngữ VI/EN
+    if (typeof window.toggleNowNowTocDrawer === 'function' && !window.toggleNowNowTocDrawer.__v9Hooked) {
+      const origToc = window.toggleNowNowTocDrawer;
+      window.toggleNowNowTocDrawer = function() {
+        behaviorStats.tocOpens++;
+        saveStateToLocal();
+        scheduleFastSync(false);
+        return origToc.apply(this, arguments);
+      };
+      window.toggleNowNowTocDrawer.__v9Hooked = true;
+    }
+
+    if (typeof window.setNowNowLanguage === 'function' && !window.setNowNowLanguage.__v9Hooked) {
+      const origLang = window.setNowNowLanguage;
+      window.setNowNowLanguage = function(lang) {
+        if (activeSessionSeconds > 2) {
+          behaviorStats.langSwitches++;
+          saveStateToLocal();
+          scheduleFastSync(false);
+        }
+        return origLang.apply(this, arguments);
+      };
+      window.setNowNowLanguage.__v9Hooked = true;
+    }
+  }
+
+  // 9. THEO DÕI ĐỌC SÂU TỪNG BÀI VIẾT TRONG TẠP CHÍ THREADS (BÀI #1 -> BÀI #12)
+  let threadsReaderObserver = null;
+  function attachThreadsCardsReaderTracker() {
+    const scrollBox = document.querySelector('#subwebViral .subweb-body-scroll');
+    const cards = document.querySelectorAll('#subwebViral .threads-post-card');
+    if (!scrollBox || !cards.length) return;
+
+    if (threadsReaderObserver) threadsReaderObserver.disconnect();
+    const timers = {};
+
+    threadsReaderObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const idx = Array.from(cards).indexOf(entry.target);
+        if (idx === -1) return;
+        const postNum = idx + 1;
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.45) {
+          timers[postNum] = setTimeout(() => {
+            behaviorStats.threadsPostsSet.add(`Bài #${postNum}`);
+            saveStateToLocal();
+            scheduleFastSync(false);
+          }, 1400);
+        } else if (timers[postNum]) {
+          clearTimeout(timers[postNum]);
+        }
+      });
+    }, { root: scrollBox, threshold: [0.45] });
+
+    cards.forEach(c => threadsReaderObserver.observe(c));
+
+    // Bắt sự kiện bấm vào "Xem bài gốc" trong Tạp Chí Threads
+    document.querySelectorAll('#subwebViral .threads-verify-link').forEach(link => {
+      if (link.__v9Bound) return;
+      link.__v9Bound = true;
+      link.addEventListener('click', () => {
+        behaviorStats.origThreadLinkClicks++;
+        saveStateToLocal();
+        flushFootprintImmediately(true);
+      }, { passive: true });
+    });
+  }
+
+  // 10. GẮN CẢM BIẾN DOM BỔ SUNG (KÉO MÈO, Ô NHẬP TÂM SỰ NHÁP, BÔI ĐEN CHỮ, LINK MXH)
+  function attachDomSensors() {
+    // A. Kéo thả Mèo Đen
+    const catBtnEl = document.getElementById('catBtnEl');
+    if (catBtnEl) {
+      let downX = 0, downY = 0;
+      catBtnEl.addEventListener('pointerdown', (e) => {
+        downX = e.clientX;
+        downY = e.clientY;
+      }, { passive: true });
+
+      catBtnEl.addEventListener('pointerup', (e) => {
+        if (Math.hypot(e.clientX - downX, e.clientY - downY) > 12) {
+          catStats.drags++;
+          saveStateToLocal();
+          scheduleFastSync(false);
+        }
+      }, { passive: true });
+    }
+
+    // B. Chạm vào Nhà Mèo ở Footer (Phòng trường hợp chưa có hàm handleHouseCatTap)
+    const cushionEl = document.getElementById('catVelvetCushionWrap');
+    if (cushionEl) {
+      cushionEl.addEventListener('click', () => {
+        if (typeof window.handleHouseCatTap !== 'function') {
+          catStats.houseTaps++;
+          saveStateToLocal();
+          scheduleFastSync(false);
+        }
+      }, { passive: true });
+    }
+
+    // C. Bắt dính Tâm Sự Nháp (Kể cả khi khách gõ vào rồi xóa đi!)
+    const bindTopicInputSensor = () => {
+      const inputEl = document.getElementById('bookingTopicInput');
+      if (!inputEl || inputEl.__v9SensorBound) return;
+      inputEl.__v9SensorBound = true;
+
+      inputEl.addEventListener('input', () => {
+        behaviorStats.userModifiedBooking = true;
+        const val = inputEl.value.trim();
+        if (val.length >= behaviorStats.maxDraftText.length) {
+          behaviorStats.maxDraftText = val;
+        }
+        if (val.length > 0 && !behaviorStats.finalAction.includes('Đặt lịch')) {
+          behaviorStats.finalAction = '✍️ Gõ tâm sự nháp';
+        }
+        saveStateToLocal();
+        scheduleFastSync(false);
+      });
+
+      inputEl.addEventListener('blur', () => {
+        saveStateToLocal();
+        scheduleFastSync(true);
+      });
+    };
+    bindTopicInputSensor();
+    setTimeout(bindTopicInputSensor, 600);
+
+    // D. Bắt sự kiện bấm vào 4 thẻ Mạng Xã Hội ở Footer (Threads, IG, FB, TikTok)
+    document.querySelectorAll('.social-invite-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const titleEl = card.querySelector('.font-extrabold') || card;
+        const name = titleEl.textContent.trim().split('\n')[0].trim();
+        if (name && !behaviorStats.socialLinkClicks.includes(name)) {
+          behaviorStats.socialLinkClicks.push(name);
+        }
+        if (!behaviorStats.finalAction.includes('Đặt lịch')) {
+          behaviorStats.finalAction = `Ghé kênh ${name}`;
+        }
+        saveStateToLocal();
+        flushFootprintImmediately(true);
+      }, { passive: true });
+    });
+
+    // E. Bắt sự kiện Bôi Đen Văn Bản (Text Highlighting)
+    let selectionTimer = null;
+    document.addEventListener('selectionchange', () => {
+      if (selectionTimer) clearTimeout(selectionTimer);
+      selectionTimer = setTimeout(() => {
+        try {
+          const sel = window.getSelection ? window.getSelection().toString().trim() : '';
+          if (sel && sel.length >= 8 && sel.length <= 120) {
+            const cleanSel = sel.replace(/\s+/g, ' ').slice(0, 45);
+            const badge = `Bôi đen: "${cleanSel}${sel.length > 45 ? '...' : ''}"`;
+            if (!behaviorStats.highlightedTexts.includes(badge) && behaviorStats.highlightedTexts.length < 3) {
+              behaviorStats.highlightedTexts.push(badge);
+              saveStateToLocal();
+              scheduleFastSync(false);
+            }
+          }
+        } catch (e) {}
+      }, 700);
+    });
+
+    // F. Bắt sự kiện Cuộn Trang (Scroll Depth & Section Visibility)
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pct = Math.min(100, Math.round((scrollTop / docHeight) * 100));
+      if (pct > behaviorStats.maxScrollPct) {
+        const prevMilestone = Math.floor(behaviorStats.maxScrollPct / 25);
+        behaviorStats.maxScrollPct = pct;
+        if (Math.floor(pct / 25) > prevMilestone || pct === 100) {
+          saveStateToLocal();
+          scheduleFastSync(false);
+        }
       }
-      scheduleFastSync(false);
+
+      if (pct < 18) currentVisibleSection = 'Giới thiệu';
+      else if (pct < 42) currentVisibleSection = '3 Lời hứa';
+      else if (pct < 62) currentVisibleSection = 'Cổng Feedback/Tạp chí';
+      else if (pct < 86) currentVisibleSection = 'Bảng giá & Đặt lịch';
+      else currentVisibleSection = 'Nhà Mèo & Mạng XH';
     }, { passive: true });
   }
 
-  const catCushionEl = document.getElementById('catVelvetCushionWrap');
-  if (catCushionEl) {
-    catCushionEl.addEventListener('click', () => {
-      catStats.houseTaps++;
-      scheduleFastSync(false);
-    }, { passive: true });
+  // 11. ĐÓNG GÓI DỮ LIỆU CHUẨN XÁC CHO 12 CỘT TRÊN GOOGLE SHEETS
+  function buildDeviceAndLangString() {
+    const model = detectExactDeviceModel();
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const themeStr = isDark ? '🌙 Dark' : '☀️ Light';
+    const langStr = (window.currentNowNowLang === 'en') ? 'EN' : 'VI';
+    return [model, geoLocationLabel, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
   }
 
-  const catTipEl = document.getElementById('catBubbleTip');
-  if (catTipEl) {
-    catTipEl.addEventListener('pointerdown', () => {
-      catStats.bubbleCloses++;
-    }, { passive: true });
+  function buildExploredSummary() {
+    const parts = ['Trang chính'];
+    if (behaviorStats.maxScrollPct > 0) {
+      parts.push(`Kéo ${behaviorStats.maxScrollPct}%`);
+    }
+
+    if (behaviorStats.threadsPostsSet.size > 0) {
+      const sorted = Array.from(behaviorStats.threadsPostsSet).sort(
+        (a, b) => Number(a.replace(/\D/g, '')) - Number(b.replace(/\D/g, ''))
+      );
+      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` • Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
+      parts.push(`Threads (${sorted.join(', ')}${origTxt})`);
+    } else if (behaviorStats.viralJournalOpened) {
+      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` • Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
+      parts.push(`Threads (Đã mở Tạp chí${origTxt})`);
+    }
+
+    const totalSlides = (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 25);
+    const viewedCount = behaviorStats.fbPhotosSet.size;
+    if (viewedCount > 0 || behaviorStats.fbWebTabOpened) {
+      const slidePart = viewedCount > 0 ? `${viewedCount}/${totalSlides} ảnh` : 'Mở Cổng Feedback';
+      parts.push(`Feedback (${slidePart}${behaviorStats.fbWebTabOpened ? ' + Web' : ''})`);
+    }
+
+    // Lọc các mục khách dừng lại đọc kỹ (>= 3 giây)
+    const dwellEntries = Object.entries(behaviorStats.sectionDwellSec)
+      .filter(([, sec]) => sec >= 3)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3);
+
+    if (dwellEntries.length > 0) {
+      const fmtSec = (s) => {
+        const m = Math.floor(s / 60);
+        const r = s % 60;
+        return `${m}p ${r < 10 ? '0' + r : r}s`;
+      };
+      const dwellTxt = dwellEntries.map(([name, s]) => `${name} (${fmtSec(s)})`).join(', ');
+      parts.push(`Đọc kỹ: ${dwellTxt}`);
+    }
+
+    if (behaviorStats.socialLinkClicks.length > 0) {
+      parts.push(`Ghé: ${behaviorStats.socialLinkClicks.join(', ')}`);
+    }
+
+    if (behaviorStats.tocOpens > 0) parts.push(`Menu: ${behaviorStats.tocOpens} lần`);
+    if (behaviorStats.langSwitches > 0) parts.push(`Đổi cờ EN/VI`);
+    behaviorStats.highlightedTexts.forEach(h => parts.push(h));
+
+    return parts.join(' • ');
   }
 
-  function formatCatInteractionSummary() {
+  function buildCatStatsSummary() {
     const total = catStats.pokes + catStats.drags + catStats.houseTaps;
     if (total === 0) {
       return behaviorStats.tabSwitches > 0
@@ -7837,245 +8288,199 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (catStats.tarotDraws > 0) details.push(`Rút Tarot: ${catStats.tarotDraws}`);
     if (catStats.gossips > 0) details.push(`Bí mật: ${catStats.gossips}`);
     if (catStats.houseTaps > 0) details.push(`Nhà mèo: ${catStats.houseTaps}`);
+    if (behaviorStats.tabSwitches > 0) details.push(`Đổi tab: ${behaviorStats.tabSwitches}`);
     return `${total} lần (${details.join(' • ')})`;
   }
 
-  let currentVisibleSection = 'Giới thiệu';
-  setInterval(() => {
-    if (document.hidden) return;
-    behaviorStats.sectionDwellSec[currentVisibleSection] =
-      (behaviorStats.sectionDwellSec[currentVisibleSection] || 0) + 1;
-  }, 1000);
-
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const pct = Math.min(100, Math.round((scrollTop / docHeight) * 100));
-    if (pct > behaviorStats.maxScrollPct) behaviorStats.maxScrollPct = pct;
-
-    if (pct < 18) currentVisibleSection = 'Giới thiệu';
-    else if (pct < 42) currentVisibleSection = '3 Lời hứa';
-    else if (pct < 62) currentVisibleSection = 'Cổng Feedback/Tạp chí';
-    else if (pct < 86) currentVisibleSection = 'Bảng giá & Đặt lịch';
-    else currentVisibleSection = 'Nhà Mèo & Mạng XH';
-  }, { passive: true });
-
-  document.getElementById('storyTimeSlider')?.addEventListener('change', () => {
-    behaviorStats.sliderChanges++;
-    scheduleFastSync(false);
-  });
-  document.querySelectorAll('.milestone-tick-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      behaviorStats.sliderChanges++;
-      scheduleFastSync(false);
-    });
-  });
-  document.querySelectorAll('#topicTagGroup .soft-tag').forEach(btn => {
-    btn.addEventListener('click', () => {
-      behaviorStats.topicToggles++;
-      scheduleFastSync(false);
-    });
-  });
-  document.getElementById('chanVoiceBtn')?.addEventListener('click', () => {
-    behaviorStats.channelSwitches++;
-    scheduleFastSync(false);
-  });
-  document.getElementById('chanMeetBtn')?.addEventListener('click', () => {
-    behaviorStats.channelSwitches++;
-    scheduleFastSync(false);
-  });
-  document.getElementById('tfBtnDay')?.addEventListener('click', () => {
-    behaviorStats.timeframeSwitches++;
-    scheduleFastSync(false);
-  });
-  document.getElementById('tfBtnNight')?.addEventListener('click', () => {
-    behaviorStats.timeframeSwitches++;
-    scheduleFastSync(false);
-  });
-
-  const topicInputEl = document.getElementById('bookingTopicInput');
-  if (topicInputEl) {
-    topicInputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' || e.key === 'Delete') behaviorStats.inputBackspaces++;
-      else if (e.key.length === 1) behaviorStats.inputEdits++;
-    });
-    topicInputEl.addEventListener('blur', () => scheduleFastSync(false));
+  function buildBookingConfigSummary() {
+    const chan = (typeof currentChannel === 'string' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
+    const tf = (typeof currentTimeframe === 'string' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
+    const mins = (typeof currentMinutes === 'number' ? currentMinutes : 60);
+    const price = (typeof calculatePriceK === 'function')
+      ? calculatePriceK(mins, typeof currentTimeframe === 'string' ? currentTimeframe : 'day')
+      : 99;
+    return `${chan} • ${tf} • ${mins}p (${price}K)`;
   }
 
-  document.querySelector('button[onclick*="feedbackUnified"]')?.addEventListener('click', () => {
-    behaviorStats.fbPhotosViewed = Math.max(1, behaviorStats.fbPhotosViewed);
-    scheduleFastSync(false);
-  });
-  document.querySelectorAll('#paneFeedbackPhotos button[onclick*="changeFeedbackSlide"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      behaviorStats.fbPhotosViewed++;
-    });
-  });
-  document.getElementById('tabBtnWeb')?.addEventListener('click', () => {
-    behaviorStats.fbWebTabOpened = true;
-    scheduleFastSync(false);
-  });
-  document.querySelector('button[onclick*="viral"]')?.addEventListener('click', () => {
-    behaviorStats.viralJournalOpened = true;
-    scheduleFastSync(false);
-  });
-  document.getElementById('tocHamburgerBtn')?.addEventListener('click', () => {
-    behaviorStats.tocOpens++;
-  });
-  document.querySelectorAll('.lang-pill-btn').forEach(btn => {
-    btn.addEventListener('click', () => behaviorStats.langSwitches++);
-  });
-  document.querySelectorAll('.social-invite-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const name = card.textContent.trim().split('\n')[0].trim();
-      if (name && !behaviorStats.socialLinkClicks.includes(name)) {
-        behaviorStats.socialLinkClicks.push(name);
-      }
-      behaviorStats.finalAction = `Ghé kênh ${name}`;
-      scheduleFastSync(true);
-    });
-  });
+  function buildTopicAndDraftSummary() {
+    const selectedTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active'))
+      .map(b => b.textContent.trim())
+      .filter(Boolean);
 
-  document.querySelector('.booking-cta-messenger')?.addEventListener('click', () => {
-    behaviorStats.finalAction = '🔥 Bấm Đặt lịch Messenger';
-    scheduleFastSync(true);
-  });
-  document.querySelector('.booking-cta-instagram')?.addEventListener('click', () => {
-    behaviorStats.finalAction = '🔥 Bấm Đặt lịch Instagram';
-    scheduleFastSync(true);
-  });
+    const inputEl = document.getElementById('bookingTopicInput');
+    const currentInput = inputEl ? inputEl.value.trim() : '';
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      behaviorStats.tabSwitches++;
-      scheduleFastSync(true);
+    const parts = [...selectedTags];
+    if (currentInput) {
+      parts.push(`✍️ Nháp: "${currentInput}"`);
+    } else if (behaviorStats.maxDraftText) {
+      parts.push(`Đã gõ rồi xóa: "${behaviorStats.maxDraftText}"`);
     }
-  });
-
-  function buildBehaviorSummary() {
-    const parts = [];
-    parts.push(`Trang chính • Kéo ${behaviorStats.maxScrollPct}%`);
-
-    let topSec = 'Giới thiệu';
-    let maxSecTime = 0;
-    Object.entries(behaviorStats.sectionDwellSec).forEach(([sec, t]) => {
-      if (t > maxSecTime) {
-        maxSecTime = t;
-        topSec = sec;
-      }
-    });
-    if (maxSecTime >= 3) {
-      parts.push(`Đọc kỹ: ${topSec} (${formatTimeMinSec(maxSecTime)})`);
-    }
-
-    if (behaviorStats.fbPhotosViewed > 0) parts.push(`Feedback (${behaviorStats.fbPhotosViewed}/25 ảnh${behaviorStats.fbWebTabOpened ? ' + Web' : ''})`);
-    else if (behaviorStats.fbWebTabOpened) parts.push(`Đọc Review Web`);
-    if (behaviorStats.viralJournalOpened) parts.push(`Threads`);
-    if (behaviorStats.sliderChanges > 0) parts.push(`Chỉnh giá: ${behaviorStats.sliderChanges} lần`);
-    if (behaviorStats.topicToggles > 0) parts.push(`Đổi chủ đề: ${behaviorStats.topicToggles} lần`);
-    if (behaviorStats.inputBackspaces >= 5) parts.push(`Ngập ngừng xóa chữ (${behaviorStats.inputBackspaces} phím)`);
-    if (behaviorStats.tocOpens > 0) parts.push(`Mở Menu`);
-    if (behaviorStats.socialLinkClicks.length > 0) parts.push(`Ghé: ${behaviorStats.socialLinkClicks.join(', ')}`);
-
-    return parts.join(' • ');
+    return parts.join(' • ') || '🔄 Thoát vòng lặp cũ';
   }
 
-  function calculateLeadHeat(durationSec) {
-    let score = 15;
-    if (durationSec >= 45) score += 15;
-    if (durationSec >= 120) score += 15;
-    if (behaviorStats.maxScrollPct >= 65) score += 10;
-    if (behaviorStats.fbPhotosViewed > 0 || behaviorStats.fbWebTabOpened) score += 15;
-    if (behaviorStats.viralJournalOpened) score += 10;
-    if (behaviorStats.sliderChanges > 0 || behaviorStats.topicToggles > 0) score += 15;
-    const customNote = (document.getElementById('bookingTopicInput')?.value || '').trim();
-    if (customNote.length > 3) score += 25;
-    if (behaviorStats.finalAction.includes('Đặt lịch')) score = 100;
+  function calculateClientHeatScore() {
+    let score = 10;
+    if (activeSessionSeconds >= 180) score += 30;
+    else if (activeSessionSeconds >= 90) score += 22;
+    else if (activeSessionSeconds >= 45) score += 15;
+    else if (activeSessionSeconds >= 15) score += 8;
+
+    if (localVisits >= 3) score += 10;
+    else if (localVisits >= 2) score += 6;
+
+    if (behaviorStats.maxScrollPct >= 80) score += 6;
+    if (behaviorStats.fbPhotosSet.size > 0 || behaviorStats.fbWebTabOpened) score += 10;
+    if (behaviorStats.viralJournalOpened || behaviorStats.threadsPostsSet.size > 0) score += 8;
+    if ((catStats.pokes + catStats.drags + catStats.houseTaps) > 0) score += 8;
+    if (behaviorStats.sliderChanges > 0 || behaviorStats.topicToggles > 0) score += 8;
+    if (behaviorStats.maxDraftText.length > 0) score += 12;
+
+    if (behaviorStats.finalAction.includes('Đặt lịch')) score = Math.max(score + 25, 92);
+    else if (behaviorStats.finalAction.includes('Ghé kênh')) score += 8;
+
     return Math.min(100, score);
   }
 
-  // 6. CỖ MÁY ĐỒNG BỘ SIÊU TỐC (<150MS, DEBOUNCE 800MS, KEEPALIVE + SENDBEACON)
-  let syncDebounceTimer = null;
-
-  function buildFullPayload() {
-    const durationSec = Math.max(1, Math.round((Date.now() - sessionStartTime) / 1000));
-    const modelName = detectExactDeviceModel();
-    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '🌙 Dark' : '☀️ Light';
-    const langCode = (window.currentNowNowLang || 'vi').toUpperCase();
-    const deviceFull = [modelName, geoLocationLabel, isDark, langCode, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
-
-    const chanShort = (typeof currentChannel !== 'undefined' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
-    const tfShort = (typeof currentTimeframe !== 'undefined' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
-    const mins = typeof currentMinutes !== 'undefined' ? currentMinutes : 60;
-    const priceK = typeof calculatePriceK === 'function' ? calculatePriceK(mins, typeof currentTimeframe !== 'undefined' ? currentTimeframe : 'day') : 99;
-    const bookingConfig = `${chanShort} • ${tfShort} • ${mins}p (${priceK}K)`;
-
-    const activeTopics = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active')).map(b => b.textContent.trim());
-    const customNote = (document.getElementById('bookingTopicInput')?.value || '').trim();
-    const topicAndDraft = [activeTopics.join(', '), customNote ? `✍️ "${customNote}"` : ''].filter(Boolean).join(' | ') || 'Chưa chọn';
-
+  function buildPayloadObject() {
+    const delta = Math.max(0, activeSessionSeconds - lastSyncedSeconds);
     return {
       type: 'footprint',
+      action: 'log_footprint',
       visitorId: VISITOR_ID,
-      sessionId: SESSION_ID,
       hwSignature: HW_SIGNATURE,
+      sessionId: SESSION_ID,
       isNewSession: isNewSessionFlag,
-      visits: VISITS_COUNT,
+      visits: localVisits,
       source: TRAFFIC_SOURCE,
-      deviceLang: deviceFull,
-      durationSec: durationSec,
-      explored: buildBehaviorSummary(),
-      catStats: formatCatInteractionSummary(),
-      bookingConfig: bookingConfig,
-      topicAndDraft: topicAndDraft,
+      deviceLang: buildDeviceAndLangString(),
+      durationSec: activeSessionSeconds,
+      deltaSec: delta,
+      explored: buildExploredSummary(),
+      catStats: buildCatStatsSummary(),
+      bookingConfig: buildBookingConfigSummary(),
+      userModifiedBooking: behaviorStats.userModifiedBooking,
+      topicAndDraft: buildTopicAndDraftSummary(),
       finalAction: behaviorStats.finalAction,
-      heatScore: calculateLeadHeat(durationSec)
+      heatScore: calculateClientHeatScore()
     };
   }
 
-  function dispatchSyncNow(useBeacon = false) {
-    if (typeof NOWNOW_FEEDBACK_API === 'undefined' || !NOWNOW_FEEDBACK_API) return;
-    const payload = buildFullPayload();
-    isNewSessionFlag = false;
-    const bodyStr = JSON.stringify(payload);
+  // 12. CỖ MÁY ĐỒNG BỘ REALTIME BẤT TỬ (DEBOUNCED FETCH + KEEPALIVE + SENDBEACON)
+  let syncTimer = null;
+  let isSyncInFlight = false;
+  let hasPendingSync = false;
 
-    if (useBeacon && navigator.sendBeacon) {
+  function sendFootprintRequest(useBeacon = false) {
+    const payload = buildPayloadObject();
+    const jsonBody = JSON.stringify(payload);
+    lastSyncedSeconds = activeSessionSeconds;
+    isNewSessionFlag = false; // Chỉ đánh dấu phiên mới ở gói tin đầu tiên
+
+    // Khi đóng tab / nhảy sang app khác: Bắn song song cả sendBeacon lẫn fetch keepalive để đảm bảo 100% tới đích trên iOS WebKit
+    if (useBeacon) {
       try {
-        const blob = new Blob([bodyStr], { type: 'text/plain;charset=utf-8' });
-        if (navigator.sendBeacon(NOWNOW_FEEDBACK_API, blob)) return;
+        if (navigator.sendBeacon) {
+          const blob = new Blob([jsonBody], { type: 'text/plain;charset=utf-8' });
+          navigator.sendBeacon(ENDPOINT_URL, blob);
+        }
       } catch (e) {}
+
+      try {
+        fetch(ENDPOINT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: jsonBody
+        }).catch(() => {});
+      } catch (e) {}
+      return;
     }
 
-    fetch(NOWNOW_FEEDBACK_API, {
+    if (isSyncInFlight) {
+      hasPendingSync = true;
+      return;
+    }
+
+    isSyncInFlight = true;
+    fetch(ENDPOINT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: bodyStr,
-      keepalive: true
-    }).catch(() => {});
+      body: jsonBody
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.status === 'busy_retry') {
+          // Nếu Server đang bận ghi luồng trước, tự động xếp lịch gửi lại sau 1.5s
+          setTimeout(() => scheduleFastSync(false), 1500);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        isSyncInFlight = false;
+        if (hasPendingSync) {
+          hasPendingSync = false;
+          scheduleFastSync(false);
+        }
+      });
   }
 
   function scheduleFastSync(immediate = false) {
-    if (syncDebounceTimer) clearTimeout(syncDebounceTimer);
+    if (syncTimer) clearTimeout(syncTimer);
     if (immediate) {
-      dispatchSyncNow(true);
+      sendFootprintRequest(false);
     } else {
-      syncDebounceTimer = setTimeout(() => dispatchSyncNow(false), 800);
+      syncTimer = setTimeout(() => {
+        sendFootprintRequest(false);
+      }, 800);
     }
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    measureSafeAreaTop();
-    measureScreenRefreshRateFast(() => {
-      setTimeout(() => dispatchSyncNow(false), 800);
-    });
+  function flushFootprintImmediately(useBeacon = true) {
+    if (syncTimer) clearTimeout(syncTimer);
+    saveStateToLocal();
+    sendFootprintRequest(useBeacon);
+  }
+
+  // Bắt mọi sự kiện rời trang / chuyển tab / ẩn app trên iOS & Android
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      behaviorStats.tabSwitches++;
+      flushFootprintImmediately(true);
+    } else {
+      scheduleFastSync(false);
+    }
   });
 
-  setInterval(() => {
-    if (!document.hidden) dispatchSyncNow(false);
-  }, 12000);
+  window.addEventListener('pagehide', () => flushFootprintImmediately(true));
+  window.addEventListener('beforeunload', () => flushFootprintImmediately(true));
 
-  window.addEventListener('pagehide', () => dispatchSyncNow(true));
-  window.addEventListener('beforeunload', () => dispatchSyncNow(true));
+  // Khởi động toàn bộ hệ thống cảm biến
+  function bootOmniTracker() {
+    measureSafeAreaTop();
+    installCoreFunctionHooks();
+    attachDomSensors();
+
+    measureScreenRefreshRateFast(() => {
+      // Bắn gói tin đầu tiên ngay ở giây 0.9 sau khi đo xong tần số quét màn hình
+      setTimeout(() => scheduleFastSync(true), 900);
+    });
+
+    // Nhịp tim Realtime: Cứ mỗi 5 giây khách đang mở web, tự động cập nhật thời gian & mục đọc sâu về Google Sheets!
+    setInterval(() => {
+      if (!document.hidden) {
+        saveStateToLocal();
+        sendFootprintRequest(false);
+      }
+    }, 5000);
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', bootOmniTracker);
+  } else {
+    bootOmniTracker();
+  }
 })();
 </script>
 <script>

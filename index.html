@@ -7500,7 +7500,7 @@ I'd love to book a 1:1 Tarot & CBT session:
 </script>
 
 <!-- =========================================================================
-     BỘ CẢM BIẾN DẤU CHÂN SỐ & TÂM LÝ NGƯỢC (NOWNOW TRACKER V2.0 - MIND READER)
+     BỘ CẢM BIẾN DẤU CHÂN SỐ & TÂM LÝ NGƯỢC (NOWNOW TRACKER V3.5 - OMEGA TELEMETRY)
      ========================================================================= -->
 <script>
 (function initNowNowDigitalFootprintTracker() {
@@ -7525,52 +7525,116 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (localStorage.getItem('nownow_admin_ignore') === '1') return;
   } catch (e) {}
 
-  // 2. NHẬN DIỆN CHÍNH XÁC ĐỜI MÁY (IPHONE / IPAD / ANDROID / PC)
+  // 2. TỪ ĐIỂN DỊCH MÃ PHẦN CỨNG NỘI BỘ -> TÊN THƯƠNG MẠI (IOS & ANDROID)
+  const APPLE_MODEL_MAP = {
+    'iPhone11,2': 'iPhone XS', 'iPhone11,4': 'iPhone XS Max', 'iPhone11,6': 'iPhone XS Max', 'iPhone11,8': 'iPhone XR',
+    'iPhone12,1': 'iPhone 11', 'iPhone12,3': 'iPhone 11 Pro', 'iPhone12,5': 'iPhone 11 Pro Max', 'iPhone12,8': 'iPhone SE 2',
+    'iPhone13,1': 'iPhone 12 mini', 'iPhone13,2': 'iPhone 12', 'iPhone13,3': 'iPhone 12 Pro', 'iPhone13,4': 'iPhone 12 Pro Max',
+    'iPhone14,2': 'iPhone 13 Pro', 'iPhone14,3': 'iPhone 13 Pro Max', 'iPhone14,4': 'iPhone 13 mini', 'iPhone14,5': 'iPhone 13',
+    'iPhone14,6': 'iPhone SE 3', 'iPhone14,7': 'iPhone 14', 'iPhone14,8': 'iPhone 14 Plus',
+    'iPhone15,2': 'iPhone 14 Pro', 'iPhone15,3': 'iPhone 14 Pro Max', 'iPhone15,4': 'iPhone 15', 'iPhone15,5': 'iPhone 15 Plus',
+    'iPhone16,1': 'iPhone 15 Pro', 'iPhone16,2': 'iPhone 15 Pro Max',
+    'iPhone17,1': 'iPhone 16 Pro', 'iPhone17,2': 'iPhone 16 Pro Max', 'iPhone17,3': 'iPhone 16', 'iPhone17,4': 'iPhone 16 Plus', 'iPhone17,5': 'iPhone 16e',
+    'iPhone18,1': 'iPhone 17 Pro', 'iPhone18,2': 'iPhone 17 Pro Max', 'iPhone18,3': 'iPhone 17', 'iPhone18,4': 'iPhone 17 Air', 'iPhone18,5': 'iPhone 17e'
+  };
+
+  const ANDROID_MODEL_MAP = {
+    'SM-S948': 'Galaxy S26 Ultra', 'SM-S946': 'Galaxy S26+', 'SM-S941': 'Galaxy S26',
+    'SM-S938': 'Galaxy S25 Ultra', 'SM-S936': 'Galaxy S25+', 'SM-S931': 'Galaxy S25', 'SM-S731': 'Galaxy S25 FE',
+    'SM-S928': 'Galaxy S24 Ultra', 'SM-S926': 'Galaxy S24+', 'SM-S921': 'Galaxy S24', 'SM-S721': 'Galaxy S24 FE',
+    'SM-S918': 'Galaxy S23 Ultra', 'SM-S916': 'Galaxy S23+', 'SM-S911': 'Galaxy S23',
+    'SM-S908': 'Galaxy S22 Ultra', 'SM-F956': 'Galaxy Z Fold6', 'SM-F966': 'Galaxy Z Fold7',
+    'SM-F741': 'Galaxy Z Flip6', 'SM-F761': 'Galaxy Z Flip7',
+    'SM-A566': 'Galaxy A56', 'SM-A556': 'Galaxy A55', 'SM-A546': 'Galaxy A54', 'SM-A356': 'Galaxy A35'
+  };
+
+  function translateCommercialModel(rawCode) {
+    if (!rawCode) return '';
+    const clean = rawCode.trim();
+    if (APPLE_MODEL_MAP[clean]) return APPLE_MODEL_MAP[clean];
+    const prefix7 = clean.toUpperCase().slice(0, 7);
+    if (ANDROID_MODEL_MAP[prefix7]) return `${ANDROID_MODEL_MAP[prefix7]} (${clean})`;
+    return clean;
+  }
+
+  // Đo tần số quét màn hình thực tế (120Hz ProMotion vs 60Hz) qua requestAnimationFrame
+  let measuredHzTag = '';
+  function measureScreenRefreshRate() {
+    try {
+      let frames = 0;
+      const deltas = [];
+      let prevTs = performance.now();
+      function step(now) {
+        const dt = now - prevTs;
+        prevTs = now;
+        if (dt > 2 && dt < 50) deltas.push(dt);
+        frames++;
+        if (frames < 36) {
+          requestAnimationFrame(step);
+        } else if (deltas.length >= 15) {
+          deltas.sort((a, b) => a - b);
+          const median = deltas[Math.floor(deltas.length / 2)];
+          measuredHzTag = median < 11.2 ? '120Hz ProMotion' : '60Hz';
+        }
+      }
+      requestAnimationFrame(step);
+    } catch (e) {}
+  }
+  measureScreenRefreshRate();
+
   let resolvedDeviceModel = '';
 
-  function inferAppleModel() {
+  function inferAppleModelFromSpecs() {
     const ua = navigator.userAgent || '';
+    // 1. Ưu tiên bắt mã nội bộ trong In-App Browser (Instagram / Threads / Facebook)
+    const internalMatch = ua.match(/(iPhone\d+,\d+|iPad\d+,\d+)/);
+    if (internalMatch && internalMatch[1]) {
+      return translateCommercialModel(internalMatch[1]);
+    }
+
+    // 2. Safari thuần: Kết hợp Viewport + DPR + Tần số quét màn hình
     const sw = Math.min(screen.width, screen.height);
     const sh = Math.max(screen.width, screen.height);
     const dpr = Math.round(window.devicePixelRatio || 1);
     const key = `${sw}x${sh}@${dpr}`;
+    const is120 = measuredHzTag === '120Hz ProMotion';
 
     if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
       const ipadMap = {
         '768x1024@2': 'iPad Mini / Air / Gen 9',
         '810x1080@2': 'iPad Gen 10',
-        '820x1180@2': 'iPad Air 11" (M1/M2)',
+        '820x1180@2': 'iPad Air 11" (M1/M2/M3)',
         '834x1194@2': 'iPad Pro 11"',
         '1024x1366@2': 'iPad Pro 12.9" / 13"'
       };
       return ipadMap[key] || `iPad (${sw}x${sh})`;
     }
 
-    const iphoneMap = {
-      '375x667@2': 'iPhone SE / 8',
-      '414x736@3': 'iPhone 8 Plus',
-      '375x812@3': 'iPhone X / XS / 11 Pro / 12-13 mini',
-      '414x896@2': 'iPhone XR / 11',
-      '414x896@3': 'iPhone XS Max / 11 Pro Max',
-      '390x844@3': 'iPhone 12 / 13 / 14 / 16e',
-      '428x926@3': 'iPhone 12-13 Pro Max / 14 Plus',
-      '393x852@3': 'iPhone 14 Pro / 15 / 15 Pro / 16',
-      '430x932@3': 'iPhone 14 Pro Max / 15-16 Plus / 15 Pro Max',
-      '402x874@3': 'iPhone 16 Pro / 17 / 17 Pro',
-      '440x956@3': 'iPhone 16 Pro Max / 17 Pro Max'
-    };
-    return iphoneMap[key] || `iPhone (${sw}x${sh}@${dpr}x)`;
+    if (key === '393x852@3') return is120 ? 'iPhone 14 Pro / 15 Pro (120Hz)' : 'iPhone 15 / 16 (hoặc 14-15 Pro Tiết kiệm pin)';
+    if (key === '430x932@3') return is120 ? 'iPhone 14 Pro Max / 15 Pro Max (120Hz)' : 'iPhone 15 Plus / 16 Plus';
+    if (key === '402x874@3') return 'iPhone 16 Pro / 17 / 17 Pro (120Hz)';
+    if (key === '440x956@3') return 'iPhone 16 Pro Max / 17 Pro Max (120Hz)';
+    if (key === '390x844@3') return 'iPhone 12 / 13 / 14 / 16e';
+    if (key === '428x926@3') return 'iPhone 12-13 Pro Max / 14 Plus';
+    if (key === '375x812@3') return 'iPhone X / XS / 11 Pro / 12-13 mini';
+    if (key === '414x896@2') return 'iPhone XR / 11';
+    if (key === '414x896@3') return 'iPhone XS Max / 11 Pro Max';
+    if (key === '375x667@2') return 'iPhone SE / 8';
+
+    return `iPhone (${sw}x${sh}@${dpr}x${measuredHzTag ? ' • ' + measuredHzTag : ''})`;
   }
 
   function initDeviceDetection() {
     const ua = navigator.userAgent || '';
     if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
-      resolvedDeviceModel = inferAppleModel();
+      resolvedDeviceModel = inferAppleModelFromSpecs();
       return;
     }
+
     if (/Android/i.test(ua)) {
       const m = ua.match(/Android[^;]+;\s*([^;)]+)\s*(?:Build|\))/i);
-      resolvedDeviceModel = (m && m[1] && m[1].trim() !== 'K') ? `Android (${m[1].trim()})` : 'Android';
+      const rawAndroid = (m && m[1] && m[1].trim() !== 'K') ? m[1].trim() : '';
+      resolvedDeviceModel = rawAndroid ? translateCommercialModel(rawAndroid) : 'Android';
     } else if (/Windows/i.test(ua)) {
       resolvedDeviceModel = 'Windows PC';
     } else if (/Mac OS X/i.test(ua)) {
@@ -7579,13 +7643,14 @@ I'd love to book a 1:1 Tarot & CBT session:
       resolvedDeviceModel = 'Desktop';
     }
 
+    // Client Hints bất đồng bộ cho Chrome / Samsung Internet trên Android
     if (navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
-      navigator.userAgentData.getHighEntropyValues(['model'])
+      navigator.userAgentData.getHighEntropyValues(['model', 'platformVersion'])
         .then(hints => {
           if (hints.model && hints.model.trim() !== '') {
-            resolvedDeviceModel = /Android/i.test(ua)
-              ? `Android (${hints.model.trim()})`
-              : `${resolvedDeviceModel} (${hints.model.trim()})`;
+            const friendly = translateCommercialModel(hints.model.trim());
+            const ver = hints.platformVersion ? ` (Android ${hints.platformVersion.split('.')[0]})` : '';
+            resolvedDeviceModel = `${friendly}${ver}`;
           }
         })
         .catch(() => {});
@@ -7593,7 +7658,40 @@ I'd love to book a 1:1 Tarot & CBT session:
   }
   initDeviceDetection();
 
-  // 3. VÂN TAY PHẦN CỨNG ENTROPY CAO ([HW-XXXXXX]) CHỐNG NHẦM 2 MÁY GIỐNG NHAU
+  // 3. VÂN TAY PHẦN CỨNG BẤT TỬ ([HW-XXXXXX]) BẰNG SÓNG ÂM NGẦM + WEBGL + VOICES + P3 GAMUT
+  let audioFingerprintHash = '';
+  function computeSilentAudioHash() {
+    try {
+      const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      if (!OfflineCtx) return;
+      const ctx = new OfflineCtx(1, 5000, 44100);
+      const osc = ctx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(10000, ctx.currentTime);
+
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.setValueAtTime(-50, ctx.currentTime);
+      comp.knee.setValueAtTime(40, ctx.currentTime);
+      comp.ratio.setValueAtTime(12, ctx.currentTime);
+      comp.attack.setValueAtTime(0, ctx.currentTime);
+      comp.release.setValueAtTime(0.25, ctx.currentTime);
+
+      osc.connect(comp);
+      comp.connect(ctx.destination);
+      osc.start(0);
+
+      ctx.startRendering().then(buffer => {
+        const data = buffer.getChannelData(0);
+        let sum = 0;
+        for (let i = 4500; i < 5000; i++) {
+          sum += Math.abs(data[i]);
+        }
+        audioFingerprintHash = sum.toFixed(6);
+        HW_SIGNATURE = computeHardwareSignature();
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
   function computeHardwareSignature() {
     try {
       let gpuInfo = '';
@@ -7609,7 +7707,7 @@ I'd love to book a 1:1 Tarot & CBT session:
           ctx2d.fillStyle = '#f60';
           ctx2d.fillRect(10, 2, 62, 20);
           ctx2d.fillStyle = '#069';
-          ctx2d.fillText('NowNowTarot_FP_2026_🐾✨', 4, 8);
+          ctx2d.fillText('NowNowTarot_Omega_2026_🐾', 4, 8);
           canvasSig = c.toDataURL().slice(-64);
         }
       } catch (e) {}
@@ -7621,21 +7719,25 @@ I'd love to book a 1:1 Tarot & CBT session:
           const dbg = gl.getExtension('WEBGL_debug_renderer_info');
           const renderer = dbg ? (gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '') : '';
           const maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE) || '';
-          gpuInfo = renderer + ':' + maxTex;
+          const exts = (gl.getSupportedExtensions() || []).length;
+          gpuInfo = `${renderer}:${maxTex}:${exts}`;
         }
       } catch (e) {}
 
       let voicesSig = '';
       try {
         if (window.speechSynthesis && typeof window.speechSynthesis.getVoices === 'function') {
-          voicesSig = window.speechSynthesis.getVoices().map(v => v.name).slice(0, 12).join(',');
+          voicesSig = window.speechSynthesis.getVoices().map(v => v.name).slice(0, 15).join(',');
         }
       } catch (e) {}
+
+      const hasP3 = window.matchMedia && window.matchMedia('(color-gamut: p3)').matches ? 'P3' : 'sRGB';
 
       const rawSig = [
         screen.width + 'x' + screen.height,
         window.devicePixelRatio || 1,
         screen.colorDepth || 24,
+        hasP3,
         navigator.hardwareConcurrency || 0,
         navigator.deviceMemory || 0,
         navigator.maxTouchPoints || 0,
@@ -7643,7 +7745,8 @@ I'd love to book a 1:1 Tarot & CBT session:
         Intl.DateTimeFormat().resolvedOptions().timeZone || '',
         gpuInfo,
         canvasSig,
-        voicesSig
+        voicesSig,
+        audioFingerprintHash
       ].join('|');
 
       let hash = 2166136261;
@@ -7659,14 +7762,68 @@ I'd love to book a 1:1 Tarot & CBT session:
   }
 
   let HW_SIGNATURE = computeHardwareSignature();
+  computeSilentAudioHash();
   if (window.speechSynthesis) {
     window.speechSynthesis.onvoiceschanged = () => {
       HW_SIGNATURE = computeHardwareSignature();
     };
   }
 
-  // 4. MÃ ĐỊNH DANH DẤU CHÂN PHIÊN TRÌNH DUYỆT (#NNT-WXXXX)
+  // 4. ĐỊNH VỊ TỈNH/THÀNH PHỐ + NHÀ MẠNG + PHÁT HIỆN VPN (KHÔNG XIN QUYỀN GPS)
+  let geoLocationLabel = '';
+  let isOverseasOrVpn = false;
+
+  function fetchIpGeoAndIsp() {
+    try {
+      const cached = sessionStorage.getItem('nownow_ip_geo_v1');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        geoLocationLabel = parsed.label || '';
+        isOverseasOrVpn = Boolean(parsed.overseas);
+        return;
+      }
+    } catch (e) {}
+
+    const deviceTz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2600);
+
+    fetch('https://ipwho.is/', { signal: controller.signal })
+      .then(r => r.json())
+      .then(d => {
+        clearTimeout(timer);
+        if (!d || d.success === false) return;
+        const city = d.city || d.region || '';
+        const countryCode = d.country_code || '';
+        const countryName = countryCode === 'VN' ? 'VN' : (d.country || countryCode);
+        const rawIsp = (d.connection && (d.connection.isp || d.connection.org)) || '';
+        const cleanIsp = rawIsp
+          .replace(/Corporation|Joint Stock Company|Telecommunications|Telecom|Group|Limited|Ltd\.?|Co\.,?/gi, '')
+          .trim()
+          .slice(0, 22);
+        const ipTz = (d.timezone && d.timezone.id) || '';
+
+        let vpnFlag = '';
+        if (ipTz && deviceTz && ipTz !== deviceTz && !(ipTz.includes('Bangkok') && deviceTz.includes('Ho_Chi_Minh'))) {
+          vpnFlag = ' | ⚠️ Lệch múi giờ/VPN';
+        }
+        if (countryCode && countryCode !== 'VN') {
+          isOverseasOrVpn = true;
+        }
+
+        const place = [city, countryName].filter(Boolean).join(', ');
+        geoLocationLabel = `📍 ${place}${cleanIsp ? ' (' + cleanIsp + ')' : ''}${vpnFlag}`;
+        try {
+          sessionStorage.setItem('nownow_ip_geo_v1', JSON.stringify({ label: geoLocationLabel, overseas: isOverseasOrVpn }));
+        } catch (e) {}
+      })
+      .catch(() => clearTimeout(timer));
+  }
+  fetchIpGeoAndIsp();
+
+  // 5. MÃ ĐỊNH DANH DẤU CHÂN TRÌNH DUYỆT (#NNT-WXXXX) & ĐẾM SỐ LẦN QUAY LẠI
   const FP_ID_KEY = 'nownow_visitor_fp_id_v1';
+  const FP_VISITS_KEY = 'nownow_visitor_count_v1';
   const isFreshBrowser = !localStorage.getItem(FP_ID_KEY);
 
   function getOrCreateVisitorId() {
@@ -7686,11 +7843,81 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
   }
 
+  function incrementVisitCount() {
+    try {
+      const prev = parseInt(localStorage.getItem(FP_VISITS_KEY) || '0', 10) || 0;
+      const next = prev + 1;
+      localStorage.setItem(FP_VISITS_KEY, String(next));
+      return next;
+    } catch (e) {
+      return 1;
+    }
+  }
+
   const VISITOR_ID = getOrCreateVisitorId();
+  const VISITS_COUNT = incrementVisitCount();
   const SESSION_ID = 'S' + Date.now().toString(36).toUpperCase();
   const sessionStartTime = Date.now();
 
-  // 4. BỘ NHỚ TÂM LÝ XUYÊN LẦN TRUY CẬP (ADAPTIVE MIND-READING MEMORY)
+  // 6. NHẬN DIỆN NGUỒN DẪN, GIAO DIỆN TỐI & PIN
+  function detectTrafficSource() {
+    try {
+      const saved = sessionStorage.getItem('nownow_first_source');
+      if (saved && saved !== 'Direct') return saved;
+    } catch (e) {}
+
+    const ua = (navigator.userAgent || '').toLowerCase();
+    const ref = (document.referrer || '').toLowerCase();
+    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
+    let src = 'Direct';
+
+    if (ua.includes('barcelona') || utm.includes('threads') || ref.includes('threads.')) {
+      src = 'App Threads';
+    } else if (ua.includes('instagram') || utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) {
+      src = 'App Instagram';
+    } else if (ua.includes('fbav') || ua.includes('fban') || utm.includes('fb') || ref.includes('facebook.') || ref.includes('fbclid')) {
+      src = 'App Facebook';
+    } else if (ua.includes('aweme') || utm.includes('tiktok') || ref.includes('tiktok.') || urlParams.has('ttclid')) {
+      src = 'App TikTok';
+    } else if (ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios')) {
+      src = 'Safari (Ngoài App)';
+    } else if (ua.includes('chrome') || ua.includes('crios') || ua.includes('fxios')) {
+      src = 'Chrome / Trình duyệt khác';
+    } else if (ref.includes('google.')) {
+      src = 'Google Search';
+    } else if (utm) {
+      src = utm;
+    }
+
+    try { sessionStorage.setItem('nownow_first_source', src); } catch (e) {}
+    return src;
+  }
+
+  let batteryPct = null;
+  let batteryTag = '';
+  if (navigator.getBattery) {
+    navigator.getBattery().then(bat => {
+      batteryPct = Math.round(bat.level * 100);
+      batteryTag = bat.charging ? `⚡${batteryPct}%` : (batteryPct <= 20 ? `🪫${batteryPct}%` : `🔋${batteryPct}%`);
+    }).catch(() => {});
+  }
+
+  function buildDeviceAndRegionLabel() {
+    if (/iPhone|iPad/i.test(navigator.userAgent || '') && !/iPhone\d+,\d+/.test(navigator.userAgent || '')) {
+      resolvedDeviceModel = inferAppleModelFromSpecs();
+    }
+    const langCode = (window.currentNowNowLang || navigator.language || 'vi').toUpperCase().slice(0, 2);
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const themeTag = isDark ? '🌙 Dark' : '☀️ Light';
+    const net = (navigator.connection && navigator.connection.effectiveType) ? navigator.connection.effectiveType.toUpperCase() : '';
+    const statusParts = [themeTag, batteryTag, net].filter(Boolean).join(' | ');
+    const fallbackRegion = `Vùng: ${(Intl.DateTimeFormat().resolvedOptions().timeZone || '').includes('Ho_Chi_Minh') ? 'VN' : 'Global'}`;
+    const locPart = geoLocationLabel || fallbackRegion;
+
+    return `${resolvedDeviceModel} • ${locPart} • ${statusParts} • ${langCode} • [${HW_SIGNATURE}]`;
+  }
+
+  // 7. BỘ NHỚ TÂM LÝ XUYÊN LẦN TRUY CẬP (ADAPTIVE MIND-READING MEMORY)
   const PSYCH_MEM_KEY = 'nownow_psych_profile_v1';
   const THREAD_TOPICS_MAP = [
     'chuyện tam quan & chấp nhận sự khác biệt',
@@ -7722,57 +7949,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     } catch (e) {}
   }
 
-  // 5. NHẬN DIỆN NGUỒN DẪN & THIẾT BỊ
-  function detectTrafficSource() {
-    try {
-      const saved = sessionStorage.getItem('nownow_first_source');
-      if (saved && saved !== 'Direct') return saved;
-    } catch (e) {}
-
-    const ua = (navigator.userAgent || '').toLowerCase();
-    const ref = (document.referrer || '').toLowerCase();
-    const utm = (urlParams.get('utm_source') || urlParams.get('ref') || '').toLowerCase();
-    
-    let src = 'Direct';
-
-    if (ua.includes('barcelona') || utm.includes('threads') || ref.includes('threads.')) {
-      src = 'App Threads';
-    } else if (ua.includes('instagram') || utm.includes('ig') || utm.includes('insta') || ref.includes('instagram.')) {
-      src = 'App Instagram';
-    } else if (ua.includes('fbav') || ua.includes('fban') || utm.includes('fb') || ref.includes('facebook.') || ref.includes('fbclid')) {
-      src = 'App Facebook';
-    } else if (ua.includes('aweme') || utm.includes('tiktok') || ref.includes('tiktok.') || urlParams.has('ttclid')) {
-      src = 'App TikTok';
-    } else if (ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios')) {
-      src = 'Safari (Ngoài App)';
-    } else if (ua.includes('chrome') || ua.includes('crios') || ua.includes('fxios')) {
-      src = 'Chrome / Trình duyệt khác';
-    } else if (ref.includes('google.')) {
-      src = 'Google Search';
-    } else if (utm) {
-      src = utm;
-    }
-
-    try { sessionStorage.setItem('nownow_first_source', src); } catch (e) {}
-    return src;
-  }
-
-  let batteryTag = '';
-  if (navigator.getBattery) {
-    navigator.getBattery().then(bat => {
-      const pct = Math.round(bat.level * 100);
-      if (pct <= 20 && !bat.charging) batteryTag = ` | 🪫 Pin ${pct}%`;
-    }).catch(() => {});
-  }
-
-  function detectDeviceType() {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-    const region = (tz.includes('Ho_Chi_Minh') || tz.includes('Saigon') || tz.includes('Bangkok')) ? 'VN' : (tz.split('/').pop() || 'Global');
-    const net = (navigator.connection && navigator.connection.effectiveType) ? ` | ${navigator.connection.effectiveType.toUpperCase()}` : '';
-    return `${resolvedDeviceModel} (Vùng: ${region}${batteryTag}${net})`;
-  }
-
-  // 6. TRẠNG THÁI HÀNH VI & VI LƯỠNG LỰ TRONG PHIÊN
+  // 8. TRẠNG THÁI HÀNH VI & VI LƯỠNG LỰ TÂM LÝ (MICRO-SIGNALS)
   const state = {
     hasMeaningfulInteraction: false,
     maxScrollY: 0,
@@ -7781,74 +7958,66 @@ I'd love to book a 1:1 Tarot & CBT session:
     viewedWebReviews: false,
     openedThreads: false,
     readThreadPosts: new Set(),
+    postDwellMs: {},
+    activePostIdx: -1,
+    activePostEnterTs: 0,
     catPokes: 0,
     lastTarotCard: '',
     touchedBookingConfig: false,
+    // Theo dõi tự kiểm duyệt (gõ > 30 ký tự rồi xóa)
+    maxDraftLen: 0,
+    erasedLongDraft: '',
+    selfCensorshipCount: 0,
     draftNoteHistory: '',
     finalAction: 'Chỉ xem rồi thoát',
-    // Micro-Hesitation Telemetry
     peakMinutes: 60,
     priceHesitation: '',
     priceReassuredShown: false,
     highlightedText: '',
+    copiedText: '',
     tabHopCount: 0,
     tabHopReassuredShown: false,
     lastSentHash: '',
     lastSentTimestamp: 0
   };
 
+  function commitActiveThreadDwell() {
+    if (state.activePostIdx !== -1 && state.activePostEnterTs > 0) {
+      const elapsed = Date.now() - state.activePostEnterTs;
+      if (elapsed >= 1500 && elapsed <= 600000) {
+        state.postDwellMs[state.activePostIdx] = (state.postDwellMs[state.activePostIdx] || 0) + elapsed;
+      }
+      state.activePostEnterTs = Date.now();
+    }
+  }
+
   window.addEventListener('scroll', () => {
     if (window.scrollY > state.maxScrollY) state.maxScrollY = window.scrollY;
+    if (window.scrollY > 250) state.hasMeaningfulInteraction = true;
   }, { passive: true });
 
-  // Bắt hành vi bôi đen chữ trên web hoặc trong Tạp Chí Threads
-  function captureSelectedText() {
+  function captureSelectedText(isCopyEvent = false) {
     setTimeout(() => {
       try {
         const sel = window.getSelection ? window.getSelection().toString().trim() : '';
-        if (sel.length >= 10 && sel.length <= 160) {
+        if (sel.length >= 10 && sel.length <= 180) {
           state.hasMeaningfulInteraction = true;
-          state.highlightedText = sel.replace(/\s+/g, ' ');
-          savePsychProfile({ lastHighlight: state.highlightedText.slice(0, 70) });
+          const cleanSel = sel.replace(/\s+/g, ' ');
+          if (isCopyEvent) {
+            state.copiedText = cleanSel;
+          } else {
+            state.highlightedText = cleanSel;
+          }
+          savePsychProfile({ lastHighlight: cleanSel.slice(0, 70) });
         }
       } catch (e) {}
-    }, 220);
+    }, 150);
   }
-  document.addEventListener('mouseup', captureSelectedText, { passive: true });
-  document.addEventListener('touchend', captureSelectedText, { passive: true });
+  document.addEventListener('mouseup', () => captureSelectedText(false), { passive: true });
+  document.addEventListener('touchend', () => captureSelectedText(false), { passive: true });
+  document.addEventListener('copy', () => captureSelectedText(true), { passive: true });
 
-  // Bắt hành vi "nhấp nhổm" đổi tab/app (mở Messenger/IG rồi lại quay về web)
-  document.addEventListener('visibilitychange', () => {
-    const elapsedSec = (Date.now() - sessionStartTime) / 1000;
-    if (document.visibilityState === 'hidden') {
-      if (elapsedSec >= 3) state.tabHopCount++;
-      flushFootprintToSheets(false);
-    } else if (document.visibilityState === 'visible') {
-      if (
-        state.tabHopCount >= 2 &&
-        !state.tabHopReassuredShown &&
-        !state.finalAction.includes('Messenger') &&
-        !state.finalAction.includes('Instagram') &&
-        !document.body.classList.contains('portal-open')
-      ) {
-        state.tabHopReassuredShown = true;
-        setTimeout(() => {
-          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
-          if (typeof showCatTip === 'function') {
-            const isEn = window.currentNowNowLang === 'en';
-            showCatTip(
-              isEn
-                ? 'Noticed you hopping back and forth! Still hesitant on how to start? Just send 2 quick lines of context—Now will gently guide the rest 🐾🕯️'
-                : 'Thấy bà nhảy qua lại nãy giờ, còn phân vân câu hỏi hay ngại mở lời đúng hơm? Cứ nhắn sơ 2 dòng bối cảnh thôi, Now tự dẫn dắt cho nha 🐾🕯️',
-              6200
-            );
-          }
-        }, 650);
-      }
-    }
-  });
-
-  // 7. GẮN CẢM BIẾN VÀO CÁC HÀM CÓ SẴN TRÊN TRANG
+  // 9. GẮN CẢM BIẾN VÀO CÁC HÀM CÓ SẴN TRÊN TRANG
   const origOpenSubWeb = window.openSubWeb;
   if (typeof origOpenSubWeb === 'function') {
     window.openSubWeb = function(type, pushToHistory) {
@@ -7864,12 +8033,24 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
+  const origCloseSubWeb = window.closeSubWeb;
+  if (typeof origCloseSubWeb === 'function') {
+    window.closeSubWeb = function(type) {
+      if (type === 'viral') {
+        commitActiveThreadDwell();
+        state.activePostIdx = -1;
+      }
+      return origCloseSubWeb.apply(this, arguments);
+    };
+  }
+
   const origGoToSlide = window.goToFeedbackSlide;
   if (typeof origGoToSlide === 'function') {
     window.goToFeedbackSlide = function(idx, dir) {
       state.hasMeaningfulInteraction = true;
       state.openedFeedback = true;
-      const slideNum = ((idx % TOTAL_FEEDBACK_SLIDES) + TOTAL_FEEDBACK_SLIDES) % TOTAL_FEEDBACK_SLIDES + 1;
+      const total = typeof TOTAL_FEEDBACK_SLIDES !== 'undefined' ? TOTAL_FEEDBACK_SLIDES : 25;
+      const slideNum = ((idx % total) + total) % total + 1;
       if (slideNum > state.maxFbSlideSeen) state.maxFbSlideSeen = slideNum;
       return origGoToSlide.apply(this, arguments);
     };
@@ -7901,7 +8082,6 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
-  // Bắt dao động giá (kéo từ mốc cao xuống mốc thấp) & trấn an tức thì
   let sliderHesitationDebounce = null;
   const origRenderMinutes = window.renderMinutesState;
   if (typeof origRenderMinutes === 'function') {
@@ -7946,15 +8126,13 @@ I'd love to book a 1:1 Tarot & CBT session:
         state.hasMeaningfulInteraction = true;
         state.touchedBookingConfig = true;
         if (fnName === 'addTopicTag' && arguments[0]) {
-          const tagTxt = arguments[0].textContent.trim();
-          savePsychProfile({ lastTopicTag: tagTxt });
+          savePsychProfile({ lastTopicTag: arguments[0].textContent.trim() });
         }
         return origFn.apply(this, arguments);
       };
     }
   });
 
-  // Đính kèm Mã Dấu Chân vào cuối tin nhắn tự động Copy khi bấm Messenger / Instagram
   const origBuildBookingMsg = window.buildBookingMessage;
   if (typeof origBuildBookingMsg === 'function') {
     window.buildBookingMessage = function() {
@@ -7965,7 +8143,6 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
-  // Bắt sự kiện bấm nút Đặt Lịch (Messenger / Instagram) -> Đẩy ngay dữ liệu nóng về Sheets
   const origHandleRedirect = window.handleBookingRedirect;
   if (typeof origHandleRedirect === 'function') {
     window.handleBookingRedirect = function(platform) {
@@ -7977,17 +8154,194 @@ I'd love to book a 1:1 Tarot & CBT session:
     };
   }
 
-  // 8. ĐÒN "TÂM LINH TƯƠNG THÔNG" KHI KHÁCH QUAY LẠI LẦN SAU & THEO DÕI GÕ PHÍM
+  // 10. ĐÓNG GÓI & BẮN DỮ LIỆU VỀ GOOGLE SHEETS (CHỐNG RỚT GÓI SAFARI IOS)
+  function buildFootprintPayload() {
+    commitActiveThreadDwell();
+    const durationSec = Math.max(1, Math.round((Date.now() - sessionStartTime) / 1000));
+    const totalSlides = typeof TOTAL_FEEDBACK_SLIDES !== 'undefined' ? TOTAL_FEEDBACK_SLIDES : 25;
+
+    const exploredParts = ['Trang chính'];
+    if (state.openedThreads) {
+      const readList = Array.from(state.readThreadPosts);
+      exploredParts.push(readList.length ? `Threads (${readList.join(', ')})` : 'Threads');
+
+      // Tìm bài viết đọc lâu nhất (> 15 giây)
+      let topIdx = -1;
+      let topMs = 0;
+      Object.entries(state.postDwellMs).forEach(([k, ms]) => {
+        if (ms > topMs) {
+          topMs = ms;
+          topIdx = Number(k);
+        }
+      });
+      if (topIdx !== -1 && topMs >= 15000) {
+        const dwellSec = Math.round(topMs / 1000);
+        const topicShort = THREAD_TOPICS_MAP[topIdx] || `Bài #${topIdx + 1}`;
+        exploredParts.push(`Đọc sâu Bài #${topIdx + 1}: ${topicShort} (${dwellSec}s)`);
+      }
+    }
+    if (state.openedFeedback) {
+      const webTag = state.viewedWebReviews ? ' + Web' : '';
+      exploredParts.push(`Feedback (${state.maxFbSlideSeen}/${totalSlides} ảnh${webTag})`);
+    }
+    if (state.copiedText) {
+      exploredParts.push(`Copy đoạn: "${state.copiedText}"`);
+    } else if (state.highlightedText) {
+      exploredParts.push(`Bôi đen: "${state.highlightedText}"`);
+    }
+
+    let catStats = `${state.catPokes} lần`;
+    if (state.lastTarotCard) catStats += ` • Lá: ${state.lastTarotCard}`;
+    if (state.tabHopCount > 0) catStats += ` • Đổi tab: ${state.tabHopCount} lần`;
+
+    const tfText = (typeof currentTimeframe !== 'undefined' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
+    const chanText = (typeof currentChannel !== 'undefined' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
+    const mins = typeof currentMinutes !== 'undefined' ? currentMinutes : 60;
+    const priceK = typeof calculatePriceK === 'function' ? calculatePriceK(mins, typeof currentTimeframe !== 'undefined' ? currentTimeframe : 'day') : 99;
+    let bookingConfig = `${chanText} • ${tfText} • ${mins}p (${priceK}K)`;
+    if (state.priceHesitation) bookingConfig += ` [⚠️ ${state.priceHesitation}]`;
+
+    const selectedTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active')).map(b => b.textContent.trim());
+    const currentInputVal = (document.getElementById('bookingTopicInput')?.value || '').trim();
+    const draftVal = currentInputVal.length >= state.draftNoteHistory.length ? currentInputVal : state.draftNoteHistory;
+    let topicAndDraft = selectedTags.length ? selectedTags.join(', ') : 'Chưa chọn chủ đề';
+
+    if (state.selfCensorshipCount > 0 && state.erasedLongDraft) {
+      topicAndDraft += ` | ⚠️ Tự kiểm duyệt (gõ ${state.maxDraftLen} chữ rồi xóa ${state.selfCensorshipCount} lần) | Nháp đã xóa: "${state.erasedLongDraft}"`;
+    } else if (draftVal) {
+      topicAndDraft += ` | Nháp: "${draftVal}"`;
+    }
+
+    // Tính điểm độ nóng tâm lý (0 - 100)
+    const hr = new Date().getHours();
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let score = 10;
+    if (durationSec >= 30) score += 10;
+    if (durationSec >= 120) score += 15;
+    if (state.openedThreads) score += 12;
+    if (Object.values(state.postDwellMs).some(ms => ms >= 15000)) score += 10;
+    if (state.openedFeedback) score += 15;
+    if (state.touchedBookingConfig) score += 12;
+    if (draftVal || state.erasedLongDraft) score += 15;
+    if (state.selfCensorshipCount > 0) score += 10;
+    if (hr >= 0 && hr < 4 && isDark) score += 10;
+    if (batteryPct !== null && batteryPct <= 20) score += 5;
+    if (state.finalAction.includes('Messenger') || state.finalAction.includes('Instagram')) score = 100;
+    score = Math.min(100, score);
+
+    return {
+      type: 'footprint',
+      visitorId: VISITOR_ID,
+      sessionId: SESSION_ID,
+      visits: VISITS_COUNT,
+      isFreshBrowser: isFreshBrowser,
+      hwSignature: HW_SIGNATURE,
+      source: detectTrafficSource(),
+      deviceLang: buildDeviceAndRegionLabel(),
+      durationSec: durationSec,
+      explored: exploredParts.join(' • '),
+      catStats: catStats,
+      bookingConfig: bookingConfig,
+      topicAndDraft: topicAndDraft,
+      finalAction: state.finalAction,
+      heatScore: score
+    };
+  }
+
+  function flushFootprintToSheets(forceNow = false) {
+    if (typeof NOWNOW_FEEDBACK_API === 'undefined') return;
+    const durationSec = (Date.now() - sessionStartTime) / 1000;
+    if (!forceNow && !state.hasMeaningfulInteraction && durationSec < 6) return;
+
+    const payload = buildFootprintPayload();
+    const payloadStr = JSON.stringify(payload);
+
+    if (!forceNow && payloadStr === state.lastSentHash && (Date.now() - state.lastSentTimestamp) < 8000) return;
+    state.lastSentHash = payloadStr;
+    state.lastSentTimestamp = Date.now();
+
+    try {
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payloadStr], { type: 'text/plain;charset=utf-8' });
+        const queued = navigator.sendBeacon(NOWNOW_FEEDBACK_API, blob);
+        if (queued) return;
+      }
+    } catch (e) {}
+
+    fetch(NOWNOW_FEEDBACK_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: payloadStr,
+      keepalive: true
+    }).catch(() => {});
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    const elapsedSec = (Date.now() - sessionStartTime) / 1000;
+    if (document.visibilityState === 'hidden') {
+      if (elapsedSec >= 3) state.tabHopCount++;
+      flushFootprintToSheets(false);
+    } else if (document.visibilityState === 'visible') {
+      if (
+        state.tabHopCount >= 2 &&
+        !state.tabHopReassuredShown &&
+        !state.finalAction.includes('Messenger') &&
+        !state.finalAction.includes('Instagram') &&
+        !document.body.classList.contains('portal-open')
+      ) {
+        state.tabHopReassuredShown = true;
+        setTimeout(() => {
+          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+          if (typeof showCatTip === 'function') {
+            const isEn = window.currentNowNowLang === 'en';
+            showCatTip(
+              isEn
+                ? 'Noticed you hopping back and forth! Still hesitant on how to start? Just send 2 quick lines of context—Now will gently guide the rest 🐾🕯️'
+                : 'Thấy bà nhảy qua lại nãy giờ, còn phân vân câu hỏi hay ngại mở lời đúng hơm? Cứ nhắn sơ 2 dòng bối cảnh thôi, Now tự dẫn dắt cho nha 🐾🕯️',
+              6200
+            );
+          }
+        }, 650);
+      }
+    }
+  });
+
+  window.addEventListener('pagehide', () => flushFootprintToSheets(false), { passive: true });
+  setInterval(() => {
+    if (document.visibilityState === 'visible' && state.hasMeaningfulInteraction) {
+      flushFootprintToSheets(false);
+    }
+  }, 30000);
+
+  // 11. TÂM LINH TƯƠNG THÔNG KHI KHÁCH QUAY LẠI & BẮT TỰ KIỂM DUYỆT KHI GÕ PHÍM
   window.addEventListener('DOMContentLoaded', () => {
     const inputEl = document.getElementById('bookingTopicInput');
     if (inputEl) {
+      let currentPeakBuffer = '';
       inputEl.addEventListener('input', () => {
         state.hasMeaningfulInteraction = true;
         state.touchedBookingConfig = true;
         const val = inputEl.value.trim();
+
+        if (val.length >= currentPeakBuffer.length) {
+          currentPeakBuffer = val;
+        }
+        if (val.length > state.maxDraftLen) {
+          state.maxDraftLen = val.length;
+        }
         if (val.length > state.draftNoteHistory.length) {
           state.draftNoteHistory = val;
         }
+
+        // Bắt tín hiệu tự kiểm duyệt: Đã gõ >= 30 ký tự rồi xóa sạch hoặc còn dưới 8 ký tự
+        if (currentPeakBuffer.length >= 30 && val.length <= 8) {
+          state.selfCensorshipCount++;
+          if (currentPeakBuffer.length > state.erasedLongDraft.length) {
+            state.erasedLongDraft = currentPeakBuffer.slice(0, 220);
+          }
+          currentPeakBuffer = val;
+        }
+
         const lower = val.toLowerCase();
         if (lower.includes('nyc') || lower.includes('người yêu cũ')) savePsychProfile({ lastDraftKeyword: 'nyc' });
         else if (lower.includes('mập mờ') || lower.includes('crush') || lower.includes('im lặng')) savePsychProfile({ lastDraftKeyword: 'crush' });
@@ -7996,26 +8350,31 @@ I'd love to book a 1:1 Tarot & CBT session:
       });
     }
 
-    // Theo dõi bài viết Threads khách dừng lại đọc và ghi nhớ chủ đề
     const threadCards = document.querySelectorAll('#subwebViral .threads-post-card');
     if (threadCards.length && 'IntersectionObserver' in window) {
       const obs = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+          const idx = Array.from(threadCards).indexOf(entry.target);
+          if (idx === -1) return;
           if (entry.isIntersecting) {
-            const idx = Array.from(threadCards).indexOf(entry.target);
-            if (idx !== -1) {
-              state.readThreadPosts.add(`Bài #${idx + 1}`);
-              if (THREAD_TOPICS_MAP[idx]) {
-                savePsychProfile({ lastThreadTopic: THREAD_TOPICS_MAP[idx] });
-              }
+            state.readThreadPosts.add(`Bài #${idx + 1}`);
+            if (state.activePostIdx !== idx) {
+              commitActiveThreadDwell();
+              state.activePostIdx = idx;
+              state.activePostEnterTs = Date.now();
             }
+            if (THREAD_TOPICS_MAP[idx]) {
+              savePsychProfile({ lastThreadTopic: THREAD_TOPICS_MAP[idx] });
+            }
+          } else if (state.activePostIdx === idx) {
+            commitActiveThreadDwell();
+            state.activePostIdx = -1;
           }
         });
-      }, { threshold: 0.5 });
+      }, { threshold: 0.55 });
       threadCards.forEach(c => obs.observe(c));
     }
 
-    // Kích hoạt "Tâm linh tương thông" cho khách quay lại (trong vòng 14 ngày)
     const profile = loadPsychProfile();
     const isFreshProfile = profile.updatedAt && (Date.now() - profile.updatedAt < 14 * 24 * 3600 * 1000);
     if (isFreshProfile && window.currentNowNowLang !== 'en') {
@@ -8036,138 +8395,19 @@ I'd love to book a 1:1 Tarot & CBT session:
       } else if (profile.lastTopicTag) {
         mindReadGreeting = `Mừng bà quay lại góc nhỏ của Now! Chủ đề <b>${profile.lastTopicTag}</b> bữa trước vẫn còn làm bà bận tâm đúng hơm? 🌷🐾`;
       } else if (profile.hadPriceHesitation) {
-        mindReadGreeting = 'Ủa bà quay lại nè! Nhớ là nhà Now <b>0đ đặt cọc, nhẹ lòng mới dừng đồng hồ</b> nha — cứ chọn 30p trải nghiệm cho thoải mái nè ⏳💖';
-      }
-
-      if (customPlaceholder && inputEl) {
-        inputEl.setAttribute('placeholder', customPlaceholder);
+        mindReadGreeting = 'Ủa bà quay lại nè! Nhớ quy tắc <b>0đ đặt cọc, nhẹ lòng mới dừng đồng hồ</b> nhà Now nha — cứ chọn thử 15p–30p trải nghiệm trước nè ⏳💝';
       }
 
       if (mindReadGreeting) {
         setTimeout(() => {
-          if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
           if (typeof showCatTip === 'function') showCatTip(mindReadGreeting, 6800);
-        }, 1450);
+        }, 2600);
+      }
+      if (customPlaceholder && inputEl) {
+        inputEl.setAttribute('placeholder', customPlaceholder);
       }
     }
   });
-
-  // 9. CHẤM ĐIỂM ĐỘ NÓNG (0 - 100) & ĐÓNG GÓI DỮ LIỆU
-  function computeHeatScore(durationSec, visits) {
-    let score = 10;
-    if (visits >= 3) score += 25;
-    else if (visits === 2) score += 15;
-
-    if (durationSec >= 180) score += 25;
-    else if (durationSec >= 90) score += 20;
-    else if (durationSec >= 30) score += 10;
-
-    if (state.openedFeedback) score += 10;
-    if (state.openedThreads) score += 10;
-    if (state.catPokes >= 2) score += 10;
-    if (state.touchedBookingConfig) score += 15;
-    if (state.draftNoteHistory.length > 0) score += 20;
-    if (state.priceHesitation) score += 15;
-    if (state.highlightedText) score += 15;
-    if (state.tabHopCount >= 2) score += 15;
-    if (state.finalAction.includes('Messenger') || state.finalAction.includes('Instagram')) score += 30;
-
-    return Math.min(100, score);
-  }
-
-  function buildFootprintPayload() {
-    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
-    let visits = 1;
-    try {
-      const mem = JSON.parse(localStorage.getItem('nownow_cat_soul_memory_v1') || '{}');
-      if (mem.visits) visits = Number(mem.visits) || 1;
-    } catch (e) {}
-
-    const lang = (window.currentNowNowLang || 'vi').toUpperCase();
-    const deviceLang = `${detectDeviceType()} • ${lang} • [${HW_SIGNATURE}]`;
-
-    const exploredParts = [];
-    if (state.openedFeedback) {
-      exploredParts.push(`Feedback (${state.maxFbSlideSeen}/21 ảnh${state.viewedWebReviews ? ' + Web' : ''})`);
-    }
-    if (state.openedThreads) {
-      const posts = Array.from(state.readThreadPosts).slice(0, 5).join(', ');
-      exploredParts.push(posts ? `Threads (${posts})` : 'Mở Tạp Chí Threads');
-    }
-    if (state.highlightedText) {
-      exploredParts.push(`Bôi đen: "${state.highlightedText}"`);
-    }
-
-    const catParts = [];
-    catParts.push(state.catPokes > 0
-      ? `${state.catPokes} lần${state.lastTarotCard ? ` (Rút lá ${state.lastTarotCard})` : ''}`
-      : '0 lần');
-    if (state.tabHopCount >= 2) {
-      catParts.push(`Đổi tab: ${state.tabHopCount} lần`);
-    }
-
-    const chanShort = (typeof currentChannel !== 'undefined' && currentChannel.includes('Meet')) ? 'Google Meet' : 'Voice Note';
-    const tfShort = (typeof currentTimeframe !== 'undefined' && currentTimeframe === 'night') ? 'Cú Đêm' : 'Ban Ngày';
-    const mins = typeof currentMinutes !== 'undefined' ? currentMinutes : 60;
-    const priceK = (typeof calculatePriceK === 'function') ? calculatePriceK(mins, typeof currentTimeframe !== 'undefined' ? currentTimeframe : 'day') : 99;
-    const bookingConfig = `${chanShort} • ${tfShort} • ${mins}p (${priceK}K)${state.priceHesitation ? ` [⚠️ ${state.priceHesitation}]` : ''}`;
-
-    const activeTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active'))
-      .map(b => b.textContent.trim()).join(', ');
-    const currentInput = (document.getElementById('bookingTopicInput')?.value || '').trim();
-    const finalDraft = currentInput || state.draftNoteHistory;
-    const draftLabel = finalDraft
-      ? (currentInput ? `Nháp: "${finalDraft}"` : `[Đã xóa nháp]: "${finalDraft}"`)
-      : '';
-    const topicAndDraft = [activeTags, draftLabel].filter(Boolean).join(' | ') || 'Chưa chọn chủ đề';
-
-    return {
-      type: 'footprint',
-      visitorId: VISITOR_ID,
-      hwSignature: HW_SIGNATURE,
-      sessionId: SESSION_ID,
-      isFreshBrowser: isFreshBrowser,
-      visits: visits,
-      source: detectTrafficSource(),
-      deviceLang: deviceLang,
-      durationSec: durationSec,
-      explored: exploredParts.join(' • ') || 'Trang chính',
-      catStats: catParts.join(' • '),
-      bookingConfig: bookingConfig,
-      topicAndDraft: topicAndDraft,
-      finalAction: state.finalAction,
-      heatScore: computeHeatScore(durationSec, visits)
-    };
-  }
-
-  function flushFootprintToSheets(forceSend = false) {
-    if (typeof NOWNOW_FEEDBACK_API === 'undefined') return;
-    const durationSec = Math.round((Date.now() - sessionStartTime) / 1000);
-
-    if (!forceSend && durationSec < 5 && !state.hasMeaningfulInteraction) return;
-
-    const now = Date.now();
-    if (!forceSend && (now - state.lastSentTimestamp < 12000)) return;
-
-    const payload = buildFootprintPayload();
-    const hash = JSON.stringify([payload.explored, payload.catStats, payload.bookingConfig, payload.topicAndDraft, payload.finalAction, payload.heatScore]);
-    if (!forceSend && hash === state.lastSentHash && durationSec < 20) return;
-
-    state.lastSentHash = hash;
-    state.lastSentTimestamp = now;
-
-    try {
-      fetch(NOWNOW_FEEDBACK_API, {
-        method: 'POST',
-        keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      }).catch(() => {});
-    } catch (e) {}
-  }
-
-  window.addEventListener('pagehide', () => flushFootprintToSheets(false));
-  setTimeout(() => flushFootprintToSheets(false), 45000);
 })();
 </script>
 <script>

@@ -8222,10 +8222,10 @@ I'd love to book a 1:1 Tarot & CBT session:
       const sorted = Array.from(behaviorStats.threadsPostsSet).sort(
         (a, b) => Number(a.replace(/\D/g, '')) - Number(b.replace(/\D/g, ''))
       );
-      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` • Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
+      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` | Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
       parts.push(`Threads (${sorted.join(', ')}${origTxt})`);
     } else if (behaviorStats.viralJournalOpened) {
-      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` • Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
+      const origTxt = behaviorStats.origThreadLinkClicks > 0 ? ` | Gốc: ${behaviorStats.origThreadLinkClicks}` : '';
       parts.push(`Threads (Đã mở Tạp chí${origTxt})`);
     }
 
@@ -8343,28 +8343,72 @@ I'd love to book a 1:1 Tarot & CBT session:
   }
 
   function calculateClientHeatScore() {
-    let score = 10;
-    if (activeSessionSeconds >= 180) score += 28;
-    else if (activeSessionSeconds >= 90) score += 20;
-    else if (activeSessionSeconds >= 45) score += 14;
-    else if (activeSessionSeconds >= 15) score += 8;
+    const hasClickedBooking = behaviorStats.finalAction.includes('Đặt lịch');
+    const hasDraftedStory = behaviorStats.maxDraftText.length > 0;
+    const hasTouchedSlider = behaviorStats.userTouchedSlider;
+    const hasTouchedBookingUI = hasTouchedSlider || behaviorStats.userTouchedChannel || behaviorStats.userTouchedTimeframe || behaviorStats.userTouchedTopics;
+    const hasOpenedContent = behaviorStats.fbPhotosSet.size > 0 || behaviorStats.fbWebTabOpened || behaviorStats.viralJournalOpened || behaviorStats.threadsPostsSet.size > 0;
+    const hasTouchedCat = (catStats.pokes + catStats.drags + catStats.houseTaps) > 0;
+    const hasEscapedToSocial = behaviorStats.finalAction.includes('Ghé kênh');
 
-    if (localVisits >= 3) score += 10;
-    else if (localVisits >= 2) score += 6;
+    let score = 5;
+    if (activeSessionSeconds >= 180) score += 10;
+    else if (activeSessionSeconds >= 90) score += 7;
+    else if (activeSessionSeconds >= 45) score += 4;
+    else if (activeSessionSeconds >= 15) score += 2;
 
-    if (behaviorStats.maxScrollPct >= 80) score += 6;
-    if (behaviorStats.fbPhotosSet.size > 0 || behaviorStats.fbWebTabOpened) score += 10;
-    if (behaviorStats.viralJournalOpened || behaviorStats.threadsPostsSet.size > 0) score += 8;
-    if ((catStats.pokes + catStats.drags + catStats.houseTaps) > 0) score += 8;
-    if (behaviorStats.userTouchedSlider) score += 12;
-    else if (behaviorStats.userTouchedChannel || behaviorStats.userTouchedTimeframe) score += 6;
-    if (behaviorStats.userTouchedTopics) score += 6;
-    if (behaviorStats.maxDraftText.length > 0) score += 12;
+    if (behaviorStats.maxScrollPct >= 80) score += 4;
+    else if (behaviorStats.maxScrollPct >= 50) score += 2;
 
-    if (behaviorStats.finalAction.includes('Đặt lịch')) score = Math.max(score + 25, 92);
-    else if (behaviorStats.finalAction.includes('Ghé kênh')) score += 8;
+    if (localVisits >= 3) score += 3;
+    else if (localVisits >= 2) score += 2;
 
-    return Math.min(100, score);
+    if (behaviorStats.fbPhotosSet.size > 0 || behaviorStats.fbWebTabOpened) {
+      score += 7;
+      if (behaviorStats.fbWebTabOpened || behaviorStats.fbPhotosSet.size >= 5) score += 5;
+    }
+    if (behaviorStats.viralJournalOpened || behaviorStats.threadsPostsSet.size > 0) {
+      score += 5;
+      if (behaviorStats.threadsPostsSet.size >= 2) score += 4;
+      if (behaviorStats.origThreadLinkClicks > 0) score += 3;
+    }
+    if (behaviorStats.highlightedTexts.length > 0) score += 4;
+    if (hasTouchedCat) score += 3;
+
+    if (hasEscapedToSocial && !hasTouchedBookingUI && !hasClickedBooking) {
+      score -= 5;
+    }
+
+    if (behaviorStats.userTouchedChannel || behaviorStats.userTouchedTimeframe) score += 8;
+    if (hasTouchedSlider) {
+      score += 14;
+      if (behaviorStats.sliderStops.length >= 2) score += 5;
+    }
+    if (behaviorStats.userTouchedTopics) score += 7;
+    if (hasDraftedStory) {
+      score += 22;
+      if (behaviorStats.maxDraftText.length >= 25) score += 5;
+    }
+
+    if (hasClickedBooking) {
+      let closingScore = 85;
+      if (hasTouchedSlider) closingScore += 5;
+      if (behaviorStats.userTouchedChannel || behaviorStats.userTouchedTimeframe) closingScore += 2;
+      if (behaviorStats.userTouchedTopics) closingScore += 3;
+      if (hasDraftedStory) closingScore += 4;
+      if (hasOpenedContent) closingScore += 1;
+      return Math.min(100, Math.max(score, closingScore));
+    }
+    if (hasDraftedStory || (hasTouchedSlider && hasOpenedContent && activeSessionSeconds >= 120)) {
+      return Math.min(84, Math.max(70, score));
+    }
+    if (hasTouchedBookingUI) {
+      return Math.min(69, Math.max(45, score));
+    }
+    if (hasOpenedContent || hasTouchedCat) {
+      return Math.min(44, Math.max(25, score));
+    }
+    return Math.min(24, Math.max(5, score));
   }
 
   function buildPayloadObject() {

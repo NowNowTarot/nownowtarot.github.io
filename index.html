@@ -7525,27 +7525,125 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (localStorage.getItem('nownow_admin_ignore') === '1') return;
   } catch (e) {}
 
-  // 2. TẠO MÃ VÂN TAY PHẦN CỨNG NHẸ ([HW-XXXXXX]) ĐỂ XUYÊN THẤU IN-APP BROWSER & TAB ẨN DANH
+  // 2. NHẬN DIỆN CHÍNH XÁC ĐỜI MÁY (IPHONE / IPAD / ANDROID / PC)
+  let resolvedDeviceModel = '';
+
+  function inferAppleModel() {
+    const ua = navigator.userAgent || '';
+    const sw = Math.min(screen.width, screen.height);
+    const sh = Math.max(screen.width, screen.height);
+    const dpr = Math.round(window.devicePixelRatio || 1);
+    const key = `${sw}x${sh}@${dpr}`;
+
+    if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
+      const ipadMap = {
+        '768x1024@2': 'iPad Mini / Air / Gen 9',
+        '810x1080@2': 'iPad Gen 10',
+        '820x1180@2': 'iPad Air 11" (M1/M2)',
+        '834x1194@2': 'iPad Pro 11"',
+        '1024x1366@2': 'iPad Pro 12.9" / 13"'
+      };
+      return ipadMap[key] || `iPad (${sw}x${sh})`;
+    }
+
+    const iphoneMap = {
+      '375x667@2': 'iPhone SE / 8',
+      '414x736@3': 'iPhone 8 Plus',
+      '375x812@3': 'iPhone X / XS / 11 Pro / 12-13 mini',
+      '414x896@2': 'iPhone XR / 11',
+      '414x896@3': 'iPhone XS Max / 11 Pro Max',
+      '390x844@3': 'iPhone 12 / 13 / 14 / 16e',
+      '428x926@3': 'iPhone 12-13 Pro Max / 14 Plus',
+      '393x852@3': 'iPhone 14 Pro / 15 / 15 Pro / 16',
+      '430x932@3': 'iPhone 14 Pro Max / 15-16 Plus / 15 Pro Max',
+      '402x874@3': 'iPhone 16 Pro / 17 / 17 Pro',
+      '440x956@3': 'iPhone 16 Pro Max / 17 Pro Max'
+    };
+    return iphoneMap[key] || `iPhone (${sw}x${sh}@${dpr}x)`;
+  }
+
+  function initDeviceDetection() {
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) {
+      resolvedDeviceModel = inferAppleModel();
+      return;
+    }
+    if (/Android/i.test(ua)) {
+      const m = ua.match(/Android[^;]+;\s*([^;)]+)\s*(?:Build|\))/i);
+      resolvedDeviceModel = (m && m[1] && m[1].trim() !== 'K') ? `Android (${m[1].trim()})` : 'Android';
+    } else if (/Windows/i.test(ua)) {
+      resolvedDeviceModel = 'Windows PC';
+    } else if (/Mac OS X/i.test(ua)) {
+      resolvedDeviceModel = 'MacBook / Mac';
+    } else {
+      resolvedDeviceModel = 'Desktop';
+    }
+
+    if (navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
+      navigator.userAgentData.getHighEntropyValues(['model'])
+        .then(hints => {
+          if (hints.model && hints.model.trim() !== '') {
+            resolvedDeviceModel = /Android/i.test(ua)
+              ? `Android (${hints.model.trim()})`
+              : `${resolvedDeviceModel} (${hints.model.trim()})`;
+          }
+        })
+        .catch(() => {});
+    }
+  }
+  initDeviceDetection();
+
+  // 3. VÂN TAY PHẦN CỨNG ENTROPY CAO ([HW-XXXXXX]) CHỐNG NHẦM 2 MÁY GIỐNG NHAU
   function computeHardwareSignature() {
     try {
       let gpuInfo = '';
+      let canvasSig = '';
       try {
         const c = document.createElement('canvas');
-        const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+        c.width = 240;
+        c.height = 40;
+        const ctx2d = c.getContext('2d');
+        if (ctx2d) {
+          ctx2d.textBaseline = 'top';
+          ctx2d.font = '14px "Arial", sans-serif';
+          ctx2d.fillStyle = '#f60';
+          ctx2d.fillRect(10, 2, 62, 20);
+          ctx2d.fillStyle = '#069';
+          ctx2d.fillText('NowNowTarot_FP_2026_🐾✨', 4, 8);
+          canvasSig = c.toDataURL().slice(-64);
+        }
+      } catch (e) {}
+
+      try {
+        const glCanvas = document.createElement('canvas');
+        const gl = glCanvas.getContext('webgl') || glCanvas.getContext('experimental-webgl');
         if (gl) {
           const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-          if (dbg) gpuInfo = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '';
+          const renderer = dbg ? (gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '') : '';
+          const maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE) || '';
+          gpuInfo = renderer + ':' + maxTex;
+        }
+      } catch (e) {}
+
+      let voicesSig = '';
+      try {
+        if (window.speechSynthesis && typeof window.speechSynthesis.getVoices === 'function') {
+          voicesSig = window.speechSynthesis.getVoices().map(v => v.name).slice(0, 12).join(',');
         }
       } catch (e) {}
 
       const rawSig = [
         screen.width + 'x' + screen.height,
         window.devicePixelRatio || 1,
+        screen.colorDepth || 24,
         navigator.hardwareConcurrency || 0,
+        navigator.deviceMemory || 0,
         navigator.maxTouchPoints || 0,
+        (navigator.languages || [navigator.language || '']).join(','),
         Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-        navigator.platform || '',
-        gpuInfo
+        gpuInfo,
+        canvasSig,
+        voicesSig
       ].join('|');
 
       let hash = 2166136261;
@@ -7560,10 +7658,17 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
   }
 
-  const HW_SIGNATURE = computeHardwareSignature();
+  let HW_SIGNATURE = computeHardwareSignature();
+  if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      HW_SIGNATURE = computeHardwareSignature();
+    };
+  }
 
-  // 3. MÃ ĐỊNH DANH DẤU CHÂN PHIÊN TRÌNH DUYỆT (#NNT-WXXXX)
+  // 4. MÃ ĐỊNH DANH DẤU CHÂN PHIÊN TRÌNH DUYỆT (#NNT-WXXXX)
   const FP_ID_KEY = 'nownow_visitor_fp_id_v1';
+  const isFreshBrowser = !localStorage.getItem(FP_ID_KEY);
+
   function getOrCreateVisitorId() {
     try {
       let id = localStorage.getItem(FP_ID_KEY);
@@ -7652,12 +7757,19 @@ I'd love to book a 1:1 Tarot & CBT session:
     return src;
   }
 
+  let batteryTag = '';
+  if (navigator.getBattery) {
+    navigator.getBattery().then(bat => {
+      const pct = Math.round(bat.level * 100);
+      if (pct <= 20 && !bat.charging) batteryTag = ` | 🪫 Pin ${pct}%`;
+    }).catch(() => {});
+  }
+
   function detectDeviceType() {
-    const ua = navigator.userAgent || '';
-    if (/iPhone/i.test(ua)) return 'iPhone';
-    if (/iPad/i.test(ua)) return 'iPad';
-    if (/Android/i.test(ua)) return 'Android';
-    return 'Desktop';
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const region = (tz.includes('Ho_Chi_Minh') || tz.includes('Saigon') || tz.includes('Bangkok')) ? 'VN' : (tz.split('/').pop() || 'Global');
+    const net = (navigator.connection && navigator.connection.effectiveType) ? ` | ${navigator.connection.effectiveType.toUpperCase()}` : '';
+    return `${resolvedDeviceModel} (Vùng: ${region}${batteryTag}${net})`;
   }
 
   // 6. TRẠNG THÁI HÀNH VI & VI LƯỠNG LỰ TRONG PHIÊN
@@ -8014,6 +8126,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       visitorId: VISITOR_ID,
       hwSignature: HW_SIGNATURE,
       sessionId: SESSION_ID,
+      isFreshBrowser: isFreshBrowser,
       visits: visits,
       source: detectTrafficSource(),
       deviceLang: deviceLang,

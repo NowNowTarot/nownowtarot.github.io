@@ -7888,6 +7888,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     origThreadLinkClicks: Number(persistedState.origThreadLinkClicks) || 0,
     socialLinkClicks: Array.isArray(persistedState.socialLinkClicks) ? persistedState.socialLinkClicks : [],
     highlightedTexts: Array.isArray(persistedState.highlightedTexts) ? persistedState.highlightedTexts : [],
+    copiedTexts: Array.isArray(persistedState.copiedTexts) ? persistedState.copiedTexts : [],
     maxDraftText: String(persistedState.maxDraftText || ''),
     finalAction: String(persistedState.finalAction || 'Đang xem trang'),
     sectionDwellSec: persistedState.sectionDwellSec || {
@@ -7927,6 +7928,7 @@ I'd love to book a 1:1 Tarot & CBT session:
         origThreadLinkClicks: behaviorStats.origThreadLinkClicks,
         socialLinkClicks: behaviorStats.socialLinkClicks,
         highlightedTexts: behaviorStats.highlightedTexts,
+        copiedTexts: behaviorStats.copiedTexts,
         maxDraftText: behaviorStats.maxDraftText,
         finalAction: behaviorStats.finalAction,
         sectionDwellSec: behaviorStats.sectionDwellSec
@@ -8288,6 +8290,26 @@ I'd love to book a 1:1 Tarot & CBT session:
       }, 700);
     });
 
+    document.addEventListener('copy', (e) => {
+      if (!e.isTrusted) return;
+      try {
+        let copied = window.getSelection ? window.getSelection().toString().trim() : '';
+        if (!copied && document.activeElement && typeof document.activeElement.selectionStart === 'number') {
+          const el = document.activeElement;
+          copied = String(el.value || '').substring(el.selectionStart, el.selectionEnd).trim();
+        }
+        if (copied && copied.length >= 3) {
+          const cleanCopy = copied.replace(/\s+/g, ' ').slice(0, 45);
+          const badge = `📋 Copy: "${cleanCopy}${copied.length > 45 ? '...' : ''}"`;
+          if (!behaviorStats.copiedTexts.includes(badge) && behaviorStats.copiedTexts.length < 3) {
+            behaviorStats.copiedTexts.push(badge);
+            saveStateToLocal();
+            scheduleFastSync(false);
+          }
+        }
+      } catch (err) {}
+    });
+
     window.addEventListener('scroll', () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const docHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -8374,6 +8396,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (behaviorStats.tocOpens > 0) parts.push(`Menu: ${behaviorStats.tocOpens} lần`);
     if (behaviorStats.langSwitches > 0) parts.push(`Đổi cờ EN/VI`);
     behaviorStats.highlightedTexts.forEach(h => parts.push(h));
+    behaviorStats.copiedTexts.forEach(c => parts.push(c));
 
     return parts.join(' • ');
   }

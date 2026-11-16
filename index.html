@@ -2005,6 +2005,27 @@ body.portal-open .cat-cloud-tip {
             <span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>
           </button>
         </div>
+        <!-- DÒNG MÚI GIỜ TÀNG HÌNH (Ẩn 100% với khách ở Việt Nam, tự hiện với khách quốc tế) -->
+        <div id="tzStealthBar" class="hidden text-center -mt-1.5 mb-1">
+          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/85 bg-white/[0.03] border border-[#ffdf85]/20 rounded-full px-3 py-1">
+            <span id="tzStealthText">🌍 Tự động quy đổi theo giờ địa phương</span>
+            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline font-bold ml-1 hover:text-white cursor-pointer">Đổi</button>
+          </div>
+          <div id="tzSelectWrap" class="hidden mt-2">
+            <select id="tzQuickSelect" onchange="onChangeNowNowTimezone(this.value)" aria-label="Chọn múi giờ của bạn" class="bg-[#14080e] text-[#faf6f0] text-[11.5px] border border-[#ffdf85]/45 rounded-xl px-3 py-1.5 focus:outline-none focus:border-[#ffdf85] cursor-pointer">
+              <option value="Asia/Ho_Chi_Minh">🇻🇳 Việt Nam (Giờ Hà Nội / TP.HCM • GMT+7)</option>
+              <option value="Europe/Berlin">🇩🇪 Đức / Châu Âu (Berlin, Paris • GMT+1/+2)</option>
+              <option value="Europe/London">🇬🇧 Vương Quốc Anh (London • GMT+0/+1)</option>
+              <option value="America/New_York">🇺🇸 Mỹ Bờ Đông (New York, Texas • EST/EDT)</option>
+              <option value="America/Los_Angeles">🇺🇸 Mỹ Bờ Tây (California, Seattle • PST/PDT)</option>
+              <option value="America/Toronto">🇨🇦 Canada (Toronto, Montreal • EST/EDT)</option>
+              <option value="Australia/Sydney">🇦🇺 Úc (Sydney, Melbourne • AEST/AEDT)</option>
+              <option value="Asia/Tokyo">🇯🇵 Nhật Bản (Tokyo, Osaka • GMT+9)</option>
+              <option value="Asia/Seoul">🇰🇷 Hàn Quốc (Seoul, Busan • GMT+9)</option>
+              <option value="Asia/Singapore">🇸🇬 Singapore / Malaysia (GMT+8)</option>
+            </select>
+          </div>
+        </div>
 
         <div class="flex items-end justify-between border-b border-white/15 pb-3">
           <div>
@@ -4614,8 +4635,198 @@ body.portal-open .cat-cloud-tip {
       btn.classList.toggle('active');
     }
 
+    /* =========================================================================
+       HỆ THỐNG NHẬN DIỆN & QUY ĐỔI ĐA MÚI GIỜ "TÀNG HÌNH" (STEALTH TIMEZONE ENGINE)
+       ========================================================================= */
+    const NOWNOW_DETECTED_IANA_TZ = (function() {
+      try {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
+      } catch (e) {
+        return 'Asia/Ho_Chi_Minh';
+      }
+    })();
+    window.currentClientTimezone = NOWNOW_DETECTED_IANA_TZ;
+
+    const TZ_CITY_LABEL_MAP = {
+      'Europe/Berlin': { vi: 'Berlin', en: 'Berlin' },
+      'Europe/Paris': { vi: 'Paris', en: 'Paris' },
+      'Europe/London': { vi: 'London', en: 'London' },
+      'America/New_York': { vi: 'New York', en: 'New York' },
+      'America/Chicago': { vi: 'Chicago', en: 'Chicago' },
+      'America/Los_Angeles': { vi: 'Los Angeles', en: 'Los Angeles' },
+      'America/Toronto': { vi: 'Toronto', en: 'Toronto' },
+      'America/Vancouver': { vi: 'Vancouver', en: 'Vancouver' },
+      'Australia/Sydney': { vi: 'Sydney', en: 'Sydney' },
+      'Australia/Melbourne': { vi: 'Melbourne', en: 'Melbourne' },
+      'Asia/Tokyo': { vi: 'Tokyo', en: 'Tokyo' },
+      'Asia/Seoul': { vi: 'Seoul', en: 'Seoul' },
+      'Asia/Singapore': { vi: 'Singapore', en: 'Singapore' },
+      'Asia/Bangkok': { vi: 'Bangkok', en: 'Bangkok' },
+      'Asia/Ho_Chi_Minh': { vi: 'Việt Nam', en: 'Vietnam' },
+      'Asia/Saigon': { vi: 'Việt Nam', en: 'Vietnam' }
+    };
+
+    function isVietnamTimezone(tz) {
+      if (!tz) return true;
+      const clean = String(tz).trim();
+      return clean === 'Asia/Ho_Chi_Minh' || clean === 'Asia/Saigon' || clean === 'Asia/Hanoi';
+    }
+
+    function getTimezoneOffsetMinutesForInstant(tz, refDate) {
+      try {
+        const d = refDate || new Date();
+        const utcStr = d.toLocaleString('en-US', { timeZone: 'UTC' });
+        const tzStr = d.toLocaleString('en-US', { timeZone: tz });
+        return Math.round((new Date(tzStr).getTime() - new Date(utcStr).getTime()) / 60000);
+      } catch (e) {
+        return 420; // Fallback GMT+7
+      }
+    }
+
+    function getClientTimezoneMeta(tz) {
+      const targetTz = tz || window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ;
+      const isVN = isVietnamTimezone(targetTz);
+      const now = new Date();
+      const targetOffsetMins = getTimezoneOffsetMinutesForInstant(targetTz, now);
+      const vnOffsetMins = 420; // Asia/Ho_Chi_Minh = UTC+7 (420 mins)
+      const diffMinsFromVN = targetOffsetMins - vnOffsetMins;
+      const diffHoursFromVN = diffMinsFromVN / 60;
+
+      // Format GMT string (e.g. GMT+1, GMT-5, GMT+9:30)
+      const signGmt = targetOffsetMins >= 0 ? '+' : '-';
+      const absGmtMins = Math.abs(targetOffsetMins);
+      const gmtH = Math.floor(absGmtMins / 60);
+      const gmtM = absGmtMins % 60;
+      const gmtLabel = `GMT${signGmt}${gmtH}${gmtM > 0 ? ':' + (gmtM < 10 ? '0' + gmtM : gmtM) : ''}`;
+
+      // Format diff vs VN (e.g. -6h, +2h)
+      const signDiff = diffHoursFromVN >= 0 ? '+' : '';
+      const diffLabel = `${signDiff}${Number.isInteger(diffHoursFromVN) ? diffHoursFromVN : diffHoursFromVN.toFixed(1)}h`;
+
+      // Convert VN slots: Day (09:00 -> 24:00 VN) & Night (00:00 -> 04:00 VN)
+      const fmtClock = (vnHour) => {
+        let totalM = (vnHour * 60 + diffMinsFromVN) % 1440;
+        if (totalM < 0) totalM += 1440;
+        const hh = String(Math.floor(totalM / 60)).padStart(2, '0');
+        const mm = String(totalM % 60).padStart(2, '0');
+        return `${hh}:${mm}`;
+      };
+
+      const cityObj = TZ_CITY_LABEL_MAP[targetTz];
+      const fallbackCity = targetTz.includes('/') ? targetTz.split('/').pop().replace(/_/g, ' ') : targetTz;
+
+      return {
+        iana: targetTz,
+        isVN: isVN && diffMinsFromVN === 0,
+        gmtLabel: gmtLabel,
+        diffLabel: diffLabel,
+        cityVi: cityObj ? cityObj.vi : fallbackCity,
+        cityEn: cityObj ? cityObj.en : fallbackCity,
+        dayStartLocal: fmtClock(9),
+        dayEndLocal: fmtClock(24),
+        nightStartLocal: fmtClock(0),
+        nightEndLocal: fmtClock(4)
+      };
+    }
+
+    function updateNowNowTimezoneUI() {
+      const meta = getClientTimezoneMeta(window.currentClientTimezone);
+      const isEn = window.currentNowNowLang === 'en';
+      const btnDay = document.getElementById('tfBtnDay');
+      const btnNight = document.getElementById('tfBtnNight');
+      const stealthBar = document.getElementById('tzStealthBar');
+      const stealthText = document.getElementById('tzStealthText');
+      const changeBtn = document.getElementById('tzChangeToggleBtn');
+      const selectEl = document.getElementById('tzQuickSelect');
+
+      if (selectEl) {
+        const hasOption = Array.from(selectEl.options).some(opt => opt.value === meta.iana);
+        if (!hasOption && !meta.isVN) {
+          const customOpt = document.createElement('option');
+          customOpt.value = meta.iana;
+          customOpt.textContent = `🌍 ${meta.cityVi} (${meta.iana} • ${meta.gmtLabel})`;
+          selectEl.insertBefore(customOpt, selectEl.firstChild);
+        }
+        selectEl.value = meta.isVN ? 'Asia/Ho_Chi_Minh' : meta.iana;
+      }
+
+      if (meta.isVN) {
+        if (btnDay) {
+          btnDay.innerHTML = isEn
+            ? '☀️ Daytime (9 AM – 12 AM)'
+            : '<span>☀️ Ban Ngày</span> <span class="timeframe-subtext">(9h – 0h)</span>';
+        }
+        if (btnNight) {
+          btnNight.innerHTML = isEn
+            ? '🌙 Night Owl (12 AM – 4 AM)'
+            : '<span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>';
+        }
+        const hasManualOverride = (window.currentClientTimezone !== NOWNOW_DETECTED_IANA_TZ) || !isVietnamTimezone(NOWNOW_DETECTED_IANA_TZ);
+        if (stealthBar) {
+          if (hasManualOverride) {
+            stealthBar.classList.remove('hidden');
+            if (stealthText) {
+              stealthText.innerHTML = isEn
+                ? '🇻🇳 Showing Vietnam Time (GMT+7)'
+                : '🇻🇳 Đang hiển thị theo giờ Việt Nam (GMT+7)';
+            }
+            if (changeBtn) changeBtn.textContent = isEn ? 'Change' : 'Đổi';
+          } else {
+            stealthBar.classList.add('hidden');
+          }
+        }
+      } else {
+        const daySub = isEn
+          ? `(${meta.dayStartLocal} – ${meta.dayEndLocal} your time)`
+          : `(${meta.dayStartLocal} – ${meta.dayEndLocal} giờ của bạn)`;
+        const nightSub = isEn
+          ? `(${meta.nightStartLocal} – ${meta.nightEndLocal} your time)`
+          : `(${meta.nightStartLocal} – ${meta.nightEndLocal} giờ của bạn)`;
+
+        if (btnDay) {
+          btnDay.innerHTML = isEn
+            ? `<span>☀️ Daytime</span> <span class="timeframe-subtext">${daySub}</span>`
+            : `<span>☀️ Ban Ngày</span> <span class="timeframe-subtext">${daySub}</span>`;
+        }
+        if (btnNight) {
+          btnNight.innerHTML = isEn
+            ? `<span>🌙 Night Owl</span> <span class="timeframe-subtext">${nightSub}</span>`
+            : `<span>🌙 Cú Đêm</span> <span class="timeframe-subtext">${nightSub}</span>`;
+        }
+        if (stealthBar) stealthBar.classList.remove('hidden');
+        if (stealthText) {
+          stealthText.innerHTML = isEn
+            ? `🌍 Auto-converted to ${meta.cityEn} time (${meta.gmtLabel}) (VN ${meta.diffLabel})`
+            : `🌍 Tự động quy đổi theo giờ ${meta.cityVi} (${meta.gmtLabel}) (Chênh Việt Nam ${meta.diffLabel})`;
+        }
+        if (changeBtn) {
+          changeBtn.textContent = isEn ? 'Change' : 'Đổi';
+        }
+      }
+    }
+
+    function toggleNowNowTzDropdown() {
+      const wrap = document.getElementById('tzSelectWrap');
+      if (!wrap) return;
+      wrap.classList.toggle('hidden');
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+    }
+
+    function onChangeNowNowTimezone(newTz) {
+      window.currentClientTimezone = newTz || 'Asia/Ho_Chi_Minh';
+      updateNowNowTimezoneUI();
+      const wrap = document.getElementById('tzSelectWrap');
+      if (wrap) wrap.classList.add('hidden');
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+    }
+
     function buildBookingMessage() {
-      const tfLabel = currentTimeframe === 'day' ? 'Ban Ngày (9h00 – 00:00)' : 'Cú Đêm (00:00 – 4h00 sáng)';
+      const tzMeta = getClientTimezoneMeta(window.currentClientTimezone);
+      const tfLabel = tzMeta.isVN
+        ? (currentTimeframe === 'day' ? 'Ban Ngày (9h00 – 00:00)' : 'Cú Đêm (00:00 – 4h00 sáng)')
+        : (currentTimeframe === 'day'
+            ? `Ban Ngày (${tzMeta.dayStartLocal} – ${tzMeta.dayEndLocal} giờ khách / 9h00 – 00:00 VN)`
+            : `Cú Đêm (${tzMeta.nightStartLocal} – ${tzMeta.nightEndLocal} giờ khách / 00:00 – 4h00 VN)`);
       const priceK = calculatePriceK(currentMinutes, currentTimeframe);
       const timeLabel = `Khoảng ${currentMinutes} phút (~${priceK}K - tính theo đồng hồ thực tế)`;
 
@@ -4634,10 +4845,14 @@ body.portal-open .cat-cloud-tip {
         combinedTopic = 'Nhờ NowNow lắng nghe và gỡ rối giúp mình nha';
       }
 
+      const tzLine = tzMeta.isVN
+        ? ''
+        : `\n• Múi giờ khách: ${tzMeta.iana} (${tzMeta.gmtLabel} • Chênh VN ${tzMeta.diffLabel})`;
+
       return `Chào NowNow Tarot! 🐾
 Mình muốn đặt lịch xem bài:
 • Thời lượng mình chọn: ${timeLabel}
-• Khung giờ: ${tfLabel}
+• Khung giờ: ${tfLabel}${tzLine}
 • Kênh tương tác: ${currentChannel}
 • Chuyện mình đang vướng: ${combinedTopic}`;
     }
@@ -5123,9 +5338,23 @@ Mình muốn đặt lịch xem bài:
     /* =========================================================================
     9. KHỞI CHẠY HỆ THỐNG TỨC THÌ & TỰ ĐỘNG CHUYỂN MÙA / KHUNG GIỜ ĐÊM
     ========================================================================= */
+ function getVietnamCurrentHour() {
+   try {
+     const vnHourStr = new Intl.DateTimeFormat('en-US', {
+       timeZone: 'Asia/Ho_Chi_Minh',
+       hour: 'numeric',
+       hour12: false
+     }).format(new Date());
+     const parsed = parseInt(vnHourStr, 10);
+     return isNaN(parsed) ? (new Date().getHours()) : (parsed % 24);
+   } catch (e) {
+     return new Date().getHours();
+   }
+ }
+
  function initLiveAvailabilityStatus() {
-   const hr = new Date().getHours();
-   if (hr >= 0 && hr < 4 && typeof selectTimeframe === 'function') {
+   const vnHr = getVietnamCurrentHour();
+   if (vnHr >= 0 && vnHr < 4 && typeof selectTimeframe === 'function') {
      selectTimeframe('night');
    }
    if (typeof getHourBasedCatDialogue === 'function' && typeof catPassiveDialogues !== 'undefined') {
@@ -5167,6 +5396,7 @@ Mình muốn đặt lịch xem bài:
    if (slider && typeof minutesToSliderPos === 'function') slider.value = minutesToSliderPos(60);
    if (typeof renderMinutesState === 'function') renderMinutesState(60, false);
 
+   if (typeof updateNowNowTimezoneUI === 'function') updateNowNowTimezoneUI();
    if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
    initLiveAvailabilityStatus();
    startAutoSeasonCycle15s();
@@ -6934,17 +7164,27 @@ Mình muốn đặt lịch xem bài:
   const origBuildBookingMessage = window.buildBookingMessage;
   window.buildBookingMessage = function() {
     if (window.currentNowNowLang !== 'en') return origBuildBookingMessage();
-    const tfLabel = currentTimeframe === 'day' ? 'Daytime (9:00 AM – 12:00 AM)' : 'Night Owl (12:00 AM – 4:00 AM)';
+    const tzMeta = (typeof getClientTimezoneMeta === 'function')
+      ? getClientTimezoneMeta(window.currentClientTimezone)
+      : { isVN: true };
+    const tfLabel = tzMeta.isVN
+      ? (currentTimeframe === 'day' ? 'Daytime (9:00 AM – 12:00 AM VN)' : 'Night Owl (12:00 AM – 4:00 AM VN)')
+      : (currentTimeframe === 'day'
+          ? `Daytime (${tzMeta.dayStartLocal} – ${tzMeta.dayEndLocal} your time / 9:00 AM – 12:00 AM VN)`
+          : `Night Owl (${tzMeta.nightStartLocal} – ${tzMeta.nightEndLocal} your time / 12:00 AM – 4:00 AM VN)`);
     const priceK = calculatePriceK(currentMinutes, currentTimeframe);
     const chanEN = currentChannel.includes('Voice') ? 'Two-Way Voice Notes' : 'Live Call (Google Meet + Recording)';
     const selectedTags = Array.from(document.querySelectorAll('#topicTagGroup .soft-tag.active')).map(b => b.textContent.trim());
     const customNote = document.getElementById('bookingTopicInput').value.trim();
     const combinedTopic = [selectedTags.join(', '), customNote].filter(Boolean).join(' | ') || 'Looking for deep clarity & guidance with NowNow';
+    const tzLine = tzMeta.isVN
+      ? ''
+      : `\n• Client Timezone: ${tzMeta.iana} (${tzMeta.gmtLabel} • VN ${tzMeta.diffLabel})`;
 
     return `Hi NowNow Tarot! 🐾
 I'd love to book a 1:1 Tarot & CBT session:
 • Estimated Duration: ~${currentMinutes} mins (~${priceK}K VND - billed by actual time)
-• Time Slot: ${tfLabel}
+• Time Slot: ${tfLabel}${tzLine}
 • Preferred Channel: ${chanEN}
 • What's on my mind: ${combinedTopic}`;
   };
@@ -7033,9 +7273,10 @@ I'd love to book a 1:1 Tarot & CBT session:
       }
     }
 
-    // Đồng bộ lại trạng thái Thanh trượt & Khung giờ theo ngôn ngữ mới
+    // Đồng bộ lại trạng thái Thanh trượt, Khung giờ & Múi giờ theo ngôn ngữ mới
     window.selectTimeframe(currentTimeframe);
     window.renderMinutesState(currentMinutes, false);
+    if (typeof updateNowNowTimezoneUI === 'function') updateNowNowTimezoneUI();
     try { localStorage.setItem('nownow_preferred_lang', lang); } catch (e) {}
   };
 
@@ -8336,7 +8577,14 @@ I'd love to book a 1:1 Tarot & CBT session:
     const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const themeStr = isDark ? '🌙 Dark' : '☀️ Light';
     const langStr = (window.currentNowNowLang === 'en') ? 'EN' : 'VI';
-    return [model, geoLocationLabel, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
+    const detectedTz = (typeof NOWNOW_DETECTED_IANA_TZ !== 'undefined' && NOWNOW_DETECTED_IANA_TZ)
+      ? NOWNOW_DETECTED_IANA_TZ
+      : (function() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } })();
+    const activeTz = (window.currentClientTimezone && window.currentClientTimezone !== detectedTz)
+      ? `${detectedTz} ➔ ${window.currentClientTimezone}`
+      : detectedTz;
+    const tzBadge = activeTz ? `🌐 ${activeTz}` : '';
+    return [model, geoLocationLabel, tzBadge, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
   }
 
   function buildExploredSummary() {

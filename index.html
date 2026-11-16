@@ -2005,25 +2005,22 @@ body.portal-open .cat-cloud-tip {
             <span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>
           </button>
         </div>
-        <!-- DÒNG MÚI GIỜ TÀNG HÌNH (Ẩn 100% với khách ở Việt Nam, tự hiện với khách quốc tế) -->
-        <div id="tzStealthBar" class="hidden text-center -mt-1.5 mb-1">
-          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/85 bg-white/[0.03] border border-[#ffdf85]/20 rounded-full px-3 py-1">
-            <span id="tzStealthText">🌍 Tự động quy đổi theo giờ địa phương</span>
-            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline font-bold ml-1 hover:text-white cursor-pointer">Đổi</button>
+        <!-- DÒNG MÚI GIỜ TINH TẾ + POPOVER CỜ SVG KÍNH MỜ (CHUẨN WINDOWS / IOS / ANDROID) -->
+        <div id="tzStealthBar" class="relative text-center -mt-1 mb-1">
+          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/90 bg-white/[0.04] border border-[#ffdf85]/25 rounded-full px-3.5 py-1.5 shadow-sm backdrop-blur-md">
+            <span id="tzStealthText" class="inline-flex items-center gap-1.5">Khung giờ Việt Nam (GMT+7)</span>
+            <span class="text-[#ffdf85]/40">•</span>
+            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline decoration-[#ffdf85]/50 underline-offset-2 font-bold hover:text-white cursor-pointer">Bạn ở nước ngoài? Đổi múi giờ</button>
           </div>
-          <div id="tzSelectWrap" class="hidden mt-2">
-            <select id="tzQuickSelect" onchange="onChangeNowNowTimezone(this.value)" aria-label="Chọn múi giờ của bạn" class="bg-[#14080e] text-[#faf6f0] text-[11.5px] border border-[#ffdf85]/45 rounded-xl px-3 py-1.5 focus:outline-none focus:border-[#ffdf85] cursor-pointer">
-              <option value="Asia/Ho_Chi_Minh">🇻🇳 Việt Nam (Giờ Hà Nội / TP.HCM • GMT+7)</option>
-              <option value="Europe/Berlin">🇩🇪 Đức / Châu Âu (Berlin, Paris • GMT+1/+2)</option>
-              <option value="Europe/London">🇬🇧 Vương Quốc Anh (London • GMT+0/+1)</option>
-              <option value="America/New_York">🇺🇸 Mỹ Bờ Đông (New York, Texas • EST/EDT)</option>
-              <option value="America/Los_Angeles">🇺🇸 Mỹ Bờ Tây (California, Seattle • PST/PDT)</option>
-              <option value="America/Toronto">🇨🇦 Canada (Toronto, Montreal • EST/EDT)</option>
-              <option value="Australia/Sydney">🇦🇺 Úc (Sydney, Melbourne • AEST/AEDT)</option>
-              <option value="Asia/Tokyo">🇯🇵 Nhật Bản (Tokyo, Osaka • GMT+9)</option>
-              <option value="Asia/Seoul">🇰🇷 Hàn Quốc (Seoul, Busan • GMT+9)</option>
-              <option value="Asia/Singapore">🇸🇬 Singapore / Malaysia (GMT+8)</option>
-            </select>
+
+          <div id="tzSelectWrap" class="hidden mt-2.5 mx-auto max-w-[460px] bg-[#14080e]/95 border border-[#ffdf85]/45 rounded-2xl p-3 shadow-2xl backdrop-blur-xl text-left">
+            <div class="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-white/10">
+              <span id="tzPopoverTitle" class="text-[11px] font-extrabold text-[#ffdf85]">🌍 Chọn khu vực của bạn</span>
+              <button type="button" id="tzAutoDetectBtn" onclick="resetNowNowTimezoneToAuto()" class="text-[10px] text-[#f2dec4]/85 hover:text-[#ffdf85] underline cursor-pointer shrink-0">
+                🔄 Tự động theo máy
+              </button>
+            </div>
+            <div id="tzChipGrid" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
           </div>
         </div>
 
@@ -4636,7 +4633,7 @@ body.portal-open .cat-cloud-tip {
     }
 
     /* =========================================================================
-       HỆ THỐNG NHẬN DIỆN & QUY ĐỔI ĐA MÚI GIỜ "TÀNG HÌNH" (STEALTH TIMEZONE ENGINE)
+       HỆ THỐNG NHẬN DIỆN & QUY ĐỔI ĐA MÚI GIỜ "TÀNG HÌNH" V2 (SVG FLAGS + FORMATTOPARTS)
        ========================================================================= */
     const NOWNOW_DETECTED_IANA_TZ = (function() {
       try {
@@ -4645,25 +4642,113 @@ body.portal-open .cat-cloud-tip {
         return 'Asia/Ho_Chi_Minh';
       }
     })();
-    window.currentClientTimezone = NOWNOW_DETECTED_IANA_TZ;
+
+    window.currentClientTimezone = (function() {
+      try {
+        return localStorage.getItem('nownow_preferred_tz') || NOWNOW_DETECTED_IANA_TZ;
+      } catch (e) {
+        return NOWNOW_DETECTED_IANA_TZ;
+      }
+    })();
+
+    // Bộ cờ SVG sắc nét 100% trên Windows Chrome, macOS, iOS, Android (không bị biến thành chữ DE/US)
+    const TZ_SVG_FLAGS = {
+      VN: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#da251d"/><polygon points="15,4 11.47,14.85 20.71,8.15 9.29,8.15 18.53,14.85" fill="#ffff00"/></svg>',
+      DE: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="6.67" y="0" fill="#000"/><rect width="30" height="6.67" y="6.67" fill="#dd0000"/><rect width="30" height="6.67" y="13.33" fill="#ffce00"/></svg>',
+      FR: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="10" height="20" x="0" fill="#002395"/><rect width="10" height="20" x="10" fill="#fff"/><rect width="10" height="20" x="20" fill="#ed2939"/></svg>',
+      GB: '<svg width="16" height="11" viewBox="0 0 60 30" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>',
+      NL: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="6.67" y="0" fill="#ae1c28"/><rect width="30" height="6.67" y="6.67" fill="#fff"/><rect width="30" height="6.67" y="13.33" fill="#21468b"/></svg>',
+      CZ: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="10" y="0" fill="#fff"/><rect width="30" height="10" y="10" fill="#d7141a"/><polygon points="0,0 15,10 0,20" fill="#11457e"/></svg>',
+      PL: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="10" y="0" fill="#fff"/><rect width="30" height="10" y="10" fill="#dc143c"/></svg>',
+      CH: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#ff0000"/><rect x="13" y="4" width="4" height="12" fill="#fff"/><rect x="9" y="8" width="12" height="4" fill="#fff"/></svg>',
+      RU: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="6.67" y="0" fill="#fff"/><rect width="30" height="6.67" y="6.67" fill="#0039a6"/><rect width="30" height="6.67" y="13.33" fill="#d52b1e"/></svg>',
+      US: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#b22234"/><path d="M0,2.8h30 M0,5.7h30 M0,8.5h30 M0,11.4h30 M0,14.2h30 M0,17.1h30" stroke="#fff" stroke-width="1.4"/><rect width="12" height="10.8" fill="#3c3b6e"/></svg>',
+      CA: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="7.5" height="20" x="0" fill="#ff0000"/><rect width="15" height="20" x="7.5" fill="#fff"/><rect width="7.5" height="20" x="22.5" fill="#ff0000"/><circle cx="15" cy="10" r="3.2" fill="#ff0000"/></svg>',
+      AU: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#00008b"/><rect width="14" height="9" fill="#012169"/><path d="M0,0 L14,9 M14,0 L0,9" stroke="#fff" stroke-width="1.6"/><path d="M7,0 v9 M0,4.5 h14" stroke="#fff" stroke-width="2.4"/><path d="M7,0 v9 M0,4.5 h14" stroke="#c8102e" stroke-width="1.4"/><circle cx="22" cy="6" r="1.3" fill="#fff"/><circle cx="25" cy="11" r="1.1" fill="#fff"/><circle cx="21" cy="14" r="1.4" fill="#fff"/><circle cx="7" cy="14" r="1.8" fill="#fff"/></svg>',
+      JP: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="5.5" fill="#bc002d"/></svg>',
+      KR: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="4.8" fill="#cd2e3a"/><path d="M10.2,10 A4.8,4.8 0 0,0 19.8,10 A2.4,2.4 0 0,0 15,10 A2.4,2.4 0 0,1 10.2,10 Z" fill="#0047a0"/></svg>',
+      TW: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#fe0000"/><rect width="15" height="10" fill="#000095"/><circle cx="7.5" cy="5" r="2.8" fill="#fff"/></svg>',
+      SG: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="10" y="0" fill="#ef3340"/><rect width="30" height="10" y="10" fill="#fff"/><circle cx="6.5" cy="5" r="2.6" fill="#fff"/><circle cx="7.5" cy="5" r="2.2" fill="#ef3340"/></svg>',
+      TH: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#a51931"/><rect width="30" height="13.3" y="3.33" fill="#fff"/><rect width="30" height="6.67" y="6.67" fill="#2d2a4a"/></svg>',
+      GLOBE: '<span class="text-[12px]">🌍</span>'
+    };
+
+    // Phân nhóm rạch ròi từng nước Châu Âu, Bắc Mỹ & Châu Á - Thái Bình Dương
+    const TZ_GROUPS = [
+      {
+        titleVi: '🇻🇳 Việt Nam',
+        titleEn: '🇻🇳 Vietnam',
+        items: [
+          { iana: 'Asia/Ho_Chi_Minh', cc: 'VN', vi: 'Việt Nam (HN / HCM)', en: 'Vietnam (HN / HCM)' }
+        ]
+      },
+      {
+        titleVi: 'Châu Âu (Phân biệt từng nước)',
+        titleEn: 'Europe (By Country)',
+        items: [
+          { iana: 'Europe/Berlin', cc: 'DE', vi: 'Đức (Berlin, Munich)', en: 'Germany (Berlin)' },
+          { iana: 'Europe/Paris', cc: 'FR', vi: 'Pháp (Paris, Lyon)', en: 'France (Paris)' },
+          { iana: 'Europe/London', cc: 'GB', vi: 'Anh (London)', en: 'UK (London)' },
+          { iana: 'Europe/Amsterdam', cc: 'NL', vi: 'Hà Lan (Amsterdam)', en: 'Netherlands' },
+          { iana: 'Europe/Prague', cc: 'CZ', vi: 'Séc (Praha)', en: 'Czechia (Prague)' },
+          { iana: 'Europe/Warsaw', cc: 'PL', vi: 'Ba Lan (Warsaw)', en: 'Poland (Warsaw)' },
+          { iana: 'Europe/Zurich', cc: 'CH', vi: 'Thụy Sĩ (Zurich)', en: 'Switzerland' },
+          { iana: 'Europe/Moscow', cc: 'RU', vi: 'Nga (Moscow)', en: 'Russia (Moscow)' }
+        ]
+      },
+      {
+        titleVi: 'Mỹ & Canada',
+        titleEn: 'US & Canada',
+        items: [
+          { iana: 'America/New_York', cc: 'US', vi: 'Mỹ Đông (NY, Boston)', en: 'US East (NY)' },
+          { iana: 'America/Chicago', cc: 'US', vi: 'Mỹ Trung (Texas, CHI)', en: 'US Central (TX)' },
+          { iana: 'America/Los_Angeles', cc: 'US', vi: 'Mỹ Tây (Cali, Seattle)', en: 'US West (LA)' },
+          { iana: 'America/Toronto', cc: 'CA', vi: 'Canada Đông (Toronto)', en: 'Canada (Toronto)' },
+          { iana: 'America/Vancouver', cc: 'CA', vi: 'Canada Tây (Vancouver)', en: 'Canada (Vancouver)' }
+        ]
+      },
+      {
+        titleVi: 'Úc & Châu Á',
+        titleEn: 'Australia & Asia',
+        items: [
+          { iana: 'Australia/Sydney', cc: 'AU', vi: 'Úc Đông (Sydney, Mel)', en: 'Australia (SYD/MEL)' },
+          { iana: 'Australia/Perth', cc: 'AU', vi: 'Úc Tây (Perth)', en: 'Australia (Perth)' },
+          { iana: 'Asia/Tokyo', cc: 'JP', vi: 'Nhật (Tokyo, Osaka)', en: 'Japan (Tokyo)' },
+          { iana: 'Asia/Seoul', cc: 'KR', vi: 'Hàn Quốc (Seoul)', en: 'South Korea (Seoul)' },
+          { iana: 'Asia/Taipei', cc: 'TW', vi: 'Đài Loan (Đài Bắc)', en: 'Taiwan (Taipei)' },
+          { iana: 'Asia/Singapore', cc: 'SG', vi: 'Singapore / Malaysia', en: 'Singapore / MY' },
+          { iana: 'Asia/Bangkok', cc: 'TH', vi: 'Thái Lan (Bangkok)', en: 'Thailand (Bangkok)' }
+        ]
+      }
+    ];
 
     const TZ_CITY_LABEL_MAP = {
-      'Europe/Berlin': { vi: 'Berlin', en: 'Berlin' },
-      'Europe/Paris': { vi: 'Paris', en: 'Paris' },
-      'Europe/London': { vi: 'London', en: 'London' },
-      'America/New_York': { vi: 'New York', en: 'New York' },
-      'America/Chicago': { vi: 'Chicago', en: 'Chicago' },
-      'America/Los_Angeles': { vi: 'Los Angeles', en: 'Los Angeles' },
-      'America/Toronto': { vi: 'Toronto', en: 'Toronto' },
-      'America/Vancouver': { vi: 'Vancouver', en: 'Vancouver' },
-      'Australia/Sydney': { vi: 'Sydney', en: 'Sydney' },
-      'Australia/Melbourne': { vi: 'Melbourne', en: 'Melbourne' },
-      'Asia/Tokyo': { vi: 'Tokyo', en: 'Tokyo' },
-      'Asia/Seoul': { vi: 'Seoul', en: 'Seoul' },
-      'Asia/Singapore': { vi: 'Singapore', en: 'Singapore' },
-      'Asia/Bangkok': { vi: 'Bangkok', en: 'Bangkok' },
-      'Asia/Ho_Chi_Minh': { vi: 'Việt Nam', en: 'Vietnam' },
-      'Asia/Saigon': { vi: 'Việt Nam', en: 'Vietnam' }
+      'Europe/Berlin': { cc: 'DE', vi: 'Đức (Berlin)', en: 'Germany' },
+      'Europe/Paris': { cc: 'FR', vi: 'Pháp (Paris)', en: 'France' },
+      'Europe/London': { cc: 'GB', vi: 'Anh (London)', en: 'UK' },
+      'Europe/Amsterdam': { cc: 'NL', vi: 'Hà Lan', en: 'Netherlands' },
+      'Europe/Prague': { cc: 'CZ', vi: 'Séc (Praha)', en: 'Czechia' },
+      'Europe/Warsaw': { cc: 'PL', vi: 'Ba Lan', en: 'Poland' },
+      'Europe/Zurich': { cc: 'CH', vi: 'Thụy Sĩ', en: 'Switzerland' },
+      'Europe/Moscow': { cc: 'RU', vi: 'Nga (Moscow)', en: 'Russia' },
+      'Europe/Rome': { cc: 'GLOBE', vi: 'Ý (Rome)', en: 'Italy' },
+      'Europe/Madrid': { cc: 'GLOBE', vi: 'Tây Ban Nha', en: 'Spain' },
+      'Europe/Vienna': { cc: 'GLOBE', vi: 'Áo (Vienna)', en: 'Austria' },
+      'America/New_York': { cc: 'US', vi: 'Mỹ Bờ Đông', en: 'US East' },
+      'America/Chicago': { cc: 'US', vi: 'Mỹ Trung (Texas)', en: 'US Central' },
+      'America/Los_Angeles': { cc: 'US', vi: 'Mỹ Bờ Tây', en: 'US West' },
+      'America/Toronto': { cc: 'CA', vi: 'Toronto', en: 'Toronto' },
+      'America/Vancouver': { cc: 'CA', vi: 'Vancouver', en: 'Vancouver' },
+      'Australia/Sydney': { cc: 'AU', vi: 'Sydney / Mel', en: 'Sydney / Mel' },
+      'Australia/Melbourne': { cc: 'AU', vi: 'Melbourne', en: 'Melbourne' },
+      'Australia/Perth': { cc: 'AU', vi: 'Perth', en: 'Perth' },
+      'Asia/Tokyo': { cc: 'JP', vi: 'Nhật Bản', en: 'Japan' },
+      'Asia/Seoul': { cc: 'KR', vi: 'Hàn Quốc', en: 'South Korea' },
+      'Asia/Taipei': { cc: 'TW', vi: 'Đài Loan', en: 'Taiwan' },
+      'Asia/Singapore': { cc: 'SG', vi: 'Singapore', en: 'Singapore' },
+      'Asia/Bangkok': { cc: 'TH', vi: 'Thái Lan', en: 'Thailand' },
+      'Asia/Ho_Chi_Minh': { cc: 'VN', vi: 'Việt Nam', en: 'Vietnam' },
+      'Asia/Saigon': { cc: 'VN', vi: 'Việt Nam', en: 'Vietnam' }
     };
 
     function isVietnamTimezone(tz) {
@@ -4672,15 +4757,31 @@ body.portal-open .cat-cloud-tip {
       return clean === 'Asia/Ho_Chi_Minh' || clean === 'Asia/Saigon' || clean === 'Asia/Hanoi';
     }
 
+    // Tính chuẩn xác offset (phút) bằng formatToParts + Date.UTC (không phụ thuộc parse chuỗi)
     function getTimezoneOffsetMinutesForInstant(tz, refDate) {
       try {
         const d = refDate || new Date();
-        const utcStr = d.toLocaleString('en-US', { timeZone: 'UTC' });
-        const tzStr = d.toLocaleString('en-US', { timeZone: tz });
-        return Math.round((new Date(tzStr).getTime() - new Date(utcStr).getTime()) / 60000);
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          year: 'numeric', month: '2-digit', day: '2-digit',
+          hour: '2-digit', minute: '2-digit', second: '2-digit',
+          hourCycle: 'h23'
+        }).formatToParts(d);
+        const map = {};
+        parts.forEach(p => { if (p.type !== 'literal') map[p.type] = Number(p.value); });
+        const asUtc = Date.UTC(map.year, map.month - 1, map.day, map.hour % 24, map.minute, map.second);
+        return Math.round((asUtc - d.getTime()) / 60000);
       } catch (e) {
-        return 420; // Fallback GMT+7
+        return 420;
       }
+    }
+
+    function getLiveClockInTz(tz) {
+      try {
+        return new Intl.DateTimeFormat('vi-VN', {
+          timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+        }).format(new Date());
+      } catch (e) { return ''; }
     }
 
     function getClientTimezoneMeta(tz) {
@@ -4688,22 +4789,19 @@ body.portal-open .cat-cloud-tip {
       const isVN = isVietnamTimezone(targetTz);
       const now = new Date();
       const targetOffsetMins = getTimezoneOffsetMinutesForInstant(targetTz, now);
-      const vnOffsetMins = 420; // Asia/Ho_Chi_Minh = UTC+7 (420 mins)
+      const vnOffsetMins = 420;
       const diffMinsFromVN = targetOffsetMins - vnOffsetMins;
       const diffHoursFromVN = diffMinsFromVN / 60;
 
-      // Format GMT string (e.g. GMT+1, GMT-5, GMT+9:30)
       const signGmt = targetOffsetMins >= 0 ? '+' : '-';
       const absGmtMins = Math.abs(targetOffsetMins);
       const gmtH = Math.floor(absGmtMins / 60);
       const gmtM = absGmtMins % 60;
       const gmtLabel = `GMT${signGmt}${gmtH}${gmtM > 0 ? ':' + (gmtM < 10 ? '0' + gmtM : gmtM) : ''}`;
 
-      // Format diff vs VN (e.g. -6h, +2h)
       const signDiff = diffHoursFromVN >= 0 ? '+' : '';
       const diffLabel = `${signDiff}${Number.isInteger(diffHoursFromVN) ? diffHoursFromVN : diffHoursFromVN.toFixed(1)}h`;
 
-      // Convert VN slots: Day (09:00 -> 24:00 VN) & Night (00:00 -> 04:00 VN)
       const fmtClock = (vnHour) => {
         let totalM = (vnHour * 60 + diffMinsFromVN) % 1440;
         if (totalM < 0) totalM += 1440;
@@ -4714,12 +4812,14 @@ body.portal-open .cat-cloud-tip {
 
       const cityObj = TZ_CITY_LABEL_MAP[targetTz];
       const fallbackCity = targetTz.includes('/') ? targetTz.split('/').pop().replace(/_/g, ' ') : targetTz;
+      const flagHtml = TZ_SVG_FLAGS[cityObj ? cityObj.cc : 'GLOBE'] || TZ_SVG_FLAGS.GLOBE;
 
       return {
         iana: targetTz,
         isVN: isVN && diffMinsFromVN === 0,
         gmtLabel: gmtLabel,
         diffLabel: diffLabel,
+        flagHtml: flagHtml,
         cityVi: cityObj ? cityObj.vi : fallbackCity,
         cityEn: cityObj ? cityObj.en : fallbackCity,
         dayStartLocal: fmtClock(9),
@@ -4727,6 +4827,47 @@ body.portal-open .cat-cloud-tip {
         nightStartLocal: fmtClock(0),
         nightEndLocal: fmtClock(4)
       };
+    }
+
+    function renderNowNowTzChips() {
+      const grid = document.getElementById('tzChipGrid');
+      if (!grid) return;
+      const isEn = window.currentNowNowLang === 'en';
+      const activeTz = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ;
+
+      const popTitle = document.getElementById('tzPopoverTitle');
+      if (popTitle) popTitle.textContent = isEn ? '🌍 Select your region' : '🌍 Chọn khu vực của bạn';
+      const autoBtn = document.getElementById('tzAutoDetectBtn');
+      if (autoBtn) autoBtn.textContent = isEn ? '🔄 Auto-detect' : '🔄 Tự động theo máy';
+
+      grid.innerHTML = TZ_GROUPS.map(grp => {
+        const chipsHtml = grp.items.map(item => {
+          const isSelected = (item.iana === activeTz) || (isVietnamTimezone(activeTz) && item.iana === 'Asia/Ho_Chi_Minh');
+          const localTime = getLiveClockInTz(item.iana);
+          const flagSvg = TZ_SVG_FLAGS[item.cc] || TZ_SVG_FLAGS.GLOBE;
+          return `
+            <button type="button" onclick="onChangeNowNowTimezone('${item.iana}')"
+              class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all text-left cursor-pointer ${
+                isSelected
+                  ? 'bg-[#b9263e]/45 border-[#ffdf85] text-[#ffdf85] font-bold shadow-sm'
+                  : 'bg-white/[0.035] border-white/10 text-[#faf6f0]/90 hover:border-[#ffdf85]/50 hover:bg-white/[0.07]'
+              }">
+              <span class="inline-flex items-center gap-1.5 min-w-0">
+                ${flagSvg}
+                <span class="truncate text-[11px]">${isEn ? item.en : item.vi}</span>
+              </span>
+              <span class="text-[10px] opacity-75 shrink-0 font-mono">${localTime}</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <div>
+            <div class="text-[10px] uppercase tracking-wider text-[#ffdf85]/75 font-bold mb-1 px-0.5">${isEn ? grp.titleEn : grp.titleVi}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">${chipsHtml}</div>
+          </div>
+        `;
+      }).join('');
     }
 
     function updateNowNowTimezoneUI() {
@@ -4737,88 +4878,99 @@ body.portal-open .cat-cloud-tip {
       const stealthBar = document.getElementById('tzStealthBar');
       const stealthText = document.getElementById('tzStealthText');
       const changeBtn = document.getElementById('tzChangeToggleBtn');
-      const selectEl = document.getElementById('tzQuickSelect');
-
-      if (selectEl) {
-        const hasOption = Array.from(selectEl.options).some(opt => opt.value === meta.iana);
-        if (!hasOption && !meta.isVN) {
-          const customOpt = document.createElement('option');
-          customOpt.value = meta.iana;
-          customOpt.textContent = `🌍 ${meta.cityVi} (${meta.iana} • ${meta.gmtLabel})`;
-          selectEl.insertBefore(customOpt, selectEl.firstChild);
-        }
-        selectEl.value = meta.isVN ? 'Asia/Ho_Chi_Minh' : meta.iana;
-      }
 
       if (meta.isVN) {
         if (btnDay) {
           btnDay.innerHTML = isEn
-            ? '☀️ Daytime (9 AM – 12 AM)'
+            ? '<span>☀️ Daytime</span> <span class="timeframe-subtext">(9 AM – 12 AM)</span>'
             : '<span>☀️ Ban Ngày</span> <span class="timeframe-subtext">(9h – 0h)</span>';
         }
         if (btnNight) {
           btnNight.innerHTML = isEn
-            ? '🌙 Night Owl (12 AM – 4 AM)'
+            ? '<span>🌙 Night Owl</span> <span class="timeframe-subtext">(12 AM – 4 AM)</span>'
             : '<span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>';
-        }
-        const hasManualOverride = (window.currentClientTimezone !== NOWNOW_DETECTED_IANA_TZ) || !isVietnamTimezone(NOWNOW_DETECTED_IANA_TZ);
-        if (stealthBar) {
-          if (hasManualOverride) {
-            stealthBar.classList.remove('hidden');
-            if (stealthText) {
-              stealthText.innerHTML = isEn
-                ? '🇻🇳 Showing Vietnam Time (GMT+7)'
-                : '🇻🇳 Đang hiển thị theo giờ Việt Nam (GMT+7)';
-            }
-            if (changeBtn) changeBtn.textContent = isEn ? 'Change' : 'Đổi';
-          } else {
-            stealthBar.classList.add('hidden');
-          }
-        }
-      } else {
-        const daySub = isEn
-          ? `(${meta.dayStartLocal} – ${meta.dayEndLocal} your time)`
-          : `(${meta.dayStartLocal} – ${meta.dayEndLocal} giờ của bạn)`;
-        const nightSub = isEn
-          ? `(${meta.nightStartLocal} – ${meta.nightEndLocal} your time)`
-          : `(${meta.nightStartLocal} – ${meta.nightEndLocal} giờ của bạn)`;
-
-        if (btnDay) {
-          btnDay.innerHTML = isEn
-            ? `<span>☀️ Daytime</span> <span class="timeframe-subtext">${daySub}</span>`
-            : `<span>☀️ Ban Ngày</span> <span class="timeframe-subtext">${daySub}</span>`;
-        }
-        if (btnNight) {
-          btnNight.innerHTML = isEn
-            ? `<span>🌙 Night Owl</span> <span class="timeframe-subtext">${nightSub}</span>`
-            : `<span>🌙 Cú Đêm</span> <span class="timeframe-subtext">${nightSub}</span>`;
         }
         if (stealthBar) stealthBar.classList.remove('hidden');
         if (stealthText) {
           stealthText.innerHTML = isEn
-            ? `🌍 Auto-converted to ${meta.cityEn} time (${meta.gmtLabel}) (VN ${meta.diffLabel})`
-            : `🌍 Tự động quy đổi theo giờ ${meta.cityVi} (${meta.gmtLabel}) (Chênh Việt Nam ${meta.diffLabel})`;
+            ? `${TZ_SVG_FLAGS.VN}<span>Vietnam Time (GMT+7)</span>`
+            : `${TZ_SVG_FLAGS.VN}<span>Khung giờ Việt Nam (GMT+7)</span>`;
+        }
+        if (changeBtn) {
+          changeBtn.textContent = isEn ? '🌍 Outside VN? Change timezone' : '🌍 Bạn ở nước ngoài? Đổi múi giờ';
+        }
+      } else {
+        const daySub = isEn
+          ? `(${meta.dayStartLocal} – ${meta.dayEndLocal} your time)`
+          : `(${meta.dayStartLocal} – ${meta.dayEndLocal} giờ bạn)`;
+        const nightSub = isEn
+          ? `(${meta.nightStartLocal} – ${meta.nightEndLocal} your time)`
+          : `(${meta.nightStartLocal} – ${meta.nightEndLocal} giờ bạn)`;
+
+        if (btnDay) {
+          btnDay.innerHTML = isEn
+            ? `<span>☀️ VN Daytime</span> <span class="timeframe-subtext">${daySub}</span>`
+            : `<span>☀️ Ca Ngày VN</span> <span class="timeframe-subtext">${daySub}</span>`;
+        }
+        if (btnNight) {
+          btnNight.innerHTML = isEn
+            ? `<span>🌙 VN Night Owl</span> <span class="timeframe-subtext">${nightSub}</span>`
+            : `<span>🌙 Ca Đêm VN</span> <span class="timeframe-subtext">${nightSub}</span>`;
+        }
+        if (stealthBar) stealthBar.classList.remove('hidden');
+        if (stealthText) {
+          const clientNow = getLiveClockInTz(meta.iana);
+          const vnNow = getLiveClockInTz('Asia/Ho_Chi_Minh');
+          const vnHr = typeof getVietnamCurrentHour === 'function' ? getVietnamCurrentHour() : new Date().getHours();
+          const nowStatus = (vnHr >= 4 && vnHr < 9)
+            ? (isEn ? 'Resting 😴' : 'Đang nghỉ 😴')
+            : (isEn ? 'Awake ✨' : 'Đang thức ✨');
+          stealthText.innerHTML = isEn
+            ? `${meta.flagHtml}<span>${meta.cityEn} <b>${clientNow}</b></span> <span class="opacity-40">•</span> ${TZ_SVG_FLAGS.VN}<span>NowNow <b>${vnNow}</b> (${nowStatus})</span>`
+            : `${meta.flagHtml}<span>${meta.cityVi} <b>${clientNow}</b></span> <span class="opacity-40">•</span> ${TZ_SVG_FLAGS.VN}<span>NowNow <b>${vnNow}</b> (${nowStatus})</span>`;
         }
         if (changeBtn) {
           changeBtn.textContent = isEn ? 'Change' : 'Đổi';
         }
       }
+      renderNowNowTzChips();
     }
 
     function toggleNowNowTzDropdown() {
       const wrap = document.getElementById('tzSelectWrap');
       if (!wrap) return;
+      const willOpen = wrap.classList.contains('hidden');
+      if (willOpen) renderNowNowTzChips();
       wrap.classList.toggle('hidden');
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
     function onChangeNowNowTimezone(newTz) {
       window.currentClientTimezone = newTz || 'Asia/Ho_Chi_Minh';
+      try { localStorage.setItem('nownow_preferred_tz', window.currentClientTimezone); } catch (e) {}
       updateNowNowTimezoneUI();
-      const wrap = document.getElementById('tzSelectWrap');
-      if (wrap) wrap.classList.add('hidden');
+      document.getElementById('tzSelectWrap')?.classList.add('hidden');
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
+
+    function resetNowNowTimezoneToAuto() {
+      try { localStorage.removeItem('nownow_preferred_tz'); } catch (e) {}
+      onChangeNowNowTimezone(NOWNOW_DETECTED_IANA_TZ);
+    }
+
+    document.addEventListener('click', (e) => {
+      const bar = document.getElementById('tzStealthBar');
+      const wrap = document.getElementById('tzSelectWrap');
+      if (bar && wrap && !wrap.classList.contains('hidden') && !bar.contains(e.target)) {
+        wrap.classList.add('hidden');
+      }
+    });
+
+    setInterval(() => {
+      if (!document.hidden && !isVietnamTimezone(window.currentClientTimezone)) {
+        updateNowNowTimezoneUI();
+      }
+    }, 30000);
 
     function buildBookingMessage() {
       const tzMeta = getClientTimezoneMeta(window.currentClientTimezone);
@@ -6960,8 +7112,6 @@ Mình muốn đặt lịch xem bài:
     '#sec-booking .interactive-step-card:nth-of-type(3) > p': 'Receive full spread photos + private audio/YouTube recordings to revisit anytime. <b>Only settle payment once your heart feels lighter</b> & unlock lifetime free check-ins!',
 
     // Slider & Buttons
-    '#tfBtnDay': '☀️ Daytime (9 AM – 12 AM)',
-    '#tfBtnNight': '🌙 Night Owl (12 AM – 4 AM)',
     '#sec-booking .pt-2 > div:nth-child(2) > div:first-child > span:first-child': 'Estimated duration:',
     '#sec-booking .pt-2 > div:nth-child(2) > div:last-child > span:first-child': 'Estimated fee (VND):',
     '.milestone-tick-btn[data-min="15"]': '15m (Min)',

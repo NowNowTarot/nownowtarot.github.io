@@ -2005,19 +2005,29 @@ body.portal-open .cat-cloud-tip {
             <span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>
           </button>
         </div>
-        <!-- DÒNG MÚI GIỜ TINH TẾ + POPOVER CỜ SVG KÍNH MỜ (CHUẨN WINDOWS / IOS / ANDROID) -->
+        <!-- DÒNG MÚI GIỜ TINH TẾ + POPOVER CỜ SVG KÍNH MỜ & CHẾ ĐỘ TỰ ĐỘNG / THỦ CÔNG -->
         <div id="tzStealthBar" class="relative text-center -mt-1 mb-1">
-          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/90 bg-white/[0.04] border border-[#ffdf85]/25 rounded-full px-3.5 py-1.5 shadow-sm backdrop-blur-md">
+          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/90 bg-white/[0.045] border border-[#ffdf85]/30 rounded-full px-3.5 py-1.5 shadow-sm backdrop-blur-md">
+            <span id="tzModeBadge" class="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
+              <span style="width:5px;height:5px;border-radius:50%;background:#34d399;display:inline-block;"></span>
+              <span id="tzModeBadgeLabel">Tự động</span>
+            </span>
             <span id="tzStealthText" class="inline-flex items-center gap-1.5">Khung giờ Việt Nam (GMT+7)</span>
             <span class="text-[#ffdf85]/40">•</span>
-            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline decoration-[#ffdf85]/50 underline-offset-2 font-bold hover:text-white cursor-pointer">Bạn ở nước ngoài? Đổi múi giờ</button>
+            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline decoration-[#ffdf85]/50 underline-offset-2 font-bold hover:text-white cursor-pointer">
+              🌍 Đổi vùng giờ
+            </button>
           </div>
 
-          <div id="tzSelectWrap" class="hidden mt-2.5 mx-auto max-w-[460px] bg-[#14080e]/95 border border-[#ffdf85]/45 rounded-2xl p-3 shadow-2xl backdrop-blur-xl text-left">
-            <div class="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-white/10">
-              <span id="tzPopoverTitle" class="text-[11px] font-extrabold text-[#ffdf85]">🌍 Chọn khu vực của bạn</span>
-              <button type="button" id="tzAutoDetectBtn" onclick="resetNowNowTimezoneToAuto()" class="text-[10px] text-[#f2dec4]/85 hover:text-[#ffdf85] underline cursor-pointer shrink-0">
-                🔄 Tự động theo máy
+          <div id="tzSelectWrap" class="hidden mt-2.5 mx-auto max-w-[460px] bg-[#14080e]/95 border border-[#ffdf85]/45 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl text-left">
+            <!-- Thanh chuyển chế độ Tự động theo máy vs Chọn thủ công -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2.5 border-b border-white/10">
+              <div class="min-w-0">
+                <div id="tzPopoverTitle" class="text-[11.5px] font-extrabold text-[#ffdf85]">🌍 Đồng bộ múi giờ thông minh</div>
+                <div id="tzDetectedDeviceLine" class="text-[10px] text-[#c4b5be] truncate mt-0.5">Máy của bạn: Asia/Ho_Chi_Minh</div>
+              </div>
+              <button type="button" id="tzAutoDetectBtn" onclick="resetNowNowTimezoneToAuto()" class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[10.5px] font-bold border transition-all cursor-pointer shrink-0">
+                <span>📡 Tự động theo máy</span>
               </button>
             </div>
             <div id="tzChipGrid" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1"></div>
@@ -4633,13 +4643,24 @@ body.portal-open .cat-cloud-tip {
     }
 
     /* =========================================================================
-       HỆ THỐNG NHẬN DIỆN & QUY ĐỔI ĐA MÚI GIỜ "TÀNG HÌNH" V2 (SVG FLAGS + FORMATTOPARTS)
+       HỆ THỐNG NHẬN DIỆN & QUY ĐỔI ĐA MÚI GIỜ "TÀNG HÌNH" V3
+       - Phân biệt rạch ròi Tự động theo máy (Auto-Sync) vs Khách tự chọn (Manual Override)
+       - 19 Cờ SVG sắc nét + Thoại Mèo Đen Fun Fact riêng cho từng quốc gia
+       - Đồng bộ lịch sử đổi múi giờ chi tiết vào Dấu Chân Số Google Sheets
        ========================================================================= */
     const NOWNOW_DETECTED_IANA_TZ = (function() {
       try {
         return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
       } catch (e) {
         return 'Asia/Ho_Chi_Minh';
+      }
+    })();
+
+    window.isManualTimezoneOverride = (function() {
+      try {
+        return Boolean(localStorage.getItem('nownow_preferred_tz'));
+      } catch (e) {
+        return false;
       }
     })();
 
@@ -4651,7 +4672,6 @@ body.portal-open .cat-cloud-tip {
       }
     })();
 
-    // Bộ cờ SVG sắc nét 100% trên Windows Chrome, macOS, iOS, Android (không bị biến thành chữ DE/US)
     const TZ_SVG_FLAGS = {
       VN: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="20" fill="#da251d"/><polygon points="15,4 11.47,14.85 20.71,8.15 9.29,8.15 18.53,14.85" fill="#ffff00"/></svg>',
       DE: '<svg width="16" height="11" viewBox="0 0 30 20" class="inline-block rounded-[2px] shrink-0 shadow-sm"><rect width="30" height="6.67" y="0" fill="#000"/><rect width="30" height="6.67" y="6.67" fill="#dd0000"/><rect width="30" height="6.67" y="13.33" fill="#ffce00"/></svg>',
@@ -4673,7 +4693,6 @@ body.portal-open .cat-cloud-tip {
       GLOBE: '<span class="text-[12px]">🌍</span>'
     };
 
-    // Phân nhóm rạch ròi từng nước Châu Âu, Bắc Mỹ & Châu Á - Thái Bình Dương
     const TZ_GROUPS = [
       {
         titleVi: '🇻🇳 Việt Nam',
@@ -4737,11 +4756,11 @@ body.portal-open .cat-cloud-tip {
       'America/New_York': { cc: 'US', vi: 'Mỹ Bờ Đông', en: 'US East' },
       'America/Chicago': { cc: 'US', vi: 'Mỹ Trung (Texas)', en: 'US Central' },
       'America/Los_Angeles': { cc: 'US', vi: 'Mỹ Bờ Tây', en: 'US West' },
-      'America/Toronto': { cc: 'CA', vi: 'Toronto', en: 'Toronto' },
-      'America/Vancouver': { cc: 'CA', vi: 'Vancouver', en: 'Vancouver' },
-      'Australia/Sydney': { cc: 'AU', vi: 'Sydney / Mel', en: 'Sydney / Mel' },
-      'Australia/Melbourne': { cc: 'AU', vi: 'Melbourne', en: 'Melbourne' },
-      'Australia/Perth': { cc: 'AU', vi: 'Perth', en: 'Perth' },
+      'America/Toronto': { cc: 'CA', vi: 'Canada (Toronto)', en: 'Toronto' },
+      'America/Vancouver': { cc: 'CA', vi: 'Canada (Vancouver)', en: 'Vancouver' },
+      'Australia/Sydney': { cc: 'AU', vi: 'Úc (Sydney/Mel)', en: 'Sydney / Mel' },
+      'Australia/Melbourne': { cc: 'AU', vi: 'Úc (Melbourne)', en: 'Melbourne' },
+      'Australia/Perth': { cc: 'AU', vi: 'Úc (Perth)', en: 'Perth' },
       'Asia/Tokyo': { cc: 'JP', vi: 'Nhật Bản', en: 'Japan' },
       'Asia/Seoul': { cc: 'KR', vi: 'Hàn Quốc', en: 'South Korea' },
       'Asia/Taipei': { cc: 'TW', vi: 'Đài Loan', en: 'Taiwan' },
@@ -4751,13 +4770,85 @@ body.portal-open .cat-cloud-tip {
       'Asia/Saigon': { cc: 'VN', vi: 'Việt Nam', en: 'Vietnam' }
     };
 
+    // Kho thoại Mèo Đen Fun Fact Tiếng Việt cực duyên cho từng nước khi khách bấm đổi múi giờ
+    const TZ_CAT_FUN_FACTS_VI = {
+      'Asia/Ho_Chi_Minh': [
+        "Meo~ Về lại múi giờ Việt Nam (GMT+7) thân thương rồi! Tối nay làm ly trà tắc hay trà sữa rồi nhắn Now gỡ rối nha bà 🧋🇻🇳",
+        "Đúng chuẩn giờ quê nhà Việt Nam! Dù bà đang ở Hà Nội, Huế hay Sài Gòn thì tần số của Now vẫn luôn sẵn sàng lắng nghe bà nè 🇻🇳💖"
+      ],
+      'Europe/Berlin': [
+        "Ồ bà đang ở Đức hả! 🇩🇪 Fun fact: Người Đức có từ 'Kummerspeck' chỉ việc ăn đồ ngọt cho đỡ buồn đó—đừng ăn một mình nữa, nhắn Now gỡ rối liền nha! 🥨🐾",
+        "Chào người đẹp bên Đức nha! 🇩🇪 Tàu DB bên đó có thể trễ chứ lịch hẹn Tarot x CBT của Now là chuẩn từng phút, đã quy đổi sẵn giờ Berlin cho bà rồi nè! 🚆✨"
+      ],
+      'Europe/Paris': [
+        "Bonjour từ nhà NowNow tới nước Pháp! 🇫🇷 Người Pháp có câu 'C’est la vie'—nhưng nếu chuyện tình cảm đang làm bà rối như đường phố Paris giờ cao điểm thì để Now gỡ cùng nha 🥐🗼",
+        "Đang ở Pháp hả bà! 🇫🇷 Bên đó người ta uống rượu vang ngắm tháp Eiffel, còn bà cứ pha tách trà ấm rồi bật Voice Note thủ thỉ với Now nha 🍷✨"
+      ],
+      'Europe/London': [
+        "Chào bà bên Anh Quốc nha! 🇬🇧 Thời tiết London hay mưa âm u dễ làm người ta overthinking lắm, pha tách trà Earl Grey ấm rồi tâm sự với Now cho nắng lên trong lòng nè ☕🌧️",
+        "Từ múi giờ Big Ben (London) kết nối thẳng về nhà NowNow! 🇬🇧 Đã đổi chuẩn giờ Anh cho bà dễ chọn ca rồi đó nha 🐾✨"
+      ],
+      'Europe/Amsterdam': [
+        "Bà đang ở Hà Lan xứ sở hoa Tulip và những con kênh xinh đẹp hả! 🇳🇱🌷 Học tinh thần 'Gezellig' (ấm cúng, thư thái) của người Hà Lan: pha ly cacao nóng rồi tâm sự cùng Now nha 🚲💖"
+      ],
+      'Europe/Prague': [
+        "Chào đằng ấy ở Séc (Praha) nha! 🇨🇿 Thành phố cổ kính đẹp như cổ tích mà lòng đang ngổn ngang chuyện tình cảm hay công việc thì để Now lắng nghe cùng bà nghen 🏰✨"
+      ],
+      'Europe/Warsaw': [
+        "Bà đang ở Ba Lan (Warsaw) đúng hơm! 🇵🇱 Mùa lạnh bên Đông Âu dễ làm người ta thấy cô đơn gấp đôi, nhớ ăn đĩa bánh xếp Pierogi nóng hổi rồi về đây trò chuyện với Now nha 🥟🐾"
+      ],
+      'Europe/Zurich': [
+        "Whoa bà đang ở Thụy Sĩ (Zurich) luôn! 🇨🇭 Xứ sở của chínhcha đẻ tâm lý học Carl Jung và những chiếc đồng hồ chính xác nhất thế giới—chuẩn bài Tarot x Carl Jung nhà NowNow rồi! ⌚🏔️"
+      ],
+      'Europe/Moscow': [
+        "Chào bà ở Nga (Moscow) nha! 🇷🇺 Ngoài trời tuyết lạnh mấy độ âm thì vào góc nhỏ nhà NowNow vẫn luôn có bếp lửa ấm và trà nóng chờ bà trút bầu tâm sự nè ❄️☕"
+      ],
+      'America/New_York': [
+        "Bà ở Mỹ Bờ Đông (New York / Boston) hả! 🇺🇸🗽 New York là 'thành phố không ngủ', mà nếu bà cũng đang thức trằn trọc vì một người thì đặt lịch gỡ rối cùng Now liền nha! ✨🐾",
+        "Lệch nhau nửa vòng trái đất từ Bờ Đông nước Mỹ 🇺🇸 về Việt Nam cũng không cản được duyên lành tụi mình! Tui đã đổi sẵn giờ EST/EDT chuẩn cho bà rồi đó 🗽💖"
+      ],
+      'America/Chicago': [
+        "Chào bà ở Mỹ Miền Trung (Texas / Chicago) nha! 🇺🇸🤠 Người ta bảo 'Everything is bigger in Texas', nhưng đừng để nỗi buồn trong lòng bà to theo nha, để Now thu nhỏ nó lại giùm cho! ✨🐾"
+      ],
+      'America/Los_Angeles': [
+        "Hí người đẹp Bờ Tây nước Mỹ (California / Seattle)! 🇺🇸🌴 Dù đang ở Cali nắng ấm hay Seattle mưa phùn uống cà phê, nhớ chọn khung giờ vừa vặn bên bà để thủ thỉ cùng Now nghen ☕✨"
+      ],
+      'America/Toronto': [
+        "Bà đang ở Canada Bờ Đông (Toronto / Montreal) hả! 🇨🇦🍁 Xa nhà giữa trời lạnh Canada mà có chuyện vướng bận trong lòng thì cứ nhắn Now, ấm áp ngọt ngào như si-rô lá phong luôn! 🥞💖"
+      ],
+      'America/Vancouver': [
+        "Chào bà ở Vancouver (Bờ Tây Canada) nha! 🇨🇦🌲 Thành phố sát biển êm đềm vậy mà lòng đang dậy sóng thì để Mèo Đen với Now giúp bà lấy lại sự bình yên nha 🌊🐾"
+      ],
+      'Australia/Sydney': [
+        "G'day từ Việt Nam sang Úc Đông (Sydney / Melbourne) nha bà! 🇦🇺🦘 Fun fact: Ở Úc số lượng chuột túi Kangaroo còn nhiều hơn cả dân số, nhưng người hiểu lòng bà lúc này thì chỉ cần 1 mình Now là đủ! 🐨💖"
+      ],
+      'Australia/Perth': [
+        "Bà ở Perth (Tây Úc) hả! 🇦🇺☀️ Tuyệt vời luôn, giờ Perth chỉ chênh Việt Nam đúng 1 tiếng thôi, đặt lịch trò chuyện với Now tiện y như đang ở sát vách nhà nhau vậy á! 🐾✨"
+      ],
+      'Asia/Tokyo': [
+        "Konnichiwa bà ở Nhật Bản nha! 🇯🇵🌸 Người Nhật có triết lý 'Kintsugi'—hàn gắn vết nứt bằng vàng để món đồ càng thêm quý giá. Vết thương lòng của bà cũng sẽ được chữa lành đẹp đẽ như vậy đó! 🍵✨",
+        "Đang đi làm hay đi học bên Nhật (Tokyo / Osaka) vất vả lắm đúng hơm bà? 🇯🇵🚃 Giờ Nhật chỉ nhanh hơn Việt Nam 2 tiếng thôi, tối về ghé tâm sự với Now cho nhẹ lòng nha 🐾💖"
+      ],
+      'Asia/Seoul': [
+        "Annyeong bà ở Hàn Quốc (Seoul / Busan) nha! 🇰🇷✨ Nhịp sống 'Palli-palli' (nhanh lên) bên Hàn dễ làm mình kiệt sức lắm, vào đây thở chậm lại một nhịp rồi gỡ rối cùng Now nghen 🧋🐾"
+      ],
+      'Asia/Taipei': [
+        "Chào bà ở Đài Loan nha! 🇹🇼🧋 Quê hương của trà sữa trân châu và những khu chợ đêm ấm áp—chỉ chênh Việt Nam 1 tiếng thôi, vừa hút trà sữa vừa Voice Note với Now là hết nước chấm! ✨🐾"
+      ],
+      'Asia/Singapore': [
+        "Chào người đẹp ở Singapore / Malaysia nha! 🇸🇬🦁 Quốc đảo Sư Tử nhịp sống hối hả, nếu công việc hay tình cảm làm bà áp lực quá thì ghé trạm sạc tâm hồn NowNow nghỉ ngơi xíu nghen 🌿💖"
+      ],
+      'Asia/Bangkok': [
+        "Sawasdee từ Huế sang Thái Lan (Bangkok) nha bà! 🇹🇭🐘 Cùng múi giờ GMT+7 với Việt Nam luôn, khỏi cần nhẩm tính cộng trừ phút nào hết trơn, quá tiện! ✨🐾"
+      ]
+    };
+
     function isVietnamTimezone(tz) {
       if (!tz) return true;
       const clean = String(tz).trim();
       return clean === 'Asia/Ho_Chi_Minh' || clean === 'Asia/Saigon' || clean === 'Asia/Hanoi';
     }
 
-    // Tính chuẩn xác offset (phút) bằng formatToParts + Date.UTC (không phụ thuộc parse chuỗi)
     function getTimezoneOffsetMinutesForInstant(tz, refDate) {
       try {
         const d = refDate || new Date();
@@ -4834,11 +4925,31 @@ body.portal-open .cat-cloud-tip {
       if (!grid) return;
       const isEn = window.currentNowNowLang === 'en';
       const activeTz = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ;
+      const detectedMeta = getClientTimezoneMeta(NOWNOW_DETECTED_IANA_TZ);
 
       const popTitle = document.getElementById('tzPopoverTitle');
-      if (popTitle) popTitle.textContent = isEn ? '🌍 Select your region' : '🌍 Chọn khu vực của bạn';
+      if (popTitle) popTitle.textContent = isEn ? '🌍 Smart Timezone Sync' : '🌍 Đồng bộ múi giờ thông minh';
+
+      const devLine = document.getElementById('tzDetectedDeviceLine');
+      if (devLine) {
+        const detClock = getLiveClockInTz(NOWNOW_DETECTED_IANA_TZ);
+        devLine.innerHTML = isEn
+          ? `Device detected: <b>${detectedMeta.cityEn}</b> (${detectedMeta.gmtLabel} • ${detClock})`
+          : `Máy của bạn: <b>${detectedMeta.cityVi}</b> (${detectedMeta.gmtLabel} • ${detClock})`;
+      }
+
       const autoBtn = document.getElementById('tzAutoDetectBtn');
-      if (autoBtn) autoBtn.textContent = isEn ? '🔄 Auto-detect' : '🔄 Tự động theo máy';
+      if (autoBtn) {
+        const isAutoActive = !window.isManualTimezoneOverride;
+        autoBtn.className = `inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-[10.5px] font-bold border transition-all cursor-pointer shrink-0 ${
+          isAutoActive
+            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-sm'
+            : 'bg-white/[0.05] border-[#ffdf85]/40 text-[#ffdf85] hover:bg-[#ffdf85]/15'
+        }`;
+        autoBtn.innerHTML = isAutoActive
+          ? (isEn ? '✓ Auto-synced with device' : '✓ Đang tự động theo máy')
+          : (isEn ? '📡 Sync with my device' : '📡 Đặt lại tự động theo máy');
+      }
 
       grid.innerHTML = TZ_GROUPS.map(grp => {
         const chipsHtml = grp.items.map(item => {
@@ -4846,7 +4957,7 @@ body.portal-open .cat-cloud-tip {
           const localTime = getLiveClockInTz(item.iana);
           const flagSvg = TZ_SVG_FLAGS[item.cc] || TZ_SVG_FLAGS.GLOBE;
           return `
-            <button type="button" onclick="onChangeNowNowTimezone('${item.iana}')"
+            <button type="button" onclick="onChangeNowNowTimezone('${item.iana}', true)"
               class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all text-left cursor-pointer ${
                 isSelected
                   ? 'bg-[#b9263e]/45 border-[#ffdf85] text-[#ffdf85] font-bold shadow-sm'
@@ -4878,6 +4989,18 @@ body.portal-open .cat-cloud-tip {
       const stealthBar = document.getElementById('tzStealthBar');
       const stealthText = document.getElementById('tzStealthText');
       const changeBtn = document.getElementById('tzChangeToggleBtn');
+      const modeBadge = document.getElementById('tzModeBadge');
+      const modeBadgeLabel = document.getElementById('tzModeBadgeLabel');
+
+      if (modeBadge && modeBadgeLabel) {
+        if (window.isManualTimezoneOverride) {
+          modeBadge.className = 'inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ffdf85]/20 text-[#ffdf85] border border-[#ffdf85]/50';
+          modeBadge.innerHTML = `<i class="fa-solid fa-hand-pointer text-[8px]"></i><span>${isEn ? 'Manual' : 'Tự chọn'}</span>`;
+        } else {
+          modeBadge.className = 'inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30';
+          modeBadge.innerHTML = `<span style="width:5px;height:5px;border-radius:50%;background:#34d399;display:inline-block;"></span><span>${isEn ? 'Auto' : 'Tự động'}</span>`;
+        }
+      }
 
       if (meta.isVN) {
         if (btnDay) {
@@ -4930,7 +5053,7 @@ body.portal-open .cat-cloud-tip {
             : `${meta.flagHtml}<span>${meta.cityVi} <b>${clientNow}</b></span> <span class="opacity-40">•</span> ${TZ_SVG_FLAGS.VN}<span>NowNow <b>${vnNow}</b> (${nowStatus})</span>`;
         }
         if (changeBtn) {
-          changeBtn.textContent = isEn ? 'Change' : 'Đổi';
+          changeBtn.textContent = isEn ? 'Change' : 'Đổi vùng giờ';
         }
       }
       renderNowNowTzChips();
@@ -4945,17 +5068,60 @@ body.portal-open .cat-cloud-tip {
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
-    function onChangeNowNowTimezone(newTz) {
+    function triggerCatCountryFunFact(ianaTz, isAutoReset) {
+      if (typeof showCatTip !== 'function') return;
+      if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+      if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+
+      const meta = getClientTimezoneMeta(ianaTz);
+      if (isAutoReset) {
+        showCatTip(
+          `📡 <b>Đã đồng bộ tự động theo máy bà:</b> Hệ thống nhận diện múi giờ <b>${meta.cityVi} (${meta.gmtLabel})</b> chuẩn từng phút rồi nha! 🐾✨`,
+          5600
+        );
+        return;
+      }
+
+      const pool = TZ_CAT_FUN_FACTS_VI[ianaTz];
+      if (pool && pool.length > 0) {
+        const chosen = pool[Math.floor(Math.random() * pool.length)];
+        showCatTip(chosen, 6400);
+      } else {
+        showCatTip(
+          `🌍 Đã chuyển sang khung giờ <b>${meta.cityVi} (${meta.gmtLabel} • Chênh VN ${meta.diffLabel})</b>! Bà cứ xem giờ bên bà trên 2 nút Ca Ngày / Ca Đêm nha 🐾✨`,
+          5800
+        );
+      }
+    }
+
+    function onChangeNowNowTimezone(newTz, isManualClick = true) {
+      const prevTz = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ;
       window.currentClientTimezone = newTz || 'Asia/Ho_Chi_Minh';
-      try { localStorage.setItem('nownow_preferred_tz', window.currentClientTimezone); } catch (e) {}
+      window.isManualTimezoneOverride = Boolean(isManualClick);
+
+      try {
+        if (isManualClick) {
+          localStorage.setItem('nownow_preferred_tz', window.currentClientTimezone);
+        } else {
+          localStorage.removeItem('nownow_preferred_tz');
+        }
+      } catch (e) {}
+
       updateNowNowTimezoneUI();
       document.getElementById('tzSelectWrap')?.classList.add('hidden');
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+
+      // Phát thoại Mèo Đen Fun Fact theo nước vừa chọn
+      triggerCatCountryFunFact(window.currentClientTimezone, !isManualClick);
+
+      // Ghi nhận chi tiết hành vi đổi múi giờ vào Dấu Chân Số Google Sheets
+      if (typeof window.__recordTrackerTimezoneSwitch === 'function') {
+        window.__recordTrackerTimezoneSwitch(prevTz, window.currentClientTimezone, isManualClick);
+      }
     }
 
     function resetNowNowTimezoneToAuto() {
-      try { localStorage.removeItem('nownow_preferred_tz'); } catch (e) {}
-      onChangeNowNowTimezone(NOWNOW_DETECTED_IANA_TZ);
+      onChangeNowNowTimezone(NOWNOW_DETECTED_IANA_TZ, false);
     }
 
     document.addEventListener('click', (e) => {
@@ -8458,6 +8624,22 @@ I'd love to book a 1:1 Tarot & CBT session:
       scheduleFastSync(false);
     };
 
+    window.__recordTrackerTimezoneSwitch = function(fromTz, toTz, isManual) {
+      behaviorStats.userTouchedTimeframe = true;
+      const metaTo = (typeof getClientTimezoneMeta === 'function')
+        ? getClientTimezoneMeta(toTz)
+        : { cityVi: toTz, gmtLabel: '' };
+      const modeTxt = isManual ? 'Tự chọn' : 'Reset Tự động';
+      const badge = `🌍 Đổi giờ: ${metaTo.cityVi} (${toTz} • ${modeTxt})`;
+      behaviorStats.highlightedTexts = behaviorStats.highlightedTexts.filter(x => !x.startsWith('🌍 Đổi giờ:'));
+      behaviorStats.highlightedTexts.push(badge);
+      if (!behaviorStats.finalAction.includes('Đặt lịch')) {
+        behaviorStats.finalAction = `🌍 Đổi giờ sang ${metaTo.cityVi}`;
+      }
+      saveStateToLocal();
+      scheduleFastSync(true);
+    };
+
     if (typeof window.setSliderMilestone === 'function' && !window.setSliderMilestone.__v10Hooked) {
       const origMile = window.setSliderMilestone;
       window.setSliderMilestone = function(targetMin) {
@@ -8730,10 +8912,13 @@ I'd love to book a 1:1 Tarot & CBT session:
     const detectedTz = (typeof NOWNOW_DETECTED_IANA_TZ !== 'undefined' && NOWNOW_DETECTED_IANA_TZ)
       ? NOWNOW_DETECTED_IANA_TZ
       : (function() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } })();
-    const activeTz = (window.currentClientTimezone && window.currentClientTimezone !== detectedTz)
-      ? `${detectedTz} ➔ ${window.currentClientTimezone}`
-      : detectedTz;
-    const tzBadge = activeTz ? `🌐 ${activeTz}` : '';
+    const chosenTz = window.currentClientTimezone || detectedTz;
+    let tzBadge = '';
+    if (window.isManualTimezoneOverride || (chosenTz && chosenTz !== detectedTz)) {
+      tzBadge = `🌐 [Khách tự đổi: ${detectedTz} ➔ ${chosenTz}]`;
+    } else if (detectedTz) {
+      tzBadge = `🌐 [Tự động: ${detectedTz}]`;
+    }
     return [model, geoLocationLabel, tzBadge, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
   }
 

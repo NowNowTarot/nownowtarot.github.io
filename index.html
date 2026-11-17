@@ -5921,6 +5921,106 @@ Mình muốn đặt lịch xem bài:
       0%, 100% { transform: scale(1) rotate(0deg); }
       50% { transform: scale(1.12) rotate(6deg); }
     }
+    
+    /* FIX CỨNG MODAL HỒI ÂM KHÔNG BAO GIỜ BỊ SỤP KHUNG TRỐNG */
+    #fbLoadingState, #fbNoticeState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      padding: 40px 18px;
+      text-align: center;
+      gap: 12px;
+    }
+    .fb-spinner-ring {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 223, 133, 0.22);
+      border-top-color: #ffdf85;
+      border-radius: 50%;
+      animation: fbSpin 0.8s linear infinite;
+    }
+    @keyframes fbSpin {
+      to { transform: rotate(360deg); }
+    }
+    /* THẺ THỦ THỈ NỔI BẬT (NHÂN VẬT CHÍNH) */
+    .fb-hero-whisper-card {
+      background: linear-gradient(145deg, rgba(168, 42, 60, 0.26) 0%, rgba(28, 12, 22, 0.96) 100%);
+      border: 1.5px solid rgba(255, 223, 133, 0.65);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 28px rgba(185, 38, 62, 0.22), inset 0 1px 0 rgba(255, 223, 133, 0.25);
+    }
+    .fb-prompt-chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(255, 223, 133, 0.12);
+      border: 1px solid rgba(255, 223, 133, 0.35);
+      color: #ffdf85;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .fb-prompt-chip:hover {
+      background: rgba(255, 223, 133, 0.25);
+      border-color: #ffdf85;
+    }
+    .fb-photo-upload-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1.2px dashed rgba(255, 223, 133, 0.42);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.28);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .fb-photo-upload-box:hover {
+      border-color: #ffdf85;
+      background: rgba(255, 223, 133, 0.06);
+    }
+    .fb-thumb-wrap {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 223, 133, 0.5);
+    }
+    .fb-thumb-remove {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    /* HIỂN THỊ ẢNH KHÁCH GỬI TRÊN TAB WEB REVIEWS */
+    .shopee-review-photos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .shopee-review-photos img {
+      width: 82px;
+      height: 82px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 223, 133, 0.4);
+      cursor: pointer;
+    }
+
     .wax-seal-anim {
       display: inline-block;
       animation: waxPulse 0.8s ease-in-out infinite;
@@ -5940,13 +6040,14 @@ Mình muốn đặt lịch xem bài:
 
       <div class="subweb-body-scroll flex flex-col flex-1 p-4" style="padding-bottom: 52px;">
         <!-- VÙNG LOADING / NIÊM PHONG THƯ -->
-        <div id="fbLoadingState" class="hidden flex flex-col items-center justify-center flex-1 py-20 text-center space-y-3">
-          <div class="text-4xl wax-seal-anim" id="fbLoadingEmoji">💌✨</div>
+        <div id="fbLoadingState" class="hidden">
+          <div class="fb-spinner-ring"></div>
+          <div class="text-2xl wax-seal-anim" id="fbLoadingEmoji">💌✨</div>
           <h3 id="fbLoadingTitle" class="text-sm sm:text-base font-extrabold text-[#ffdf85]">
-            Đang niêm phong lá thư bằng sáp vàng...
+            Đang mở khóa chiếc hộp hồi âm...
           </h3>
-          <p id="fbLoadingSub" class="text-xs text-[#f2dec4]/90 max-w-xs mx-auto">
-            Bé Mèo Đen đang chạy đi cất hồi âm của bà vào chiếc hộp kỷ niệm nhà NowNow 🐾
+          <p id="fbLoadingSub" class="text-xs text-[#f2dec4]/90" style="max-width: 280px;">
+            Chờ Mèo Đen kiểm tra mã phiên trải bài một xíu nha 🐾
           </p>
           <div class="seal-progress-track">
             <div id="fbSealProgressFill" class="seal-progress-fill"></div>
@@ -5982,17 +6083,45 @@ Mình muốn đặt lịch xem bài:
             <p class="text-[11.5px] text-[#c4b5be]">Gửi chút thủ thỉ để tụi mình cùng nhau khép lại phiên đối thoại hôm nay nha (｡･ω･｡)ﾉ♡</p>
           </div>
 
-          <!-- 1. CHUYỂN BIẾN TÂM TRẠNG -->
+          <!-- 1. LỜI NHẮN THỦ THỈ (ĐƯA LÊN ĐẦU & LÀM NỔI BẬT LÀM Ý CHÍNH) -->
+          <div class="fb-hero-whisper-card space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <div class="text-[13px] font-extrabold text-[#ffdf85]">✨ 1. Vài dòng thủ thỉ gửi Now:</div>
+              <span class="text-[10px] text-[#f2dec4]/80 italic">Ý chính nè 💖</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="insertFbPrompt('Điều làm mình nhẹ lòng nhất sau buổi xem là ')" class="fb-prompt-chip">+ Điều làm mình nhẹ lòng...</button>
+              <button type="button" onclick="insertFbPrompt('Mình thấy Now nói rất đúng chỗ ')" class="fb-prompt-chip">+ Chỗ nói trúng tim đen...</button>
+              <button type="button" onclick="insertFbPrompt('Cảm ơn Now rất nhiều vì ')" class="fb-prompt-chip">+ Cảm ơn Now vì...</button>
+            </div>
+            <textarea id="fbMessageText" rows="4" oninput="onFbDraftInput()" placeholder="Kể cho Now nghe cảm giác của bà sau buổi xem hôm nay nhé — viết tự nhiên như đang nhắn tin cho bạn thân vậy đó..." class="w-full bg-black/50 border border-[#ffdf85]/50 rounded-xl p-3 text-[13.5px] leading-relaxed text-white focus:outline-none focus:border-[#ffdf85]"></textarea>
+
+            <!-- ĐÍNH KÈM ẢNH KỶ NIỆM (TỐI ĐA 2 ẢNH, TỰ NÉN NHẸ) -->
+            <label class="fb-photo-upload-box">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="text-lg">📸</span>
+                <div class="min-w-0">
+                  <div class="text-[11.5px] font-bold text-[#ffdf85]">Gửi kèm ảnh cho Now (tùy chọn)</div>
+                  <div class="text-[10px] text-[#c4b5be] truncate">Ảnh trải bài, tin nhắn hay khoảnh khắc đẹp (tối đa 2 ảnh)</div>
+                </div>
+              </div>
+              <span class="text-[10.5px] font-bold px-2.5 py-1 rounded-full bg-[#ffdf85]/15 border border-[#ffdf85]/45 text-[#ffdf85] shrink-0">+ Chọn ảnh</span>
+              <input type="file" id="fbPhotoInput" accept="image/*" multiple class="hidden" onchange="handleFbPhotoSelect(this)">
+            </label>
+            <div id="fbPhotoPreviewList" class="hidden flex flex-wrap gap-2 pt-1"></div>
+          </div>
+
+          <!-- 2. CHUYỂN BIẾN TÂM TRẠNG -->
           <div class="interactive-step-card space-y-2">
-            <div class="text-xs font-bold text-[#ffdf85]">1. Nhịp thở cảm xúc của bà:</div>
-            <div class="text-[11px] text-[#c4b5be]">Trước khi xem lòng bà thấy thế nào? (Chạm để chọn)</div>
+            <div class="text-xs font-bold text-[#ffdf85]">2. Nhịp thở cảm xúc của bà:</div>
+            <div class="text-[11px] text-[#c4b5be]">Trước khi xem:</div>
             <div class="flex flex-wrap gap-1.5" id="groupStateBefore">
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌪️ Ngổn ngang</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌫️ Bế tắc</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🫀 Bồn chồn</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🥀 Kiệt sức</button>
             </div>
-            <div class="text-[11px] text-[#c4b5be] pt-1">Sau khi trò chuyện xong cùng Now:</div>
+            <div class="text-[11px] text-[#c4b5be] pt-1">Sau khi trò chuyện cùng Now:</div>
             <div class="flex flex-wrap gap-1.5" id="groupStateAfter">
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag active">🌤️ Nhẹ lòng</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">💡 Thấu suốt</button>
@@ -6001,21 +6130,15 @@ Mình muốn đặt lịch xem bài:
             </div>
           </div>
 
-          <!-- 2. ĐIỂM CHẠM THẤU CẢM -->
+          <!-- 3. ĐIỂM CHẠM THẤU CẢM -->
           <div class="interactive-step-card space-y-2">
-            <div class="text-xs font-bold text-[#ffdf85]">2. Điều bà thấy tâm đắc nhất ở NowNow:</div>
+            <div class="text-xs font-bold text-[#ffdf85]">3. Điều bà thấy tâm đắc nhất ở NowNow:</div>
             <div class="flex flex-wrap gap-1.5" id="groupTouchpoints">
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag active">🧠 Bóc đúng gốc rễ tiềm thức</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🎙️ Giọng nói ấm áp xoa dịu</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🌱 Định hướng thực tế, tỉnh táo</button>
               <button type="button" onclick="toggleFbTag(this)" class="soft-tag">🤝 Không phán xét hay hù dọa</button>
             </div>
-          </div>
-
-          <!-- 3. LỜI NHẮN THỦ THỈ -->
-          <div class="interactive-step-card space-y-2">
-            <div class="text-xs font-bold text-[#ffdf85]">3. Vài dòng thủ thỉ gửi riêng cho Now:</div>
-            <textarea id="fbMessageText" rows="3" placeholder="Viết những điều bà chưa kịp nói, hoặc cảm giác nhẹ nhõm lúc này nha..." class="w-full bg-black/40 border border-[#ffdf85]/35 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-[#ffdf85]"></textarea>
           </div>
 
           <!-- 4. NÚT CHIA SẺ ẨN DANH CẢI TIẾN: CẢ HÀNG LÀ LABEL BẤM SIÊU DỄ & TICK MẶC ĐỊNH -->
@@ -6291,10 +6414,129 @@ Mình muốn đặt lịch xem bài:
         .replace(/'/g, '&#039;');
     }
 
-    /* 1. CÁC HÀM TƯƠNG TÁC TRONG CHIẾC HỘP HỒI ÂM (CHỌN TAG, ĐÓNG, GỬI) */
+    /* 1. CÁC HÀM TƯƠNG TÁC TRONG CHIẾC HỘP HỒI ÂM (CHỌN TAG, ẢNH, TRACKING NHÁP, ĐÓNG, GỬI) */
+    let fbSelectedImagesBase64 = [];
+    let fbDraftDebounceTimer = null;
+    let fbLastSentDraftSig = '';
+
+    function insertFbPrompt(prefixText) {
+      const ta = document.getElementById('fbMessageText');
+      if (!ta) return;
+      const cur = ta.value.trim();
+      ta.value = cur ? (cur + '\n' + prefixText) : prefixText;
+      ta.focus();
+      onFbDraftInput();
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+    }
+
+    function compressImageFileToBase64(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const maxDim = 900;
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.78));
+          };
+          img.onerror = () => resolve(null);
+          img.src = ev.target.result;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleFbPhotoSelect(inputEl) {
+      if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+      const files = Array.from(inputEl.files).slice(0, 2 - fbSelectedImagesBase64.length);
+      for (const f of files) {
+        const b64 = await compressImageFileToBase64(f);
+        if (b64) fbSelectedImagesBase64.push(b64);
+      }
+      inputEl.value = '';
+      renderFbPhotoPreviews();
+    }
+
+    function removeFbPhoto(idx) {
+      fbSelectedImagesBase64.splice(idx, 1);
+      renderFbPhotoPreviews();
+    }
+
+    function renderFbPhotoPreviews() {
+      const box = document.getElementById('fbPhotoPreviewList');
+      if (!box) return;
+      if (fbSelectedImagesBase64.length === 0) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = fbSelectedImagesBase64.map((src, i) => `
+        <div class="fb-thumb-wrap">
+          <img src="${src}" alt="Ảnh khách gửi" class="w-full h-full object-cover">
+          <button type="button" onclick="removeFbPhoto(${i})" class="fb-thumb-remove" title="Xóa ảnh">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function sendFeedbackDraftToSheets(useBeacon = false) {
+      if (!activeClientSessionId) return;
+      const formEl = document.getElementById('fbFormState');
+      if (!formEl || formEl.classList.contains('hidden')) return;
+      const ta = document.getElementById('fbMessageText');
+      const draftText = ta ? ta.value.trim() : '';
+      const getTags = (id) => Array.from(document.querySelectorAll(`#${id} .soft-tag.active`)).map(el => el.textContent.trim()).join(', ');
+      const draftTags = [getTags('groupStateBefore'), getTags('groupStateAfter'), getTags('groupTouchpoints')].filter(Boolean).join(' | ');
+      if (!draftText && !draftTags) return;
+      const sig = draftText + '||' + draftTags;
+      if (sig === fbLastSentDraftSig) return;
+      fbLastSentDraftSig = sig;
+
+      const bodyStr = JSON.stringify({
+        action: 'save_feedback_draft',
+        session: activeClientSessionId,
+        draftText: draftText,
+        draftTags: draftTags
+      });
+      if (useBeacon && navigator.sendBeacon) {
+        try {
+          navigator.sendBeacon(NOWNOW_FEEDBACK_API, new Blob([bodyStr], { type: 'text/plain;charset=utf-8' }));
+          return;
+        } catch (e) {}
+      }
+      fetch(NOWNOW_FEEDBACK_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: bodyStr
+      }).catch(() => {});
+    }
+
+    function onFbDraftInput() {
+      if (fbDraftDebounceTimer) clearTimeout(fbDraftDebounceTimer);
+      fbDraftDebounceTimer = setTimeout(() => sendFeedbackDraftToSheets(false), 1200);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && activeClientSessionId) sendFeedbackDraftToSheets(true);
+    });
+    window.addEventListener('pagehide', () => {
+      if (activeClientSessionId) sendFeedbackDraftToSheets(true);
+    });
+
     function toggleFbTag(el) {
       if (!el) return;
       el.classList.toggle('active');
+      onFbDraftInput();
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
@@ -6325,7 +6567,8 @@ Mình muốn đặt lịch xem bài:
         stateAfter: getActiveText('groupStateAfter'),
         touchpoints: getActiveText('groupTouchpoints'),
         message: msgText,
-        allowShare: allowShare
+        allowShare: allowShare,
+        images: fbSelectedImagesBase64
       };
 
       // Bật màn hình niêm phong thư
@@ -6490,6 +6733,7 @@ Mình muốn đặt lịch xem bài:
               <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
                 "${safeMessage}"
               </p>
+              ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').filter(u => u.startsWith('http')).map(u => `<a href="${escapeHtml(u)}" target="_blank" rel="noopener"><img src="${escapeHtml(u)}" alt="Ảnh khách gửi" loading="lazy"></a>`).join('')}</div>` : ''}
             </div>
 
             ${safeReply ? `
@@ -6535,7 +6779,8 @@ Mình muốn đặt lịch xem bài:
               stateAfter: item.stateAfter || '',
               touchpoints: item.touchpoints || '',
               message: item.message || '',
-              shopReply: item.shopReply || item.reply || item.nowReply || ''
+              shopReply: item.shopReply || item.reply || item.nowReply || '',
+              images: item.images || ''
             }));
 
             try {
@@ -6606,41 +6851,54 @@ Mình muốn đặt lịch xem bài:
       document.getElementById('fbLoadingSub').textContent = "Chờ Mèo Đen kiểm tra mã phiên trải bài một xíu nha 🐾";
       loadingBox.classList.remove('hidden');
 
-      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`)
+      const sesController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 12000) : null;
+
+      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`, sesController ? { signal: sesController.signal } : {})
         .then(res => res.json())
         .then(data => {
+          if (sesTimeout) clearTimeout(sesTimeout);
           loadingBox.classList.add('hidden');
 
-          if (data.status === 'valid') {
-            // MÃ HỢP LỆ VÀ CHƯA GỬI: MỚI ĐƯỢC PHÉP HIỆN FORM
+          if (data && data.status === 'valid') {
             document.getElementById('fbFormState').classList.remove('hidden');
             if (data.clientName && data.clientName !== 'bà') {
               activeClientName = data.clientName;
               if (nameSpan) nameSpan.textContent = activeClientName;
             }
-          } else if (data.status === 'completed') {
-            // ĐÃ GỬI RỒI: HIỆN THÔNG BÁO KHÓA, FORM TUYỆT ĐỐI KHÔNG XUẤT HIỆN
+            if (data.draftText) {
+              const ta = document.getElementById('fbMessageText');
+              if (ta && !ta.value.trim()) ta.value = data.draftText;
+            }
+          } else if (data && data.status === 'completed') {
             document.getElementById('fbFormState').classList.add('hidden');
             document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
             document.getElementById('fbNoticeIcon').textContent = '✨💖';
             document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || activeClientName} một cái thật chặt!`;
             document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
             document.getElementById('fbNoticeState').classList.remove('hidden');
-          } else if (data.status === 'invalid') {
-            // MÃ KHÔNG TỒN TẠI HOẶC SAI
+          } else if (data && data.status === 'invalid') {
             document.getElementById('fbFormState').classList.add('hidden');
             document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
             document.getElementById('fbNoticeIcon').textContent = '🕯️';
             document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
             document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
             document.getElementById('fbNoticeState').classList.remove('hidden');
+          } else {
+            document.getElementById('fbFormState').classList.add('hidden');
+            document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+            document.getElementById('fbNoticeIcon').textContent = '⚠️';
+            document.getElementById('fbNoticeTitle').textContent = 'Hệ thống đang bận một chút';
+            document.getElementById('fbNoticeDesc').textContent = (data && data.message) ? data.message : 'Bà bấm tải lại trang giúp Now thử lại nha!';
+            document.getElementById('fbNoticeState').classList.remove('hidden');
           }
         })
         .catch(() => {
+          if (sesTimeout) clearTimeout(sesTimeout);
           loadingBox.classList.add('hidden');
           document.getElementById('fbNoticeIcon').textContent = '⚠️';
           document.getElementById('fbNoticeTitle').textContent = 'Kết nối gián đoạn';
-          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên, bà vui lòng thử tải lại trang nha!';
+          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên (mạng chậm hoặc máy chủ đang khởi động), bà tải lại trang thử lại nha!';
           document.getElementById('fbNoticeState').classList.remove('hidden');
         });
     }

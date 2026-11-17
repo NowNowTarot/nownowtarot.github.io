@@ -7043,25 +7043,7 @@ Mình muốn đặt lịch xem bài:
       }
     ];
 
-    function mergeReviewsKeepingSamplesAndTests(sheetReviews) {
-      const mergedMap = new Map();
-      const normKey = (r) => String((r && r.message) || '').replace(/\s+/g, ' ').trim().toLowerCase();
-      // Ưu tiên nạp dữ liệu mới nhất từ Google Sheets trước (bao gồm cả bài test & bài thật)
-      (Array.isArray(sheetReviews) ? sheetReviews : []).forEach(r => {
-        const k = normKey(r);
-        if (k) mergedMap.set(k, r);
-      });
-      // Giữ nguyên các bài mẫu mặc định nếu chưa có trong danh sách trả về
-      DEFAULT_SAMPLE_REVIEWS.forEach(sample => {
-        const k = normKey(sample);
-        if (k && !mergedMap.has(k)) {
-          mergedMap.set(k, sample);
-        }
-      });
-      return sortReviewsLongestAndPhotoFirst(Array.from(mergedMap.values()));
-    }
-
-    let currentReviewDataset = mergeReviewsKeepingSamplesAndTests([]);
+    let currentReviewDataset = [];
 
     // MẸO SẮP XẾP FEEDBACK ĐỈNH CAO:
     // 1. Feedback nào DÀI NHẤT đưa lên đầu tiên
@@ -7141,9 +7123,7 @@ Mình muốn đặt lịch xem bài:
             </div>
 
             <div class="my-3 pl-3 py-1 border-l-2 border-[#ffdf85]">
-              <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
-                "${safeMessage}"
-              </p>
+              ${safeMessage ? `<p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">"${safeMessage}"</p>` : ''}
               ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').map(u => u.trim()).filter(u => u.startsWith('http') || u.startsWith('data:image/')).map(u => `<div class="shopee-review-photo-item" onclick="openFbImageLightbox('${escapeHtml(u)}')"><img src="${escapeHtml(u)}" referrerpolicy="no-referrer" alt="Ảnh khách gửi" loading="lazy" onerror="handleDrivePhotoFallback(this)"></div>`).join('')}</div>` : ''}
             </div>
 
@@ -7172,13 +7152,13 @@ Mình muốn đặt lịch xem bài:
         if (cachedReal) {
           const parsed = JSON.parse(cachedReal);
           if (Array.isArray(parsed)) {
-            currentReviewDataset = mergeReviewsKeepingSamplesAndTests(parsed);
+            currentReviewDataset = sortReviewsLongestAndPhotoFirst(parsed);
             renderShopeeReviews();
           }
         }
       } catch (e) {}
 
-      fetch(`${NOWNOW_FEEDBACK_API}?action=get_approved`)
+      fetch(`${NOWNOW_FEEDBACK_API}?action=get_approved&nocache=1`, { cache: 'no-store' })
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'success' && Array.isArray(resData.data)) {
@@ -7193,7 +7173,7 @@ Mình muốn đặt lịch xem bài:
               shopReply: item.shopReply || item.reply || item.nowReply || '',
               images: (item.images && !String(item.images).trim().startsWith('⚠️')) ? item.images : ''
             }));
-            currentReviewDataset = mergeReviewsKeepingSamplesAndTests(mappedSheetReviews);
+            currentReviewDataset = sortReviewsLongestAndPhotoFirst(mappedSheetReviews);
 
             try {
               localStorage.setItem('nownow_real_sheet_reviews', JSON.stringify(currentReviewDataset));
@@ -7202,22 +7182,28 @@ Mình muốn đặt lịch xem bài:
             renderShopeeReviews();
 
             const track = document.getElementById('loveWallTrack');
-            if (track && currentReviewDataset.length > 0 && window.currentNowNowLang !== 'en') {
-              let htmlContent = '';
-              const list = [...currentReviewDataset, ...currentReviewDataset];
-              list.forEach(item => {
-                const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
-                const rawMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
-                const cleanMsg = escapeHtml(rawMsg);
-                const masked = escapeHtml(maskCustomerName(item.name));
-                htmlContent += `
-                  <div class="love-wall-item">
-                    <span class="love-wall-name">${icon} ${masked}:</span>
-                    <span class="love-wall-quote">"${cleanMsg}"</span>
-                  </div>
-                `;
-              });
-              track.innerHTML = htmlContent;
+            if (track && window.currentNowNowLang !== 'en') {
+              if (currentReviewDataset.length === 0) {
+                track.innerHTML = '';
+              } else {
+                let htmlContent = '';
+                const list = [...currentReviewDataset, ...currentReviewDataset];
+                list.forEach(item => {
+                  const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
+                  const msgRaw = item.message
+                    ? (item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message)
+                    : 'Đã gửi ảnh kỷ niệm cùng NowNow ✨';
+                  const cleanMsg = escapeHtml(msgRaw);
+                  const masked = escapeHtml(maskCustomerName(item.name));
+                  htmlContent += `
+                    <div class="love-wall-item">
+                      <span class="love-wall-name">${icon} ${masked}:</span>
+                      <span class="love-wall-quote">"${cleanMsg}"</span>
+                    </div>
+                  `;
+                });
+                track.innerHTML = htmlContent;
+              }
             }
           }
         })

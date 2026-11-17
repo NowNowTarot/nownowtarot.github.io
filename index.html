@@ -2005,17 +2005,14 @@ body.portal-open .cat-cloud-tip {
             <span>🌙 Cú Đêm</span> <span class="timeframe-subtext">(0h – 4h sáng)</span>
           </button>
         </div>
-        <!-- DÒNG MÚI GIỜ TINH TẾ + POPOVER CỜ SVG KÍNH MỜ & CHẾ ĐỘ TỰ ĐỘNG / THỦ CÔNG -->
+        <!-- DÒNG MÚI GIỜ TINH TẾ + POPOVER CỜ SVG KÍNH MỜ (KHÔNG CHỮ TỰ ĐỘNG, GỌN TRÊN MOBILE) -->
         <div id="tzStealthBar" class="relative text-center -mt-1 mb-1">
-          <div class="inline-flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#f2dec4]/90 bg-white/[0.045] border border-[#ffdf85]/30 rounded-full px-3.5 py-1.5 shadow-sm backdrop-blur-md">
-            <span id="tzModeBadge" class="inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30">
-              <span style="width:5px;height:5px;border-radius:50%;background:#34d399;display:inline-block;"></span>
-              <span id="tzModeBadgeLabel">Tự động</span>
-            </span>
-            <span id="tzStealthText" class="inline-flex items-center gap-1.5">Khung giờ Việt Nam (GMT+7)</span>
-            <span class="text-[#ffdf85]/40">•</span>
-            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="text-[#ffdf85] underline decoration-[#ffdf85]/50 underline-offset-2 font-bold hover:text-white cursor-pointer">
-              🌍 Đổi vùng giờ
+          <div class="tz-luxury-pill" onclick="if(!event.target.closest('button') && typeof triggerCatTzGuide === 'function') triggerCatTzGuide()">
+            <span id="tzStealthText" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">14:14 · Giờ Việt Nam</span>
+            <span class="tz-divider-dot" aria-hidden="true"></span>
+            <button type="button" id="tzChangeToggleBtn" onclick="toggleNowNowTzDropdown()" class="tz-switch-action-btn">
+              <i class="fa-solid fa-globe text-[8.5px] opacity-80"></i>
+              <span>Đổi</span>
             </button>
           </div>
 
@@ -4702,8 +4699,8 @@ body.portal-open .cat-cloud-tip {
         ]
       },
       {
-        titleVi: 'Châu Âu (Phân biệt từng nước)',
-        titleEn: 'Europe (By Country)',
+        titleVi: 'Châu Âu (Tự động chuẩn giờ Mùa Đông / Hè)',
+        titleEn: 'Europe (Auto Winter / Summer DST)',
         items: [
           { iana: 'Europe/Berlin', cc: 'DE', vi: 'Đức (Berlin, Munich)', en: 'Germany (Berlin)' },
           { iana: 'Europe/Paris', cc: 'FR', vi: 'Pháp (Paris, Lyon)', en: 'France (Paris)' },
@@ -4716,8 +4713,8 @@ body.portal-open .cat-cloud-tip {
         ]
       },
       {
-        titleVi: 'Mỹ & Canada',
-        titleEn: 'US & Canada',
+        titleVi: 'Mỹ & Canada (Tự động chuẩn giờ Mùa Đông / Hè)',
+        titleEn: 'US & Canada (Auto Winter / Summer DST)',
         items: [
           { iana: 'America/New_York', cc: 'US', vi: 'Mỹ Đông (NY, Boston)', en: 'US East (NY)' },
           { iana: 'America/Chicago', cc: 'US', vi: 'Mỹ Trung (Texas, CHI)', en: 'US Central (TX)' },
@@ -4731,6 +4728,8 @@ body.portal-open .cat-cloud-tip {
         titleEn: 'Australia & Asia',
         items: [
           { iana: 'Australia/Sydney', cc: 'AU', vi: 'Úc Đông (Sydney, Mel)', en: 'Australia (SYD/MEL)' },
+          { iana: 'Australia/Brisbane', cc: 'AU', vi: 'Úc Đông (Brisbane - Ko DST)', en: 'Australia (Brisbane)' },
+          { iana: 'Australia/Adelaide', cc: 'AU', vi: 'Úc Nam (Adelaide)', en: 'Australia (Adelaide)' },
           { iana: 'Australia/Perth', cc: 'AU', vi: 'Úc Tây (Perth)', en: 'Australia (Perth)' },
           { iana: 'Asia/Tokyo', cc: 'JP', vi: 'Nhật (Tokyo, Osaka)', en: 'Japan (Tokyo)' },
           { iana: 'Asia/Seoul', cc: 'KR', vi: 'Hàn Quốc (Seoul)', en: 'South Korea (Seoul)' },
@@ -4760,11 +4759,14 @@ body.portal-open .cat-cloud-tip {
       'America/Vancouver': { cc: 'CA', vi: 'Canada (Vancouver)', en: 'Vancouver' },
       'Australia/Sydney': { cc: 'AU', vi: 'Úc (Sydney/Mel)', en: 'Sydney / Mel' },
       'Australia/Melbourne': { cc: 'AU', vi: 'Úc (Melbourne)', en: 'Melbourne' },
+      'Australia/Brisbane': { cc: 'AU', vi: 'Úc (Brisbane)', en: 'Brisbane' },
+      'Australia/Adelaide': { cc: 'AU', vi: 'Úc (Adelaide)', en: 'Adelaide' },
       'Australia/Perth': { cc: 'AU', vi: 'Úc (Perth)', en: 'Perth' },
       'Asia/Tokyo': { cc: 'JP', vi: 'Nhật Bản', en: 'Japan' },
       'Asia/Seoul': { cc: 'KR', vi: 'Hàn Quốc', en: 'South Korea' },
       'Asia/Taipei': { cc: 'TW', vi: 'Đài Loan', en: 'Taiwan' },
       'Asia/Singapore': { cc: 'SG', vi: 'Singapore', en: 'Singapore' },
+      'Asia/Kuala_Lumpur': { cc: 'SG', vi: 'Malaysia', en: 'Malaysia' },
       'Asia/Bangkok': { cc: 'TH', vi: 'Thái Lan', en: 'Thailand' },
       'Asia/Ho_Chi_Minh': { cc: 'VN', vi: 'Việt Nam', en: 'Vietnam' },
       'Asia/Saigon': { cc: 'VN', vi: 'Việt Nam', en: 'Vietnam' }
@@ -4778,7 +4780,7 @@ body.portal-open .cat-cloud-tip {
       ],
       'Europe/Berlin': [
         "Ồ bà đang ở Đức hả! 🇩🇪 Fun fact: Người Đức có từ 'Kummerspeck' chỉ việc ăn đồ ngọt cho đỡ buồn đó—đừng ăn một mình nữa, nhắn Now gỡ rối liền nha! 🥨🐾",
-        "Chào người đẹp bên Đức nha! 🇩🇪 Tàu DB bên đó có thể trễ chứ lịch hẹn Tarot x CBT của Now là chuẩn từng phút, đã quy đổi sẵn giờ Berlin cho bà rồi nè! 🚆✨"
+        "Chào người đẹp bên Đức nha! 🇩🇪 Tàu DB bên đó có thể trễ chứ lịch hẹn Tarot x CBT của Now là chuẩn từng phút, đã tự động tính chuẩn giờ mùa Đông/Hè Berlin cho bà rồi nè! 🚆✨"
       ],
       'Europe/Paris': [
         "Bonjour từ nhà NowNow tới nước Pháp! 🇫🇷 Người Pháp có câu 'C’est la vie'—nhưng nếu chuyện tình cảm đang làm bà rối như đường phố Paris giờ cao điểm thì để Now gỡ cùng nha 🥐🗼",
@@ -4786,7 +4788,7 @@ body.portal-open .cat-cloud-tip {
       ],
       'Europe/London': [
         "Chào bà bên Anh Quốc nha! 🇬🇧 Thời tiết London hay mưa âm u dễ làm người ta overthinking lắm, pha tách trà Earl Grey ấm rồi tâm sự với Now cho nắng lên trong lòng nè ☕🌧️",
-        "Từ múi giờ Big Ben (London) kết nối thẳng về nhà NowNow! 🇬🇧 Đã đổi chuẩn giờ Anh cho bà dễ chọn ca rồi đó nha 🐾✨"
+        "Từ múi giờ Big Ben (London) kết nối thẳng về nhà NowNow! 🇬🇧 Đã tự động đồng bộ chuẩn giờ Anh (GMT/BST) cho bà dễ chọn ca rồi đó nha 🐾✨"
       ],
       'Europe/Amsterdam': [
         "Bà đang ở Hà Lan xứ sở hoa Tulip và những con kênh xinh đẹp hả! 🇳🇱🌷 Học tinh thần 'Gezellig' (ấm cúng, thư thái) của người Hà Lan: pha ly cacao nóng rồi tâm sự cùng Now nha 🚲💖"
@@ -4798,7 +4800,7 @@ body.portal-open .cat-cloud-tip {
         "Bà đang ở Ba Lan (Warsaw) đúng hơm! 🇵🇱 Mùa lạnh bên Đông Âu dễ làm người ta thấy cô đơn gấp đôi, nhớ ăn đĩa bánh xếp Pierogi nóng hổi rồi về đây trò chuyện với Now nha 🥟🐾"
       ],
       'Europe/Zurich': [
-        "Whoa bà đang ở Thụy Sĩ (Zurich) luôn! 🇨🇭 Xứ sở của chínhcha đẻ tâm lý học Carl Jung và những chiếc đồng hồ chính xác nhất thế giới—chuẩn bài Tarot x Carl Jung nhà NowNow rồi! ⌚🏔️"
+        "Whoa bà đang ở Thụy Sĩ (Zurich) luôn! 🇨🇭 Xứ sở của chính cha đẻ tâm lý học Carl Jung và những chiếc đồng hồ chính xác nhất thế giới—chuẩn bài Tarot x Carl Jung nhà NowNow rồi! ⌚🏔️"
       ],
       'Europe/Moscow': [
         "Chào bà ở Nga (Moscow) nha! 🇷🇺 Ngoài trời tuyết lạnh mấy độ âm thì vào góc nhỏ nhà NowNow vẫn luôn có bếp lửa ấm và trà nóng chờ bà trút bầu tâm sự nè ❄️☕"
@@ -4820,7 +4822,13 @@ body.portal-open .cat-cloud-tip {
         "Chào bà ở Vancouver (Bờ Tây Canada) nha! 🇨🇦🌲 Thành phố sát biển êm đềm vậy mà lòng đang dậy sóng thì để Mèo Đen với Now giúp bà lấy lại sự bình yên nha 🌊🐾"
       ],
       'Australia/Sydney': [
-        "G'day từ Việt Nam sang Úc Đông (Sydney / Melbourne) nha bà! 🇦🇺🦘 Fun fact: Ở Úc số lượng chuột túi Kangaroo còn nhiều hơn cả dân số, nhưng người hiểu lòng bà lúc này thì chỉ cần 1 mình Now là đủ! 🐨💖"
+        "G'day từ Việt Nam sang Úc Đông (Sydney / Melbourne) nha bà! 🇦🇺🦘 Hệ thống đã tự động tính chuẩn giờ Úc (kể cả giờ mùa hè DST +4h hay mùa đông +3h) cho bà rồi đó! 🐨💖"
+      ],
+      'Australia/Brisbane': [
+        "Chào bà ở Brisbane (Queensland, Úc) nha! 🇦🇺☀️ Bang Queensland nắng ấm quanh năm không đổi giờ mùa hè (DST), luôn nhanh hơn Việt Nam đúng 3 tiếng siêu dễ nhớ luôn! 🐾✨"
+      ],
+      'Australia/Adelaide': [
+        "Chào người đẹp ở Adelaide (Nam Úc) nha! 🇦🇺🍷 Múi giờ đặc biệt lẻ 30 phút của Nam Úc đã được Mèo tính chuẩn từng phút khớp với giờ Việt Nam cho bà rồi nè! 🐾✨"
       ],
       'Australia/Perth': [
         "Bà ở Perth (Tây Úc) hả! 🇦🇺☀️ Tuyệt vời luôn, giờ Perth chỉ chênh Việt Nam đúng 1 tiếng thôi, đặt lịch trò chuyện với Now tiện y như đang ở sát vách nhà nhau vậy á! 🐾✨"
@@ -4849,30 +4857,53 @@ body.portal-open .cat-cloud-tip {
       return clean === 'Asia/Ho_Chi_Minh' || clean === 'Asia/Saigon' || clean === 'Asia/Hanoi';
     }
 
+    function getTzDateParts(tz, refDate) {
+      const d = refDate || new Date();
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: tz,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false,
+        hourCycle: 'h23'
+      }).formatToParts(d);
+      const map = {};
+      parts.forEach(p => { if (p.type !== 'literal') map[p.type] = Number(p.value); });
+      map.hour = (map.hour || 0) % 24;
+      return map;
+    }
+
     function getTimezoneOffsetMinutesForInstant(tz, refDate) {
       try {
         const d = refDate || new Date();
-        const parts = new Intl.DateTimeFormat('en-US', {
-          timeZone: tz,
-          year: 'numeric', month: '2-digit', day: '2-digit',
-          hour: '2-digit', minute: '2-digit', second: '2-digit',
-          hourCycle: 'h23'
-        }).formatToParts(d);
-        const map = {};
-        parts.forEach(p => { if (p.type !== 'literal') map[p.type] = Number(p.value); });
-        const asUtc = Date.UTC(map.year, map.month - 1, map.day, map.hour % 24, map.minute, map.second);
-        return Math.round((asUtc - d.getTime()) / 60000);
+        const map = getTzDateParts(tz, d);
+        const asUtc = Date.UTC(map.year, map.month - 1, map.day, map.hour, map.minute, map.second);
+        // Làm tròn theo bội số 15 phút để triệt tiêu 100% sai số mili-giây trên mọi trình duyệt
+        return Math.round((asUtc - d.getTime()) / 900000) * 15;
       } catch (e) {
         return 420;
       }
     }
 
-    function getLiveClockInTz(tz) {
+    function getLiveClockInTz(tz, refDate) {
       try {
-        return new Intl.DateTimeFormat('vi-VN', {
-          timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
-        }).format(new Date());
+        const map = getTzDateParts(tz, refDate || new Date());
+        const hh = String(map.hour).padStart(2, '0');
+        const mm = String(map.minute).padStart(2, '0');
+        return `${hh}:${mm}`;
       } catch (e) { return ''; }
+    }
+
+    function getDayShiftFromVN(tz, refDate) {
+      try {
+        const d = refDate || new Date();
+        const vnParts = getTzDateParts('Asia/Ho_Chi_Minh', d);
+        const targetParts = getTzDateParts(tz, d);
+        const vnDayUtc = Date.UTC(vnParts.year, vnParts.month - 1, vnParts.day);
+        const targetDayUtc = Date.UTC(targetParts.year, targetParts.month - 1, targetParts.day);
+        return Math.round((targetDayUtc - vnDayUtc) / 86400000); // -1: Hôm qua, 0: Cùng ngày, +1: Ngày mai
+      } catch (e) {
+        return 0;
+      }
     }
 
     function getClientTimezoneMeta(tz) {
@@ -4883,6 +4914,7 @@ body.portal-open .cat-cloud-tip {
       const vnOffsetMins = 420;
       const diffMinsFromVN = targetOffsetMins - vnOffsetMins;
       const diffHoursFromVN = diffMinsFromVN / 60;
+      const dayShift = getDayShiftFromVN(targetTz, now);
 
       const signGmt = targetOffsetMins >= 0 ? '+' : '-';
       const absGmtMins = Math.abs(targetOffsetMins);
@@ -4890,8 +4922,23 @@ body.portal-open .cat-cloud-tip {
       const gmtM = absGmtMins % 60;
       const gmtLabel = `GMT${signGmt}${gmtH}${gmtM > 0 ? ':' + (gmtM < 10 ? '0' + gmtM : gmtM) : ''}`;
 
-      const signDiff = diffHoursFromVN >= 0 ? '+' : '';
-      const diffLabel = `${signDiff}${Number.isInteger(diffHoursFromVN) ? diffHoursFromVN : diffHoursFromVN.toFixed(1)}h`;
+      const signDiff = diffMinsFromVN >= 0 ? '+' : '-';
+      const absDiffMins = Math.abs(diffMinsFromVN);
+      const diffH = Math.floor(absDiffMins / 60);
+      const diffM = absDiffMins % 60;
+      const diffLabel = diffMinsFromVN === 0
+        ? '0h'
+        : `${signDiff}${diffH}h${diffM > 0 ? diffM + 'p' : ''}`;
+
+      let dayShiftVi = '';
+      let dayShiftEn = '';
+      if (dayShift < 0) {
+        dayShiftVi = 'H.qua';
+        dayShiftEn = 'Yest.';
+      } else if (dayShift > 0) {
+        dayShiftVi = 'N.mai';
+        dayShiftEn = 'Tmrw';
+      }
 
       const fmtClock = (vnHour) => {
         let totalM = (vnHour * 60 + diffMinsFromVN) % 1440;
@@ -4910,6 +4957,9 @@ body.portal-open .cat-cloud-tip {
         isVN: isVN && diffMinsFromVN === 0,
         gmtLabel: gmtLabel,
         diffLabel: diffLabel,
+        dayShift: dayShift,
+        dayShiftVi: dayShiftVi,
+        dayShiftEn: dayShiftEn,
         flagHtml: flagHtml,
         cityVi: cityObj ? cityObj.vi : fallbackCity,
         cityEn: cityObj ? cityObj.en : fallbackCity,
@@ -4954,8 +5004,14 @@ body.portal-open .cat-cloud-tip {
       grid.innerHTML = TZ_GROUPS.map(grp => {
         const chipsHtml = grp.items.map(item => {
           const isSelected = (item.iana === activeTz) || (isVietnamTimezone(activeTz) && item.iana === 'Asia/Ho_Chi_Minh');
+          const itemMeta = getClientTimezoneMeta(item.iana);
           const localTime = getLiveClockInTz(item.iana);
           const flagSvg = TZ_SVG_FLAGS[item.cc] || TZ_SVG_FLAGS.GLOBE;
+          const shiftBadge = isEn ? itemMeta.dayShiftEn : itemMeta.dayShiftVi;
+          const rightTimeText = itemMeta.isVN
+            ? `${localTime} (GMT+7)`
+            : `${localTime}${shiftBadge ? ' ' + shiftBadge : ''} (${itemMeta.diffLabel})`;
+
           return `
             <button type="button" onclick="onChangeNowNowTimezone('${item.iana}', true)"
               class="flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all text-left cursor-pointer ${
@@ -4967,7 +5023,7 @@ body.portal-open .cat-cloud-tip {
                 ${flagSvg}
                 <span class="truncate text-[11px]">${isEn ? item.en : item.vi}</span>
               </span>
-              <span class="text-[10px] opacity-75 shrink-0 font-mono">${localTime}</span>
+              <span class="text-[9.5px] opacity-85 shrink-0 font-mono">${rightTimeText}</span>
             </button>
           `;
         }).join('');
@@ -4989,18 +5045,7 @@ body.portal-open .cat-cloud-tip {
       const stealthBar = document.getElementById('tzStealthBar');
       const stealthText = document.getElementById('tzStealthText');
       const changeBtn = document.getElementById('tzChangeToggleBtn');
-      const modeBadge = document.getElementById('tzModeBadge');
-      const modeBadgeLabel = document.getElementById('tzModeBadgeLabel');
-
-      if (modeBadge && modeBadgeLabel) {
-        if (window.isManualTimezoneOverride) {
-          modeBadge.className = 'inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#ffdf85]/20 text-[#ffdf85] border border-[#ffdf85]/50';
-          modeBadge.innerHTML = `<i class="fa-solid fa-hand-pointer text-[8px]"></i><span>${isEn ? 'Manual' : 'Tự chọn'}</span>`;
-        } else {
-          modeBadge.className = 'inline-flex items-center gap-1 text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/30';
-          modeBadge.innerHTML = `<span style="width:5px;height:5px;border-radius:50%;background:#34d399;display:inline-block;"></span><span>${isEn ? 'Auto' : 'Tự động'}</span>`;
-        }
-      }
+      const clientNow = getLiveClockInTz(meta.iana);
 
       if (meta.isVN) {
         if (btnDay) {
@@ -5016,11 +5061,11 @@ body.portal-open .cat-cloud-tip {
         if (stealthBar) stealthBar.classList.remove('hidden');
         if (stealthText) {
           stealthText.innerHTML = isEn
-            ? `${TZ_SVG_FLAGS.VN}<span>Vietnam Time (GMT+7)</span>`
-            : `${TZ_SVG_FLAGS.VN}<span>Khung giờ Việt Nam (GMT+7)</span>`;
+            ? `<span class="tz-flag-chip">${TZ_SVG_FLAGS.VN}<b class="text-[#ffdf85] font-mono">${clientNow}</b><span class="opacity-85">· Vietnam time</span></span>`
+            : `<span class="tz-flag-chip">${TZ_SVG_FLAGS.VN}<b class="text-[#ffdf85] font-mono">${clientNow}</b><span class="opacity-85">· Giờ Việt Nam</span></span>`;
         }
         if (changeBtn) {
-          changeBtn.textContent = isEn ? '🌍 Outside VN? Change timezone' : '🌍 Bạn ở nước ngoài? Đổi múi giờ';
+          changeBtn.innerHTML = `<i class="fa-solid fa-globe text-[8.5px] opacity-80"></i><span>${isEn ? 'Change' : 'Đổi'}</span>`;
         }
       } else {
         const daySub = isEn
@@ -5042,28 +5087,52 @@ body.portal-open .cat-cloud-tip {
         }
         if (stealthBar) stealthBar.classList.remove('hidden');
         if (stealthText) {
-          const clientNow = getLiveClockInTz(meta.iana);
           const vnNow = getLiveClockInTz('Asia/Ho_Chi_Minh');
-          const vnHr = typeof getVietnamCurrentHour === 'function' ? getVietnamCurrentHour() : new Date().getHours();
-          const nowStatus = (vnHr >= 4 && vnHr < 9)
-            ? (isEn ? 'Resting 😴' : 'Đang nghỉ 😴')
-            : (isEn ? 'Awake ✨' : 'Đang thức ✨');
+          const dayTagVi = meta.dayShiftVi ? ` <span class="text-[9.5px] text-[#ffdf85]/80">(${meta.dayShiftVi})</span>` : '';
+          const dayTagEn = meta.dayShiftEn ? ` <span class="text-[9.5px] text-[#ffdf85]/80">(${meta.dayShiftEn})</span>` : '';
           stealthText.innerHTML = isEn
-            ? `${meta.flagHtml}<span>${meta.cityEn} <b>${clientNow}</b></span> <span class="opacity-40">•</span> ${TZ_SVG_FLAGS.VN}<span>NowNow <b>${vnNow}</b> (${nowStatus})</span>`
-            : `${meta.flagHtml}<span>${meta.cityVi} <b>${clientNow}</b></span> <span class="opacity-40">•</span> ${TZ_SVG_FLAGS.VN}<span>NowNow <b>${vnNow}</b> (${nowStatus})</span>`;
+            ? `<span class="tz-flag-chip">${meta.flagHtml}<b class="text-[#ffdf85] font-mono">${clientNow}</b>${dayTagEn}<span>${meta.cityEn} (${meta.diffLabel})</span></span><span class="opacity-35">·</span><span class="tz-flag-chip">${TZ_SVG_FLAGS.VN}<span>VN <b class="text-white font-mono">${vnNow}</b></span></span>`
+            : `<span class="tz-flag-chip">${meta.flagHtml}<b class="text-[#ffdf85] font-mono">${clientNow}</b>${dayTagVi}<span>${meta.cityVi} (${meta.diffLabel})</span></span><span class="opacity-35">·</span><span class="tz-flag-chip">${TZ_SVG_FLAGS.VN}<span>VN <b class="text-white font-mono">${vnNow}</b></span></span>`;
         }
         if (changeBtn) {
-          changeBtn.textContent = isEn ? 'Change' : 'Đổi vùng giờ';
+          changeBtn.innerHTML = `<i class="fa-solid fa-globe text-[8.5px] opacity-80"></i><span>${isEn ? 'Change' : 'Đổi'}</span>`;
         }
       }
       renderNowNowTzChips();
+    }
+
+    function triggerCatTzGuide(fromButton) {
+      if (typeof showCatTip !== 'function') return;
+      if (typeof triggerCatGentleWiggle === 'function') triggerCatGentleWiggle();
+      const isEn = window.currentNowNowLang === 'en';
+      const meta = getClientTimezoneMeta(window.currentClientTimezone);
+      const clientNow = getLiveClockInTz(meta.iana);
+
+      if (fromButton) {
+        showCatTip(
+          isEn
+            ? `🐾 <b>Timezone Guide:</b> I'm reading your device clock (<b>${clientNow}</b>). Pick your city below and I'll auto-convert NowNow's Vietnam shift hours (including Winter/Summer DST) for you! ✨`
+            : `🐾 <b>Mèo hướng dẫn múi giờ nè:</b> Đồng hồ đang lấy đúng giờ trên máy bà (<b>${clientNow}</b>). Hệ thống tự động nhận diện cả <b>Giờ Mùa Đông / Mùa Hè (DST)</b> của Âu, Mỹ, Úc để quy đổi Ca Ngày / Ca Đêm khớp chuẩn với Việt Nam nha! ✨`,
+          6800
+        );
+      } else {
+        showCatTip(
+          isEn
+            ? `🕰️ <b>Cat Tip:</b> That clock shows your local time (<b>${clientNow}</b>) — tap <b>Change</b> anytime if you're traveling abroad so I can convert Vietnam hours for you! 🐾`
+            : `🕰️ <b>Mèo giải thích xíu nè:</b> Giờ <b>${clientNow}</b> là đồng hồ lấy thẳng từ máy bà đó! Mèo tự quy đổi sẵn Ca Ngày / Ca Đêm của NowNow sang giờ chỗ bà ở, cần đổi vùng cứ bấm nút <b>Đổi</b> kế bên nha 🐾✨`,
+          6500
+        );
+      }
     }
 
     function toggleNowNowTzDropdown() {
       const wrap = document.getElementById('tzSelectWrap');
       if (!wrap) return;
       const willOpen = wrap.classList.contains('hidden');
-      if (willOpen) renderNowNowTzChips();
+      if (willOpen) {
+        renderNowNowTzChips();
+        triggerCatTzGuide(true);
+      }
       wrap.classList.toggle('hidden');
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
@@ -5133,10 +5202,10 @@ body.portal-open .cat-cloud-tip {
     });
 
     setInterval(() => {
-      if (!document.hidden && !isVietnamTimezone(window.currentClientTimezone)) {
+      if (!document.hidden) {
         updateNowNowTimezoneUI();
       }
-    }, 30000);
+    }, 20000);
 
     function buildBookingMessage() {
       const tzMeta = getClientTimezoneMeta(window.currentClientTimezone);
@@ -5988,59 +6057,178 @@ Mình muốn đặt lịch xem bài:
       background: rgba(255, 223, 133, 0.25);
       border-color: #ffdf85;
     }
+    /* THANH MÚI GIỜ KÍNH MỜ SIÊU GỌN & TINH TẾ */
+    .tz-luxury-pill {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      max-width: 100%;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(20, 8, 15, 0.78);
+      border: 1px solid rgba(255, 223, 133, 0.22);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      font-size: 11px;
+      color: rgba(250, 246, 240, 0.88);
+      cursor: pointer;
+    }
+    .tz-divider-dot {
+      width: 2.5px;
+      height: 2.5px;
+      border-radius: 50%;
+      background: rgba(255, 223, 133, 0.35);
+      flex-shrink: 0;
+    }
+    .tz-flag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4.5px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .tz-flag-chip svg {
+      width: 14px;
+      height: 10px;
+      border-radius: 2.5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+    .tz-switch-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1.5px 7px;
+      border-radius: 999px;
+      background: rgba(255, 223, 133, 0.08);
+      border: 1px solid rgba(255, 223, 133, 0.26);
+      color: rgba(255, 223, 133, 0.9);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none !important;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tz-switch-action-btn:hover {
+      background: rgba(255, 223, 133, 0.2);
+      border-color: rgba(255, 223, 133, 0.65);
+      color: #ffffff;
+    }
+    @media (max-width: 640px) {
+      .tz-luxury-pill {
+        gap: 5px;
+        padding: 3px 8px;
+        font-size: 10px;
+      }
+      .tz-flag-chip {
+        gap: 3.5px;
+      }
+      .tz-flag-chip svg {
+        width: 12px;
+        height: 8.5px;
+      }
+      .tz-switch-action-btn {
+        padding: 1px 6px;
+        font-size: 9px;
+      }
+    }
+
+    /* KHUNG ĐÍNH KÈM ẢNH FEEDBACK TINH TẾ & SANG TRỌNG */
     .fb-photo-upload-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border: 1.2px dashed rgba(255, 223, 133, 0.42);
-      border-radius: 14px;
-      background: rgba(0, 0, 0, 0.28);
+      gap: 12px;
+      padding: 11px 14px;
+      border: 1.2px dashed rgba(255, 223, 133, 0.45);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(158, 42, 59, 0.1));
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.22s ease;
     }
     .fb-photo-upload-box:hover {
       border-color: #ffdf85;
-      background: rgba(255, 223, 133, 0.06);
+      background: linear-gradient(135deg, rgba(255, 223, 133, 0.08), rgba(158, 42, 59, 0.18));
+      transform: translateY(-1px);
+    }
+    .fb-photo-icon-orb {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: rgba(255, 223, 133, 0.14);
+      border: 1px solid rgba(255, 223, 133, 0.38);
+      color: #ffdf85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
     }
     .fb-thumb-wrap {
       position: relative;
-      width: 64px;
-      height: 64px;
-      border-radius: 10px;
+      width: 84px;
+      height: 84px;
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(255, 223, 133, 0.5);
+      border: 1.5px solid rgba(255, 223, 133, 0.65);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+      background: #0d070b;
     }
     .fb-thumb-remove {
       position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 18px;
-      height: 18px;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      font-size: 10px;
+      background: rgba(14, 7, 13, 0.88);
+      border: 1px solid rgba(255, 223, 133, 0.6);
+      color: #ffdf85;
+      font-size: 11px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
-    /* HIỂN THỊ ẢNH KHÁCH GỬI TRÊN TAB WEB REVIEWS */
+    .fb-thumb-remove:hover {
+      background: #e85d75;
+      color: #fff;
+    }
+    /* HIỂN THỊ ẢNH KHÁCH GỬI TRÊN TAB WEB REVIEWS + LIGHTBOX PHÓNG TO */
     .shopee-review-photos {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 11px;
     }
-    .shopee-review-photos img {
-      width: 82px;
-      height: 82px;
+    .shopee-review-photo-item {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.2px solid rgba(255, 223, 133, 0.45);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+      cursor: zoom-in;
+      transition: transform 0.22s ease, border-color 0.22s ease;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .shopee-review-photo-item:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: #ffdf85;
+    }
+    .shopee-review-photo-item img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 223, 133, 0.4);
-      cursor: pointer;
+      display: block;
     }
 
     .wax-seal-anim {
@@ -6122,14 +6310,16 @@ Mình muốn đặt lịch xem bài:
 
             <!-- ĐÍNH KÈM ẢNH KỶ NIỆM (TỐI ĐA 2 ẢNH, TỰ NÉN NHẸ) -->
             <label class="fb-photo-upload-box">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <span class="text-lg">📸</span>
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="fb-photo-icon-orb">
+                  <i class="fa-solid fa-camera-retro"></i>
+                </div>
                 <div class="min-w-0">
-                  <div class="text-[12px] font-bold text-[#ffdf85]">Gửi kèm ảnh cho Now (tùy chọn)</div>
-                  <div class="text-[10.5px] text-[#c4b5be] truncate">Ảnh trải bài, tin nhắn hay khoảnh khắc đẹp (tối đa 2 ảnh)</div>
+                  <div class="text-[12px] font-bold text-[#ffdf85]">Đính kèm ảnh kỷ niệm cùng Now (tùy chọn)</div>
+                  <div class="text-[10.5px] text-[#c4b5be] truncate">Ảnh trải bài, khoảnh khắc chữa lành hoặc feedback (tối đa 2 ảnh)</div>
                 </div>
               </div>
-              <span class="text-[10.5px] font-bold px-3 py-1.5 rounded-full bg-[#ffdf85]/15 border border-[#ffdf85]/50 text-[#ffdf85] shrink-0">+ Chọn ảnh</span>
+              <span id="fbPhotoCountBadge" class="text-[10.5px] font-bold px-3 py-1.5 rounded-full bg-[#ffdf85]/15 border border-[#ffdf85]/50 text-[#ffdf85] shrink-0">+ Chọn ảnh</span>
               <input type="file" id="fbPhotoInput" accept="image/*" multiple class="hidden" onchange="handleFbPhotoSelect(this)">
             </label>
             <div id="fbPhotoPreviewList" class="hidden flex flex-wrap gap-2 pt-1"></div>
@@ -6466,8 +6656,29 @@ Mình muốn đặt lịch xem bài:
       renderFbPhotoPreviews();
     }
 
+    function openFbImageLightbox(url) {
+      if (!url) return;
+      let lb = document.getElementById('fbImageLightboxModal');
+      if (!lb) {
+        lb = document.createElement('div');
+        lb.id = 'fbImageLightboxModal';
+        lb.style.cssText = 'position:fixed;inset:0;z-index:320;background:rgba(5,2,8,0.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out;';
+        lb.onclick = () => lb.remove();
+        document.body.appendChild(lb);
+      }
+      lb.innerHTML = `
+        <img src="${escapeHtml(url)}" alt="Ảnh kỷ niệm khách gửi" style="max-width:92vw;max-height:86vh;border-radius:18px;border:1.5px solid rgba(255,223,133,0.65);box-shadow:0 20px 60px rgba(0,0,0,0.9);object-fit:contain;">
+      `;
+    }
+
     function renderFbPhotoPreviews() {
       const box = document.getElementById('fbPhotoPreviewList');
+      const badge = document.getElementById('fbPhotoCountBadge');
+      if (badge) {
+        badge.textContent = fbSelectedImagesBase64.length > 0
+          ? `Đã chọn ${fbSelectedImagesBase64.length}/2 ảnh ✨`
+          : '+ Chọn ảnh';
+      }
       if (!box) return;
       if (fbSelectedImagesBase64.length === 0) {
         box.classList.add('hidden');
@@ -6477,7 +6688,7 @@ Mình muốn đặt lịch xem bài:
       box.classList.remove('hidden');
       box.innerHTML = fbSelectedImagesBase64.map((src, i) => `
         <div class="fb-thumb-wrap">
-          <img src="${src}" alt="Ảnh khách gửi" class="w-full h-full object-cover">
+          <img src="${src}" alt="Ảnh khách gửi" class="w-full h-full object-cover cursor-pointer" onclick="openFbImageLightbox('${src}')">
           <button type="button" onclick="removeFbPhoto(${i})" class="fb-thumb-remove" title="Xóa ảnh">✕</button>
         </div>
       `).join('');
@@ -6733,7 +6944,7 @@ Mình muốn đặt lịch xem bài:
               <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
                 "${safeMessage}"
               </p>
-              ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').filter(u => u.startsWith('http')).map(u => `<a href="${escapeHtml(u)}" target="_blank" rel="noopener"><img src="${escapeHtml(u)}" alt="Ảnh khách gửi" loading="lazy"></a>`).join('')}</div>` : ''}
+              ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').map(u => u.trim()).filter(u => u.startsWith('http')).map(u => `<div class="shopee-review-photo-item" onclick="openFbImageLightbox('${escapeHtml(u)}')"><img src="${escapeHtml(u)}" alt="Ảnh khách gửi" loading="lazy" onerror="this.closest('.shopee-review-photo-item').style.display='none'"></div>`).join('')}</div>` : ''}
             </div>
 
             ${safeReply ? `
@@ -7536,8 +7747,8 @@ Mình muốn đặt lịch xem bài:
     '#sec-booking .interactive-step-card:nth-of-type(3) > p': 'Receive full spread photos + private audio/YouTube recordings to revisit anytime. <b>Only settle payment once your heart feels lighter</b> & unlock lifetime free check-ins!',
 
     // Slider & Buttons
-    '#sec-booking .pt-2 > div:nth-child(2) > div:first-child > span:first-child': 'Estimated duration:',
-    '#sec-booking .pt-2 > div:nth-child(2) > div:last-child > span:first-child': 'Estimated fee (VND):',
+    '#sec-booking .pt-2 > div:nth-child(3) > div:first-child > span:first-child': 'Estimated duration:',
+    '#sec-booking .pt-2 > div:nth-child(3) > div:last-child > span:first-child': 'Estimated fee (VND):',
     '.milestone-tick-btn[data-min="15"]': '15m (Min)',
     '.milestone-tick-btn[data-min="30"]': '30m',
     '.milestone-tick-btn[data-min="60"]': '60m',
@@ -9815,11 +10026,19 @@ window.NOWNOW_CAT_LOTTIE_DATA = {"v":"5.7.4","fr":60,"ip":0,"op":360,"w":160,"h"
     "If you aren't ready to book a reading yet, tap the social cards right below to hang out on NowNow's Threads & IG 🌷📱"
   ];
 
+  const getPoolGuideBookingWithTz = function() {
+    const arr = (typeof getPoolGuideBooking === 'function') ? (getPoolGuideBooking() || []) : [];
+    return arr.concat([
+      "🕰️ Thấy đồng hồ giờ ngay dưới 2 nút Ban Ngày / Cú Đêm hơm bà? Mèo lấy thẳng giờ máy bà rồi tự quy đổi khớp giờ Việt Nam của NowNow luôn, bấm nút Đổi kế bên nếu bà đang ở nước ngoài nha! 🐾✨",
+      "🌍 Khách của NowNow hay nhắn từ Nhật, Úc, Mỹ, Châu Âu lắm! Nên Mèo gắn sẵn nút Đổi múi giờ nhỏ xinh ngay dưới khung ca đó, chọn 1 chạm là thấy giờ bên bà liền khỏi tính nhẩm! 🐱🕒"
+    ]);
+  };
+
   const bagRoyal = new UltraUniqueBag(POOL_ROYAL_COMEDY);
   const bagLove = new UltraUniqueBag(POOL_LOVE_ROAST);
   const bagCBT = new UltraUniqueBag(POOL_CBT_JUNG_WITTY);
   const bagGossipLife = new UltraUniqueBag(POOL_GOSSIP_AND_LIFE);
-  const bagGuide = new UltraUniqueBag(getPoolGuideBooking);
+  const bagGuide = new UltraUniqueBag(getPoolGuideBookingWithTz);
   const bagTarot = new UltraUniqueBag(() => (typeof catTarotMiniCards !== 'undefined' ? catTarotMiniCards : []));
   const bagEN = new UltraUniqueBag(getPoolEN);
   const deckEnTarot = new UltraUniqueBag(EN_TAROT_MINI);
@@ -10465,6 +10684,26 @@ window.NOWNOW_CAT_LOTTIE_DATA = {"v":"5.7.4","fr":60,"ip":0,"op":360,"w":160,"h"
       lastY = curY;
       lastT = now;
     }, { passive: true });
+
+    // Mèo chủ động giải thích thanh múi giờ 1 lần khi khách lướt tới khu vực chọn Ca Ngày / Cú Đêm
+    let tzBarExplainedOnce = false;
+    const tzStealthBarEl = document.getElementById('tzStealthBar');
+    if (tzStealthBarEl && 'IntersectionObserver' in window) {
+      const tzGuideObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !tzBarExplainedOnce && !document.body.classList.contains('portal-open')) {
+            tzBarExplainedOnce = true;
+            setTimeout(() => {
+              if (!document.body.classList.contains('portal-open') && typeof triggerCatTzGuide === 'function') {
+                triggerCatTzGuide(false);
+              }
+            }, 900);
+            tzGuideObs.disconnect();
+          }
+        });
+      }, { threshold: 0.65 });
+      tzGuideObs.observe(tzStealthBarEl);
+    }
 
     // Đứng hình lưỡng lự tại Khung Đặt Lịch (> 15s)
     let bookingIdleReassured = false;

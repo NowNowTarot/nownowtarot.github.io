@@ -121,6 +121,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
@@ -5787,7 +5789,7 @@ Mình muốn đặt lịch xem bài:
    if (typeof initCatRoamingAndDragging === 'function') initCatRoamingAndDragging();
    initLiveAvailabilityStatus();
    startAutoSeasonCycle15s();
-   if (typeof startPassiveCatDialogueLoop === 'function') startPassiveCatDialogueLoop();
+   if (typeof startPassiveCatDialogueLoop === 'function' && !document.getElementById('nownow-cat-omniscient-v3-1')) startPassiveCatDialogueLoop();
  });
 
 
@@ -6781,11 +6783,31 @@ Mình muốn đặt lịch xem bài:
     }
 
     function submitFeedbackToSheets() {
+      const taEl = document.getElementById('fbMessageText');
+      const msgText = taEl ? taEl.value.trim() : '';
+      const allowShare = document.getElementById('fbAllowShareCheck').checked;
+
+      if (!msgText && fbSelectedImagesBase64.length === 0) {
+        if (taEl) {
+          taEl.focus();
+          taEl.style.borderColor = '#e85d75';
+          taEl.style.boxShadow = '0 0 0 3px rgba(232, 93, 117, 0.28)';
+          setTimeout(() => {
+            taEl.style.borderColor = '';
+            taEl.style.boxShadow = '';
+          }, 1800);
+        }
+        const cnt = document.getElementById('fbCharCounter');
+        if (cnt) {
+          cnt.textContent = '✍️ Bà viết vài chữ hoặc chọn ảnh trước khi gửi nha!';
+          cnt.style.color = '#ffdf85';
+        }
+        if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+        return;
+      }
+
       const submitBtn = document.getElementById('fbSubmitBtn');
       if (submitBtn) submitBtn.disabled = true; // Khóa nút ngay lập tức chống bấm đúp
-
-      const msgText = document.getElementById('fbMessageText').value.trim();
-      const allowShare = document.getElementById('fbAllowShareCheck').checked;
 
       const getActiveText = (containerId) => {
         return Array.from(document.querySelectorAll(`#${containerId} .soft-tag.active`))
@@ -6831,8 +6853,16 @@ Mình muốn đặt lịch xem bài:
       .then(data => {
         loadingBox.classList.add('hidden');
 
+        if (data.status === 'empty') {
+          document.getElementById('fbFormState').classList.remove('hidden');
+          if (submitBtn) submitBtn.disabled = false;
+          if (taEl) taEl.focus();
+          return;
+        }
+
         // NẾU SERVER TỪ CHỐI (DO ĐÃ CÓ HỒI ÂM TRƯỚC ĐÓ)
         if (data.status === 'denied') {
+          try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
           document.getElementById('fbNoticeIcon').textContent = '🔒';
           document.getElementById('fbNoticeTitle').textContent = 'Phiên này đã có hồi âm!';
           document.getElementById('fbNoticeDesc').textContent = data.message || 'Phiên trải bài này đã có hồi âm, hệ thống đã khóa để bảo vệ dữ liệu!';
@@ -6841,6 +6871,7 @@ Mình muốn đặt lịch xem bài:
         }
 
         // NẾU GỬI THÀNH CÔNG HỢP LỆ
+        try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
         document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
         document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
         document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${escapeHtml(activeClientName)}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
@@ -6909,6 +6940,28 @@ Mình muốn đặt lịch xem bài:
     /* 4. DỮ LIỆU THỰC 100% TỪ GOOGLE SHEETS (ĐÃ BẢO VỆ XSS VÀ XÓA NÚT HỮU ÍCH) */
     let currentReviewDataset = [];
 
+    // MẸO SẮP XẾP FEEDBACK ĐỈNH CAO:
+    // 1. Feedback nào DÀI NHẤT đưa lên đầu tiên
+    // 2. Nếu độ dài bằng nhau, feedback nào CÓ ẢNH đưa lên trước
+    function sortReviewsLongestAndPhotoFirst(list) {
+      if (!Array.isArray(list)) return [];
+      return [...list].sort((a, b) => {
+        const lenA = String((a && a.message) || '').trim().length;
+        const lenB = String((b && b.message) || '').trim().length;
+        if (lenB !== lenA) return lenB - lenA;
+
+        const countValidImgs = (obj) => String((obj && obj.images) || '')
+          .split('\n')
+          .map(u => u.trim())
+          .filter(u => u.startsWith('http') || u.startsWith('data:image/')).length;
+        const imgA = countValidImgs(a);
+        const imgB = countValidImgs(b);
+        if (imgB !== imgA) return imgB - imgA;
+
+        return String((b && (b.time || b.date)) || '').localeCompare(String((a && (a.time || a.date)) || ''));
+      });
+    }
+
     function renderShopeeReviews() {
       const container = document.getElementById('shopeeReviewContainer');
       if (!container) return;
@@ -6921,8 +6974,9 @@ Mình muốn đặt lịch xem bài:
         return;
       }
 
+      const sortedDataset = sortReviewsLongestAndPhotoFirst(currentReviewDataset);
       let html = '';
-      currentReviewDataset.forEach((r) => {
+      sortedDataset.forEach((r) => {
         const rawReply = (r.shopReply || '').trim();
         const maskedName = maskCustomerName(r.name);
         const avatarLetter = (r.name || 'K').trim().charAt(0).toUpperCase();
@@ -6956,11 +7010,11 @@ Mình muốn đặt lịch xem bài:
               <div class="text-[9.5px] text-[#c4b5be] font-normal">
                 <i class="fa-solid fa-sparkles text-[8px] mr-1"></i> ${safeService}
               </div>
-              <div class="flex flex-wrap gap-1">
+              ${(safeStateBefore || safeStateAfter || safeTouchpoints) ? `<div class="flex flex-wrap gap-1">
                 ${safeStateBefore ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Trước: ${safeStateBefore}</span>` : ''}
                 ${safeStateAfter ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">Sau: ${safeStateAfter}</span>` : ''}
                 ${safeTouchpoints ? `<span class="text-[9px] bg-white/[0.03] border border-white/10 px-2 py-0.5 rounded-full text-[#c4b5be]">${safeTouchpoints}</span>` : ''}
-              </div>
+              </div>` : ''}
             </div>
 
             <div class="my-3 pl-3 py-1 border-l-2 border-[#ffdf85]">
@@ -7005,7 +7059,7 @@ Mình muốn đặt lịch xem bài:
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'success' && Array.isArray(resData.data)) {
-            currentReviewDataset = resData.data.map((item) => ({
+            currentReviewDataset = sortReviewsLongestAndPhotoFirst(resData.data.map((item) => ({
               name: item.name || 'Khách nhà Now',
               time: item.date || item.time || 'Gần đây',
               service: 'Phiên trải bài thấu cảm 1:1',
@@ -7014,8 +7068,8 @@ Mình muốn đặt lịch xem bài:
               touchpoints: item.touchpoints || '',
               message: item.message || '',
               shopReply: item.shopReply || item.reply || item.nowReply || '',
-              images: item.images || ''
-            }));
+              images: (item.images && !String(item.images).trim().startsWith('⚠️')) ? item.images : ''
+            })));
 
             try {
               localStorage.setItem('nownow_real_sheet_reviews', JSON.stringify(currentReviewDataset));
@@ -7046,7 +7100,7 @@ Mình muốn đặt lịch xem bài:
         .catch(() => {});
     }
 
-    /* 6. MỞ CĂN PHÒNG HỒI ÂM KHI CÓ ?session= (ĐÃ KHÓA AN TOÀN) */
+    /* 6. MỞ CĂN PHÒNG HỒI ÂM TỨC THÌ 0.05 GIÂY KHI CÓ ?session= (OPTIMISTIC INSTANT OPEN + ĐỒNG BỘ NGẦM) */
     function checkUrlForSessionParam() {
       let session = null;
       const params = new URLSearchParams(window.location.search);
@@ -7062,11 +7116,11 @@ Mình muốn đặt lịch xem bài:
       }
 
       const reservedHashes = ['feedbackUnified', 'feedback', 'viral', 'shopeeFeedback', 'sec-booking'];
-      if (!session || reservedHashes.includes(session.trim())) return;
+      if (!session || reservedHashes.includes(session.trim())) return false;
 
-      activeClientSessionId = session.trim();
+      activeClientSessionId = session.trim().toUpperCase();
       const modal = document.getElementById('sessionFeedbackModal');
-      if (!modal) return;
+      if (!modal) return false;
 
       const urlName = params.get('name');
       activeClientName = urlName || 'bà';
@@ -7076,21 +7130,71 @@ Mình muốn đặt lịch xem bài:
       document.body.classList.add('portal-open');
       modal.classList.add('open');
 
-      // 🛡️ BẢO MẬT: GIẤU FORM, HIỆN MÀN HÌNH CHỜ TRONG KHI KIỂM TRA MÃ
-      document.getElementById('fbFormState').classList.add('hidden');
-      document.getElementById('fbNoticeState').classList.add('hidden');
-      
       const loadingBox = document.getElementById('fbLoadingState');
-      document.getElementById('fbLoadingTitle').textContent = "Đang mở khóa chiếc hộp hồi âm...";
-      document.getElementById('fbLoadingSub').textContent = "Chờ Mèo Đen kiểm tra mã phiên trải bài một xíu nha 🐾";
-      loadingBox.classList.remove('hidden');
-
-      const clientTzParam = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ || 'Asia/Ho_Chi_Minh';
+      const formBox = document.getElementById('fbFormState');
+      const noticeBox = document.getElementById('fbNoticeState');
       const isValidNntFormat = /^NNT-[A-Z0-9]{4,12}$/i.test(activeClientSessionId);
 
-      const verifySessionWithRetry = (attempt = 1) => {
+      // 1. Nếu mã sai định dạng ngay từ đầu -> Báo ngay trong 0ms không cần chờ mạng
+      if (!isValidNntFormat) {
+        loadingBox.classList.add('hidden');
+        formBox.classList.add('hidden');
+        document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+        document.getElementById('fbNoticeIcon').textContent = '🕯️';
+        document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
+        document.getElementById('fbNoticeDesc').textContent = 'Mã phiên trải bài không hợp lệ hoặc đã hết hạn.';
+        noticeBox.classList.remove('hidden');
+        return true;
+      }
+
+      // 2. Kiểm tra bộ nhớ máy khách: Nếu máy này vừa gửi xong phiên này -> Báo hoàn tất ngay trong 0ms
+      try {
+        if (localStorage.getItem('nownow_fb_submitted_' + activeClientSessionId) === '1') {
+          const cachedMetaRaw = localStorage.getItem('nownow_ses_meta_' + activeClientSessionId);
+          if (cachedMetaRaw) {
+            const cm = JSON.parse(cachedMetaRaw);
+            if (cm && cm.clientName) activeClientName = cm.clientName;
+          }
+          loadingBox.classList.add('hidden');
+          formBox.classList.add('hidden');
+          document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+          document.getElementById('fbNoticeIcon').textContent = '✨💖';
+          document.getElementById('fbNoticeTitle').textContent = `Now ôm ${activeClientName} một cái thật chặt!`;
+          document.getElementById('fbNoticeDesc').textContent = 'Hồi âm này bà đã gửi cho Now rồi nè. Cảm ơn bà đã mở lòng cùng tụi mình nha!';
+          noticeBox.classList.remove('hidden');
+          return true;
+        }
+
+        // Khôi phục tên khách & bản nháp đã lưu trên máy (nếu có) ngay tức thì
+        const cachedMetaRaw = localStorage.getItem('nownow_ses_meta_' + activeClientSessionId);
+        if (cachedMetaRaw) {
+          const cm = JSON.parse(cachedMetaRaw);
+          if (cm && cm.clientName && cm.clientName !== 'bà') {
+            activeClientName = cm.clientName;
+            if (nameSpan) nameSpan.textContent = activeClientName;
+          }
+          if (cm && cm.draftText) {
+            const ta = document.getElementById('fbMessageText');
+            if (ta && !ta.value.trim()) {
+              ta.value = cm.draftText;
+              const cnt = document.getElementById('fbCharCounter');
+              if (cnt) cnt.textContent = `${cm.draftText.length} ký tự ✨`;
+            }
+          }
+        }
+      } catch (e) {}
+
+      // 3. MỞ KHÓA TỨC THÌ (0.05 GIÂY - KHÔNG BẮT KHÁCH ĐỨNG CHỜ SPINNER):
+      // Hiện ngay Form Hồi Âm để khách đọc và gõ được liền, trong khi Mèo Đen đồng bộ tên khách & lượt mở link ở hậu trường!
+      loadingBox.classList.add('hidden');
+      noticeBox.classList.add('hidden');
+      formBox.classList.remove('hidden');
+
+      const clientTzParam = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ || 'Asia/Ho_Chi_Minh';
+
+      const verifySessionInBackground = (attempt = 1) => {
         const sesController = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 11000) : null;
+        const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 10000) : null;
         const verifyUrl = `${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}&tz=${encodeURIComponent(clientTzParam)}`;
 
         fetch(verifyUrl, sesController ? { signal: sesController.signal } : {})
@@ -7099,74 +7203,71 @@ Mình muốn đặt lịch xem bài:
             if (sesTimeout) clearTimeout(sesTimeout);
 
             if (data && data.status === 'error' && attempt < 2) {
-              setTimeout(() => verifySessionWithRetry(attempt + 1), 900);
+              setTimeout(() => verifySessionInBackground(attempt + 1), 800);
               return;
             }
 
-            loadingBox.classList.add('hidden');
+            // Nếu khách đang bấm nút Gửi rồi thì không ghi đè màn hình đang gửi
+            if (!loadingBox.classList.contains('hidden')) return;
 
             if (data && data.status === 'valid') {
-              document.getElementById('fbFormState').classList.remove('hidden');
               if (data.clientName && data.clientName !== 'bà') {
                 activeClientName = data.clientName;
                 if (nameSpan) nameSpan.textContent = activeClientName;
               }
               if (data.draftText) {
                 const ta = document.getElementById('fbMessageText');
-                if (ta && !ta.value.trim()) ta.value = data.draftText;
+                if (ta && !ta.value.trim()) {
+                  ta.value = data.draftText;
+                  const cnt = document.getElementById('fbCharCounter');
+                  if (cnt) cnt.textContent = `${data.draftText.length} ký tự ✨`;
+                }
               }
+              try {
+                localStorage.setItem('nownow_ses_meta_' + activeClientSessionId, JSON.stringify({
+                  clientName: activeClientName,
+                  draftText: data.draftText || ''
+                }));
+              } catch (e) {}
             } else if (data && data.status === 'completed') {
-              document.getElementById('fbFormState').classList.add('hidden');
+              try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
+              formBox.classList.add('hidden');
               document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
               document.getElementById('fbNoticeIcon').textContent = '✨💖';
               document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || activeClientName} một cái thật chặt!`;
               document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
-              document.getElementById('fbNoticeState').classList.remove('hidden');
+              noticeBox.classList.remove('hidden');
             } else if (data && data.status === 'invalid') {
-              document.getElementById('fbFormState').classList.add('hidden');
+              formBox.classList.add('hidden');
               document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
               document.getElementById('fbNoticeIcon').textContent = '🕯️';
               document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
               document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
-              document.getElementById('fbNoticeState').classList.remove('hidden');
-            } else if (isValidNntFormat) {
-              // KHIÊN FAIL-OPEN: Nếu máy chủ Google tạm bận ở bước kiểm tra GET nhưng mã NNT-XXXXXX hợp lệ,
-              // vẫn mở thẳng Form Hồi Âm để khách viết & gửi bình thường (không bao giờ làm lỡ khách!)
-              document.getElementById('fbFormState').classList.remove('hidden');
-            } else {
-              document.getElementById('fbFormState').classList.add('hidden');
-              document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
-              document.getElementById('fbNoticeIcon').textContent = '⚠️';
-              document.getElementById('fbNoticeTitle').textContent = 'Hệ thống đang bận một chút';
-              document.getElementById('fbNoticeDesc').textContent = (data && data.message) ? data.message : 'Bà bấm tải lại trang giúp Now thử lại nha!';
-              document.getElementById('fbNoticeState').classList.remove('hidden');
+              noticeBox.classList.remove('hidden');
             }
           })
           .catch(() => {
             if (sesTimeout) clearTimeout(sesTimeout);
             if (attempt < 2) {
-              setTimeout(() => verifySessionWithRetry(attempt + 1), 900);
-              return;
-            }
-            loadingBox.classList.add('hidden');
-            if (isValidNntFormat) {
-              document.getElementById('fbFormState').classList.remove('hidden');
-            } else {
-              document.getElementById('fbNoticeIcon').textContent = '⚠️';
-              document.getElementById('fbNoticeTitle').textContent = 'Kết nối gián đoạn';
-              document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên (mạng chậm hoặc máy chủ đang khởi động), bà tải lại trang thử lại nha!';
-              document.getElementById('fbNoticeState').classList.remove('hidden');
+              setTimeout(() => verifySessionInBackground(attempt + 1), 800);
             }
           });
       };
 
-      verifySessionWithRetry(1);
+      verifySessionInBackground(1);
+      return true;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      checkUrlForSessionParam();
+      const hasActiveSessionModal = checkUrlForSessionParam();
       renderShopeeReviews();
-      syncApprovedReviewsFromSheets();
+      // Nếu khách đang mở link ?session=..., ưu tiên 100% băng thông cho request kiểm tra phiên,
+      // lùi việc tải danh sách Love Wall nền lại 2.2 giây để Google Apps Script phản hồi tức thì!
+      if (hasActiveSessionModal) {
+        setTimeout(() => syncApprovedReviewsFromSheets(), 2200);
+      } else {
+        syncApprovedReviewsFromSheets();
+      }
     });
   </script>
 <!-- =========================================================================
@@ -9802,11 +9903,11 @@ I'd love to book a 1:1 Tarot & CBT session:
     });
 
     setInterval(() => {
-      if (!document.hidden) {
+      if (!document.hidden && (activeSessionSeconds <= 60 || (activeSessionSeconds - lastSyncedSeconds) >= 15)) {
         saveStateToLocal();
         sendFootprintRequest(false);
       }
-    }, 5000);
+    }, 15000);
   }
 
   if (document.readyState === 'loading') {

@@ -8263,8 +8263,18 @@ I'd love to book a 1:1 Tarot & CBT session:
         else if (cityDisplay === 'TP.HCM') cityDisplay = 'TP.HCM [Cổng Miền Nam]';
       }
 
+      const devTz = (typeof NOWNOW_DETECTED_IANA_TZ !== 'undefined' && NOWNOW_DETECTED_IANA_TZ)
+        ? NOWNOW_DETECTED_IANA_TZ
+        : (function() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } })();
+      const isDevTzVN = devTz === 'Asia/Ho_Chi_Minh' || devTz === 'Asia/Saigon' || devTz === 'Asia/Hanoi';
+      let vpnFlag = '';
+      if (chosen.country && chosen.country !== 'VN' && isDevTzVN) {
+        vpnFlag = ' [⚠️ Nghi VPN / Private Relay từ VN]';
+      } else if (chosen.country === 'VN' && devTz && !isDevTzVN) {
+        vpnFlag = ` [⚠️ IP VN nhưng máy đặt giờ ${devTz}]`;
+      }
       const netInfo = [ispPart, connBadge].filter(Boolean).join(' • ');
-      geoLocationLabel = `📍 ${cityDisplay}, ${chosen.country}${netInfo ? ' (' + netInfo + ')' : ''}`;
+      geoLocationLabel = `📍 ${cityDisplay}, ${chosen.country}${netInfo ? ' (' + netInfo + ')' : ''}${vpnFlag}`;
       try {
         sessionStorage.setItem('nownow_ip_geo_v10', geoLocationLabel);
         localStorage.setItem('nownow_ip_geo_v10', geoLocationLabel);
@@ -8317,6 +8327,21 @@ I'd love to book a 1:1 Tarot & CBT session:
       })
       .catch(() => {})
       .finally(onSourceDone);
+
+    setTimeout(() => {
+      if (!geoLocationLabel) {
+        const devTz = (typeof NOWNOW_DETECTED_IANA_TZ !== 'undefined' && NOWNOW_DETECTED_IANA_TZ)
+          ? NOWNOW_DETECTED_IANA_TZ
+          : (function() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } })();
+        if (devTz) {
+          const tzMeta = (typeof TZ_CITY_LABEL_MAP !== 'undefined' && TZ_CITY_LABEL_MAP[devTz])
+            ? TZ_CITY_LABEL_MAP[devTz].vi
+            : devTz.split('/').pop().replace(/_/g, ' ');
+          geoLocationLabel = `📍 ${tzMeta} [Suy từ Múi giờ]`;
+          scheduleFastSync(false);
+        }
+      }
+    }, 2500);
   })();
 
   // 3. NHẬN DIỆN NGUỒN DẪN 8 TẦNG (CHỐNG SAI LỆCH KHI MỞ IN-APP HOẶC F5)
@@ -9145,6 +9170,9 @@ I'd love to book a 1:1 Tarot & CBT session:
       isNewSession: isNewSessionFlag,
       visits: localVisits,
       source: TRAFFIC_SOURCE,
+      clientTimezone: (typeof NOWNOW_DETECTED_IANA_TZ !== 'undefined' && NOWNOW_DETECTED_IANA_TZ)
+        ? NOWNOW_DETECTED_IANA_TZ
+        : (function() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh'; } catch (e) { return 'Asia/Ho_Chi_Minh'; } })(),
       deviceLang: buildDeviceAndLangString(),
       durationSec: activeSessionSeconds,
       deltaSec: delta,

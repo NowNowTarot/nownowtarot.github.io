@@ -6619,18 +6619,27 @@ Mình muốn đặt lịch xem bài:
         reader.onload = (ev) => {
           const img = new Image();
           img.onload = () => {
-            const maxDim = 900;
-            let w = img.width, h = img.height;
-            if (w > maxDim || h > maxDim) {
-              if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
-              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            const renderAt = (maxDim, qual) => {
+              let w = img.width, h = img.height;
+              if (w > maxDim || h > maxDim) {
+                if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
+                else { w = Math.round(w * maxDim / h); h = maxDim; }
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, w, h);
+              return canvas.toDataURL('image/jpeg', qual);
+            };
+            let dataUrl = renderAt(820, 0.74);
+            if (dataUrl.length > 23500) {
+              dataUrl = renderAt(640, 0.66);
             }
-            const canvas = document.createElement('canvas');
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, w, h);
-            resolve(canvas.toDataURL('image/jpeg', 0.78));
+            if (dataUrl.length > 23500) {
+              dataUrl = renderAt(520, 0.58);
+            }
+            resolve(dataUrl);
           };
           img.onerror = () => resolve(null);
           img.src = ev.target.result;
@@ -6638,6 +6647,19 @@ Mình muốn đặt lịch xem bài:
         reader.onerror = () => resolve(null);
         reader.readAsDataURL(file);
       });
+    }
+
+    function handleDrivePhotoFallback(imgEl) {
+      if (!imgEl) return;
+      const curSrc = imgEl.getAttribute('src') || '';
+      const idMatch = curSrc.match(/[?&]id=([A-Za-z0-9_-]+)/);
+      if (idMatch && idMatch[1] && !imgEl.dataset.retriedLh3) {
+        imgEl.dataset.retriedLh3 = '1';
+        imgEl.src = 'https://lh3.googleusercontent.com/d/' + idMatch[1] + '=w1000';
+        return;
+      }
+      const wrap = imgEl.closest('.shopee-review-photo-item');
+      if (wrap) wrap.style.display = 'none';
     }
 
     async function handleFbPhotoSelect(inputEl) {
@@ -6667,7 +6689,7 @@ Mình muốn đặt lịch xem bài:
         document.body.appendChild(lb);
       }
       lb.innerHTML = `
-        <img src="${escapeHtml(url)}" alt="Ảnh kỷ niệm khách gửi" style="max-width:92vw;max-height:86vh;border-radius:18px;border:1.5px solid rgba(255,223,133,0.65);box-shadow:0 20px 60px rgba(0,0,0,0.9);object-fit:contain;">
+        <img src="${escapeHtml(url)}" referrerpolicy="no-referrer" onerror="handleDrivePhotoFallback(this)" alt="Ảnh kỷ niệm khách gửi" style="max-width:92vw;max-height:86vh;border-radius:18px;border:1.5px solid rgba(255,223,133,0.65);box-shadow:0 20px 60px rgba(0,0,0,0.9);object-fit:contain;">
       `;
     }
 
@@ -6774,6 +6796,7 @@ Mình muốn đặt lịch xem bài:
         session: activeClientSessionId,
         clientName: activeClientName,
         platform: "Website",
+        clientTimezone: window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ || 'Asia/Ho_Chi_Minh',
         stateBefore: getActiveText('groupStateBefore'),
         stateAfter: getActiveText('groupStateAfter'),
         touchpoints: getActiveText('groupTouchpoints'),
@@ -6944,7 +6967,7 @@ Mình muốn đặt lịch xem bài:
               <p class="text-[14.5px] sm:text-[15.5px] font-bold text-[#faf6f0] leading-relaxed tracking-wide" style="text-shadow: 0 1px 10px rgba(255, 223, 133, 0.18);">
                 "${safeMessage}"
               </p>
-              ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').map(u => u.trim()).filter(u => u.startsWith('http')).map(u => `<div class="shopee-review-photo-item" onclick="openFbImageLightbox('${escapeHtml(u)}')"><img src="${escapeHtml(u)}" alt="Ảnh khách gửi" loading="lazy" onerror="this.closest('.shopee-review-photo-item').style.display='none'"></div>`).join('')}</div>` : ''}
+              ${r.images ? `<div class="shopee-review-photos">${String(r.images).split('\n').map(u => u.trim()).filter(u => u.startsWith('http') || u.startsWith('data:image/')).map(u => `<div class="shopee-review-photo-item" onclick="openFbImageLightbox('${escapeHtml(u)}')"><img src="${escapeHtml(u)}" referrerpolicy="no-referrer" alt="Ảnh khách gửi" loading="lazy" onerror="handleDrivePhotoFallback(this)"></div>`).join('')}</div>` : ''}
             </div>
 
             ${safeReply ? `
@@ -7062,56 +7085,82 @@ Mình muốn đặt lịch xem bài:
       document.getElementById('fbLoadingSub').textContent = "Chờ Mèo Đen kiểm tra mã phiên trải bài một xíu nha 🐾";
       loadingBox.classList.remove('hidden');
 
-      const sesController = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 12000) : null;
+      const clientTzParam = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ || 'Asia/Ho_Chi_Minh';
+      const isValidNntFormat = /^NNT-[A-Z0-9]{4,12}$/i.test(activeClientSessionId);
 
-      fetch(`${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`, sesController ? { signal: sesController.signal } : {})
-        .then(res => res.json())
-        .then(data => {
-          if (sesTimeout) clearTimeout(sesTimeout);
-          loadingBox.classList.add('hidden');
+      const verifySessionWithRetry = (attempt = 1) => {
+        const sesController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 11000) : null;
+        const verifyUrl = `${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}&tz=${encodeURIComponent(clientTzParam)}`;
 
-          if (data && data.status === 'valid') {
-            document.getElementById('fbFormState').classList.remove('hidden');
-            if (data.clientName && data.clientName !== 'bà') {
-              activeClientName = data.clientName;
-              if (nameSpan) nameSpan.textContent = activeClientName;
+        fetch(verifyUrl, sesController ? { signal: sesController.signal } : {})
+          .then(res => res.json())
+          .then(data => {
+            if (sesTimeout) clearTimeout(sesTimeout);
+
+            if (data && data.status === 'error' && attempt < 2) {
+              setTimeout(() => verifySessionWithRetry(attempt + 1), 900);
+              return;
             }
-            if (data.draftText) {
-              const ta = document.getElementById('fbMessageText');
-              if (ta && !ta.value.trim()) ta.value = data.draftText;
+
+            loadingBox.classList.add('hidden');
+
+            if (data && data.status === 'valid') {
+              document.getElementById('fbFormState').classList.remove('hidden');
+              if (data.clientName && data.clientName !== 'bà') {
+                activeClientName = data.clientName;
+                if (nameSpan) nameSpan.textContent = activeClientName;
+              }
+              if (data.draftText) {
+                const ta = document.getElementById('fbMessageText');
+                if (ta && !ta.value.trim()) ta.value = data.draftText;
+              }
+            } else if (data && data.status === 'completed') {
+              document.getElementById('fbFormState').classList.add('hidden');
+              document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+              document.getElementById('fbNoticeIcon').textContent = '✨💖';
+              document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || activeClientName} một cái thật chặt!`;
+              document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
+              document.getElementById('fbNoticeState').classList.remove('hidden');
+            } else if (data && data.status === 'invalid') {
+              document.getElementById('fbFormState').classList.add('hidden');
+              document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+              document.getElementById('fbNoticeIcon').textContent = '🕯️';
+              document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
+              document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
+              document.getElementById('fbNoticeState').classList.remove('hidden');
+            } else if (isValidNntFormat) {
+              // KHIÊN FAIL-OPEN: Nếu máy chủ Google tạm bận ở bước kiểm tra GET nhưng mã NNT-XXXXXX hợp lệ,
+              // vẫn mở thẳng Form Hồi Âm để khách viết & gửi bình thường (không bao giờ làm lỡ khách!)
+              document.getElementById('fbFormState').classList.remove('hidden');
+            } else {
+              document.getElementById('fbFormState').classList.add('hidden');
+              document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
+              document.getElementById('fbNoticeIcon').textContent = '⚠️';
+              document.getElementById('fbNoticeTitle').textContent = 'Hệ thống đang bận một chút';
+              document.getElementById('fbNoticeDesc').textContent = (data && data.message) ? data.message : 'Bà bấm tải lại trang giúp Now thử lại nha!';
+              document.getElementById('fbNoticeState').classList.remove('hidden');
             }
-          } else if (data && data.status === 'completed') {
-            document.getElementById('fbFormState').classList.add('hidden');
-            document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
-            document.getElementById('fbNoticeIcon').textContent = '✨💖';
-            document.getElementById('fbNoticeTitle').textContent = `Now ôm ${data.clientName || activeClientName} một cái thật chặt!`;
-            document.getElementById('fbNoticeDesc').textContent = data.message || 'Bà đã gửi lời nhắn cho phiên này rồi nha!';
-            document.getElementById('fbNoticeState').classList.remove('hidden');
-          } else if (data && data.status === 'invalid') {
-            document.getElementById('fbFormState').classList.add('hidden');
-            document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
-            document.getElementById('fbNoticeIcon').textContent = '🕯️';
-            document.getElementById('fbNoticeTitle').textContent = 'Căn phòng không khả dụng';
-            document.getElementById('fbNoticeDesc').textContent = data.message || 'Mã phiên trải bài không tồn tại hoặc đã hết hạn.';
-            document.getElementById('fbNoticeState').classList.remove('hidden');
-          } else {
-            document.getElementById('fbFormState').classList.add('hidden');
-            document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
-            document.getElementById('fbNoticeIcon').textContent = '⚠️';
-            document.getElementById('fbNoticeTitle').textContent = 'Hệ thống đang bận một chút';
-            document.getElementById('fbNoticeDesc').textContent = (data && data.message) ? data.message : 'Bà bấm tải lại trang giúp Now thử lại nha!';
-            document.getElementById('fbNoticeState').classList.remove('hidden');
-          }
-        })
-        .catch(() => {
-          if (sesTimeout) clearTimeout(sesTimeout);
-          loadingBox.classList.add('hidden');
-          document.getElementById('fbNoticeIcon').textContent = '⚠️';
-          document.getElementById('fbNoticeTitle').textContent = 'Kết nối gián đoạn';
-          document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên (mạng chậm hoặc máy chủ đang khởi động), bà tải lại trang thử lại nha!';
-          document.getElementById('fbNoticeState').classList.remove('hidden');
-        });
+          })
+          .catch(() => {
+            if (sesTimeout) clearTimeout(sesTimeout);
+            if (attempt < 2) {
+              setTimeout(() => verifySessionWithRetry(attempt + 1), 900);
+              return;
+            }
+            loadingBox.classList.add('hidden');
+            if (isValidNntFormat) {
+              document.getElementById('fbFormState').classList.remove('hidden');
+            } else {
+              document.getElementById('fbNoticeIcon').textContent = '⚠️';
+              document.getElementById('fbNoticeTitle').textContent = 'Kết nối gián đoạn';
+              document.getElementById('fbNoticeDesc').textContent = 'Không thể kiểm tra mã phiên (mạng chậm hoặc máy chủ đang khởi động), bà tải lại trang thử lại nha!';
+              document.getElementById('fbNoticeState').classList.remove('hidden');
+            }
+          });
+      };
+
+      verifySessionWithRetry(1);
     }
 
     window.addEventListener('DOMContentLoaded', () => {

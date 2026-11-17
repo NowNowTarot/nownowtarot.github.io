@@ -3338,7 +3338,10 @@ body.portal-open .cat-cloud-tip {
       }
 
       if (counterEl) {
-        counterEl.textContent = `Tin nhắn ${currentFbIndex + 1} / ${TOTAL_FEEDBACK_SLIDES}`;
+        const isEn = window.currentNowNowLang === 'en';
+        counterEl.textContent = isEn
+          ? `Chat ${currentFbIndex + 1} / ${TOTAL_FEEDBACK_SLIDES}`
+          : `Tin nhắn ${currentFbIndex + 1} / ${TOTAL_FEEDBACK_SLIDES}`;
       }
 
       dots.forEach((d, idx) => {
@@ -6937,8 +6940,128 @@ Mình muốn đặt lịch xem bài:
       return str[0] + '***' + str[str.length - 1];
     }
 
-    /* 4. DỮ LIỆU THỰC 100% TỪ GOOGLE SHEETS (ĐÃ BẢO VỆ XSS VÀ XÓA NÚT HỮU ÍCH) */
-    let currentReviewDataset = [];
+    /* 4. DỮ LIỆU HỒI ÂM KẾT HỢP BÀI MẪU + BÀI TEST + ĐỒNG BỘ GOOGLE SHEETS (KHÔNG ẨN BÀI TEST) */
+    const DEFAULT_SAMPLE_REVIEWS = [
+      {
+        name: 'Mỹ Hà',
+        time: '2026-11-11',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🌫️ Bế tắc, 🥀 Kiệt sức',
+        stateAfter: '🌤️ Nhẹ lòng, 💡 Thấu suốt, ⚡ Có động lực',
+        touchpoints: '🧠 Bóc đúng gốc rễ tiềm thức, 🌱 Định hướng thực tế, tỉnh táo',
+        message: 'Thật sự lúc bấm đặt lịch lòng tui ngổn ngang kinh khủng khiếp bà ơi... Mấy tuần nay cứ bị kẹt cứng trong đống suy nghĩ luẩn quẩn, vừa bồn chồn vừa sợ, chẳng biết tâm sự cùng ai vì sợ người ta bảo mình làm quá. Lúc mới vào phiên tui còn gồng lắm, cứ nghĩ là xem vui vui thôi. Ai ngờ đâu Now nói câu nào là trúng tim đen câu đó, bóc trúng phóc cái nỗi sợ bị bỏ rơi và cái tính hay tự dằn vặt mà bấy lâu nay tui ráng trốn tránh. Nghe Now phân tích nhẹ nhàng mà sống mũi tui cay xè luôn á.\n\nNói chuyện xong với Now tự nhiên thấy lồng ngực nhẹ bẫng hẳn, kiểu trút bớt được cả tảng đá đè nặng bấy lâu. Cảm ơn Now  Thấy may mắn xỉu vì vũ trụ đưa đẩy đúng lúc gặp được Now (,,>﹏<,,) ♡"',
+        shopReply: 'Mỗi khi thấy lòng chênh vênh hay bão giông quay lại, nhớ hít một hơi thật sâu và tự ôm lấy mình một cái nha. Now và chiếc hộp nhỏ này vẫn luôn ở đây mỗi khi bà cần một trạm dừng chân. Thương chúc bà những ngày sắp tới thật dịu dàng và bình yên nghen! Ôm bà một cái thật chặt nhen',
+        images: ''
+      },
+      {
+        name: 'Diem Ngoc',
+        time: '2026-11-14',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🌪️ Ngổn ngang, 🥀 Kiệt sức',
+        stateAfter: '🕊️ An yên, 🌤️ Nhẹ lòng',
+        touchpoints: '🎙️ Giọng nói ấm áp xoa dịu, 🤝 Không phán xét hay hù dọa',
+        message: 'Reader nói chuyện ấm áp, lắng nghe, mình như được chữa lành sau chuỗi ngày tăm tối...',
+        shopReply: 'Thương Ngọc thật nhiều, bất cứ lúc nào cần một người lắng nghe 0đ trọn đời cứ nhắn Now liền nha!',
+        images: ''
+      },
+      {
+        name: 'Nnhi2803',
+        time: '2026-11-16',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🥀 Kiệt sức',
+        stateAfter: '🌤️ Nhẹ lòng, 💡 Thấu suốt',
+        touchpoints: '🧠 Bóc đúng gốc rễ tiềm thức, 🌱 Định hướng thực tế, tỉnh táo, 🤝 Không phán xét hay hù dọa',
+        message: 'Bà xem kỹ lắm á, với cũng không phán xét mà còn gợi ý câu hỏi cho tui xem, cảm ơn bà',
+        shopReply: 'Cảm ơn bà đã ghé tiệm tui nhen, chúc bà sớm bình ổn nè',
+        images: ''
+      },
+      {
+        name: 'Linh Nga',
+        time: '2026-11-17',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '',
+        stateAfter: '🌤️ Nhẹ lòng',
+        touchpoints: '🎙️ Giọng nói ấm áp xoa dịu',
+        message: 'Sao không biết shop này sớm hơn nhỉ... shop ơi đừng cht để tui còn dãi bày dài dài',
+        shopReply: '',
+        images: 'https://drive.google.com/thumbnail?id=1hPTKSKfmAy-hTYPutvqjIPDIB134Tb-b&sz=w1000'
+      },
+      {
+        name: 'Quỳnh Chi',
+        time: '2026-10-18',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🌫️ Bế tắc',
+        stateAfter: '🌤️ Nhẹ lòng, 💡 Thấu suốt',
+        touchpoints: '🧠 Bóc đúng gốc rễ tiềm thức, 🌱 Định hướng thực tế, tỉnh táo',
+        message: 'Phân tích tâm lý nhận thức rất thực tế, trò chuyện xong nhẹ nhõm cả người!',
+        shopReply: 'Cảm ơn Chi đã mở lòng cùng Now nha, chúc bà luôn vững vàng và rạng rỡ nè!',
+        images: ''
+      },
+      {
+        name: 'Sogeum won',
+        time: '2026-10-04',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🫀 Bồn chồn',
+        stateAfter: '🌤️ Nhẹ lòng, ⚡ Có động lực',
+        touchpoints: '🧠 Bóc đúng gốc rễ tiềm thức',
+        message: 'Tháo gỡ đúng nút thắt gốc rễ, 0đ đặt cọc, xem xong nhẹ lòng mới dừng đồng hồ...',
+        shopReply: 'Cảm ơn bà đã luôn tin tưởng ghé góc nhỏ của Now nha!',
+        images: ''
+      },
+      {
+        name: 'C Nguyet Tit',
+        time: '2026-11-17',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '',
+        stateAfter: '💡 Thấu suốt',
+        touchpoints: '🌱 Định hướng thực tế, tỉnh táo',
+        message: 'Sao bà lấy rẻ vậy trời... số tiền bỏ ra quá xứng đáng',
+        shopReply: '',
+        images: 'https://drive.google.com/thumbnail?id=1aftMzTsMjnYuZIGoU-Id-zjMDre5X6MJ&sz=w1000'
+      },
+      {
+        name: 'Tiến Hùng',
+        time: '2026-11-09',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🌪️ Ngổn ngang, 🌫️ Bế tắc, 🫀 Bồn chồn, 🥀 Kiệt sức',
+        stateAfter: '🌤️ Nhẹ lòng, 💡 Thấu suốt, 🕊️ An yên, ⚡ Có động lực',
+        touchpoints: '🧠 Bóc đúng gốc rễ tiềm thức, 🎙️ Giọng nói ấm áp xoa dịu, 🌱 Định hướng thực tế, tỉnh táo, 🤝 Không phán xét hay hù dọa',
+        message: 'Ưng cái giọng sốp này gheeee, recommend cho mn nhaa',
+        shopReply: 'Cảm ơn cậu rất nhiều ạ và con đường phía trước luôn thuận lợi',
+        images: ''
+      },
+      {
+        name: 'Kiều Oanh',
+        time: '2026-11-16',
+        service: 'Phiên trải bài thấu cảm 1:1',
+        stateBefore: '🥀 Kiệt sức',
+        stateAfter: '⚡ Có động lực',
+        touchpoints: '🎙️ Giọng nói ấm áp xoa dịu',
+        message: 'Có time sẽ luôn ủng hộ Shop',
+        shopReply: 'Now sẽ luôn chờ bà nhaaa',
+        images: ''
+      }
+    ];
+
+    function mergeReviewsKeepingSamplesAndTests(sheetReviews) {
+      const mergedMap = new Map();
+      const normKey = (r) => String((r && r.message) || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      // Ưu tiên nạp dữ liệu mới nhất từ Google Sheets trước (bao gồm cả bài test & bài thật)
+      (Array.isArray(sheetReviews) ? sheetReviews : []).forEach(r => {
+        const k = normKey(r);
+        if (k) mergedMap.set(k, r);
+      });
+      // Giữ nguyên các bài mẫu mặc định nếu chưa có trong danh sách trả về
+      DEFAULT_SAMPLE_REVIEWS.forEach(sample => {
+        const k = normKey(sample);
+        if (k && !mergedMap.has(k)) {
+          mergedMap.set(k, sample);
+        }
+      });
+      return sortReviewsLongestAndPhotoFirst(Array.from(mergedMap.values()));
+    }
+
+    let currentReviewDataset = mergeReviewsKeepingSamplesAndTests([]);
 
     // MẸO SẮP XẾP FEEDBACK ĐỈNH CAO:
     // 1. Feedback nào DÀI NHẤT đưa lên đầu tiên
@@ -7049,7 +7172,7 @@ Mình muốn đặt lịch xem bài:
         if (cachedReal) {
           const parsed = JSON.parse(cachedReal);
           if (Array.isArray(parsed)) {
-            currentReviewDataset = parsed;
+            currentReviewDataset = mergeReviewsKeepingSamplesAndTests(parsed);
             renderShopeeReviews();
           }
         }
@@ -7059,7 +7182,7 @@ Mình muốn đặt lịch xem bài:
         .then(res => res.json())
         .then(resData => {
           if (resData.status === 'success' && Array.isArray(resData.data)) {
-            currentReviewDataset = sortReviewsLongestAndPhotoFirst(resData.data.map((item) => ({
+            const mappedSheetReviews = resData.data.map((item) => ({
               name: item.name || 'Khách nhà Now',
               time: item.date || item.time || 'Gần đây',
               service: 'Phiên trải bài thấu cảm 1:1',
@@ -7069,7 +7192,8 @@ Mình muốn đặt lịch xem bài:
               message: item.message || '',
               shopReply: item.shopReply || item.reply || item.nowReply || '',
               images: (item.images && !String(item.images).trim().startsWith('⚠️')) ? item.images : ''
-            })));
+            }));
+            currentReviewDataset = mergeReviewsKeepingSamplesAndTests(mappedSheetReviews);
 
             try {
               localStorage.setItem('nownow_real_sheet_reviews', JSON.stringify(currentReviewDataset));
@@ -7078,9 +7202,9 @@ Mình muốn đặt lịch xem bài:
             renderShopeeReviews();
 
             const track = document.getElementById('loveWallTrack');
-            if (track && resData.data.length > 0 && window.currentNowNowLang !== 'en') {
+            if (track && currentReviewDataset.length > 0 && window.currentNowNowLang !== 'en') {
               let htmlContent = '';
-              const list = [...resData.data, ...resData.data];
+              const list = [...currentReviewDataset, ...currentReviewDataset];
               list.forEach(item => {
                 const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
                 const rawMsg = item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message;
@@ -7954,8 +8078,8 @@ Mình muốn đặt lịch xem bài:
     '#tabBtnPhotos span': 'Chat Screenshots',
     '#tabBtnWeb span': 'Web Reviews',
     '#paneFeedbackPhotos h3': 'Heartfelt Whispers After Our Sessions',
-    '#paneFeedbackPhotos > div:last-child button[onclick*="-1"]': '◀ Prev',
-    '#paneFeedbackPhotos > div:last-child button[onclick*="1"]': 'Next ▶',
+    '#paneFeedbackPhotos > div:last-child button[onclick*="(-1)"]': '◀ Prev',
+    '#paneFeedbackPhotos > div:last-child button[onclick*="(1)"]': 'Next ▶',
     '#paneFeedbackPhotos .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
     '#paneFeedbackWeb .subweb-subtle-cta span': '✨ Pick Duration & Book Session',
 
@@ -7972,18 +8096,18 @@ Mình muốn đặt lịch xem bài:
     '#sec-portals button[onclick*="viral"] > div:last-child': '<span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 121.3K Grounded Mindset</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 203.6K Conflict Styles</span><span class="bg-[#ffdf85]/15 px-2.5 py-1 rounded-full font-semibold">❤️ 73.9K Blooming Garden</span>',
 
     // 12 BÀI VIẾT TẠP CHÍ THREADS (ĐÃ ĐỒNG BỘ THỨ TỰ BÀI MỚI VÀO TOP 1)
-    '#subwebViral .threads-post-card:nth-of-type(1) p': '"In my view, a truly grounded worldview and emotional maturity are best revealed in the capacity to embrace differences. They understand that distinct lived experiences and upbringings naturally shape unique perspectives. They may disagree with someone\'s outlook, but they never resort to judgment, contempt, or belittling to assert moral superiority. Being around someone like that feels deeply safe—because they never attempt to force you into their own mold."',
-    '#subwebViral .threads-post-card:nth-of-type(2) p': '"Let me add one crucial thing: compatibility in how you resolve conflict. When everything is peaceful, grabbing good food, small talk, or physical chemistry is super easy. But when conflict hits and one person chooses stonewalling and silent treatment while the other spirals into emotional outbursts—all that initial compatibility vanishes into thin air."',
-    '#subwebViral .threads-post-card:nth-of-type(3) p': '"Spot on—or more accurately, real love shows up when you’re busy pouring energy back into yourself. When you stop treating a relationship like a life KPI and redirect that focus into upgrading your skills, wellness, and career, you naturally bloom. When a tree blossoms, butterflies come on their own—nobody attracts butterflies by whistling in an empty dirt lot."',
-    '#subwebViral .threads-post-card:nth-of-type(4) p': '"Fun neuroscience fact: about 90% of your serotonin is produced in your gut, not your brain. So when your mental health hits rock bottom and your gut microbiome gets thrown off balance, sugar-craving bacteria send signals straight up the vagus nerve to hijack your brain into craving sweets. Half the time it’s not even you wanting cake—it’s your gut bacteria driving the wheel 👀👀🥹"',
-    '#subwebViral .threads-post-card:nth-of-type(5) p': '"Reading Tarot made me realize fate works just like the TikTok algorithm. If you repeat the exact same daily route—work -> school -> same old friend group—the algorithm tags your life as \'full capacity\' and stops recommending new people. Serendipity is like the \'For You\' discovery feed. To trigger new connections, you have to feed the algorithm new keywords: take a different street, work at a new café, or learn a random skill."',
-    '#subwebViral .threads-post-card:nth-of-type(6) p': '"Working in spirituality, I deeply believe this—with a twist. Sometimes the universe blocks something not because it’s toxic, but because it’s too massive for your current emotional vessel. Like plugging 220V current into a 110V lightbulb—it’ll shatter. A delayed blessing is often an emergency brake giving you time to upgrade your inner grounding before receiving it."',
-    '#subwebViral .threads-post-card:nth-of-type(7) p': '"You sound like a classic blend of hyper-vigilance and romantic starvation—craving deep romance while keeping your guard at maximum alert. You’re not single because you lack options; your subconscious has simply raised its safety threshold so high that no one can hurt you again. Be gentle with yourself—when your nervous system truly feels safe, it’ll lower the shield."',
-    '#subwebViral .threads-post-card:nth-of-type(8) p': '"Honestly, the people in Gladwell’s Outliers didn’t magically know their passion from day one either :))) The real loop is: try something -> realize you can tolerate its boredom longer than others -> get positive feedback -> brain releases dopamine -> keep grinding until you hit 10,000 hours. Finding your strength comes from experimenting enough to see what kind of struggle you’re most resilient to."',
-    '#subwebViral .threads-post-card:nth-of-type(9) p': '"Couldn’t agree more. We need to draw a clear line: fake flexing is an ego issue, while living in a humble rented room is just your starting point. Not being born with a silver spoon never means you aren’t allowed to treat yourself with dignity and grace."',
-    '#subwebViral .threads-post-card:nth-of-type(10) p': '"I believe in divine timing, but where empirical psychology meets mysticism. The \'right time\' isn’t a fixed date on a cosmic calendar—it’s the intersection of inner readiness and expanding your surface area for luck by stepping out into the world. When your mindset is ready, you naturally broadcast signals on the right frequency."',
-    '#subwebViral .threads-post-card:nth-of-type(11) p': '"You aren’t heartless at all—you’re actually deeply sensitive. Because your heart bruises so easily, your brain puts on an \'I don’t care either way\' armor to protect you. Feeling emotionally numb or floating is just your nervous system flipping the circuit breaker to prevent overload. Stop being so hard on yourself."',
-    '#subwebViral .threads-post-card:nth-of-type(12) p': '"I used to get trapped in this exact same mental loop. It’s like passing through 3 layers: Layer 1 is Awareness (knowing what you’re doing) -> Layer 2 is Metacognition (analyzing the root cause of why you did it) -> Layer 3 is Over-analysis (dissecting every thought until you’re exhausted and nauseous :)))))"'
+    '#subwebViral .threads-post-card:nth-of-type(2) p': '"In my view, a truly grounded worldview and emotional maturity are best revealed in the capacity to embrace differences. They understand that distinct lived experiences and upbringings naturally shape unique perspectives. They may disagree with someone\'s outlook, but they never resort to judgment, contempt, or belittling to assert moral superiority. Being around someone like that feels deeply safe—because they never attempt to force you into their own mold."',
+    '#subwebViral .threads-post-card:nth-of-type(3) p': '"Let me add one crucial thing: compatibility in how you resolve conflict. When everything is peaceful, grabbing good food, small talk, or physical chemistry is super easy. But when conflict hits and one person chooses stonewalling and silent treatment while the other spirals into emotional outbursts—all that initial compatibility vanishes into thin air."',
+    '#subwebViral .threads-post-card:nth-of-type(4) p': '"Spot on—or more accurately, real love shows up when you’re busy pouring energy back into yourself. When you stop treating a relationship like a life KPI and redirect that focus into upgrading your skills, wellness, and career, you naturally bloom. When a tree blossoms, butterflies come on their own—nobody attracts butterflies by whistling in an empty dirt lot."',
+    '#subwebViral .threads-post-card:nth-of-type(5) p': '"Fun neuroscience fact: about 90% of your serotonin is produced in your gut, not your brain. So when your mental health hits rock bottom and your gut microbiome gets thrown off balance, sugar-craving bacteria send signals straight up the vagus nerve to hijack your brain into craving sweets. Half the time it’s not even you wanting cake—it’s your gut bacteria driving the wheel 👀👀🥹"',
+    '#subwebViral .threads-post-card:nth-of-type(6) p': '"Reading Tarot made me realize fate works just like the TikTok algorithm. If you repeat the exact same daily route—work -> school -> same old friend group—the algorithm tags your life as \'full capacity\' and stops recommending new people. Serendipity is like the \'For You\' discovery feed. To trigger new connections, you have to feed the algorithm new keywords: take a different street, work at a new café, or learn a random skill."',
+    '#subwebViral .threads-post-card:nth-of-type(7) p': '"Working in spirituality, I deeply believe this—with a twist. Sometimes the universe blocks something not because it’s toxic, but because it’s too massive for your current emotional vessel. Like plugging 220V current into a 110V lightbulb—it’ll shatter. A delayed blessing is often an emergency brake giving you time to upgrade your inner grounding before receiving it."',
+    '#subwebViral .threads-post-card:nth-of-type(8) p': '"You sound like a classic blend of hyper-vigilance and romantic starvation—craving deep romance while keeping your guard at maximum alert. You’re not single because you lack options; your subconscious has simply raised its safety threshold so high that no one can hurt you again. Be gentle with yourself—when your nervous system truly feels safe, it’ll lower the shield."',
+    '#subwebViral .threads-post-card:nth-of-type(9) p': '"Honestly, the people in Gladwell’s Outliers didn’t magically know their passion from day one either :))) The real loop is: try something -> realize you can tolerate its boredom longer than others -> get positive feedback -> brain releases dopamine -> keep grinding until you hit 10,000 hours. Finding your strength comes from experimenting enough to see what kind of struggle you’re most resilient to."',
+    '#subwebViral .threads-post-card:nth-of-type(10) p': '"Couldn’t agree more. We need to draw a clear line: fake flexing is an ego issue, while living in a humble rented room is just your starting point. Not being born with a silver spoon never means you aren’t allowed to treat yourself with dignity and grace."',
+    '#subwebViral .threads-post-card:nth-of-type(11) p': '"I believe in divine timing, but where empirical psychology meets mysticism. The \'right time\' isn’t a fixed date on a cosmic calendar—it’s the intersection of inner readiness and expanding your surface area for luck by stepping out into the world. When your mindset is ready, you naturally broadcast signals on the right frequency."',
+    '#subwebViral .threads-post-card:nth-of-type(12) p': '"You aren’t heartless at all—you’re actually deeply sensitive. Because your heart bruises so easily, your brain puts on an \'I don’t care either way\' armor to protect you. Feeling emotionally numb or floating is just your nervous system flipping the circuit breaker to prevent overload. Stop being so hard on yourself."',
+    '#subwebViral .threads-post-card:nth-of-type(13) p': '"I used to get trapped in this exact same mental loop. It’s like passing through 3 layers: Layer 1 is Awareness (knowing what you’re doing) -> Layer 2 is Metacognition (analyzing the root cause of why you did it) -> Layer 3 is Over-analysis (dissecting every thought until you’re exhausted and nauseous :)))))"'
   };
 
   // 2. BỘ LỜI THOẠI BÉ MÈO ĐEN & LÁ BÀI TAROT BẰNG TIẾNG ANH BẢN XỨ
@@ -8577,7 +8701,11 @@ I'd love to book a 1:1 Tarot & CBT session:
     'iPhone15,2': 'iPhone 14 Pro', 'iPhone15,3': 'iPhone 14 Pro Max', 'iPhone15,4': 'iPhone 15', 'iPhone15,5': 'iPhone 15 Plus',
     'iPhone16,1': 'iPhone 15 Pro', 'iPhone16,2': 'iPhone 15 Pro Max',
     'iPhone17,1': 'iPhone 16 Pro', 'iPhone17,2': 'iPhone 16 Pro Max', 'iPhone17,3': 'iPhone 16', 'iPhone17,4': 'iPhone 16 Plus', 'iPhone17,5': 'iPhone 16e',
-    'iPhone18,1': 'iPhone 17 Pro', 'iPhone18,2': 'iPhone 17 Pro Max', 'iPhone18,3': 'iPhone 17', 'iPhone18,4': 'iPhone 17 Air', 'iPhone18,5': 'iPhone 17e'
+    'iPhone18,1': 'iPhone 17 Pro', 'iPhone18,2': 'iPhone 17 Pro Max', 'iPhone18,3': 'iPhone 17', 'iPhone18,4': 'iPhone 17 Air', 'iPhone18,5': 'iPhone 17e',
+    'iPad14,8': 'iPad Air M2', 'iPad14,9': 'iPad Air M2', 'iPad14,10': 'iPad Air M2', 'iPad14,11': 'iPad Air M2',
+    'iPad13,18': 'iPad Gen 10', 'iPad13,19': 'iPad Gen 10', 'iPad13,16': 'iPad Air 5', 'iPad13,17': 'iPad Air 5',
+    'iPad13,4': 'iPad Pro M1', 'iPad13,8': 'iPad Pro M1', 'iPad14,3': 'iPad Pro M2', 'iPad14,5': 'iPad Pro M2',
+    'iPad16,3': 'iPad Pro M4', 'iPad16,5': 'iPad Pro M4'
   };
 
   const ANDROID_MODEL_MAP = {
@@ -9274,7 +9402,7 @@ I'd love to book a 1:1 Tarot & CBT session:
         ? getClientTimezoneMeta(toTz)
         : { cityVi: toTz, gmtLabel: '' };
       const modeTxt = isManual ? 'Tự chọn' : 'Reset Tự động';
-      const badge = `🌍 Đổi giờ: ${metaTo.cityVi} (${toTz} • ${modeTxt})`;
+      const badge = `🌍 Đổi giờ: ${metaTo.cityVi} (${toTz} - ${modeTxt})`;
       behaviorStats.highlightedTexts = behaviorStats.highlightedTexts.filter(x => !x.startsWith('🌍 Đổi giờ:'));
       behaviorStats.highlightedTexts.push(badge);
       if (!behaviorStats.finalAction.includes('Đặt lịch')) {
@@ -9495,7 +9623,7 @@ I'd love to book a 1:1 Tarot & CBT session:
         try {
           const sel = window.getSelection ? window.getSelection().toString().trim() : '';
           if (sel && sel.length >= 8 && sel.length <= 120) {
-            const cleanSel = sel.replace(/\s+/g, ' ').slice(0, 45);
+            const cleanSel = sel.replace(/•/g, '-').replace(/\s+/g, ' ').slice(0, 45);
             const badge = `Bôi đen: "${cleanSel}${sel.length > 45 ? '...' : ''}"`;
             if (!behaviorStats.highlightedTexts.includes(badge) && behaviorStats.highlightedTexts.length < 3) {
               behaviorStats.highlightedTexts.push(badge);
@@ -9516,7 +9644,7 @@ I'd love to book a 1:1 Tarot & CBT session:
           copied = String(el.value || '').substring(el.selectionStart, el.selectionEnd).trim();
         }
         if (copied && copied.length >= 3) {
-          const cleanCopy = copied.replace(/\s+/g, ' ').slice(0, 45);
+          const cleanCopy = copied.replace(/•/g, '-').replace(/\s+/g, ' ').slice(0, 45);
           const badge = `📋 Copy: "${cleanCopy}${copied.length > 45 ? '...' : ''}"`;
           if (!behaviorStats.copiedTexts.includes(badge) && behaviorStats.copiedTexts.length < 3) {
             behaviorStats.copiedTexts.push(badge);
@@ -10383,7 +10511,9 @@ window.NOWNOW_CAT_LOTTIE_DATA = {"v":"5.7.4","fr":60,"ip":0,"op":360,"w":160,"h"
       }
       const counter = document.getElementById('fbSlideCounter');
       if (counter && typeof currentFbIndex !== 'undefined') {
-        counter.textContent = `Tin nhắn ${currentFbIndex + 1} / ${total}`;
+        counter.textContent = isEn
+          ? `Chat ${currentFbIndex + 1} / ${total}`
+          : `Tin nhắn ${currentFbIndex + 1} / ${total}`;
       }
     };
     syncCounts();
@@ -11019,6 +11149,7 @@ window.NOWNOW_CAT_LOTTIE_DATA = {"v":"5.7.4","fr":60,"ip":0,"op":360,"w":160,"h"
             : `${total} tấm ảnh chụp màn hình tin nhắn chân thật không xạo một chữ nào, bà cứ bấm tới lui đọc nha 📸💖`, 5000);
         }
       };
+      window.switchFeedbackTab.__v10Hooked = origSwitchFeedbackTab.__v10Hooked;
     }
 
     let slidePokes = 0;

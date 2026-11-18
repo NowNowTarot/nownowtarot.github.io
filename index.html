@@ -3246,7 +3246,12 @@ body.portal-open .cat-cloud-tip {
       'fb21', // 22
       'fb23', // 23 🌟 (MỚI)
       'fb24', // 24 🌟 (MỚI)
-      'fb25'  // 25 🌟 (MỚI)
+      'fb25', // 25 🌟 (MỚI)
+      'fb26',
+      'fb27',
+      'fb28',
+      'fb29',
+      'fb30'
     ];
 
     const TOTAL_FEEDBACK_SLIDES = FEEDBACK_LIST.length;
@@ -3255,7 +3260,7 @@ body.portal-open .cat-cloud-tip {
 
     function loadFeedbackImageWithFallback(imgElement, slideIdx) {
       const fileBase = FEEDBACK_LIST[slideIdx] || `fb${slideIdx + 1}`;
-      const baseHost = (window.location.hostname === 'nownowtarot.github.io') ? '' : 'https://nownowtarot.github.io/';
+      const baseHost = (window.location.hostname === 'nownowtarot.github.io' || window.location.protocol === 'file:') ? '' : 'https://nownowtarot.github.io/';
       const webpSrc = `${baseHost}${fileBase}.webp`;
       const jpgSrc = `${baseHost}${fileBase}.jpg`;
 

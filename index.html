@@ -2080,11 +2080,8 @@ body.portal-open .cat-cloud-tip {
               <i class="fa-brands fa-facebook-messenger"></i>
             </div>
             <div class="text-left min-w-0">
-              <div class="text-[14px] sm:text-[15px] font-extrabold text-white truncate">
+              <div id="ctaMessengerTitle" class="text-[14px] sm:text-[15px] font-extrabold text-white truncate">
                 Nhắn Đặt Lịch Qua Messenger
-              </div>
-              <div class="text-[11px] text-[#ffdf85] font-medium truncate">
-                ⚡ Tự động Copy số phút & chủ đề • Chỉ cần Dán
               </div>
             </div>
           </div>
@@ -2097,16 +2094,18 @@ body.portal-open .cat-cloud-tip {
               <i class="fa-brands fa-instagram"></i>
             </div>
             <div class="text-left min-w-0">
-              <div class="text-[14px] sm:text-[15px] font-extrabold text-white truncate">
+              <div id="ctaInstagramTitle" class="text-[14px] sm:text-[15px] font-extrabold text-white truncate">
                 Nhắn Qua Instagram @nownowtarot
-              </div>
-              <div class="text-[11px] text-[#f2dec4]/85 font-medium truncate">
-                ✨ Tự động Copy lịch hẹn • Kết nối Direct nhanh
               </div>
             </div>
           </div>
           <span class="cta-action-pill">Mở IG →</span>
         </button>
+
+        <p id="bookingAutoCopyHint" class="text-[11.5px] text-[#f2dec4]/85 text-center leading-relaxed pt-1 px-2">
+          <i class="fa-regular fa-clipboard text-[#ffdf85] mr-1"></i>
+          Chạm nút trên sẽ <b class="text-[#ffdf85]">tự chép sẵn lịch hẹn</b> bà vừa chọn rồi qua khung chat chỉ cần <b>DÁN</b> và gửi qua IG hay Mess cho Now là xong nha!
+        </p>
       </div>
     </section>
 
@@ -8021,12 +8020,11 @@ Mình muốn đặt lịch xem bài:
     '.milestone-tick-btn[data-min="120"]': '2h',
     '.milestone-tick-btn[data-min="180"]': '3h',
 
-    '.booking-cta-messenger .text-left > div:first-child': 'Book Session via Messenger',
-    '.booking-cta-messenger .text-left > div:last-child': '⚡ Auto-copies your duration & topic • Just Paste & Send',
+    '#ctaMessengerTitle': 'Book Session via Messenger',
     '.booking-cta-messenger .cta-action-pill': 'Send Now →',
-    '.booking-cta-instagram .text-left > div:first-child': 'Message via Instagram @nownowtarot',
-    '.booking-cta-instagram .text-left > div:last-child': '✨ Auto-copies your booking note • Instant DM',
+    '#ctaInstagramTitle': 'Message via Instagram @nownowtarot',
     '.booking-cta-instagram .cta-action-pill': 'Open IG →',
+    '#bookingAutoCopyHint': '<i class="fa-regular fa-clipboard text-[#ffdf85] mr-1"></i> Tapping above <b class="text-[#ffdf85]">auto-copies your booking note</b> — simply <b>Paste &amp; Send</b> once chat opens!',
 
     // Footer
     '#sec-social > .text-center > span': 'Stay Connected in Good Energy',

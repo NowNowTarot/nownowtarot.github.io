@@ -7977,6 +7977,7 @@ Mình muốn đặt lịch xem bài:
     '#copyConfirmModal h3': 'Booking Note Copied to Clipboard!',
     '#copyConfirmModal p': 'Once inside <b id="copyModalPlatformName" class="text-[#ffdf85]">Messenger</b>, simply <b>Paste</b> your note into the chat box and hit send!',
     '#copyModalOpenNowBtn span': 'Open App Now',
+    '#copyModalRetryBtn': 'Copy booking note again',
 
     '#subwebFeedbackUnified .subweb-back-btn span': 'Back to Main Page',
     '#subwebFeedbackUnified .subweb-title-pill span': 'NowNow Client Feedback Hub',
@@ -8106,9 +8107,7 @@ Mình muốn đặt lịch xem bài:
           subDisplay.textContent = `(${hrs} hrs)`;
         } else subDisplay.textContent = '';
       }
-      if (notifyCat && typeof showCatTip === 'function') {
-        showCatTip(`Meow~! You selected <b>${m} mins (~${priceK}K VND)</b>. Hit the booking button and I’ll auto-copy your note! 🐾`, 3400);
-      }
+      // triggerCatSliderReaction inside origRenderMinutesState already handles EN cat tips (no double toast)
     }
   };
 
@@ -8594,7 +8593,7 @@ I'd love to book a 1:1 Tarot & CBT session:
 
   const ENDPOINT_URL = (typeof NOWNOW_FEEDBACK_API !== 'undefined' && NOWNOW_FEEDBACK_API)
     ? NOWNOW_FEEDBACK_API
-    : "https://script.google.com/macros/s/AKfycbwHsjoBYSxz5u26cTxSZ6idEPat02sUZJ8RprQkEX3ccCNuQPMmwjiS9aMiXl1F0zpIwA/exec";
+    : "https://nownow-lovewall.tienhung202204.workers.dev/";
 
   // 1. TỪ ĐIỂN ÁNH XẠ MÃ PHẦN CỨNG APPLE & ANDROID THƯƠNG MẠI
   const APPLE_MODEL_MAP = {
@@ -9927,8 +9926,23 @@ I'd love to book a 1:1 Tarot & CBT session:
     setTimeout(installCoreFunctionHooks, 600);
     attachDomSensors();
 
+    let hasFirstRealEngagement = false;
+    const markRealHumanAndSync = () => {
+      if (hasFirstRealEngagement) return;
+      hasFirstRealEngagement = true;
+      scheduleFastSync(false);
+    };
+    window.addEventListener('pointerdown', markRealHumanAndSync, { passive: true, once: true });
+    window.addEventListener('scroll', markRealHumanAndSync, { passive: true, once: true });
+    window.addEventListener('keydown', markRealHumanAndSync, { passive: true, once: true });
+
+    // Đợi tối thiểu 4.5 giây mới gửi Dấu chân số đầu tiên để tự loại bot quét 2-3 giây
     measureScreenRefreshRateFast(() => {
-      setTimeout(() => scheduleFastSync(true), 900);
+      setTimeout(() => {
+        if (!document.hidden && (activeSessionSeconds >= 4 || hasFirstRealEngagement)) {
+          scheduleFastSync(true);
+        }
+      }, 4500);
     });
 
     // Giãn nhịp heartbeat lên 45 giây để tiết kiệm 70% Quota Apps Script (vẫn chốt tức thì khi bấm Đặt lịch / rời tab)

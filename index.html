@@ -6028,7 +6028,7 @@ Mình muốn đặt lịch xem bài:
       height: 100%;
       background: linear-gradient(90deg, var(--rose-warm), var(--gold-warm));
       border-radius: 999px;
-      transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: width 3.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .seal-progress-fill.filling {
       width: 100%;
@@ -6372,6 +6372,7 @@ Mình muốn đặt lịch xem bài:
               <span id="fbPhotoCountBadge" class="text-[10.5px] font-bold px-3 py-1.5 rounded-full bg-[#ffdf85]/15 border border-[#ffdf85]/50 text-[#ffdf85] shrink-0">+ Chọn ảnh</span>
               <input type="file" id="fbPhotoInput" accept="image/*" multiple class="hidden" onchange="handleFbPhotoSelect(this)">
             </label>
+            <div id="fbPhotoErrorNotice" class="hidden text-[11px] text-[#ffdf85] bg-rose-500/20 border border-rose-400/40 rounded-xl px-3 py-2"></div>
             <div id="fbPhotoPreviewList" class="hidden flex flex-wrap gap-2 pt-1"></div>
           </div>
 
@@ -6669,7 +6670,41 @@ Mình muốn đặt lịch xem bài:
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
     }
 
-    function compressImageFileToBase64(file) {
+    function recompressDataUrlToBudget(dataUrl, maxChars) {
+      return new Promise((resolve) => {
+        if (!dataUrl || dataUrl.length <= maxChars) {
+          resolve(dataUrl);
+          return;
+        }
+        const img = new Image();
+        img.onload = () => {
+          const renderAt = (maxDim, qual) => {
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            return canvas.toDataURL('image/jpeg', qual);
+          };
+          const steps = [[720, 0.68], [600, 0.62], [500, 0.56], [420, 0.50], [360, 0.45]];
+          let out = dataUrl;
+          for (let i = 0; i < steps.length; i++) {
+            out = renderAt(steps[i][0], steps[i][1]);
+            if (out.length <= maxChars) break;
+          }
+          resolve(out);
+        };
+        img.onerror = () => resolve(dataUrl);
+        img.src = dataUrl;
+      });
+    }
+
+    function compressImageFileToBase64(file, maxChars = 34000) {
       return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (ev) => {
@@ -6688,12 +6723,10 @@ Mình muốn đặt lịch xem bài:
               ctx.drawImage(img, 0, 0, w, h);
               return canvas.toDataURL('image/jpeg', qual);
             };
-            let dataUrl = renderAt(820, 0.74);
-            if (dataUrl.length > 23500) {
-              dataUrl = renderAt(640, 0.66);
-            }
-            if (dataUrl.length > 23500) {
-              dataUrl = renderAt(520, 0.58);
+            const steps = [[860, 0.76], [720, 0.68], [600, 0.62], [500, 0.56], [420, 0.50], [360, 0.45]];
+            let dataUrl = renderAt(steps[0][0], steps[0][1]);
+            for (let i = 1; i < steps.length && dataUrl.length > maxChars; i++) {
+              dataUrl = renderAt(steps[i][0], steps[i][1]);
             }
             resolve(dataUrl);
           };
@@ -6720,11 +6753,40 @@ Mình muốn đặt lịch xem bài:
 
     async function handleFbPhotoSelect(inputEl) {
       if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
-      const files = Array.from(inputEl.files).slice(0, 2 - fbSelectedImagesBase64.length);
-      for (const f of files) {
-        const b64 = await compressImageFileToBase64(f);
-        if (b64) fbSelectedImagesBase64.push(b64);
+      const errBox = document.getElementById('fbPhotoErrorNotice');
+      if (errBox) {
+        errBox.classList.add('hidden');
+        errBox.textContent = '';
       }
+
+      const files = Array.from(inputEl.files).slice(0, 2 - fbSelectedImagesBase64.length);
+      const projectedTotal = fbSelectedImagesBase64.length + files.length;
+      const budgetPerImg = projectedTotal >= 2 ? 21500 : 34000;
+      let failedCount = 0;
+
+      for (const f of files) {
+        const b64 = await compressImageFileToBase64(f, budgetPerImg);
+        if (b64) {
+          fbSelectedImagesBase64.push(b64);
+        } else {
+          failedCount++;
+        }
+      }
+
+      // Nếu tổng cộng có 2 ảnh, đảm bảo cả ảnh đầu tiên cũng gọn <= 21.500 ký tự để không bao giờ vượt trần 49.000 của Sheets
+      if (fbSelectedImagesBase64.length >= 2) {
+        for (let i = 0; i < fbSelectedImagesBase64.length; i++) {
+          if (fbSelectedImagesBase64[i].length > 21500) {
+            fbSelectedImagesBase64[i] = await recompressDataUrlToBudget(fbSelectedImagesBase64[i], 21500);
+          }
+        }
+      }
+
+      if (failedCount > 0 && errBox) {
+        errBox.textContent = '⚠️ Có ảnh định dạng lạ (VD HEIC đời cũ) trình duyệt không đọc được — bà chọn ảnh JPG/PNG hoặc chụp màn hình lại giúp Now nha!';
+        errBox.classList.remove('hidden');
+      }
+
       inputEl.value = '';
       renderFbPhotoPreviews();
     }
@@ -7410,6 +7472,9 @@ Mình muốn đặt lịch xem bài:
               if (data.clientName && data.clientName !== 'bà') {
                 activeClientName = data.clientName;
                 if (nameSpan) nameSpan.textContent = activeClientName;
+                if (typeof window.__updateTrackerFeedbackClientName === 'function') {
+                  window.__updateTrackerFeedbackClientName(activeClientName);
+                }
               }
               // Không đổ draftText từ server lên khung gõ khách; chỉ lưu tên khách vào localStorage
               try {
@@ -8727,31 +8792,20 @@ I'd love to book a 1:1 Tarot & CBT session:
 <script>
 (function initNowNowDigitalFootprintTrackerV10() {
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('session') || urlParams.has('id')) return;
+  const rawSesParam = (urlParams.get('session') || urlParams.get('id') || '').trim().toUpperCase();
+  const feedbackSessionCode = /^NNT-[A-Z0-9]{4,12}$/.test(rawSesParam) ? rawSesParam : '';
+  let feedbackClientNameForTracker = (urlParams.get('name') || '').trim();
 
+  // Giữ chế độ ?admin=1 chỉ để chặn tăng ảo cột Q/R/T khi Now check link Feedback (KHÔNG chặn Dấu chân số web)
   if (urlParams.get('admin') === '1') {
     try { localStorage.setItem('nownow_admin_ignore', '1'); } catch (e) {}
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        if (typeof showCatTip === 'function') {
-          showCatTip('🛡️ Đã bật chế độ Ẩn danh Chủ Shop! Thiết bị này sẽ không ghi dấu chân vào Google Sheets nha sếp 🐾', 5500);
-        }
-      }, 1200);
-    });
-    return;
   } else if (urlParams.get('admin') === '0') {
     try { localStorage.removeItem('nownow_admin_ignore'); } catch (e) {}
   }
 
-  try {
-    if (localStorage.getItem('nownow_admin_ignore') === '1') return;
-  } catch (e) {}
-
-  // Chặn sớm các trình thu thập dữ liệu tự động (Googlebot / Lighthouse / Headless) ngay ở Client
+  // Nhận diện Crawler để dán nhãn [🤖 BOT] (vẫn lưu log đầy đủ, không bỏ qua)
   const rawUaForBot = navigator.userAgent || '';
-  if (/Googlebot|Google-InspectionTool|HeadlessChrome|Lighthouse|PageSpeed|GTmetrix|Pingdom|AhrefsBot|SemrushBot|bingbot|facebookexternalhit|Facebot|Twitterbot|Bytespider|PetalBot|YandexBot|Nexus 5X Build\/MMB29P/i.test(rawUaForBot)) {
-    return;
-  }
+  const isClientBot = Boolean(navigator.webdriver) || /Googlebot|Google-InspectionTool|HeadlessChrome|Lighthouse|PageSpeed|GTmetrix|Pingdom|AhrefsBot|SemrushBot|bingbot|facebookexternalhit|Facebot|meta-externalagent|meta-externalfetcher|Twitterbot|Bytespider|PetalBot|YandexBot|Nexus 5X Build\/MMB29P/i.test(rawUaForBot);
 
   const ENDPOINT_URL = (typeof NOWNOW_FEEDBACK_API !== 'undefined' && NOWNOW_FEEDBACK_API)
     ? NOWNOW_FEEDBACK_API
@@ -9280,7 +9334,9 @@ I'd love to book a 1:1 Tarot & CBT session:
     highlightedTexts: Array.isArray(persistedState.highlightedTexts) ? persistedState.highlightedTexts : [],
     copiedTexts: Array.isArray(persistedState.copiedTexts) ? persistedState.copiedTexts : [],
     maxDraftText: String(persistedState.maxDraftText || ''),
-    finalAction: String(persistedState.finalAction || 'Đang xem trang'),
+    finalAction: feedbackSessionCode
+      ? `💌 Mở link Feedback (${feedbackSessionCode}${feedbackClientNameForTracker ? ' • ' + feedbackClientNameForTracker : ''})`
+      : String(persistedState.finalAction || 'Đang xem trang'),
     sectionDwellSec: persistedState.sectionDwellSec || {
       'Giới thiệu': 0,
       '3 Lời hứa': 0,
@@ -9753,11 +9809,15 @@ I'd love to book a 1:1 Tarot & CBT session:
     } else if (detectedTz) {
       tzBadge = `🌐 [Tự động: ${detectedTz}]`;
     }
-    return [model, geoLocationLabel, tzBadge, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
+    const botPrefix = isClientBot ? '[🤖 BOT] ' : '';
+    return botPrefix + [model, geoLocationLabel, tzBadge, themeStr, langStr, `[${HW_SIGNATURE}]`].filter(Boolean).join(' • ');
   }
 
   function buildExploredSummary() {
     const parts = ['Trang chính'];
+    if (feedbackSessionCode) {
+      parts.push(`💌 Link Feedback (${feedbackSessionCode}${feedbackClientNameForTracker ? ' • ' + feedbackClientNameForTracker : ''})`);
+    }
     if (behaviorStats.maxScrollPct > 0) {
       parts.push(`Kéo ${behaviorStats.maxScrollPct}%`);
     }
@@ -9974,6 +10034,9 @@ I'd love to book a 1:1 Tarot & CBT session:
       type: 'footprint',
       action: 'log_footprint',
       _hp: '',
+      isBot: isClientBot,
+      feedbackSession: feedbackSessionCode,
+      feedbackClientName: feedbackClientNameForTracker,
       visitorId: VISITOR_ID,
       hwSignature: HW_SIGNATURE,
       sessionId: SESSION_ID,
@@ -10099,13 +10162,21 @@ I'd love to book a 1:1 Tarot & CBT session:
     window.addEventListener('scroll', markRealHumanAndSync, { passive: true, once: true });
     window.addEventListener('keydown', markRealHumanAndSync, { passive: true, once: true });
 
-    // Đợi tối thiểu 4.5 giây mới gửi Dấu chân số đầu tiên để tự loại bot quét 2-3 giây
+    window.__updateTrackerFeedbackClientName = function(realName) {
+      if (!feedbackSessionCode || !realName || realName === 'bà') return;
+      feedbackClientNameForTracker = String(realName).trim();
+      if (!behaviorStats.finalAction.includes('Đặt lịch')) {
+        behaviorStats.finalAction = `💌 Mở link Feedback (${feedbackSessionCode} • ${feedbackClientNameForTracker})`;
+      }
+      saveStateToLocal();
+      scheduleFastSync(true);
+    };
+
+    // Lưu log ngay sau 500ms (không chờ 4.5 giây) để không lọt bất kỳ lượt nhấp vào web nào
     measureScreenRefreshRateFast(() => {
       setTimeout(() => {
-        if (!document.hidden && (activeSessionSeconds >= 4 || hasFirstRealEngagement)) {
-          scheduleFastSync(true);
-        }
-      }, 4500);
+        scheduleFastSync(true);
+      }, 500);
     });
 
     // Giãn nhịp heartbeat lên 45 giây để tiết kiệm 70% Quota Apps Script (vẫn chốt tức thì khi bấm Đặt lịch / rời tab)

@@ -6755,12 +6755,27 @@ Mình muốn đặt lịch xem bài:
       `).join('');
     }
 
+    function cleanFbDraftText(raw) {
+      if (!raw) return '';
+      const lines = String(raw).replace(/\r\n?/g, '\n').split('\n');
+      const out = [];
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        if (/^\s*✅\s*Đã gửi chính thức/i.test(line)) return '';
+        if (/^\s*(?:🕒|🏷️\s*Chọn:)/.test(line)) continue;
+        line = line.replace(/^\s*(?:✍️\s*Nháp:|Nháp:)\s*/i, '');
+        if (line.trim() !== '' || out.length > 0) out.push(line);
+      }
+      while (out.length > 0 && out[out.length - 1].trim() === '') out.pop();
+      return out.join('\n').trim();
+    }
+
     function sendFeedbackDraftToSheets(useBeacon = false) {
       if (!activeClientSessionId) return;
       const formEl = document.getElementById('fbFormState');
       if (!formEl || formEl.classList.contains('hidden')) return;
       const ta = document.getElementById('fbMessageText');
-      const draftText = ta ? ta.value.trim() : '';
+      const draftText = ta ? cleanFbDraftText(ta.value) : '';
       const getTags = (id) => Array.from(document.querySelectorAll(`#${id} .soft-tag.active`)).map(el => el.textContent.trim()).join(', ');
       const draftTags = [getTags('groupStateBefore'), getTags('groupStateAfter'), getTags('groupTouchpoints')].filter(Boolean).join(' | ');
       if (!draftText && !draftTags) return;
@@ -7213,12 +7228,14 @@ Mình muốn đặt lịch xem bài:
             activeClientName = cm.clientName;
             if (nameSpan) nameSpan.textContent = activeClientName;
           }
-          if (cm && cm.draftText) {
+          const cleanCachedDraft = cm && cm.draftText ? cleanFbDraftText(cm.draftText) : '';
+          if (cleanCachedDraft) {
             const ta = document.getElementById('fbMessageText');
             if (ta && !ta.value.trim()) {
-              ta.value = cm.draftText;
+              ta.value = cleanCachedDraft;
+              fbLastSentDraftSig = cleanCachedDraft + '||';
               const cnt = document.getElementById('fbCharCounter');
-              if (cnt) cnt.textContent = `${cm.draftText.length} ký tự ✨`;
+              if (cnt) cnt.textContent = `${cleanCachedDraft.length} ký tự ✨`;
             }
           }
         }
@@ -7307,18 +7324,20 @@ Mình muốn đặt lịch xem bài:
                 activeClientName = data.clientName;
                 if (nameSpan) nameSpan.textContent = activeClientName;
               }
-              if (data.draftText) {
+              const cleanServerDraft = cleanFbDraftText(data.draftText || '');
+              if (cleanServerDraft) {
                 const ta = document.getElementById('fbMessageText');
                 if (ta && !ta.value.trim()) {
-                  ta.value = data.draftText;
+                  ta.value = cleanServerDraft;
+                  fbLastSentDraftSig = cleanServerDraft + '||';
                   const cnt = document.getElementById('fbCharCounter');
-                  if (cnt) cnt.textContent = `${data.draftText.length} ký tự ✨`;
+                  if (cnt) cnt.textContent = `${cleanServerDraft.length} ký tự ✨`;
                 }
               }
               try {
                 localStorage.setItem('nownow_ses_meta_' + activeClientSessionId, JSON.stringify({
                   clientName: activeClientName,
-                  draftText: data.draftText || ''
+                  draftText: cleanServerDraft
                 }));
               } catch (e) {}
             } else if (data && data.status === 'completed') {

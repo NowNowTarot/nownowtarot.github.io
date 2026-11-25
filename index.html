@@ -1889,15 +1889,27 @@ body.portal-open .cat-cloud-tip {
           <div class="love-wall-marquee-container" style="margin: 0; padding: 7px 0; background: rgba(18, 8, 15, 0.65); border-color: rgba(255, 223, 133, 0.28);" title="Dừng lại khi rê chuột vào">
             <div class="love-wall-marquee-track" id="loveWallTrack">
               <div class="love-wall-item">
-                <span class="love-wall-name">🕊️ Diem Ngoc:</span>
+                <span class="love-wall-name">🕊️ D***c:</span>
                 <span class="love-wall-quote">"Reader nói chuyện ấm áp, lắng nghe, mình như được chữa lành sau chuỗi ngày tăm tối..."</span>
               </div>
               <div class="love-wall-item">
-                <span class="love-wall-name">🌤️ Quỳnh Chi:</span>
+                <span class="love-wall-name">🌤️ Q***i:</span>
                 <span class="love-wall-quote">"Phân tích tâm lý nhận thức rất thực tế, trò chuyện xong nhẹ nhõm cả người!"</span>
               </div>
               <div class="love-wall-item">
-                <span class="love-wall-name">✨ Sogeum won:</span>
+                <span class="love-wall-name">✨ S***n:</span>
+                <span class="love-wall-quote">"Tháo gỡ đúng nút thắt gốc rễ, 0đ đặt cọc, xem xong nhẹ lòng mới dừng đồng hồ..."</span>
+              </div>
+              <div class="love-wall-item">
+                <span class="love-wall-name">🕊️ D***c:</span>
+                <span class="love-wall-quote">"Reader nói chuyện ấm áp, lắng nghe, mình như được chữa lành sau chuỗi ngày tăm tối..."</span>
+              </div>
+              <div class="love-wall-item">
+                <span class="love-wall-name">🌤️ Q***i:</span>
+                <span class="love-wall-quote">"Phân tích tâm lý nhận thức rất thực tế, trò chuyện xong nhẹ nhõm cả người!"</span>
+              </div>
+              <div class="love-wall-item">
+                <span class="love-wall-name">✨ S***n:</span>
                 <span class="love-wall-quote">"Tháo gỡ đúng nút thắt gốc rễ, 0đ đặt cọc, xem xong nhẹ lòng mới dừng đồng hồ..."</span>
               </div>
             </div>
@@ -6777,6 +6789,10 @@ Mình muốn đặt lịch xem bài:
 
     function sendFeedbackDraftToSheets(useBeacon = false) {
       if (!activeClientSessionId) return;
+      try {
+        const qsAdmin = new URLSearchParams(window.location.search).get('admin');
+        if (qsAdmin === '1' || localStorage.getItem('nownow_admin_ignore') === '1') return;
+      } catch (e) {}
       const formEl = document.getElementById('fbFormState');
       if (!formEl || formEl.classList.contains('hidden')) return;
       const ta = document.getElementById('fbMessageText');
@@ -6947,11 +6963,11 @@ Mình muốn đặt lịch xem bài:
         if (submitBtn) submitBtn.disabled = false;
       };
 
-      // Gửi dữ liệu về Google Sheets có Timeout 20 giây chống treo vô hạn
-      const submitController = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      const submitTimeout = submitController ? setTimeout(() => submitController.abort(), 20000) : null;
+      // Gửi dữ liệu về Cloudflare Fast-Ack (tự thử lại ngầm 1 lần nếu mạng 4G chớp rớt, timeout 15 giây)
+      const sendFeedbackOnce = (attempt = 1) => {
+        const submitController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const submitTimeout = submitController ? setTimeout(() => submitController.abort(), 15000) : null;
 
-      try {
         fetch(NOWNOW_FEEDBACK_API, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -7007,10 +7023,17 @@ Mình muốn đặt lịch xem bài:
         })
         .catch(() => {
           if (submitTimeout) clearTimeout(submitTimeout);
-          showRecoverableSubmitError();
+          if (attempt < 2) {
+            setTimeout(() => sendFeedbackOnce(attempt + 1), 1200);
+          } else {
+            showRecoverableSubmitError();
+          }
         });
+      };
+
+      try {
+        sendFeedbackOnce(1);
       } catch (e) {
-        if (submitTimeout) clearTimeout(submitTimeout);
         showRecoverableSubmitError();
       }
     }
@@ -8309,17 +8332,17 @@ I'd love to book a 1:1 Tarot & CBT session:
         if (el) el.innerHTML = enHtml;
       });
       if (loveWallTrackEl) {
-        loveWallTrackEl.innerHTML = `
+        const enItemsHtml = `
           <div class="love-wall-item">
-            <span class="love-wall-name">🕊️ Diem Ngoc:</span>
+            <span class="love-wall-name">🕊️ D***c:</span>
             <span class="love-wall-quote">"Warm, empathetic listener—I felt genuinely healed after weeks of feeling lost..."</span>
           </div>
           <div class="love-wall-item">
-            <span class="love-wall-name">🌤️ Quynh Chi:</span>
+            <span class="love-wall-name">🌤️ Q***i:</span>
             <span class="love-wall-quote">"Super grounded CBT psychology insights! Felt a huge weight lifted off my chest!"</span>
           </div>
           <div class="love-wall-item">
-            <span class="love-wall-name">✨ Sogeum won:</span>
+            <span class="love-wall-name">✨ S***n:</span>
             <span class="love-wall-quote">"Untangled the exact root cause, $0 deposit, only stopped the clock when I felt relieved..."</span>
           </div>
           <div class="love-wall-item">
@@ -8327,6 +8350,7 @@ I'd love to book a 1:1 Tarot & CBT session:
             <span class="love-wall-quote">"Now pinpointed my fear of abandonment and overthinking right away—my chest feels so light!"</span>
           </div>
         `;
+        loveWallTrackEl.innerHTML = enItemsHtml + enItemsHtml;
       }
       if (inputEl) inputEl.setAttribute('placeholder', '✍️ Or type any specific story, context, or preferred time slot right here...');
 

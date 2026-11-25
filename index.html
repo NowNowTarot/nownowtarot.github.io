@@ -6313,7 +6313,10 @@ Mình muốn đặt lịch xem bài:
             <p id="fbBonusTarotText" class="text-xs text-[#faf6f0]/95 leading-relaxed"></p>
           </div>
 
-          <div class="pt-2">
+          <div class="pt-2 flex flex-wrap items-center justify-center gap-2">
+            <button type="button" id="fbRetryEditBtn" onclick="returnToFeedbackForm()" class="hidden subweb-subtle-cta py-2.5 px-5" style="background: rgba(255, 223, 133, 0.22); border-color: #ffdf85;">
+              <span>🔄 Quay lại gửi tiếp (Giữ nguyên bài viết)</span>
+            </button>
             <button type="button" onclick="closeFeedbackSanctuary()" class="subweb-subtle-cta py-2.5 px-6">
               <span>✨ Dạo chơi trang chính nha</span>
             </button>
@@ -6568,7 +6571,7 @@ Mình muốn đặt lịch xem bài:
               </div>
 
               <div class="iphone-viewport-body">
-               <img id="iphoneFeedbackImg" src="https://nownowtarot.github.io/fb22.webp" alt="Feedback thực tế NowNow Tarot" loading="lazy" decoding="async" class="iphone-fb-img">
+               <img id="iphoneFeedbackImg" src="https://nownowtarot.github.io/fb46.webp" alt="Feedback thực tế NowNow Tarot" loading="lazy" decoding="async" class="iphone-fb-img">
               </div>
 
               <div class="iphone-home-indicator">
@@ -6751,7 +6754,7 @@ Mình muốn đặt lịch xem bài:
       box.classList.remove('hidden');
       box.innerHTML = fbSelectedImagesBase64.map((src, i) => `
         <div class="fb-thumb-wrap">
-          <img src="${src}" alt="Ảnh khách gửi" class="w-full h-full object-cover cursor-pointer" onclick="openFbImageLightbox('${src}')">
+          <img src="${src}" alt="Ảnh khách gửi" class="w-full h-full object-cover cursor-pointer" onclick="openFbImageLightbox(fbSelectedImagesBase64[${i}])">
           <button type="button" onclick="removeFbPhoto(${i})" class="fb-thumb-remove" title="Xóa ảnh">✕</button>
         </div>
       `).join('');
@@ -6856,6 +6859,16 @@ Mình muốn đặt lịch xem bài:
       if (typeof playIOSButtonSound === 'function') playIOSButtonSound('close');
     }
 
+    function returnToFeedbackForm() {
+      document.getElementById('fbNoticeState')?.classList.add('hidden');
+      document.getElementById('fbRetryEditBtn')?.classList.add('hidden');
+      document.getElementById('fbFormState')?.classList.remove('hidden');
+      const submitBtn = document.getElementById('fbSubmitBtn');
+      if (submitBtn) submitBtn.disabled = false;
+      document.getElementById('fbMessageText')?.focus();
+      if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
+    }
+
     function submitFeedbackToSheets() {
       const taEl = document.getElementById('fbMessageText');
       const msgText = taEl ? taEl.value.trim() : '';
@@ -6878,6 +6891,12 @@ Mình muốn đặt lịch xem bài:
         }
         if (typeof playIOSButtonSound === 'function') playIOSButtonSound('tap');
         return;
+      }
+
+      // Hủy ngay bộ đếm lưu nháp để tránh bắn song song với lệnh gửi chính thức
+      if (fbDraftDebounceTimer) {
+        clearTimeout(fbDraftDebounceTimer);
+        fbDraftDebounceTimer = null;
       }
 
       const submitBtn = document.getElementById('fbSubmitBtn');
@@ -6904,6 +6923,7 @@ Mình muốn đặt lịch xem bài:
       // Bật màn hình niêm phong thư
       document.getElementById('fbFormState').classList.add('hidden');
       document.getElementById('fbNoticeState').classList.add('hidden');
+      document.getElementById('fbRetryEditBtn')?.classList.add('hidden');
       const loadingBox = document.getElementById('fbLoadingState');
       document.getElementById('fbLoadingTitle').textContent = "Đang niêm phong lá thư bằng sáp vàng...";
       document.getElementById('fbLoadingSub').textContent = "Bé Mèo Đen đang chạy đi cất hồi âm của bà vào chiếc hộp kỷ niệm nhà NowNow 🐾";
@@ -6916,61 +6936,83 @@ Mình muốn đặt lịch xem bài:
         fillBar.classList.add('filling');
       }
 
-      // Gửi dữ liệu về Google Sheets và chờ phản hồi thực tế từ server
-      try {
-      fetch(NOWNOW_FEEDBACK_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(data => {
+      const showRecoverableSubmitError = (errMsg) => {
         loadingBox.classList.add('hidden');
-
-        if (data.status === 'empty') {
-          document.getElementById('fbFormState').classList.remove('hidden');
-          if (submitBtn) submitBtn.disabled = false;
-          if (taEl) taEl.focus();
-          return;
-        }
-
-        // NẾU SERVER TỪ CHỐI (DO ĐÃ CÓ HỒI ÂM TRƯỚC ĐÓ)
-        if (data.status === 'denied') {
-          try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
-          document.getElementById('fbNoticeIcon').textContent = '🔒';
-          document.getElementById('fbNoticeTitle').textContent = 'Phiên này đã có hồi âm!';
-          document.getElementById('fbNoticeDesc').textContent = data.message || 'Phiên trải bài này đã có hồi âm, hệ thống đã khóa để bảo vệ dữ liệu!';
-          document.getElementById('fbNoticeState').classList.remove('hidden');
-          return;
-        }
-
-        // NẾU GỬI THÀNH CÔNG HỢP LỆ
-        try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
-        document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
-        document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
-        document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${escapeHtml(activeClientName)}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
-
-        const tarotBox = document.getElementById('fbBonusTarotBox');
-        const tarotText = document.getElementById('fbBonusTarotText');
-        if (tarotBox && tarotText && typeof catTarotMiniCards !== 'undefined') {
-          const randomCard = catTarotMiniCards[Math.floor(Math.random() * catTarotMiniCards.length)];
-          tarotText.innerHTML = randomCard;
-          tarotBox.classList.remove('hidden');
-        }
-
-        document.getElementById('fbNoticeState').classList.remove('hidden');
-        if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
-        setTimeout(() => syncApprovedReviewsFromSheets(), 1500);
-      })
-      .catch(() => {
-        loadingBox.classList.add('hidden');
+        document.getElementById('fbBonusTarotBox')?.classList.add('hidden');
         document.getElementById('fbNoticeIcon').textContent = '⚠️';
         document.getElementById('fbNoticeTitle').textContent = 'Có chút gián đoạn!';
-        document.getElementById('fbNoticeDesc').textContent = 'Mạng bị chập chờn, bà kiểm tra kết nối rồi thử lại giúp Now nha.';
+        document.getElementById('fbNoticeDesc').textContent = errMsg || 'Mạng bị chập chờn hoặc phản hồi hơi chậm — bài viết & ảnh của bà vẫn được giữ nguyên, bấm nút bên dưới để gửi lại nha!';
+        document.getElementById('fbRetryEditBtn')?.classList.remove('hidden');
         document.getElementById('fbNoticeState').classList.remove('hidden');
         if (submitBtn) submitBtn.disabled = false;
-      });
-      } catch (e) {}
+      };
+
+      // Gửi dữ liệu về Google Sheets có Timeout 20 giây chống treo vô hạn
+      const submitController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const submitTimeout = submitController ? setTimeout(() => submitController.abort(), 20000) : null;
+
+      try {
+        fetch(NOWNOW_FEEDBACK_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+          ...(submitController ? { signal: submitController.signal } : {})
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (submitTimeout) clearTimeout(submitTimeout);
+          loadingBox.classList.add('hidden');
+
+          if (!data || data.status === 'error') {
+            showRecoverableSubmitError(data && data.message ? data.message : null);
+            return;
+          }
+
+          if (data.status === 'empty') {
+            document.getElementById('fbFormState').classList.remove('hidden');
+            if (submitBtn) submitBtn.disabled = false;
+            if (taEl) taEl.focus();
+            return;
+          }
+
+          // NẾU SERVER TỪ CHỐI (DO ĐÃ CÓ HỒI ÂM TRƯỚC ĐÓ)
+          if (data.status === 'denied') {
+            try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
+            document.getElementById('fbRetryEditBtn')?.classList.add('hidden');
+            document.getElementById('fbNoticeIcon').textContent = '🔒';
+            document.getElementById('fbNoticeTitle').textContent = 'Phiên này đã có hồi âm!';
+            document.getElementById('fbNoticeDesc').textContent = data.message || 'Phiên trải bài này đã có hồi âm, hệ thống đã khóa để bảo vệ dữ liệu!';
+            document.getElementById('fbNoticeState').classList.remove('hidden');
+            return;
+          }
+
+          // NẾU GỬI THÀNH CÔNG HỢP LỆ
+          try { localStorage.setItem('nownow_fb_submitted_' + activeClientSessionId, '1'); } catch (e) {}
+          document.getElementById('fbRetryEditBtn')?.classList.add('hidden');
+          document.getElementById('fbNoticeIcon').textContent = '🎉🐾';
+          document.getElementById('fbNoticeTitle').textContent = 'Đã Gửi Hồi Âm Thành Công!';
+          document.getElementById('fbNoticeDesc').innerHTML = `Cảm ơn <b>${escapeHtml(activeClientName)}</b> đã mở lòng cùng NowNow. Giờ đây bà đã chính thức mở khóa đặc quyền <b>Làm bạn tâm sự 0đ trọn đời</b> rồi nha (｡･ω･｡)ﾉ♡`;
+
+          const tarotBox = document.getElementById('fbBonusTarotBox');
+          const tarotText = document.getElementById('fbBonusTarotText');
+          if (tarotBox && tarotText && typeof catTarotMiniCards !== 'undefined') {
+            const randomCard = catTarotMiniCards[Math.floor(Math.random() * catTarotMiniCards.length)];
+            tarotText.innerHTML = randomCard;
+            tarotBox.classList.remove('hidden');
+          }
+
+          document.getElementById('fbNoticeState').classList.remove('hidden');
+          if (typeof playCuteMeowSound === 'function') playCuteMeowSound();
+          setTimeout(() => syncApprovedReviewsFromSheets(), 1500);
+        })
+        .catch(() => {
+          if (submitTimeout) clearTimeout(submitTimeout);
+          showRecoverableSubmitError();
+        });
+      } catch (e) {
+        if (submitTimeout) clearTimeout(submitTimeout);
+        showRecoverableSubmitError();
+      }
     }
 
     /* 2. CHUYỂN TAB ẢNH / WEB */
@@ -7107,6 +7149,29 @@ Mình muốn đặt lịch xem bài:
     }
 
     /* 5. KÉO 100% FEEDBACK THẬT ĐÃ DUYỆT TỪ GOOGLE SHEETS */
+    window.renderLoveWallMarqueeVi = function() {
+      const track = document.getElementById('loveWallTrack');
+      if (!track || !Array.isArray(currentReviewDataset) || currentReviewDataset.length === 0) return false;
+      let htmlContent = '';
+      const list = [...currentReviewDataset, ...currentReviewDataset];
+      list.forEach(item => {
+        const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
+        const msgRaw = item.message
+          ? (item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message)
+          : 'Đã gửi ảnh kỷ niệm cùng NowNow ✨';
+        const cleanMsg = escapeHtml(msgRaw);
+        const masked = escapeHtml(maskCustomerName(item.name));
+        htmlContent += `
+          <div class="love-wall-item">
+            <span class="love-wall-name">${icon} ${masked}:</span>
+            <span class="love-wall-quote">"${cleanMsg}"</span>
+          </div>
+        `;
+      });
+      track.innerHTML = htmlContent;
+      return true;
+    };
+
     function syncApprovedReviewsFromSheets() {
       try { localStorage.removeItem('nownow_cached_reviews'); } catch (e) {}
 
@@ -7148,29 +7213,8 @@ Mình muốn đặt lịch xem bài:
 
             renderShopeeReviews();
 
-            const track = document.getElementById('loveWallTrack');
-            if (track && window.currentNowNowLang !== 'en') {
-              if (currentReviewDataset.length === 0) {
-                track.innerHTML = '';
-              } else {
-                let htmlContent = '';
-                const list = [...currentReviewDataset, ...currentReviewDataset];
-                list.forEach(item => {
-                  const icon = item.stateAfter ? escapeHtml(item.stateAfter.split(' ')[0] || '💌') : '💌';
-                  const msgRaw = item.message
-                    ? (item.message.length > 85 ? (item.message.substring(0, 85) + '...') : item.message)
-                    : 'Đã gửi ảnh kỷ niệm cùng NowNow ✨';
-                  const cleanMsg = escapeHtml(msgRaw);
-                  const masked = escapeHtml(maskCustomerName(item.name));
-                  htmlContent += `
-                    <div class="love-wall-item">
-                      <span class="love-wall-name">${icon} ${masked}:</span>
-                      <span class="love-wall-quote">"${cleanMsg}"</span>
-                    </div>
-                  `;
-                });
-                track.innerHTML = htmlContent;
-              }
+            if (typeof window.renderLoveWallMarqueeVi === 'function' && window.currentNowNowLang !== 'en') {
+              window.renderLoveWallMarqueeVi();
             }
           }
         })
@@ -8304,6 +8348,9 @@ I'd love to book a 1:1 Tarot & CBT session:
     } else {
       viDomMemory.forEach((viHtml, sel) => {
         if (sel === '#bookingTopicInput_placeholder') return;
+        if (sel === '#loveWallTrack' && typeof window.renderLoveWallMarqueeVi === 'function' && window.renderLoveWallMarqueeVi()) {
+          return;
+        }
         const el = document.querySelector(sel);
         if (el) el.innerHTML = viHtml;
       });
@@ -8869,12 +8916,13 @@ I'd love to book a 1:1 Tarot & CBT session:
     }
 
     if (/Android/i.test(ua)) {
+      const osTag = clientHintsOsVer || 'Android';
       if (clientHintsModel) {
-        return clientHintsOsVer ? `${clientHintsModel} (${clientHintsOsVer})` : clientHintsModel;
+        return `${clientHintsModel} (${osTag})`;
       }
       const m = ua.match(/Android[^;]+;\s*([^;)]+)\s*(?:Build|\))/i);
       const rawAndroid = (m && m[1] && m[1].trim() !== 'K') ? m[1].trim() : '';
-      return rawAndroid ? translateCommercialModel(rawAndroid) : (clientHintsOsVer || 'Android Smartphone');
+      return rawAndroid ? `${translateCommercialModel(rawAndroid)} (${osTag})` : `${osTag} Smartphone`;
     }
     if (/Windows/i.test(ua)) return clientHintsOsVer || 'Windows PC';
     if (/Mac OS X/i.test(ua)) return 'MacBook / Mac';
@@ -10555,7 +10603,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     let currentCatPose = '';
     let tapStreak = 0;
     let tapResetTimer = null;
-    let activeHatKey = 'noel';
+    let activeHatKey = (typeof detectAutoSeasonKey === 'function') ? detectAutoSeasonKey() : 'noel';
     let gardenScale = 1;
     let gardenOpacity = 1;
 

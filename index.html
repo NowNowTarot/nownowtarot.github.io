@@ -3233,36 +3233,52 @@ body.portal-open .cat-cloud-tip {
        3. IPHONE 14 PRO CAROUSEL (DANH SÁCH THỨ TỰ TÙY CHỈNH THEO Ý SẾP)
        ========================================================================= */
     const FEEDBACK_LIST = [
-      'fb22', // 1. Ảnh 22 lên đầu tiên làm át chủ bài 🌟 (MỚI)
-      'fb13', // 2. Ảnh 13 lùi xuống số 2
-      'fb1',  // 3. Ảnh 1
-      'fb2',  // 4. Ảnh 2
-      'fb3',  // 5. Ảnh 3
-      'fb4',  // 6
-      'fb5',  // 7
-      'fb6',  // 8
-      'fb7',  // 9
-      'fb8',  // 10
-      'fb9',  // 11
-      'fb10', // 12
-      'fb11', // 13
-      'fb12', // 14
-      'fb14', // 15
-      'fb15', // 16
-      'fb16', // 17
-      'fb17', // 18
-      'fb18', // 19
-      'fb19', // 20
-      'fb20', // 21
-      'fb21', // 22
-      'fb23', // 23 🌟 (MỚI)
-      'fb24', // 24 🌟 (MỚI)
-      'fb25', // 25 🌟 (MỚI)
-      'fb26',
-      'fb27',
-      'fb28',
+      'fb46', // Mới nhất hiện đầu tiên (lần sau thêm fb47, fb48... lên trên dòng này)
+      'fb45',
+      'fb44',
+      'fb43',
+      'fb42',
+      'fb41',
+      'fb40',
+      'fb39',
+      'fb38',
+      'fb37',
+      'fb36',
+      'fb35',
+      'fb34',
+      'fb33',
+      'fb32',
+      'fb31', // Hết đợt 16 ảnh mới (fb46 -> fb31)
+      'fb30',
       'fb29',
-      'fb30'
+      'fb28',
+      'fb27',
+      'fb26',
+      'fb25',
+      'fb24',
+      'fb23',
+      'fb22',
+      'fb21',
+      'fb20',
+      'fb19',
+      'fb18',
+      'fb17',
+      'fb16',
+      'fb15',
+      'fb14',
+      'fb13',
+      'fb12',
+      'fb11',
+      'fb10',
+      'fb9',
+      'fb8',
+      'fb7',
+      'fb6',
+      'fb5',
+      'fb4',
+      'fb3',
+      'fb2',
+      'fb1'
     ];
 
     const TOTAL_FEEDBACK_SLIDES = FEEDBACK_LIST.length;
@@ -6579,7 +6595,7 @@ Mình muốn đặt lịch xem bài:
               Tiếp ▶
             </button>
           </div>
-          <div id="fbDotsContainer" class="flex items-center justify-center gap-1.5 py-0.5"></div>
+          <div id="fbDotsContainer" class="flex flex-wrap items-center justify-center gap-1 py-0.5 max-w-[320px] mx-auto"></div>
           <button type="button" data-sound="open" onclick="jumpToBookingFromSubWeb('feedbackUnified')" class="subweb-subtle-cta py-1.5 px-4 text-[11px] mt-0.5">
             <span>✨ Chọn số phút & Đặt lịch</span>
             <svg class="nn-ico text-[9px]" viewBox="0 0 448 512" aria-hidden="true"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
@@ -6962,25 +6978,19 @@ Mình muốn đặt lịch xem bài:
     /* 4. DỮ LIỆU HỒI ÂM ĐỒNG BỘ 100% TỪ GOOGLE SHEETS */
     let currentReviewDataset = [];
 
-    // MẸO SẮP XẾP FEEDBACK ĐỈNH CAO:
-    // 1. Feedback nào DÀI NHẤT đưa lên đầu tiên
-    // 2. Nếu độ dài bằng nhau, feedback nào CÓ ẢNH đưa lên trước
+    // SẮP XẾP FEEDBACK MỚI NHẤT HIỆN LÊN ĐẦU TIÊN (THEO THỜI GIAN GỬI GIẢM DẦN)
     function sortReviewsLongestAndPhotoFirst(list) {
       if (!Array.isArray(list)) return [];
+      const toSortableDate = (obj) => {
+        const raw = String((obj && (obj.submittedAt || obj.date || obj.time)) || '').trim();
+        // Chỉ dùng để so sánh nếu đúng dạng YYYY-MM-DD...
+        return /^\d{4}-\d{2}-\d{2}/.test(raw) ? raw : '';
+      };
       return [...list].sort((a, b) => {
-        const lenA = String((a && a.message) || '').trim().length;
-        const lenB = String((b && b.message) || '').trim().length;
-        if (lenB !== lenA) return lenB - lenA;
-
-        const countValidImgs = (obj) => String((obj && obj.images) || '')
-          .split('\n')
-          .map(u => u.trim())
-          .filter(u => u.startsWith('http') || u.startsWith('data:image/')).length;
-        const imgA = countValidImgs(a);
-        const imgB = countValidImgs(b);
-        if (imgB !== imgA) return imgB - imgA;
-
-        return String((b && (b.time || b.date)) || '').localeCompare(String((a && (a.time || a.date)) || ''));
+        const tA = toSortableDate(a);
+        const tB = toSortableDate(b);
+        if (tB !== tA) return tB.localeCompare(tA);
+        return 0; // Giữ nguyên thứ tự mới nhất từ Google Sheets nếu trùng mốc thời gian
       });
     }
 
@@ -7085,6 +7095,7 @@ Mình muốn đặt lịch xem bài:
             const mappedSheetReviews = resData.data.map((item) => ({
               name: item.name || 'Khách nhà Now',
               time: item.date || item.time || 'Gần đây',
+              submittedAt: item.submittedAt || item.date || item.time || '',
               service: 'Phiên trải bài thấu cảm 1:1',
               stateBefore: item.stateBefore || '',
               stateAfter: item.stateAfter || '',
@@ -7221,11 +7232,62 @@ Mình muốn đặt lịch xem bài:
       formBox.classList.remove('hidden');
 
       const clientTzParam = window.currentClientTimezone || NOWNOW_DETECTED_IANA_TZ || 'Asia/Ho_Chi_Minh';
+      let hasSentHumanSessionView = false;
+
+      const scheduleHumanSessionViewTrack = () => {
+        if (hasSentHumanSessionView) return;
+        // 1. Bỏ qua nếu đang ở chế độ Admin (?admin=1 hoặc đã bật nownow_admin_ignore)
+        try {
+          if (params.get('admin') === '1' || localStorage.getItem('nownow_admin_ignore') === '1') return;
+        } catch (e) {}
+
+        // 2. Chặn Bot/Crawler xem trước link (Meta/Instagram/Facebook/Telegram/Headless...)
+        const ua = navigator.userAgent || '';
+        const isLikelyBot =
+          Boolean(navigator.webdriver) ||
+          /facebookexternalhit|facebot|meta-externalagent|meta-externalfetcher|twitterbot|slackbot|discordbot|telegrambot|whatsapp|linkedinbot|pinterest|googlebot|bingbot|applebot|headlesschrome|phantomjs|puppeteer|playwright|lighthouse|bytespider|crawler|spider|preview/i.test(ua) ||
+          window.innerWidth === 0 ||
+          window.innerHeight === 0;
+        if (isLikelyBot) return;
+
+        let trackTimer = null;
+        const sendHumanTrack = () => {
+          if (hasSentHumanSessionView) return;
+          if (document.visibilityState === 'hidden') return;
+          hasSentHumanSessionView = true;
+          if (trackTimer) clearTimeout(trackTimer);
+          window.removeEventListener('pointerdown', sendHumanTrack);
+          window.removeEventListener('keydown', sendHumanTrack);
+          window.removeEventListener('touchstart', sendHumanTrack);
+          document.removeEventListener('visibilitychange', onVisChange);
+
+          const trackUrl = `${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}&tz=${encodeURIComponent(clientTzParam)}&track=1`;
+          fetch(trackUrl, { keepalive: true }).catch(() => {});
+        };
+
+        const armTrack = () => {
+          if (hasSentHumanSessionView || trackTimer) return;
+          trackTimer = setTimeout(sendHumanTrack, 3000);
+          window.addEventListener('pointerdown', sendHumanTrack, { once: true, passive: true });
+          window.addEventListener('keydown', sendHumanTrack, { once: true, passive: true });
+          window.addEventListener('touchstart', sendHumanTrack, { once: true, passive: true });
+        };
+
+        const onVisChange = () => {
+          if (document.visibilityState === 'visible') armTrack();
+        };
+
+        if (document.visibilityState === 'visible') {
+          armTrack();
+        } else {
+          document.addEventListener('visibilitychange', onVisChange);
+        }
+      };
 
       const verifySessionInBackground = (attempt = 1) => {
         const sesController = typeof AbortController !== 'undefined' ? new AbortController() : null;
         const sesTimeout = sesController ? setTimeout(() => sesController.abort(), 10000) : null;
-        const verifyUrl = `${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}&tz=${encodeURIComponent(clientTzParam)}`;
+        const verifyUrl = `${NOWNOW_FEEDBACK_API}?session=${encodeURIComponent(activeClientSessionId)}`;
 
         fetch(verifyUrl, sesController ? { signal: sesController.signal } : {})
           .then(res => res.json())
@@ -7241,6 +7303,7 @@ Mình muốn đặt lịch xem bài:
             if (!loadingBox.classList.contains('hidden')) return;
 
             if (data && data.status === 'valid') {
+              scheduleHumanSessionViewTrack();
               if (data.clientName && data.clientName !== 'bà') {
                 activeClientName = data.clientName;
                 if (nameSpan) nameSpan.textContent = activeClientName;
@@ -7664,7 +7727,7 @@ Mình muốn đặt lịch xem bài:
         <span class="toc-item-icon">⭐</span>
         <div class="min-w-0">
           <div class="toc-item-title">Mở Hộp Thư Feedback</div>
-          <span class="toc-item-sub">Xem 30 ảnh iPhone & Nhật ký hồi âm</span>
+          <span class="toc-item-sub">Xem 46 ảnh iPhone & Nhật ký hồi âm</span>
         </div>
       </div>
       <svg class="nn-ico text-[10px] text-[#ffdf85]" viewBox="0 0 512 512" aria-hidden="true"><path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z"/></svg>
@@ -7968,7 +8031,7 @@ Mình muốn đặt lịch xem bài:
     '#tocDrawer button[data-target="sec-social"] .toc-item-sub': 'Threads, IG, Facebook & TikTok',
     '#tocDrawer .toc-section-caption:nth-of-type(2)': '⚡ Quick Archive Portals',
     '#tocDrawer button[onclick*="feedbackUnified"] .toc-item-title': 'Open Client Feedback Hub',
-    '#tocDrawer button[onclick*="feedbackUnified"] .toc-item-sub': '30 iPhone captures & shift journals',
+    '#tocDrawer button[onclick*="feedbackUnified"] .toc-item-sub': '46 iPhone captures & shift journals',
     '#tocDrawer button[onclick*="viral"] .toc-item-title': 'Open Mindful Journal',
     '#tocDrawer button[onclick*="viral"] .toc-item-sub': 'Read 200K+ view Threads reflections',
     '#tocDrawer .toc-drawer-footer button span': '💌 Pick Duration & Book Now',
@@ -9106,7 +9169,7 @@ I'd love to book a 1:1 Tarot & CBT session:
     tocOpens: Number(persistedState.tocOpens) || 0,
     langSwitches: Number(persistedState.langSwitches) || 0,
     tabSwitches: Number(persistedState.tabSwitches) || 0,
-    fbPhotosSet: new Set((Array.isArray(persistedState.fbPhotosArr) ? persistedState.fbPhotosArr : []).filter(n => n >= 1 && n <= (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 30))),
+    fbPhotosSet: new Set((Array.isArray(persistedState.fbPhotosArr) ? persistedState.fbPhotosArr : []).filter(n => n >= 1 && n <= (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 46))),
     fbPhotoDwell: persistedState.fbPhotoDwell || {},
     fbWebTabOpened: Boolean(persistedState.fbWebTabOpened),
     viralJournalOpened: Boolean(persistedState.viralJournalOpened),
@@ -9271,7 +9334,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       const origGoSlide = window.goToFeedbackSlide;
       window.goToFeedbackSlide = function(index, direction) {
         const res = origGoSlide.apply(this, arguments);
-        const maxSlides = (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 30);
+        const maxSlides = (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 46);
         const slideNum = Math.max(1, Math.min(maxSlides, (typeof currentFbIndex === 'number' ? currentFbIndex : 0) + 1));
         behaviorStats.fbPhotosSet.add(slideNum);
         saveStateToLocal();
@@ -9614,7 +9677,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       parts.push(`Threads (Đã mở Tạp chí${origTxt})`);
     }
 
-    const totalSlides = (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 30);
+    const totalSlides = (typeof TOTAL_FEEDBACK_SLIDES === 'number' ? TOTAL_FEEDBACK_SLIDES : 46);
     const viewedCount = behaviorStats.fbPhotosSet.size;
     if (viewedCount > 0 || behaviorStats.fbWebTabOpened) {
       // Tìm bức ảnh Feedback mà khách dừng lại đọc lâu nhất (>= 3 giây)
@@ -9989,7 +10052,7 @@ I'd love to book a 1:1 Tarot & CBT session:
    - Đồng bộ 100% bộ đếm chạm mèo & nhà mèo với NowNow Digital Footprint Tracker V9.2.
    ========================================================================= */
 (function initUnifiedNowNowCatEngine() {
-  const getTotalFb = () => (typeof FEEDBACK_LIST !== 'undefined' && Array.isArray(FEEDBACK_LIST)) ? FEEDBACK_LIST.length : 25;
+  const getTotalFb = () => (typeof FEEDBACK_LIST !== 'undefined' && Array.isArray(FEEDBACK_LIST)) ? FEEDBACK_LIST.length : 46;
 
   // ---------------------------------------------------------------------------
   // 1. BỘ NHỚ CHỐNG LẶP VĨNH VIỄN (FNV-1A FULL HASH • NHỚ 260 CÂU XUYÊN F5)

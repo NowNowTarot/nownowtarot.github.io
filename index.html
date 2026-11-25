@@ -8834,12 +8834,22 @@ I'd love to book a 1:1 Tarot & CBT session:
     'SM-S928': 'Galaxy S24 Ultra', 'SM-S926': 'Galaxy S24+', 'SM-S921': 'Galaxy S24', 'SM-S721': 'Galaxy S24 FE',
     'SM-S918': 'Galaxy S23 Ultra', 'SM-S916': 'Galaxy S23+', 'SM-S911': 'Galaxy S23', 'SM-S711': 'Galaxy S23 FE',
     'SM-S908': 'Galaxy S22 Ultra', 'SM-S906': 'Galaxy S22+', 'SM-S901': 'Galaxy S22',
-    'SM-F956': 'Galaxy Z Fold6', 'SM-F946': 'Galaxy Z Fold5', 'SM-F936': 'Galaxy Z Fold4',
-    'SM-F741': 'Galaxy Z Flip6', 'SM-F731': 'Galaxy Z Flip5', 'SM-F721': 'Galaxy Z Flip4',
+    'SM-G998': 'Galaxy S21 Ultra', 'SM-G996': 'Galaxy S21+', 'SM-G991': 'Galaxy S21', 'SM-G990': 'Galaxy S21 FE',
+    'SM-F966': 'Galaxy Z Fold7', 'SM-F956': 'Galaxy Z Fold6', 'SM-F946': 'Galaxy Z Fold5', 'SM-F936': 'Galaxy Z Fold4',
+    'SM-F766': 'Galaxy Z Flip7', 'SM-F741': 'Galaxy Z Flip6', 'SM-F731': 'Galaxy Z Flip5', 'SM-F721': 'Galaxy Z Flip4',
     'SM-A566': 'Galaxy A56', 'SM-A556': 'Galaxy A55', 'SM-A546': 'Galaxy A54', 'SM-A536': 'Galaxy A53',
-    'SM-A356': 'Galaxy A35', 'SM-A346': 'Galaxy A34', 'SM-A256': 'Galaxy A25', 'SM-A155': 'Galaxy A15',
-    '23127PN0CG': 'Xiaomi 14', '23116PN5BC': 'Xiaomi 14 Pro', '24030PN60G': 'Xiaomi 14 Ultra',
-    '2210132G': 'Xiaomi 13', '2304FPN6DC': 'Xiaomi 13 Ultra', '23090RA98G': 'Redmi Note 13 Pro+'
+    'SM-A366': 'Galaxy A36', 'SM-A356': 'Galaxy A35', 'SM-A346': 'Galaxy A34',
+    'SM-A266': 'Galaxy A26', 'SM-A256': 'Galaxy A25', 'SM-A165': 'Galaxy A16', 'SM-A166': 'Galaxy A16 5G', 'SM-A155': 'Galaxy A15', 'SM-A156': 'Galaxy A15 5G', 'SM-A055': 'Galaxy A05', 'SM-A065': 'Galaxy A06',
+    '24129PN74G': 'Xiaomi 15', '25010PN30G': 'Xiaomi 15 Ultra',
+    '23127PN0CG': 'Xiaomi 14', '23116PN5BC': 'Xiaomi 14 Pro', '24030PN60G': 'Xiaomi 14 Ultra', '2406APNFAG': 'Xiaomi 14T', '2407FPN8EG': 'Xiaomi 14T Pro',
+    '2210132G': 'Xiaomi 13', '2304FPN6DC': 'Xiaomi 13 Ultra', '2306EPN60G': 'Xiaomi 13T', '23078PND5G': 'Xiaomi 13T Pro',
+    '24090RA29G': 'Redmi Note 14 Pro+', '24094RAD4G': 'Redmi Note 14 Pro', '24117RN76G': 'Redmi Note 14',
+    '23090RA98G': 'Redmi Note 13 Pro+', '2312DRA50G': 'Redmi Note 13 Pro', '23129RAA4G': 'Redmi Note 13',
+    '2311DRK48G': 'POCO X6 Pro', '23122PCD1G': 'POCO X6', '24069PC21G': 'POCO F6', '2412DPC0AG': 'POCO X7 Pro',
+    'CPH2639': 'OPPO Reno12', 'CPH2629': 'OPPO Reno12 Pro', 'CPH2689': 'OPPO Reno13', 'CPH2697': 'OPPO Reno13 Pro', 'CPH2651': 'OPPO Find X8', 'CPH2659': 'OPPO Find X8 Pro',
+    'CPH2599': 'OPPO Reno11', 'CPH2607': 'OPPO Reno11 Pro', 'CPH2531': 'OPPO Reno10',
+    'V2322': 'Vivo V30', 'V2348': 'Vivo V40', 'V2309': 'Vivo X100', 'V2405': 'Vivo X200',
+    'RMX3840': 'Realme 12 Pro+', 'RMX3890': 'Realme GT 6'
   };
 
   // Tên ngắn của 12 bài viết Tạp Chí Tâm Thức để hiển thị trực quan trên Google Sheets
@@ -8866,8 +8876,74 @@ I'd love to book a 1:1 Tarot & CBT session:
     if (ANDROID_MODEL_MAP[upper]) return ANDROID_MODEL_MAP[upper];
     const prefix7 = upper.slice(0, 7);
     if (ANDROID_MODEL_MAP[prefix7]) return `${ANDROID_MODEL_MAP[prefix7]}`;
+    const prefix6 = upper.slice(0, 6);
+    if (ANDROID_MODEL_MAP[prefix6]) return `${ANDROID_MODEL_MAP[prefix6]}`;
+
+    // Nhận diện thông minh theo quy ước tiền tố mã phần cứng của từng hãng Android
+    if (/^SM-S9\d{2}/i.test(upper)) return `Samsung Galaxy S (${clean})`;
+    if (/^SM-F9\d{2}/i.test(upper)) return `Samsung Galaxy Z Fold (${clean})`;
+    if (/^SM-F7\d{2}/i.test(upper)) return `Samsung Galaxy Z Flip (${clean})`;
+    if (/^SM-A\d{3}/i.test(upper)) return `Samsung Galaxy A (${clean})`;
+    if (/^SM-M\d{3}/i.test(upper)) return `Samsung Galaxy M (${clean})`;
+    if (/^SM-[TX]\d{3}/i.test(upper)) return `Samsung Galaxy Tab (${clean})`;
+    if (/^SM-/i.test(upper)) return `Samsung Galaxy (${clean})`;
+    if (/^2[1-9][01]\d[A-Z0-9]{4,7}[GCIR]?$/i.test(upper)) {
+      if (/RA|RN|RD|DR/i.test(upper)) return `Xiaomi Redmi (${clean})`;
+      if (/PC|PF/i.test(upper)) return `Xiaomi POCO (${clean})`;
+      return `Xiaomi (${clean})`;
+    }
+    if (/^M2[01]\d{2}[A-Z0-9]+/i.test(upper)) return `Xiaomi/Redmi (${clean})`;
+    if (/^CPH\d{4}/i.test(upper)) return `OPPO (${clean})`;
+    if (/^RMX\d{4}/i.test(upper)) return `Realme (${clean})`;
+    if (/^(?:V2\d{3}|PD2\d{3})/i.test(upper)) return `Vivo (${clean})`;
+    if (/^PIXEL\s/i.test(upper)) return `Google ${clean}`;
+    if (/^(?:ONEPLUS|LE2\d{3}|NE2\d{3}|PJ[A-Z]\d{3})/i.test(upper)) return `OnePlus (${clean})`;
+    if (/^XQ-[A-Z]{2}\d{2}/i.test(upper)) return `Sony Xperia (${clean})`;
+    if (/^(?:ASUS_|AI2[2-6]\d{2})/i.test(upper)) return `ASUS (${clean})`;
+    if (/^(?:TECNO|KL\d|KJ\d|CK\d|CL\d)/i.test(upper) && /TECNO/i.test(upper)) return clean;
+    if (/^(?:HONOR|ALI-|REA-|BVL-|ELP-|PGT-)/i.test(upper)) return `Honor (${clean})`;
     return clean;
   }
+
+  // Lấy nhanh thông số phần cứng không cần xin phép (WebGL GPU + RAM + CPU cores)
+  let cachedHwSpecTag = '';
+  let cachedWebGlGpu = '';
+  (function detectSilentHardwareSpecs() {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (gl) {
+        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        if (dbg) {
+          const rawGpu = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '');
+          // Làm gọn chuỗi GPU (vd: "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 ...)" -> "RTX 4060")
+          const adreno = rawGpu.match(/Adreno\s*\(TM\)\s*\d+|Adreno\s*\d+/i);
+          const mali = rawGpu.match(/Mali-[A-Z0-9]+/i);
+          const xclipse = rawGpu.match(/Xclipse\s*\d+/i);
+          const appleM = rawGpu.match(/Apple\s+M\d+(?:\s+(?:Pro|Max|Ultra))?/i);
+          const nvidia = rawGpu.match(/(?:RTX|GTX|MX)\s*\d{3,4}(?:\s*(?:Ti|Super))?/i);
+          const radeon = rawGpu.match(/Radeon(?:\s+RX)?\s*[A-Z0-9]+/i);
+          const iris = rawGpu.match(/Intel\(R\)\s*(?:Iris\(R\)\s*Xe|UHD\s*Graphics|Arc)/i);
+          if (adreno) cachedWebGlGpu = adreno[0].replace(/\(TM\)\s*/i, '');
+          else if (mali) cachedWebGlGpu = mali[0];
+          else if (xclipse) cachedWebGlGpu = xclipse[0];
+          else if (appleM) cachedWebGlGpu = appleM[0];
+          else if (nvidia) cachedWebGlGpu = nvidia[0];
+          else if (radeon) cachedWebGlGpu = radeon[0];
+          else if (iris) cachedWebGlGpu = iris[0].replace(/\(R\)/g, '').trim();
+        }
+      }
+    } catch (e) {}
+    try {
+      const parts = [];
+      if (navigator.deviceMemory) parts.push(`${navigator.deviceMemory}GB`);
+      if (navigator.hardwareConcurrency && navigator.hardwareConcurrency >= 2 && navigator.hardwareConcurrency <= 64) {
+        parts.push(`${navigator.hardwareConcurrency}c`);
+      }
+      if (cachedWebGlGpu) parts.push(cachedWebGlGpu);
+      cachedHwSpecTag = parts.join('/');
+    } catch (e) {}
+  })();
 
   let safeAreaTopPx = 0;
   function measureSafeAreaTop() {
@@ -8916,16 +8992,26 @@ I'd love to book a 1:1 Tarot & CBT session:
   let clientHintsOsVer = '';
   try {
     if (navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === 'function') {
-      navigator.userAgentData.getHighEntropyValues(['model', 'platform', 'platformVersion'])
+      navigator.userAgentData.getHighEntropyValues(['model', 'platform', 'platformVersion', 'architecture'])
         .then(hints => {
+          let upgraded = false;
           if (hints.model && hints.model.trim() !== '' && hints.model.trim() !== 'K') {
             clientHintsModel = translateCommercialModel(hints.model.trim());
+            upgraded = true;
           }
           if (hints.platform === 'Windows' && hints.platformVersion) {
             const major = parseInt(String(hints.platformVersion).split('.')[0], 10) || 0;
             clientHintsOsVer = major >= 13 ? 'Windows 11' : 'Windows 10';
+            upgraded = true;
           } else if (hints.platform === 'Android' && hints.platformVersion) {
             clientHintsOsVer = `Android ${String(hints.platformVersion).split('.')[0]}`;
+            upgraded = true;
+          } else if (hints.platform === 'macOS' && hints.architecture === 'arm') {
+            clientHintsOsVer = 'Apple Silicon';
+            upgraded = true;
+          }
+          if (upgraded && typeof scheduleFastSync === 'function') {
+            scheduleFastSync(false);
           }
         })
         .catch(() => {});
@@ -8957,11 +9043,25 @@ I'd love to book a 1:1 Tarot & CBT session:
       const iosMatch = ua.match(/OS (\d+)[_.](\d+)/);
       const iosVer = iosMatch ? `iOS ${iosMatch[1]}.${iosMatch[2]}` : '';
       const hzTag = isProMotion120 ? '120Hz' : '';
-      const suffix = [hzTag, iosVer].filter(Boolean).join(' • ');
+      const suffix = [hzTag, iosVer].filter(Boolean).join(' · ');
       const fmt = (name) => suffix ? `${name} (${suffix})` : name;
 
-      if (key === '402x874@3') return fmt('iPhone 16 Pro');
-      if (key === '440x956@3') return fmt('iPhone 16 Pro Max');
+      // Nhận diện iPad theo độ phân giải thực (tránh bị rơi vào iPhone)
+      if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1) || sw >= 744) {
+        if (key === '744x1133@2') return fmt('iPad mini 6/7');
+        if (key === '768x1024@2') return fmt('iPad Gen 6 / mini 5');
+        if (key === '810x1080@2') return fmt('iPad Gen 7/8/9');
+        if (key === '820x1180@2') return fmt('iPad Air / Gen 10');
+        if (key === '834x1194@2') return fmt(isProMotion120 ? 'iPad Pro 11" M1/M2' : 'iPad Pro 11"');
+        if (key === '834x1210@2') return fmt('iPad Pro 11" M4');
+        if (key === '1024x1366@2') return fmt(isProMotion120 ? 'iPad Pro 12.9"' : 'iPad Air 13"');
+        if (key === '1032x1376@2') return fmt('iPad Pro 13" M4');
+        return fmt(`iPad (${sw}x${sh})`);
+      }
+
+      if (key === '402x874@3') return fmt('iPhone 16 Pro / 17 / 17 Pro');
+      if (key === '440x956@3') return fmt('iPhone 16 Pro Max / 17 Pro Max');
+      if (key === '420x912@3') return fmt('iPhone 17 Air');
       if (key === '393x852@3') {
         return fmt(isProMotion120 ? 'iPhone 14 Pro / 15 Pro' : 'iPhone 15 / 16');
       }
@@ -8970,7 +9070,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       }
       if (key === '390x844@3') {
         if (isProMotion120) return fmt('iPhone 13 Pro');
-        if (topInset >= 47) return fmt('iPhone 13 / 14');
+        if (topInset >= 47) return fmt('iPhone 13 / 14 / 16e');
         if (topInset > 0 && topInset <= 44) return fmt('iPhone 12 / 12 Pro');
         return fmt('iPhone 13 / 14');
       }
@@ -8981,7 +9081,7 @@ I'd love to book a 1:1 Tarot & CBT session:
         return fmt('iPhone 13 Pro Max / 14 Plus');
       }
       if (key === '414x896@3') {
-        if (topInset >= 48 || isProMotion120) return fmt('iPhone 14 Pro / 15 Pro [Thu phóng]');
+        if (topInset >= 54 || isProMotion120) return fmt('iPhone 14 Pro / 15 Pro [Thu phóng]');
         return fmt('iPhone 11 Pro Max / XS Max');
       }
       if (key === '414x896@2') return fmt('iPhone 11 / XR');
@@ -8995,16 +9095,28 @@ I'd love to book a 1:1 Tarot & CBT session:
 
     if (/Android/i.test(ua)) {
       const osTag = clientHintsOsVer || 'Android';
+      const specSuffix = cachedHwSpecTag ? ` · ${cachedHwSpecTag}` : '';
       if (clientHintsModel) {
-        return `${clientHintsModel} (${osTag})`;
+        return `${clientHintsModel} (${osTag}${specSuffix})`;
       }
       const m = ua.match(/Android[^;]+;\s*([^;)]+)\s*(?:Build|\))/i);
       const rawAndroid = (m && m[1] && m[1].trim() !== 'K') ? m[1].trim() : '';
-      return rawAndroid ? `${translateCommercialModel(rawAndroid)} (${osTag})` : `${osTag} Smartphone`;
+      return rawAndroid
+        ? `${translateCommercialModel(rawAndroid)} (${osTag}${specSuffix})`
+        : `${osTag} Smartphone${cachedHwSpecTag ? ' (' + cachedHwSpecTag + ')' : ''}`;
     }
-    if (/Windows/i.test(ua)) return clientHintsOsVer || 'Windows PC';
-    if (/Mac OS X/i.test(ua)) return 'MacBook / Mac';
-    return 'Desktop';
+    if (/Windows/i.test(ua)) {
+      const winName = clientHintsOsVer || 'Windows PC';
+      return cachedHwSpecTag ? `${winName} (${cachedHwSpecTag})` : winName;
+    }
+    if (/Mac OS X/i.test(ua)) {
+      const macChip = cachedWebGlGpu && /Apple M/i.test(cachedWebGlGpu)
+        ? cachedWebGlGpu
+        : (clientHintsOsVer === 'Apple Silicon' ? 'Apple Silicon' : '');
+      const macMeta = [macChip, navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency}c` : ''].filter(Boolean).join('/');
+      return macMeta ? `MacBook / Mac (${macMeta})` : 'MacBook / Mac';
+    }
+    return cachedHwSpecTag ? `Desktop (${cachedHwSpecTag})` : 'Desktop';
   }
 
   function detectConnectionBadge() {
@@ -9074,20 +9186,41 @@ I'd love to book a 1:1 Tarot & CBT session:
 
   // 2. ĐỊNH VỊ ĐỊA CHỈ ĐA NGUỒN (MULTI-PROVIDER GEO-IP CONSENSUS + TRẠM VÙNG ISP)
   const VN_CITY_MAP = {
-    'thua thien hue': 'Huế', 'thừa thiên huế': 'Huế', 'hue': 'Huế', 'thanh pho hue': 'Huế', 'thành phố huế': 'Huế',
+    'thua thien hue': 'Huế', 'thừa thiên huế': 'Huế', 'hue': 'Huế', 'thanh pho hue': 'Huế',
     'da nang': 'Đà Nẵng', 'đà nẵng': 'Đà Nẵng', 'danang': 'Đà Nẵng',
     'hanoi': 'Hà Nội', 'ha noi': 'Hà Nội', 'hà nội': 'Hà Nội',
     'ho chi minh': 'TP.HCM', 'ho chi minh city': 'TP.HCM', 'thanh pho ho chi minh': 'TP.HCM', 'saigon': 'TP.HCM',
-    'quang binh': 'Quảng Bình', 'quảng bình': 'Quảng Bình', 'dong hoi': 'Đồng Hới, Quảng Bình',
-    'quang tri': 'Quảng Trị', 'quảng trị': 'Quảng Trị',
-    'quang nam': 'Quảng Nam', 'quảng nam': 'Quảng Nam',
-    'nghe an': 'Nghệ An', 'nghệ an': 'Nghệ An', 'vinh': 'Vinh, Nghệ An',
-    'ha tinh': 'Hà Tĩnh', 'hà tĩnh': 'Hà Tĩnh',
     'hai phong': 'Hải Phòng', 'hải phòng': 'Hải Phòng',
     'can tho': 'Cần Thơ', 'cần thơ': 'Cần Thơ',
+    'ca mau': 'Cà Mau', 'cà mau': 'Cà Mau', 'bac lieu': 'Bạc Liêu', 'soc trang': 'Sóc Trăng',
+    'kien giang': 'Kiên Giang', 'rach gia': 'Rạch Giá, Kiên Giang', 'phu quoc': 'Phú Quốc, Kiên Giang',
+    'an giang': 'An Giang', 'long xuyen': 'Long Xuyên, An Giang', 'chau doc': 'Châu Đốc, An Giang',
+    'dong thap': 'Đồng Tháp', 'cao lanh': 'Cao Lãnh, Đồng Tháp', 'sa dec': 'Sa Đéc, Đồng Tháp',
+    'tien giang': 'Tiền Giang', 'my tho': 'Mỹ Tho, Tiền Giang',
+    'ben tre': 'Bến Tre', 'tra vinh': 'Trà Vinh', 'hau giang': 'Hậu Giang',
     'vinh long': 'Vĩnh Long', 'vĩnh long': 'Vĩnh Long', 'cai von': 'Bình Minh, Vĩnh Long', 'binh minh': 'Bình Minh, Vĩnh Long',
-    'dong nai': 'Đồng Nai', 'binh duong': 'Bình Dương', 'khanh hoa': 'Nha Trang, Khánh Hòa', 'nha trang': 'Nha Trang',
-    'lam dong': 'Đà Lạt, Lâm Đồng', 'da lat': 'Đà Lạt'
+    'long an': 'Long An', 'tan an': 'Tân An, Long An', 'tay ninh': 'Tây Ninh', 'binh phuoc': 'Bình Phước',
+    'binh duong': 'Bình Dương', 'thu dau mot': 'Thủ Dầu Một, Bình Dương', 'di an': 'Dĩ An, Bình Dương',
+    'dong nai': 'Đồng Nai', 'bien hoa': 'Biên Hòa, Đồng Nai',
+    'ba ria': 'Bà Rịa - Vũng Tàu', 'vung tau': 'Vũng Tàu',
+    'binh thuan': 'Bình Thuận', 'phan thiet': 'Phan Thiết, Bình Thuận', 'ninh thuan': 'Ninh Thuận', 'phan rang': 'Phan Rang, Ninh Thuận',
+    'khanh hoa': 'Khánh Hòa', 'nha trang': 'Nha Trang, Khánh Hòa', 'cam ranh': 'Cam Ranh, Khánh Hòa',
+    'phu yen': 'Phú Yên', 'tuy hoa': 'Tuy Hòa, Phú Yên', 'binh dinh': 'Bình Định', 'quy nhon': 'Quy Nhơn, Bình Định',
+    'quang ngai': 'Quảng Ngãi', 'quang nam': 'Quảng Nam', 'tam ky': 'Tam Kỳ, Quảng Nam', 'hoi an': 'Hội An, Quảng Nam',
+    'quang tri': 'Quảng Trị', 'dong ha': 'Đông Hà, Quảng Trị',
+    'quang binh': 'Quảng Bình', 'dong hoi': 'Đồng Hới, Quảng Bình',
+    'ha tinh': 'Hà Tĩnh', 'nghe an': 'Nghệ An', 'vinh': 'Vinh, Nghệ An',
+    'thanh hoa': 'Thanh Hóa', 'ninh binh': 'Ninh Bình', 'nam dinh': 'Nam Định',
+    'thai binh': 'Thái Bình', 'ha nam': 'Hà Nam', 'hung yen': 'Hưng Yên', 'hai duong': 'Hải Dương',
+    'quang ninh': 'Quảng Ninh', 'ha long': 'Hạ Long, Quảng Ninh',
+    'bac ninh': 'Bắc Ninh', 'bac giang': 'Bắc Giang', 'vinh phuc': 'Vĩnh Phúc', 'phu tho': 'Phú Thọ', 'viet tri': 'Việt Trì, Phú Thọ',
+    'thai nguyen': 'Thái Nguyên', 'lang son': 'Lạng Sơn', 'cao bang': 'Cao Bằng', 'ha giang': 'Hà Giang',
+    'lao cai': 'Lào Cai', 'sa pa': 'Sa Pa, Lào Cai', 'yen bai': 'Yên Bái', 'tuyen quang': 'Tuyên Quang',
+    'hoa binh': 'Hòa Bình', 'son la': 'Sơn La', 'dien bien': 'Điện Biên', 'lai chau': 'Lai Châu', 'bac kan': 'Bắc Kạn',
+    'lam dong': 'Lâm Đồng', 'da lat': 'Đà Lạt, Lâm Đồng', 'bao loc': 'Bảo Lộc, Lâm Đồng',
+    'dak lak': 'Đắk Lắk', 'buon ma thuot': 'Buôn Ma Thuột, Đắk Lắk',
+    'dak nong': 'Đắk Nông', 'gia nghia': 'Gia Nghĩa, Đắk Nông',
+    'gia lai': 'Gia Lai', 'pleiku': 'Pleiku, Gia Lai', 'kon tum': 'Kon Tum'
   };
 
   function normalizeVnPlace(rawPlace) {
@@ -9141,7 +9274,7 @@ I'd love to book a 1:1 Tarot & CBT session:
       } else if (chosen.country === 'VN' && devTz && !isDevTzVN) {
         vpnFlag = ` [⚠️ IP VN nhưng máy đặt giờ ${devTz}]`;
       }
-      const netInfo = [ispPart, connBadge].filter(Boolean).join(' • ');
+      const netInfo = [ispPart, connBadge].filter(Boolean).join(' · ');
       geoLocationLabel = `📍 ${cityDisplay}, ${chosen.country}${netInfo ? ' (' + netInfo + ')' : ''}${vpnFlag}`;
       try {
         sessionStorage.setItem('nownow_ip_geo_v10', geoLocationLabel);
@@ -10103,6 +10236,16 @@ I'd love to book a 1:1 Tarot & CBT session:
     })
       .then(r => r.json())
       .then(res => {
+        if (res && res.cfGeo && res.cfGeo.label) {
+          const curIsWeak = !geoLocationLabel || geoLocationLabel.includes('[Suy từ Múi giờ]') || (geoLocationLabel.includes('[Cổng') && !res.cfGeo.isHub);
+          if (curIsWeak) {
+            geoLocationLabel = res.cfGeo.label;
+            try {
+              sessionStorage.setItem('nownow_ip_geo_v10', geoLocationLabel);
+              localStorage.setItem('nownow_ip_geo_v10', geoLocationLabel);
+            } catch (e) {}
+          }
+        }
         if (res && res.status === 'busy_retry') {
           setTimeout(() => scheduleFastSync(false), 1500);
         }
